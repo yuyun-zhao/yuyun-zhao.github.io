@@ -8,7 +8,7 @@
       <link href="2021/03/02/VTK%E7%BC%96%E8%AF%91%E9%85%8D%E7%BD%AE/"/>
       <url>2021/03/02/VTK%E7%BC%96%E8%AF%91%E9%85%8D%E7%BD%AE/</url>
       
-        <content type="html"><![CDATA[        <h2 id="vtk编译与配置"   >          <a href="#vtk编译与配置" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#vtk编译与配置"></a> VTK编译与配置</h2>      <ul><li>系统平台</li></ul><p>Windows10 x64位系统</p><ul><li>所需工具：</li></ul><p>VS2019 + CMAKE 3.14.4 + QT 5.12.4（要勾选：QtWebEngine和QtScript）</p>]]></content>
+        <content type="html"><![CDATA[        <h2 id="vtk编译与配置"   >          <a href="#vtk编译与配置" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#vtk编译与配置"></a> VTK编译与配置</h2>      <ul><li>系统平台</li></ul><p>Windows10 x64位系统</p><ul><li>所需工具：</li></ul><p>VS2019 + CMAKE 3.14.4 + QT 5.12.4（要勾选：QtWebEngine和QtScript）</p>    <div class="note-plugin success">      <span class="note-plugin__icon note-plugin__icon--success">              <i class="fas fa-check-circle"></i>            </span>      <p><strong>Success</strong><br />This is success note.</p>    </div>  ]]></content>
       
       
       <categories>
