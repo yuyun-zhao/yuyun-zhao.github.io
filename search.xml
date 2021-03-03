@@ -17,7 +17,7 @@
           
           <category> CMake </category>
           
-          <category> 第三方库编译 </category>
+          <category> Third-party libraries </category>
           
       </categories>
       
@@ -28,7 +28,7 @@
             
             <tag> CMake </tag>
             
-            <tag> 第三方库编译 </tag>
+            <tag> Third-party libraries </tag>
             
         </tags>
       
