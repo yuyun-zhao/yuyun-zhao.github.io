@@ -38,9 +38,9 @@
       
       <categories>
           
-          <category> Qt </category>
-          
           <category> OpenCV </category>
+          
+          <category> Qt </category>
           
       </categories>
       
