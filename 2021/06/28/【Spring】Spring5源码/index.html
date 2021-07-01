@@ -1,9 +1,9 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="AOP原理        本质原理：看给容器中注册了什么组件，这个组件什么时候工作以及这个组件有什么功能。 要开启AOP自动代理，配置类中需要添加@EnableAspectJAutoProx。整个AOP就是从@EnableAspectJAutoProxy注解开始执行的。 123456789101112131415@EnableAspectJAutoProxy@Configu">
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="本文将逐一讲解Spring IoC容器创建过程、AOP原理以及Spring框架中常用的接口的作用。                      AOP原理        本质原理：看给容器中注册了什么组件，这个组件什么时候工作以及这个组件有什么功能。                      AOP简易执行流程         配置类开启@EnableAspectJAutoProxy注解 @Enab">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【Spring】Spring5源码分析">
 <meta property="og:url" content="http://yuyun-zhao.gitee.io/2021/06/28/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/index.html">
 <meta property="og:site_name" content="yuyun zhao&#39;s blog">
-<meta property="og:description" content="AOP原理        本质原理：看给容器中注册了什么组件，这个组件什么时候工作以及这个组件有什么功能。 要开启AOP自动代理，配置类中需要添加@EnableAspectJAutoProx。整个AOP就是从@EnableAspectJAutoProxy注解开始执行的。 123456789101112131415@EnableAspectJAutoProxy@Configu">
+<meta property="og:description" content="本文将逐一讲解Spring IoC容器创建过程、AOP原理以及Spring框架中常用的接口的作用。                      AOP原理        本质原理：看给容器中注册了什么组件，这个组件什么时候工作以及这个组件有什么功能。                      AOP简易执行流程         配置类开启@EnableAspectJAutoProxy注解 @Enab">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630165506770.png">
 <meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630190714343.png">
@@ -19,13 +19,26 @@
 <meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630213254910.png">
 <meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630204659073.png">
 <meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630204914536.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630204929418.png">
 <meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210629163559536.png">
 <meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630214340913.png">
 <meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630213635404.png">
 <meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630220411754.png">
 <meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630220448668.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630204929418.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630204914536.png">
 <meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630221118378.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701153743299.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701163050223.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701163108692.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701161459941.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701161016809.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701163847923.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701162202790.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701180818426.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701181816332.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701182427290.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701182344197.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701171303958.png">
 <meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210628212948066.png">
 <meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210628213321835.png">
 <meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210628215427638.png">
@@ -38,7 +51,7 @@
 <meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210629192447682.png">
 <meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630103302320.png">
 <meta property="article:published_time" content="2021-06-28T12:07:47.000Z">
-<meta property="article:modified_time" content="2021-06-30T14:11:21.096Z">
+<meta property="article:modified_time" content="2021-07-01T12:42:24.779Z">
 <meta property="article:author" content="yuyun zhao">
 <meta property="article:tag" content="Spring">
 <meta name="twitter:card" content="summary">
@@ -66,12 +79,37 @@ var CONFIG = {
   sourcePath: {"js":"js","css":"css","images":"images"},
 };
 
-window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><div class="sticky-top" data-popover="置顶文章" data-popover-pos="up"><span class="sticky-top__icon"><i class="fas fa-thumbtack"></i></span></div><h1 class="post-title">【Spring】Spring5源码分析</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-06-28</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-06-30</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">1.6k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">9分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body">
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><div class="sticky-top" data-popover="置顶文章" data-popover-pos="up"><span class="sticky-top__icon"><i class="fas fa-thumbtack"></i></span></div><h1 class="post-title">【Spring】Spring5源码分析</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-06-28</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-07-01</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">2.8k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">16分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body"><p>本文将逐一讲解Spring IoC容器创建过程、AOP原理以及Spring框架中常用的接口的作用。</p>
+
         <h2 id="aop原理"   >
           <a href="#aop原理" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#aop原理"></a> AOP原理</h2>
       
 <p>本质原理：看给容器中注册了什么组件，这个组件什么时候工作以及这个组件有什么功能。</p>
-<p>要开启AOP自动代理，配置类中需要<strong>添加@EnableAspectJAutoProx。整个AOP就是从@EnableAspectJAutoProxy注解开始执行的。</strong></p>
+
+        <h3 id="aop简易执行流程"   >
+          <a href="#aop简易执行流程" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#aop简易执行流程"></a> AOP简易执行流程</h3>
+      
+<ul>
+<li>配置类开启@<strong>EnableAspectJAutoProxy</strong>注解</li>
+<li><code>@EnableAspectJAutoProxy</code>注解会注册<strong>AnnotationAwareAspectJAutoProxyCreator</strong>组件（通过<code>@Import(AspectJAutoProxyRegistrar.class)</code>的方式）。<strong>AnnotationAwareAspectJAutoProxyCreator</strong>本质上是一个后置处理器（实现了相应接口）</li>
+<li>容器创建（<code>refresh()</code>方法栈中）：
+<ul>
+<li><strong>registerBeanPostProcessors()</strong>：注册所有的后置处理器，此时创建了<code>AnnotationAwareAspectJAutoProxyCreator</code>组件，在创建时会执行<code>invokeAwareMethods()</code>方法，回调地执行其实现的<code>setBeanFactory()</code>方法以获取容器中的<strong>BeanFactory</strong></li>
+<li><strong>BeanFactoryInitialization()</strong>：注册其他普通单实例组件（非后置处理器）
+<ul>
+<li>创建业务逻辑组件和切面组件</li>
+<li><code>AnnotationAwareAspectJAutoProxyCreator</code>会拦截每个组件的创建</li>
+<li>在组件创建完后</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        <h3 id="enableaspectjautoproxy"   >
+          <a href="#enableaspectjautoproxy" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#enableaspectjautoproxy"></a> @EnableAspectJAutoProxy</h3>
+      
+<p>要开启AOP自动代理，配置类中需要<strong>添加@EnableAspectJAutoProxy。整个AOP就是从@EnableAspectJAutoProxy注解开始执行的。</strong></p>
 <figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@EnableAspectJAutoProxy</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringConfigAOP</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 将业务逻辑类加入到容器中</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> MathCalculator <span class="title">calculator</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> MathCalculator();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 切面类加入到容器中</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> LogsAspects <span class="title">logsAspects</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> LogsAspects();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
 <p><code>@EnableAspectJAutoProxy</code>注解：</p>
 <p><img src="/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630165506770.png" alt="image-20210630165506770" /></p>
@@ -80,63 +118,83 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
         <h3 id="importaspectjautoproxyregistrarclass"   >
           <a href="#importaspectjautoproxyregistrarclass" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#importaspectjautoproxyregistrarclass"></a> @Import(AspectJAutoProxyRegistrar.class)</h3>
       
-<p><code>@Import(AspectJAutoProxyRegistrar.class)</code>表明<code>@EnableAspectJAutoProxy</code>注解会向容器中注册<code>AspectJAutoProxyRegistrar</code>类。</p>
-<p>AspectJAutoProxyRegistrar类实现了ImportBeanDefinitionRegistrar接口的registerBeanDefinitions()方法：</p>
+<p><code>@Import(AspectJAutoProxyRegistrar.class)</code>表明<code>@EnableAspectJAutoProxy</code>注解会向容器中注册<strong>AspectJAutoProxyRegistrar</strong>类。</p>
+<p><code>AspectJAutoProxyRegistrar</code>类实现了<code>ImportBeanDefinitionRegistrar</code>接口的<code>registerBeanDefinitions()</code>方法：</p>
 <p><img src="/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630190714343.png" alt="image-20210630190714343" /></p>
-<p>该方法使用BeanDefinitionRegistry类的对象registry给容器中注册了一个id名称为internalAutoProxyCreator的AnnotationAwareAspectJAutoProxyCreator组件（注解装配模式的AspectJ自动代理创建器）</p>
+<p>该方法使用<code>BeanDefinitionRegistry</code>类的对象<code>registry</code>给容器中注册了一个id名称为<code>internalAutoProxyCreator</code>的<code>AnnotationAwareAspectJAutoProxyCreator</code>组件（注解装配模式的AspectJ自动代理创建器）</p>
 <p><img src="/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630192408003.png" alt="image-20210630192408003" /></p>
-<p>总结：<code>@EnableAspectJAutoProxy</code>注解会向容器中注册了一个<code>AspectJAutoProxyRegistrar</code>组件，该组件会向容器中注册一个<strong>AnnotationAwareAspectJAutoProxyCreator</strong>组件，即创建了一个自动代理创建器。</p>
+<p><strong>总结</strong>：<code>@EnableAspectJAutoProxy</code>注解会向容器中注册了一个<code>AspectJAutoProxyRegistrar</code>组件，该组件会向容器中注册一个<strong>AnnotationAwareAspectJAutoProxyCreator</strong>组件，即创建了一个自动代理创建器。AOP思想的实现都是通过该组件。</p>
 
-        <h3 id="annotationawareaspectjautoproxycreator作用"   >
-          <a href="#annotationawareaspectjautoproxycreator作用" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#annotationawareaspectjautoproxycreator作用"></a> AnnotationAwareAspectJAutoProxyCreator作用</h3>
+        <h3 id="annotationawareaspectjautoproxycreator"   >
+          <a href="#annotationawareaspectjautoproxycreator" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#annotationawareaspectjautoproxycreator"></a> AnnotationAwareAspectJAutoProxyCreator</h3>
       
 <p>AnnotationAwareAspectJAutoProxyCreator类实现了两个接口：</p>
 <ul>
-<li>SmartInstantiationAwareBeanPostProcessor接口：后置处理器，在每个bean初始化前后进行一些处理</li>
-<li>BeanFactoryAware接口：用于获取bean创建工厂BeanFactory</li>
+<li><strong>SmartInstantiationAwareBeanPostProcessor</strong>接口：一种特殊的后置处理器，在每个普通组件<strong>创建前后</strong>（不同于普通后置处理器是在组件<strong>初始化前后</strong>）拦截并进行<mark>代理处理</mark>（它实现的接口方法为postProcessBefore<strong>Instantiation</strong>()，有区别于其他BeanPostProcessor里的postProcessBefore<strong>Initialization</strong>()）</li>
+<li><strong>BeanFactoryAware</strong>接口：在<code>AnnotationAwareAspectJAutoProxyCreator</code>组件被注册到容器中时（组件创建时首先执行<code>invokeAwareMethods()</code>方法，此时会回调<code>BeanFactoryAware</code>的接口），获取到容器中的bean创建工厂BeanFactory</li>
 </ul>
-<p>因此需要关心其实现的两个接口方法有什么功能。</p>
 <p><img src="/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630193143177.png" alt="image-20210630193143177" /></p>
+<p>因此需要关心其实现的两个接口方法有什么功能。</p>
 
-        <h4 id="beanfactoryaware接口作用"   >
-          <a href="#beanfactoryaware接口作用" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#beanfactoryaware接口作用"></a> BeanFactoryAware接口作用</h4>
+        <h4 id="beanfactoryaware接口的作用"   >
+          <a href="#beanfactoryaware接口的作用" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#beanfactoryaware接口的作用"></a> BeanFactoryAware接口的作用</h4>
       
-<p>AnnotationAwareAspectJAutoProxyCreator类的直接父类AspectJAwareAdvisorAutoProxyCreator类（上图红色框所示）重写了BeanFactoryAware接口的<strong>setBeanFactory()方法</strong>（AnnotationAwareAspectJAutoProxyCreator类本身并没有重写该方法），该方法内调用了<strong>initBeanFactory()方法</strong>（被AnnotationAwareAspectJAutoProxyCreator类重写）</p>
+<p><code>AnnotationAwareAspectJAutoProxyCreator</code>的父类<code>AspectJAwareAdvisorAutoProxyCreator</code>（上图红色框所示）重写了<code>BeanFactoryAware</code>接口的<strong>setBeanFactory()方法</strong>（<code>AnnotationAwareAspectJAutoProxyCreator</code>类本身并没有重写该方法），该方法内调用了<strong>initBeanFactory()方法</strong>（被<code>AnnotationAwareAspectJAutoProxyCreator</code>类重写）。</p>
+<p>在<code>AnnotationAwareAspectJAutoProxyCreator</code>组件被注册到容器中时，容器会执行<strong>invokeAwareMethods()方法</strong>，这是<code>Aware</code>接口的回调方法。因为<code>AnnotationAwareAspectJAutoProxyCreator</code>实现了<code>Aware</code>接口的<code>setBeanFactory</code>()方法，因此此时会执行其重写的<code>setBeanFactory()</code>方法<strong>获取bean创建工厂BeanFactory</strong>。</p>
 
-        <h3 id="aop流程"   >
-          <a href="#aop流程" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#aop流程"></a> AOP流程</h3>
+        <h4 id="smartinstantiationawarebeanpostprocessor接口的作用"   >
+          <a href="#smartinstantiationawarebeanpostprocessor接口的作用" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#smartinstantiationawarebeanpostprocessor接口的作用"></a> SmartInstantiationAwareBeanPostProcessor接口的作用</h4>
       
-<p><strong>1.  传入配置类，创建IoC容器</strong></p>
+<p><code>SmartInstantiationAwareBeanPostProcessor</code>接口的<code>postProcessBeforeInstantiation()</code>方法不同于其他<code>BeanPostProcessor</code>里的<code>postProcessBeforeInitialization()</code>。</p>
+<p><code>AnnotationAwareAspectJAutoProxyCreator</code>实现了<code>SmartInstantiationAwareBeanPostProcessor</code>接口，会使得其在所有的普通单实例bean<strong>创建前后</strong>能够进行拦截，调用<code>postProcessBeforeInstantiation()</code>方法和<code>applyBeanPostProcessorsAfterInitialization()</code>方法对<mark>XXX</mark></p>
+
+        <h3 id="annotationawareaspectjautoproxycreator执行时机"   >
+          <a href="#annotationawareaspectjautoproxycreator执行时机" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#annotationawareaspectjautoproxycreator执行时机"></a> AnnotationAwareAspectJAutoProxyCreator执行时机</h3>
+      
+<p><code>AnnotationAwareAspectJAutoProxyCreator</code>实现了<code>SmartInstantiationAwareBeanPostProcessor</code>接口，它会在任何bean实例创建之前（此时还没创建对象，也就还没执行普通<code>BeanPostProcessor</code>的处理器）先尝试执行<code>postProcessBeforeInstantiation()</code>方法返回对象的<mark>212112</mark>    。</p>
+<p>即<code>AnnotationAwareAspectJAutoProxyCreator</code>会在所有的普通单实例bean创建之前进行拦截，调用<code>postProcessBeforeInstantiation()</code>方法对<mark>XXX</mark></p>
+
+        <h3 id="aop详细执行流程"   >
+          <a href="#aop详细执行流程" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#aop详细执行流程"></a> AOP详细执行流程</h3>
+      
+
+        <h4 id="1-传入配置类创建ioc容器"   >
+          <a href="#1-传入配置类创建ioc容器" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#1-传入配置类创建ioc容器"></a> 1. 传入配置类，创建IoC容器</h4>
+      
 <p><img src="/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630203107349.png" alt="image-20210630203107349" /></p>
-<p><strong>2.  注册配置类，调用refresh()方法刷新容器</strong></p>
+
+        <h4 id="2-注册配置类调用refresh方法刷新容器"   >
+          <a href="#2-注册配置类调用refresh方法刷新容器" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#2-注册配置类调用refresh方法刷新容器"></a> 2.  注册配置类，调用refresh()方法刷新容器</h4>
+      
 <p><img src="/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630203127243.png" alt="image-20210630203127243" /></p>
-<p><strong>3. 在refresh()方法内执行registerBeanPostProcessors()注册所有已定义的后置处理器，以拦截bean的创建。</strong></p>
+
+        <h4 id="3-在refresh方法内执行registerbeanpostprocessors注册所有已定义的后置处理器以拦截bean的初始化-以下为该方法内执行逻辑"   >
+          <a href="#3-在refresh方法内执行registerbeanpostprocessors注册所有已定义的后置处理器以拦截bean的初始化-以下为该方法内执行逻辑" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#3-在refresh方法内执行registerbeanpostprocessors注册所有已定义的后置处理器以拦截bean的初始化-以下为该方法内执行逻辑"></a> 3. 在refresh()方法内执行registerBeanPostProcessors()注册所有已定义的后置处理器，以拦截bean的初始化。（以下为该方法内执行逻辑）</h4>
+      
 <p><img src="/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630203203476.png" alt="image-20210630203203476" /></p>
-<p><strong>3.1 在registerBeanPostProcessors()方法内：先获取IoC容器中所有已经定义了的需要实例化的BeanPostProcessor组件（此时还没创建对象实例）</strong></p>
+<p>3.1 在<code>registerBeanPostProcessors</code>()方法内：先获取IoC容器中所有已经定义了的需要实例化的<code>BeanPostProcessor</code>组件（此时还没创建对象实例）</p>
 <p><img src="/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630203357418.png" alt="image-20210630203357418" /></p>
 <p><img src="/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630202829082.png" alt="image-20210630202829082" /></p>
-<p>此时的<strong>org.springframework.aop.config.internalAutoProxyCreator</strong>正是之前在@Import(AspectJAutoProxyRegistrar.class))中使用BeanDefinitionRegistry类给容器中添加定义的id名称为internalAutoProxyCreator的组件。（即之前BeanDefinitionRegistry内定义了该后置处理器实现类，<mark>但还未创建实例化对象??</mark>）</p>
+<p>此时的<strong>org.springframework.aop.config.internalAutoProxyCreator</strong>正是之前在<code>@Import(AspectJAutoProxyRegistrar.class)</code>)中使用<code>BeanDefinitionRegistry</code>类给容器中添加<strong>定义</strong>的id名称为<code>internalAutoProxyCreator</code>的组件。（即之前<code>BeanDefinitionRegistry</code>内<strong>定义了</strong>该后置处理器实现类，<strong>但还未创建实例化对象</strong>，步骤3.5处才创建了该组件）</p>
 <p><img src="/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630192408003.png" alt="image-20210630192408003" /></p>
-<p><strong>3.2  给容器添加其他BeanPostProcessor</strong></p>
+<p>3.2  给容器添加其他<code>BeanPostProcessor</code></p>
 <p><img src="/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630204433781.png" alt="image-20210630204433781" /></p>
-<p><strong>3.3 遍历3.1中取出的所有BeanPostProcessor，并根据其是否实现了Ordered接口进行分类</strong></p>
+<p>3.3 遍历3.1中取出的所有<code>BeanPostProcessor</code>，并根据其是否实现了<code>Ordered</code>接口进行分类</p>
 <p><img src="/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630213254910.png" alt="image-20210630213254910" /></p>
-<p><strong>3.4 优先注册实现了PriorityOrdered接口的BeanPostProcessor</strong></p>
+<p>3.4 优先注册实现了<code>PriorityOrdered</code>接口的<code>BeanPostProcessor</code></p>
 <p><img src="/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630204659073.png" alt="image-20210630204659073" /></p>
-<p><strong>3.5 再给容器中注册实现了Ordered接口的BeanPostProcessor</strong></p>
-<p><strong>AnnotationAwareAspectJAutoProxyCreator类实现了该接口，因此在这一步被注册</strong></p>
+<p>3.5 再给容器中注册实现了<code>Ordered</code>接口的<code>BeanPostProcessor</code>（以下分析均为3.5断点方法<code>getBean()</code>中创建<code>AnnotationAwareAspectJAutoProxyCreator</code>对象的过程）</p>
+<p><strong>AnnotationAwareAspectJAutoProxyCreator类实现了Ordered接口，因此在这一步被注册</strong></p>
 <p><img src="/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630204914536.png" alt="image-20210630204914536" /></p>
-<p><strong>3.6 最后再注册没实现优先级接口的BeanPostProcessor</strong></p>
-<p><img src="/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630204929418.png" alt="image-20210630204929418" /></p>
 <p><strong>注册BeanPostProcessor，实际上就是创建BeanPostProcessor对象并保存在容器中</strong></p>
-<p>如何创建id为internalAutoProxyCreator的<strong>AnnotationAwareAspectJAutoProxyCreator</strong>对象【本质为BeanPostProcessor对象 】？</p>
+<p>如何创建id为<code>internalAutoProxyCreator</code>的<strong>AnnotationAwareAspectJAutoProxyCreator</strong>对象【本质为<code>BeanPostProcessor</code>对象 】？</p>
 <ol>
 <li>创建bean实例</li>
-<li>调用populateBean(beanName, mbd, instanceWrapper) 为bean属性赋值</li>
-<li>调用initializeBean(beanName, exposedObject, mbd) 为bean初始化</li>
+<li>调用<code>populateBean(beanName, mbd, instanceWrapper)</code> 为bean属性赋值</li>
+<li>调用<code>initializeBean(beanName, exposedObject, mbd)</code>为bean初始化</li>
 </ol>
 <p><img src="/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210629163559536.png" alt="image-20210629163559536" /></p>
-<p>initializeBean()方法内部依次执行：</p>
+<p><code>initializeBean()</code>方法内部依次执行：</p>
 <ul>
 <li><code>invokeAwareMethods()</code>方法（绿色框）：处理Aware接口的回调方法</li>
 <li><code>applyBeanPostProcessorsBeforeInitialization()</code>方法（红色框）：调用后置处理器</li>
@@ -144,18 +202,68 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <li><code>applyBeanPostProcessorsAfterInitialization()</code>方法（红色框）：调用后置处理器</li>
 </ul>
 <p><img src="/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630214340913.png" alt="image-20210630214340913" /></p>
-<p>执行调用invokeAwareMethods(beanName, bean)作用：执行Aware接口的回调方法。因为AnnotationAwareAspectJAutoProxyCreator类实现了<strong>BeanFactoryAware</strong>接口，因此在这里，执行了该组件的setBeanFactory()方法，用于获取bean创建工厂BeanFactory。</p>
+<p>执行调用<code>invokeAwareMethods(beanName, bean)</code>作用：执行<code>Aware</code>接口的回调方法。因为<code>AnnotationAwareAspectJAutoProxyCreator</code>类实现了<strong>BeanFactoryAware</strong>接口，因此在这里，执行了该组件的<code>setBeanFactory()</code>方法，用于获取bean创建工厂<code>BeanFactory</code>。</p>
 <p><img src="/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630213635404.png" alt="image-20210630213635404" /></p>
 <ol start="4">
-<li>此时即调用了AnnotationAwareAspectJAutoProxyCreator类父类的setBeanFactory()方法（下图红色框），获取了bean创建工厂BeanFactory。</li>
+<li>此时即调用了<code>AnnotationAwareAspectJAutoProxyCreator</code>类父类的<code>setBeanFactory()</code>方法（下图红色框），获取了bean创建工厂<code>BeanFactory</code>。</li>
 </ol>
 <p><img src="/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630220411754.png" alt="image-20210630220411754" /></p>
 <ol start="5">
-<li>接着执行this.initBeanFactory((ConfigurableListableBeanFactory)beanFactory);（上图黄色框）得到<mark>Advisorxxxx</mark></li>
+<li>接着执行<code>this.initBeanFactory((ConfigurableListableBeanFactory)beanFactory);</code>（上图黄色框）得到<mark>Advisorxxxx</mark></li>
 </ol>
 <p><img src="/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630220448668.png" alt="image-20210630220448668" /></p>
-<p><strong>4. 经过上述创建初始化等操作，获得了BeanPostProcessor实例化对象，并将注册到BeanFactory中</strong></p>
+<p>3.6 最后再注册没实现优先级接口的<code>BeanPostProcessor</code></p>
+<p><img src="/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630204929418.png" alt="image-20210630204929418" /></p>
+
+        <h4 id="4-经过上述创建初始化等操作此时35中getbean方法执行完毕获得了beanpostprocessor实例化对象再执行registerbeanpostprocessors方法将annotationawareaspectjautoproxycreator组件注册到beanfactory中"   >
+          <a href="#4-经过上述创建初始化等操作此时35中getbean方法执行完毕获得了beanpostprocessor实例化对象再执行registerbeanpostprocessors方法将annotationawareaspectjautoproxycreator组件注册到beanfactory中" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#4-经过上述创建初始化等操作此时35中getbean方法执行完毕获得了beanpostprocessor实例化对象再执行registerbeanpostprocessors方法将annotationawareaspectjautoproxycreator组件注册到beanfactory中"></a> 4. 经过上述创建初始化等操作，此时3.5中getBean()方法执行完毕，获得了BeanPostProcessor实例化对象，再执行registerBeanPostProcessors()方法将AnnotationAwareAspectJAutoProxyCreator组件注册到BeanFactory中</h4>
+      
+<p><img src="/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630204914536.png" alt="image-20210630204914536" /></p>
 <p><img src="/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630221118378.png" alt="image-20210630221118378" /></p>
+<p>以上即为<strong>创建和注册AnnotationAwareAspectJAutoProxyCreator组件的过程</strong>。</p>
+
+        <h4 id="5-步骤3中已经注册了所有的beanpostprocessor黄色框之后执行finishbeanfactoryinitialization方法红色框注册所有非lazy修饰的单实例普通组件"   >
+          <a href="#5-步骤3中已经注册了所有的beanpostprocessor黄色框之后执行finishbeanfactoryinitialization方法红色框注册所有非lazy修饰的单实例普通组件" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#5-步骤3中已经注册了所有的beanpostprocessor黄色框之后执行finishbeanfactoryinitialization方法红色框注册所有非lazy修饰的单实例普通组件"></a> 5. 步骤3中已经注册了所有的BeanPostProcessor（黄色框），之后执行finishBeanFactoryInitialization()方法（红色框）注册所有非@Lazy修饰的单实例普通组件。</h4>
+      
+<p><img src="/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701153743299.png" alt="image-20210701153743299" /></p>
+<p>5.1 进入<code>finishBeanFactoryInitialization()</code>方法后，首先遍历获取容器中所有的<code>beanNames</code>，并依次执行以下方法创建bean对象。方法栈调用：</p>
+<ul>
+<li><code>-&gt; finishBeanFactoryInitialization(beanFactory)</code></li>
+<li><code>-&gt; beanFactory.preInstantiateSingletons()</code></li>
+<li><code>-&gt; getBean(beanName)</code></li>
+<li><code>-&gt; doGetBean()</code></li>
+<li><code>-&gt; getSingleton()</code></li>
+<li><code>-&gt; createBean()</code></li>
+</ul>
+<p><img src="/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701163050223.png" alt="image-20210701163050223" /></p>
+<p><img src="/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701163108692.png" alt="image-20210701163108692" /></p>
+<p><img src="/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701161459941.png" alt="image-20210701161459941" /></p>
+<p><img src="/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701161016809.png" alt="image-20210701161016809" /></p>
+<p><img src="/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701163847923.png" alt="image-20210701163847923" /></p>
+<p>补充：在调用<code>getSingleton()</code>创建单实例bean之前，首先从缓存中查找当前bean是否存在，如果存在，说明这个bean之前已被创建过，可以直接使用，不再需要创建；否则再执行<code>getSingleton()</code>方法创建。只要创建好的bean都会被缓存起来。从缓存中查找bean是否存在：</p>
+<p><img src="/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701162202790.png" alt="image-20210701162202790" /></p>
+<p>经过上述方法栈，在执行<code>getBean(beanName)</code>方法后创建bean的流程：</p>
+<p>5.2 执行<code>getSingleton(beanName)</code>方法，从缓存中查找当前bean是否存在，如果存在，说明这个bean之前已被创建过，可以直接使用，不再需要创建；否则再执行getSingleton()方法创建。</p>
+<p>5.3 进入<code>createBean()</code> 方法体：</p>
+<p>5.3.1 在<code>createBean()</code> 方法中首先执行<code>resolveBeforeInstantiation()</code>方法（红色框，指在实例化前<strong>解析</strong>对象） 。该方法试图在此返回一个<strong>代理对象</strong>，如果能返回代理对象就使用，如果不能就向下继续执行<code>doCreateBean()</code>方法（黄色框）</p>
+<p><img src="/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701180818426.png" alt="image-20210701180818426" /></p>
+<p><code>resolveBeforeInstantiation()</code>方法体内，在实例化前先后执行前处理和后处理：</p>
+<p><img src="/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701181816332.png" alt="image-20210701181816332" /></p>
+<p>进入<code>applyBeanPostProcessorsBeforeInstantiation()</code>方法，该方法调用<code>getBeanPostProcessorCache()</code>方法判断当前容器中是否存在实现了<code>SmartInstantiationAwareBeanPostProcessor</code>接口的组件。恰好<code>AnnotationAwareAspectJAutoProxyCreator</code>类实现了该接口，因此会调用该类的<code>postProcessBeforeInstantiation()</code>方法。</p>
+<p><img src="/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701182427290.png" alt="image-20210701182427290" /></p>
+<p><img src="/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701182344197.png" alt="image-20210701182344197" /></p>
+<p><strong>重点</strong>：</p>
+<ul>
+<li><strong>BeanPostProcessor</strong>在普通bean对象<strong>创建完成之后，执行初始化方法前后</strong>调用</li>
+<li><strong>InstantiationAwareBeanPostProcessor</strong>在普通bean实例<strong>创建之前先进行拦截调用</strong>，尝试使用后置处理器返回<mark>代理对象</mark></li>
+</ul>
+<p><code>AnnotationAwareAspectJAutoProxyCreator</code>实现了<code>InstantiationAwareBeanPostProcessor</code>接口，它会在任何bean实例创建之前（此时还没创建对象，也就还没执行普通<code>BeanPostProcessor</code>的处理器）先尝试执行<code>postProcessBeforeInstantiation()</code>返回对象的。</p>
+<p>5.3.2 若<code>resolveBeforeInstantiation()</code>方法无法返回代理对象（意味着容器中没有<code>AnnotationAwareAspectJAutoProxyCreator</code>组件，即不需要开启AOP，也自然不需要返回代理对象），则程序继续向下执行<code>doCreateBean()</code>方法。此时才真正地去创建一个普通单实例bean实例，<strong>该过程和3.5中流程一样</strong>。</p>
+<p><img src="/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701171303958.png" alt="image-20210701171303958" /></p>
+
+        <h3 id="aop原理总结"   >
+          <a href="#aop原理总结" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#aop原理总结"></a> AOP原理总结</h3>
+      
 
         <h2 id="spring常用接口"   >
           <a href="#spring常用接口" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#spring常用接口"></a> Spring常用接口</h2>
@@ -203,11 +311,21 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <p>每个bean在进入该方法后都会判断是否符合黄色框中接口的实现类，若符合（代表实现了xxxAware接口），则会执行<code>invokeAwareInterfaces()</code>方法，根据其实现的接口类型调用相应的方法设置相应的容器组件（红色框）。</p>
 <p><img src="/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630103302320.png" alt="image-20210630103302320" /></p>
 </div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yuyun-zhao.gitee.io">yuyun zhao</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yuyun-zhao.gitee.io/2021/06/28/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/">http://yuyun-zhao.gitee.io/2021/06/28/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.gitee.io/tags/Spring/">Spring</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2021/06/28/%E3%80%90Memo%E3%80%91%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">【Memo】常见问题汇总</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2021/06/25/%E3%80%90Spring%E3%80%91Spring%E6%B3%A8%E8%A7%A3%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91/"><span class="paginator-prev__text">【Spring】Spring注解驱动开发</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#aop%E5%8E%9F%E7%90%86"><span class="toc-number">1.</span> <span class="toc-text">
-           AOP原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#importaspectjautoproxyregistrarclass"><span class="toc-number">1.1.</span> <span class="toc-text">
-           @Import(AspectJAutoProxyRegistrar.class)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#annotationawareaspectjautoproxycreator%E4%BD%9C%E7%94%A8"><span class="toc-number">1.2.</span> <span class="toc-text">
-           AnnotationAwareAspectJAutoProxyCreator作用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#beanfactoryaware%E6%8E%A5%E5%8F%A3%E4%BD%9C%E7%94%A8"><span class="toc-number">1.2.1.</span> <span class="toc-text">
-           BeanFactoryAware接口作用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#aop%E6%B5%81%E7%A8%8B"><span class="toc-number">1.3.</span> <span class="toc-text">
-           AOP流程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#spring%E5%B8%B8%E7%94%A8%E6%8E%A5%E5%8F%A3"><span class="toc-number">2.</span> <span class="toc-text">
+           AOP原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#aop%E7%AE%80%E6%98%93%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="toc-number">1.1.</span> <span class="toc-text">
+           AOP简易执行流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#enableaspectjautoproxy"><span class="toc-number">1.2.</span> <span class="toc-text">
+           @EnableAspectJAutoProxy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#importaspectjautoproxyregistrarclass"><span class="toc-number">1.3.</span> <span class="toc-text">
+           @Import(AspectJAutoProxyRegistrar.class)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#annotationawareaspectjautoproxycreator"><span class="toc-number">1.4.</span> <span class="toc-text">
+           AnnotationAwareAspectJAutoProxyCreator</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#beanfactoryaware%E6%8E%A5%E5%8F%A3%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">1.4.1.</span> <span class="toc-text">
+           BeanFactoryAware接口的作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#smartinstantiationawarebeanpostprocessor%E6%8E%A5%E5%8F%A3%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">1.4.2.</span> <span class="toc-text">
+           SmartInstantiationAwareBeanPostProcessor接口的作用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#annotationawareaspectjautoproxycreator%E6%89%A7%E8%A1%8C%E6%97%B6%E6%9C%BA"><span class="toc-number">1.5.</span> <span class="toc-text">
+           AnnotationAwareAspectJAutoProxyCreator执行时机</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#aop%E8%AF%A6%E7%BB%86%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="toc-number">1.6.</span> <span class="toc-text">
+           AOP详细执行流程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E4%BC%A0%E5%85%A5%E9%85%8D%E7%BD%AE%E7%B1%BB%E5%88%9B%E5%BB%BAioc%E5%AE%B9%E5%99%A8"><span class="toc-number">1.6.1.</span> <span class="toc-text">
+           1. 传入配置类，创建IoC容器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%B3%A8%E5%86%8C%E9%85%8D%E7%BD%AE%E7%B1%BB%E8%B0%83%E7%94%A8refresh%E6%96%B9%E6%B3%95%E5%88%B7%E6%96%B0%E5%AE%B9%E5%99%A8"><span class="toc-number">1.6.2.</span> <span class="toc-text">
+           2.  注册配置类，调用refresh()方法刷新容器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%9C%A8refresh%E6%96%B9%E6%B3%95%E5%86%85%E6%89%A7%E8%A1%8Cregisterbeanpostprocessors%E6%B3%A8%E5%86%8C%E6%89%80%E6%9C%89%E5%B7%B2%E5%AE%9A%E4%B9%89%E7%9A%84%E5%90%8E%E7%BD%AE%E5%A4%84%E7%90%86%E5%99%A8%E4%BB%A5%E6%8B%A6%E6%88%AAbean%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96-%E4%BB%A5%E4%B8%8B%E4%B8%BA%E8%AF%A5%E6%96%B9%E6%B3%95%E5%86%85%E6%89%A7%E8%A1%8C%E9%80%BB%E8%BE%91"><span class="toc-number">1.6.3.</span> <span class="toc-text">
+           3. 在refresh()方法内执行registerBeanPostProcessors()注册所有已定义的后置处理器，以拦截bean的初始化。（以下为该方法内执行逻辑）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E7%BB%8F%E8%BF%87%E4%B8%8A%E8%BF%B0%E5%88%9B%E5%BB%BA%E5%88%9D%E5%A7%8B%E5%8C%96%E7%AD%89%E6%93%8D%E4%BD%9C%E6%AD%A4%E6%97%B635%E4%B8%ADgetbean%E6%96%B9%E6%B3%95%E6%89%A7%E8%A1%8C%E5%AE%8C%E6%AF%95%E8%8E%B7%E5%BE%97%E4%BA%86beanpostprocessor%E5%AE%9E%E4%BE%8B%E5%8C%96%E5%AF%B9%E8%B1%A1%E5%86%8D%E6%89%A7%E8%A1%8Cregisterbeanpostprocessors%E6%96%B9%E6%B3%95%E5%B0%86annotationawareaspectjautoproxycreator%E7%BB%84%E4%BB%B6%E6%B3%A8%E5%86%8C%E5%88%B0beanfactory%E4%B8%AD"><span class="toc-number">1.6.4.</span> <span class="toc-text">
+           4. 经过上述创建初始化等操作，此时3.5中getBean()方法执行完毕，获得了BeanPostProcessor实例化对象，再执行registerBeanPostProcessors()方法将AnnotationAwareAspectJAutoProxyCreator组件注册到BeanFactory中</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E6%AD%A5%E9%AA%A43%E4%B8%AD%E5%B7%B2%E7%BB%8F%E6%B3%A8%E5%86%8C%E4%BA%86%E6%89%80%E6%9C%89%E7%9A%84beanpostprocessor%E9%BB%84%E8%89%B2%E6%A1%86%E4%B9%8B%E5%90%8E%E6%89%A7%E8%A1%8Cfinishbeanfactoryinitialization%E6%96%B9%E6%B3%95%E7%BA%A2%E8%89%B2%E6%A1%86%E6%B3%A8%E5%86%8C%E6%89%80%E6%9C%89%E9%9D%9Elazy%E4%BF%AE%E9%A5%B0%E7%9A%84%E5%8D%95%E5%AE%9E%E4%BE%8B%E6%99%AE%E9%80%9A%E7%BB%84%E4%BB%B6"><span class="toc-number">1.6.5.</span> <span class="toc-text">
+           5. 步骤3中已经注册了所有的BeanPostProcessor（黄色框），之后执行finishBeanFactoryInitialization()方法（红色框）注册所有非@Lazy修饰的单实例普通组件。</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#aop%E5%8E%9F%E7%90%86%E6%80%BB%E7%BB%93"><span class="toc-number">1.7.</span> <span class="toc-text">
+           AOP原理总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#spring%E5%B8%B8%E7%94%A8%E6%8E%A5%E5%8F%A3"><span class="toc-number">2.</span> <span class="toc-text">
            Spring常用接口</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#importbeandefinitionregistrar"><span class="toc-number">2.1.</span> <span class="toc-text">
            ImportBeanDefinitionRegistrar</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#beanpostprocessor"><span class="toc-number">2.2.</span> <span class="toc-text">
            BeanPostProcessor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#aware"><span class="toc-number">2.3.</span> <span class="toc-text">
