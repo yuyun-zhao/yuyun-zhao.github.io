@@ -4,6 +4,48 @@
   
     
     <entry>
+      <title>【Spring】Spring5 IoC源码分析</title>
+      <link href="2021/07/14/%E3%80%90Spring%E3%80%91Spring5-IoC%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+      <url>2021/07/14/%E3%80%90Spring%E3%80%91Spring5-IoC%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</url>
+      
+        <content type="html"><![CDATA[        <h2 id="ioc容器"   >          <a href="#ioc容器" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#ioc容器"></a> IoC容器</h2>      <p>IoC容器就是保存组件的地方，其内本质上是一些map对象存储组件。</p><p>在容器启动时，首先将所有定义的组件创建，并添加到这些map对象中。之后开发人员再从容器中getBean()获取组件时，将直接从该map中取出该组件，无需再创建</p><p>BeanFactory和ApplicationContext的区别：ApplicationContext是BeanFactory的子接口。</p><p>BeanFactory：Bean工厂接口，负责创建Bean实例，其内保存的单例Bean都保存在一个map中</p><p>ApplicationContext：容器接口，更多的负责容器功能的实现，其可以基于BeanFactory创建好的对象之上完成强大的容器功能，其可以从map中获取这些Bean，并且AOP，DI都在ApplicationContext接口下的类中。</p><p>BeanFactory 是 Spring最底层的接口，ApplicationContext是留给程序员使用的IOC容器；ApplicationContext是BeanFactory的子接口。</p><p>对象由BeanFactory 创建。对象间的动态装配和管理由ApplicationContext完成。</p><p>Spring中最大的模式是工厂模式，其帮助用户创建和管理组件。</p><span id="more"></span>        <h2 id="ioc容器详细创建过程分析"   >          <a href="#ioc容器详细创建过程分析" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#ioc容器详细创建过程分析"></a> IoC容器详细创建过程分析</h2>              <h3 id="1-传入配置类创建ioc容器"   >          <a href="#1-传入配置类创建ioc容器" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#1-传入配置类创建ioc容器"></a> 1. 传入配置类，创建IoC容器</h3>      <p><img src="/images/%E3%80%90Spring%E3%80%91Spring5-IoC%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/image-20210630203107349.png" alt="img" /></p>        <h3 id="2-refresh后续流程均在该方法内执行"   >          <a href="#2-refresh后续流程均在该方法内执行" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#2-refresh后续流程均在该方法内执行"></a> 2. refresh()：后续流程均在该方法内执行</h3>      <p>进入<strong>AnnotationConfigApplicationContext</strong>的构造器，调用<code>refresh()</code>方法</p><p><img src="/images/%E3%80%90Spring%E3%80%91Spring5-IoC%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/image-20210714142709396.png" alt="image-20210714142709396" /></p><p>该方法内调用 <strong>finishBeanFactoryInitialization()</strong> 方法注册<strong>所有非@Lazy修饰的单实例普通组件</strong>。</p><p><img src="/images/%E3%80%90Spring%E3%80%91Spring5-IoC%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/image-20210714161257818.png" alt="image-20210714161257818" /></p>        <h3 id="3-finishbeanfactoryinitialization注册普通组件"   >          <a href="#3-finishbeanfactoryinitialization注册普通组件" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#3-finishbeanfactoryinitialization注册普通组件"></a> 3. finishBeanFactoryInitialization()：注册普通组件</h3>      <p>该方法将注册<strong>所有非@Lazy修饰的单实例普通组件</strong>。进入该方法后，调用 <code>beanFactory.preInstantiateSingletons()</code>方法实例化所有非@Lazy修饰的单实例普通组件。</p><p><img src="/images/%E3%80%90Spring%E3%80%91Spring5-IoC%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/image-20210714161526478.png" alt="image-20210714161526478" /></p><p>此处的<code>beanFactory</code>为<strong>DefaultListableBeanFactory</strong>类对象。</p><p>进入 <code>beanFactory.preInstantiateSingletons()</code> 方法：</p><p>3.1 首先获取到所有定义的组件名字：</p><p><img src="/images/%E3%80%90Spring%E3%80%91Spring5-IoC%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/image-20210714161659116.png" alt="image-20210714161659116" /></p><p>3.2 按顺序创建组件：</p><p><img src="/images/%E3%80%90Spring%E3%80%91Spring5-IoC%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/image-20210714162218894.png" alt="image-20210714162218894" /></p><p>创建组件的内容在 <strong>getBean()</strong> 方法中：</p>        <h3 id="4-getbeanbeanname创建组件对象"   >          <a href="#4-getbeanbeanname创建组件对象" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#4-getbeanbeanname创建组件对象"></a> 4. getBean(beanName)：创建组件对象</h3>      <p><img src="/images/%E3%80%90Spring%E3%80%91Spring5-IoC%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/image-20210714145712663.png" alt="image-20210714145712663" /></p><p>其调用了 <strong>doGetBean()</strong> 方法，该方法在<code>AbstractBeanFactory</code>类中。进入该方法内：</p><p>4.1 首先调用 <strong>getSingleton()</strong> 方法从已经注册的所有单实例组件缓存map中检查有没有该组件（该过程具体分析见后文）。容器第一次创建该组件时从map中找不到该组件，则执行后续代码将其创建，并添加到map中。</p><p><img src="/images/%E3%80%90Spring%E3%80%91Spring5-IoC%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/image-20210714150118137.png" alt="image-20210714150118137" /></p><p>4.2 创建当前组件所依赖的其他组件</p><p><img src="/images/%E3%80%90Spring%E3%80%91Spring5-IoC%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/image-20210714153153739.png" alt="image-20210714153153739" /></p><p>4.3 根据组件定义信息判断其是否单例，若是则创建该组件：</p><p><img src="/images/%E3%80%90Spring%E3%80%91Spring5-IoC%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/image-20210714153335632.png" alt="image-20210714153335632" /></p><p>进入<code>getSingleton()</code>方法后，首先从缓存中判断是否已经存在该组件，若不存在，则调用上图中Lambda表达式的匿名方法中的<strong>createBean()<strong>创建该组件，并将其</strong>添加到组件缓存map中</strong>。下面为具体流程：</p><p>4.3.1 下图红色框中的<strong>singletonObjects</strong>是<code>DefaultSingletonBeanRegistry</code>类中的属性，其保存了所有已创建的单实例对象的信息。在容器创建完毕后，后续再次调用getBean()方法从容器中获取组件时，将直接从该map对象中获取（见该小节最后分析）。</p><p><img src="/images/%E3%80%90Spring%E3%80%91Spring5-IoC%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/image-20210714155928184.png" alt="image-20210714155928184" /></p><p><img src="/images/%E3%80%90Spring%E3%80%91Spring5-IoC%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/image-20210714154108704.png" alt="image-20210714154108704" /></p><p>4.3.2 接着执行下图中黄色框的<code>singletonFactory.getObject()</code>方法创建该组件。注意：该方法即是4.3中的Lambda表达式的匿名方法。执行该方法相当于执行该匿名方法（绿色框）。其返回红色框 <strong>createBean()</strong> 方法执行的结果，即创建出的组件。因此创建组件的具体代码需要分析 <strong>createBean()</strong> 方法。（见下文步骤5）</p><p><img src="/images/%E3%80%90Spring%E3%80%91Spring5-IoC%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/image-20210714155505160.png" alt="image-20210714155505160" /></p><p>4.3.3 创建出组件后，调用 <strong>addSingleton()</strong> 方法将其添加到组件缓存map中。</p><p><img src="/images/%E3%80%90Spring%E3%80%91Spring5-IoC%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/image-20210714154015017.png" alt="image-20210714154015017" /></p><p><code>addSingleton()</code>方法内，将刚才创建的组件保存到<strong>singletonObjects</strong>缓存map中：</p><p><img src="/images/%E3%80%90Spring%E3%80%91Spring5-IoC%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/image-20210714154526356.png" alt="image-20210714154526356" /></p><hr /><p>在容器启动时，将逐一执行上述过程将每个组件添加到<strong>singletonObjects</strong>这个缓存map中。在容器创建完毕后，开发人员调用 <strong>getBean()</strong> 方法从容器中获取组件时，将首先执行 <strong>getSingleton()</strong> 方法（见4.1步），其将尝试从<strong>singletonObjects</strong>中获取该组件（下图橙色框），若之前已经注册过该组件，则此处将直接将其返回，无需再执行4.2 - 4.3步骤的创建过程。</p><p><img src="/images/%E3%80%90Spring%E3%80%91Spring5-IoC%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/image-20210714163739295.png" alt="image-20210714163739295" /></p><hr /><p><strong>总结：至此，已经创建出了该组件，并将其添加到了缓存map中。其中，具体创建组件的createBean()方法分析如下：</strong></p>        <h3 id="5-createbean方法"   >          <a href="#5-createbean方法" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#5-createbean方法"></a> 5. createBean()方法：</h3>      <p>略，见AOP</p><p><img src="/images/%E3%80%90Spring%E3%80%91Spring5-IoC%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/image-20210714143755100.png" alt="image-20210714143755100" /></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Spring </category>
+          
+          <category> SSM </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Spring </tag>
+            
+            <tag> SSM </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>【SpringMVC】SpringMVC 源码分析</title>
+      <link href="2021/07/13/%E3%80%90SpringMVC%E3%80%91SpringMVC-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+      <url>2021/07/13/%E3%80%90SpringMVC%E3%80%91SpringMVC-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>【SpringBoot】SpringBoot2 源码分析</title>
       <link href="2021/07/12/%E3%80%90SpringBoot%E3%80%91SpringBoot2-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
       <url>2021/07/12/%E3%80%90SpringBoot%E3%80%91SpringBoot2-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</url>
