@@ -1,0 +1,646 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="I&#x2F;O 模型                             IO模型基本说明        I&#x2F;O 模型简单的理解：就是用什么样的通道进行数据的发送和接收，很大程度上决定了程序通信的性能。 Java 共支持 3 种网络编程模型 I&#x2F;O 模式：BIO、NIO、AIO。  Java BIO：同步并阻塞（传统阻塞型），服务器实现模式为一个连接一个线程，即客户端有连接请求">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Java】NIO">
+<meta property="og:url" content="http://yuyun-zhao.gitee.io/2021/08/13/%E3%80%90Java%E3%80%91NIO/index.html">
+<meta property="og:site_name" content="yuyun zhao&#39;s blog">
+<meta property="og:description" content="I&#x2F;O 模型                             IO模型基本说明        I&#x2F;O 模型简单的理解：就是用什么样的通道进行数据的发送和接收，很大程度上决定了程序通信的性能。 Java 共支持 3 种网络编程模型 I&#x2F;O 模式：BIO、NIO、AIO。  Java BIO：同步并阻塞（传统阻塞型），服务器实现模式为一个连接一个线程，即客户端有连接请求">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Java%E3%80%91NIO/chapter02_01.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Java%E3%80%91NIO/chapter02_02.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Java%E3%80%91NIO/chapter02_03.png">
+<meta property="og:image" content="https://dongzl.github.io/netty-handbook/_media/chapter03/chapter03_01.png">
+<meta property="og:image" content="https://dongzl.github.io/netty-handbook/_media/chapter03/chapter03_02.png">
+<meta property="og:image" content="https://dongzl.github.io/netty-handbook/_media/chapter03/chapter03_03.png">
+<meta property="og:image" content="https://dongzl.github.io/netty-handbook/_media/chapter03/chapter03_05.png">
+<meta property="og:image" content="https://dongzl.github.io/netty-handbook/_media/chapter03/chapter03_06.png">
+<meta property="og:image" content="https://dongzl.github.io/netty-handbook/_media/chapter03/chapter03_07.png">
+<meta property="og:image" content="https://dongzl.github.io/netty-handbook/_media/chapter03/chapter03_08.png">
+<meta property="og:image" content="https://dongzl.github.io/netty-handbook/_media/chapter03/chapter03_09.png">
+<meta property="article:published_time" content="2021-08-13T08:55:19.000Z">
+<meta property="article:modified_time" content="2021-08-13T11:31:34.648Z">
+<meta property="article:author" content="yuyun zhao">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Netty">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Java%E3%80%91NIO/chapter02_01.png"><title>【Java】NIO | yuyun zhao's blog</title><link ref="canonical" href="http://yuyun-zhao.gitee.io/2021/08/13/%E3%80%90Java%E3%80%91NIO/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":true},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"carbon","highlight":"light","wordWrap":false},
+  reward: false,
+  fancybox: true,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: {"avoidBanner":false},
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"复制","copySuccess":"复制成功","copyError":"复制失败"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【Java】NIO</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-08-13</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-08-13</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">4.4k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">31分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body">
+        <h2 id="io-模型"   >
+          <a href="#io-模型" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#io-模型"></a> I/O 模型</h2>
+      
+
+        <h3 id="io模型基本说明"   >
+          <a href="#io模型基本说明" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#io模型基本说明"></a> IO模型基本说明</h3>
+      
+<p><code>I/O</code> 模型简单的理解：就是用什么样的通道进行数据的发送和接收，很大程度上决定了程序通信的性能。</p>
+<p><code>Java</code> 共支持 <code>3</code> 种网络编程模型 <code>I/O</code> 模式：<code>BIO</code>、<code>NIO</code>、<code>AIO</code>。</p>
+<ol>
+<li><code>Java BIO</code>：同步并阻塞（传统阻塞型），服务器实现模式为一个连接一个线程，即客户端有连接请求时服务器端就需要启动一个线程进行处理，如果这个连接不做任何事情会造成不必要的线程开销。</li>
+</ol>
+<p><img src="/images/%E3%80%90Java%E3%80%91NIO/chapter02_01.png" alt="img" /></p>
+<span id="more"></span>
+<blockquote>
+<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://dongzl.github.io/netty-handbook/#/_content/chapter02" >https://dongzl.github.io/netty-handbook/#/_content/chapter02</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+</blockquote>
+<ol start="2">
+<li><code>Java NIO</code>：同步非阻塞，服务器实现模式为一个线程处理多个请求（连接），即客户端发送的连接请求都会注册到多路复用器上，多路复用器轮询到连接有 <code>I/O</code> 请求就进行处理。</li>
+</ol>
+<p><img src="/images/%E3%80%90Java%E3%80%91NIO/chapter02_02.png" alt="img" /></p>
+<ol start="3">
+<li><code>Java AIO(NIO.2)</code>：异步非阻塞，<code>AIO</code> 引入异步通道的概念，采用了 <code>Proactor</code> 模式，简化了程序编写，有效的请求才启动线程，它的特点是先由操作系统完成后才通知服务端程序启动线程去处理，一般适用于连接数较多且连接时间较长的应用。</li>
+</ol>
+
+        <h3 id="bio-nio-aio-使用场景"   >
+          <a href="#bio-nio-aio-使用场景" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#bio-nio-aio-使用场景"></a> BIO、NIO、AIO 使用场景</h3>
+      
+<ol>
+<li><code>BIO</code> 方式适用于<strong>连接数目比较小且固定</strong>的架构，这种方式对服务器资源要求比较高，并发局限于应用中，<code>JDK1.4</code> 以前的唯一选择，但程序简单易理解。</li>
+<li><code>NIO</code> 方式适用于<strong>连接数目多且连接比较短</strong>（轻操作）的架构，比如聊天服务器，弹幕系统，服务器间通讯等。编程比较复杂，<code>JDK1.4</code> 开始支持。</li>
+<li><code>AIO</code> 方式使用于<strong>连接数目多且连接比较长</strong>（重操作）的架构，比如相册服务器，充分调用 <code>OS</code> 参与并发操作，编程比较复杂，<code>JDK7</code> 开始支持。</li>
+</ol>
+
+        <h2 id="bio"   >
+          <a href="#bio" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#bio"></a> BIO</h2>
+      
+<ul>
+<li><code>Java BIO</code> 就是传统的 <code>Java I/O</code> 编程，其相关的类和接口在 <code>java.io</code>。</li>
+<li><code>BIO(BlockingI/O)</code>：同步阻塞，服务器实现模式为一个连接一个线程，即客户端有连接请求时服务器端就需要启动一个线程进行处理，如果这个连接不做任何事情会造成不必要的线程开销，可以通过线程池机制改善（实现多个客户连接服务器）。</li>
+<li><code>BIO</code> 方式适用于连接数目比较小且固定的架构，这种方式对服务器资源要求比较高，并发局限于应用中，<code>JDK1.4</code> 以前的唯一选择，程序简单易理解。</li>
+</ul>
+
+        <h3 id="bio-工作机制"   >
+          <a href="#bio-工作机制" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#bio-工作机制"></a> BIO 工作机制</h3>
+      
+<p><img src="/images/%E3%80%90Java%E3%80%91NIO/chapter02_03.png" alt="img" /></p>
+<p>对 <code>BIO</code> 编程流程的梳理</p>
+<ol>
+<li>服务器端启动一个 <code>ServerSocket</code>。</li>
+<li>客户端启动 <code>Socket</code> 对服务器进行通信，默认情况下服务器端需要对每个客户建立一个线程与之通讯。</li>
+<li>客户端发出请求后，先咨询服务器是否有线程响应，如果没有则会等待，或者被拒绝。</li>
+<li>如果有响应，客户端线程会等待请求结束后，在继续执行。</li>
+</ol>
+
+        <h3 id="bio-应用实例"   >
+          <a href="#bio-应用实例" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#bio-应用实例"></a> BIO 应用实例</h3>
+      
+<p>实例说明：</p>
+<ol>
+<li>使用 <code>BIO</code> 模型编写一个服务器端，监听 <code>6666</code> 端口，当有客户端连接时，就启动一个线程与之通讯。</li>
+<li>要求使用线程池机制改善，可以连接多个客户端。</li>
+<li>服务器端可以接收客户端发送的数据（<code>telnet</code> 方式即可）。</li>
+<li>代码演示：</li>
+</ol>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.zhao.bio;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.InputStream;</span><br><span class="line"><span class="keyword">import</span> java.net.ServerSocket;</span><br><span class="line"><span class="keyword">import</span> java.net.Socket;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.ExecutorService;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.Executors;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BIOServer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="comment">//线程池机制</span></span><br><span class="line">        <span class="comment">//思路</span></span><br><span class="line">        <span class="comment">//1. 创建一个线程池</span></span><br><span class="line">        <span class="comment">//2. 如果有客户端连接，就创建一个线程，与之通讯(单独写一个方法)</span></span><br><span class="line">        ExecutorService newCachedThreadPool = Executors.newCachedThreadPool();</span><br><span class="line">        <span class="comment">//创建ServerSocket</span></span><br><span class="line">        ServerSocket serverSocket = <span class="keyword">new</span> ServerSocket(<span class="number">6666</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;服务器启动了&quot;</span>);</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;线程信息id = &quot;</span> + Thread.currentThread().getId() + <span class="string">&quot;名字 = &quot;</span> + Thread.currentThread().getName());</span><br><span class="line">            <span class="comment">//监听，等待客户端连接</span></span><br><span class="line">            System.out.println(<span class="string">&quot;等待连接....&quot;</span>);</span><br><span class="line">            <span class="keyword">final</span> Socket socket = serverSocket.accept();</span><br><span class="line">            System.out.println(<span class="string">&quot;连接到一个客户端&quot;</span>);</span><br><span class="line">            <span class="comment">//就创建一个线程，与之通讯(单独写一个方法)</span></span><br><span class="line">            newCachedThreadPool.execute(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;<span class="comment">//我们重写</span></span><br><span class="line">                    <span class="comment">//可以和客户端通讯</span></span><br><span class="line">                    handler(socket);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//编写一个handler方法，和客户端通讯</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">handler</span><span class="params">(Socket socket)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;线程信息id = &quot;</span> + Thread.currentThread().getId() + <span class="string">&quot;名字 = &quot;</span> + Thread.currentThread().getName());</span><br><span class="line">            <span class="keyword">byte</span>[] bytes = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line">            <span class="comment">//通过socket获取输入流</span></span><br><span class="line">            InputStream inputStream = socket.getInputStream();</span><br><span class="line">            <span class="comment">//循环的读取客户端发送的数据</span></span><br><span class="line">            <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;线程信息id = &quot;</span> + Thread.currentThread().getId() + <span class="string">&quot;名字 = &quot;</span> + Thread.currentThread().getName());</span><br><span class="line">                System.out.println(<span class="string">&quot;read....&quot;</span>);</span><br><span class="line">                <span class="keyword">int</span> read = inputStream.read(bytes);</span><br><span class="line">                <span class="keyword">if</span> (read != -<span class="number">1</span>) &#123;</span><br><span class="line">                    System.out.println(<span class="keyword">new</span> String(bytes, <span class="number">0</span>, read));<span class="comment">//输出客户端发送的数据</span></span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;关闭和client的连接&quot;</span>);</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                socket.close();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="bio-问题分析"   >
+          <a href="#bio-问题分析" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#bio-问题分析"></a> BIO 问题分析</h3>
+      
+<ol>
+<li>每个请求都需要创建独立的线程，与对应的客户端进行数据 <code>Read</code>，业务处理，数据 <code>Write</code>。</li>
+<li>当并发数较大时，需要创建大量线程来处理连接，系统资源占用较大。</li>
+<li>连接建立后，如果当前线程暂时没有数据可读，则线程就阻塞在 <code>Read</code> 操作上，造成线程资源浪费。</li>
+</ol>
+
+        <h2 id="nio"   >
+          <a href="#nio" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#nio"></a> NIO</h2>
+      
+<p><code>Java NIO</code> 全称 <strong><code>Java non-blocking IO</code></strong> ，是指 <code>JDK</code> 提供的新 <code>API</code>。从 <code>JDK1.4</code> 开始，<code>Java</code> 提供了一系列改进的输入/输出的新特性，被统称为 <code>NIO</code>（即 <code>NewIO</code>），是同步非阻塞的。</p>
+<p><code>NIO</code> 相关类都被放在 <strong><code>java.nio</code></strong> 包及子包下，并且对原 <code>java.io</code> 包中的很多类进行改写。<code>NIO</code> 有三大核心部分:</p>
+<ul>
+<li><strong>Channel（通道）</strong></li>
+<li><strong>Buffer（缓冲区）</strong></li>
+<li><strong>Selector（选择器）</strong></li>
+</ul>
+<p><code>NIO</code> 是<strong>面向缓冲区，或者面向块编程</strong>的。数据读取到一个它稍后处理的缓冲区，需要时可在缓冲区中前后移动，这就增加了处理过程中的灵活性，使用它可以提供非阻塞式的高伸缩性网络。</p>
+<p><code>Java NIO</code> 的非阻塞模式，使一个线程从某通道发送请求或者读取数据，但是它仅能得到目前可用的数据，如果目前没有数据可用时，就什么都不会获取，而不是保持线程阻塞，所以直至数据变的可以读取之前，该线程可以继续做其他的事情。非阻塞写也是如此，一个线程请求写入一些数据到某通道，但不需要等待它完全写入，这个线程同时可以去做别的事情。</p>
+<p>通俗理解：<code>NIO</code> 是可以做到用一个线程来处理多个操作的。假设有 <code>10000</code> 个请求过来,根据实际情况，可以分配 <code>50</code> 或者 <code>100</code> 个线程来处理。不像之前的阻塞 <code>IO</code> 那样，非得分配 <code>10000</code> 个。</p>
+<p><code>HTTP 2.0</code> 使用了<strong>多路复用技术</strong>，做到同一个连接并发处理多个请求，而且并发请求的数量比 <code>HTTP 1.1</code> 大了好几个数量级。</p>
+<p>案例说明 <code>NIO</code> 的 <code>Buffer</code></p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.atguigu.nio;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.nio.IntBuffer;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BasicBuffer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//举例说明 Buffer 的使用(简单说明)</span></span><br><span class="line">        <span class="comment">//创建一个 Buffer，大小为 5，即可以存放 5 个 int</span></span><br><span class="line">        IntBuffer intBuffer = IntBuffer.allocate(<span class="number">5</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//向buffer存放数据</span></span><br><span class="line">        <span class="comment">//intBuffer.put(10);</span></span><br><span class="line">        <span class="comment">//intBuffer.put(11);</span></span><br><span class="line">        <span class="comment">//intBuffer.put(12);</span></span><br><span class="line">        <span class="comment">//intBuffer.put(13);</span></span><br><span class="line">        <span class="comment">//intBuffer.put(14);</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; intBuffer.capacity(); i++) &#123;</span><br><span class="line">            intBuffer.put(i * <span class="number">2</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//如何从 buffer 读取数据</span></span><br><span class="line">        <span class="comment">//将 buffer 转换，读写切换(!!!)</span></span><br><span class="line">        intBuffer.flip();</span><br><span class="line">        <span class="keyword">while</span> (intBuffer.hasRemaining()) &#123;</span><br><span class="line">            System.out.println(intBuffer.get());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="nio-和-bio-的比较"   >
+          <a href="#nio-和-bio-的比较" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#nio-和-bio-的比较"></a> NIO 和 BIO 的比较</h3>
+      
+<ul>
+<li><code>BIO</code> 以流的方式处理数据，而 <code>NIO</code> 以块的方式处理数据，块 <code>I/O</code> 的效率比流 <code>I/O</code> 高很多。</li>
+<li><code>BIO</code> 是阻塞的，<code>NIO</code> 则是非阻塞的。</li>
+<li><code>BIO</code> 基于字节流和字符流进行操作，而 <code>NIO</code> 基于 <code>Channel</code>（通道）和 <code>Buffer</code>（缓冲区）进行操作，数据总是从通道读取到缓冲区中，或者从缓冲区写入到通道中。<code>Selector</code>（选择器）用于监听多个通道的事件（比如：连接请求，数据到达等），因此使用单个线程就可以监听多个客户端通道。</li>
+</ul>
+
+        <h3 id="nio-三大核心原理示意图"   >
+          <a href="#nio-三大核心原理示意图" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#nio-三大核心原理示意图"></a> NIO 三大核心原理示意图</h3>
+      
+<p><code>NIO</code> 的 <code>Selector</code>、<code>Channel</code> 和 <code>Buffer</code> 的关系图：</p>
+<p><img src="https://dongzl.github.io/netty-handbook/_media/chapter03/chapter03_01.png" alt="img" /></p>
+<ul>
+<li>每个 <code>Channel</code> 都会对应一个 <code>Buffer</code>。</li>
+<li><code>Selector</code> 对应一个线程，一个线程对应多个 <code>Channel</code>（连接）。</li>
+<li>该图反应了有三个 <code>Channel</code> 注册到该 <code>Selector</code> //程序</li>
+<li>程序切换到哪个 <code>Channel</code> 是由事件决定的，<code>Event</code> 就是一个重要的概念。</li>
+<li><code>Selector</code> 会根据不同的事件，在各个通道上切换。</li>
+<li><code>Buffer</code> 就是一个内存块，底层是有一个数组。</li>
+<li>数据的读取写入是通过 <code>Buffer</code>，这个和 <code>BIO</code>，<code>BIO</code> 中要么是输入流，或者是输出流，不能双向，但是 <code>NIO</code> 的 <code>Buffer</code> 是可以读也可以写，需要 <code>flip</code> 方法切换 <code>Channel</code> 是双向的，可以返回底层操作系统的情况，比如 <code>Linux</code>，底层的操作系统通道就是双向的。</li>
+</ul>
+
+        <h2 id="缓冲区buffer"   >
+          <a href="#缓冲区buffer" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#缓冲区buffer"></a> 缓冲区（Buffer）</h2>
+      
+
+        <h3 id="简介"   >
+          <a href="#简介" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#简介"></a> 简介</h3>
+      
+<p>缓冲区（<code>Buffer</code>）：缓冲区本质上是一个<strong>可以读写数据的内存块</strong>，可以理解成是一个<strong>容器对象（含数组）</strong>，该对象提供了一组方法，可以更轻松地使用内存块，，缓冲区对象内置了一些机制，能够跟踪和记录缓冲区的状态变化情况。<code>Channel</code> 提供从文件、网络读取数据的渠道，但是读取或写入的数据都必须经由 <code>Buffer</code>，如图：</p>
+<p><img src="https://dongzl.github.io/netty-handbook/_media/chapter03/chapter03_02.png" alt="img" /></p>
+
+        <h3 id="buffer类及其子类"   >
+          <a href="#buffer类及其子类" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#buffer类及其子类"></a> Buffer类及其子类</h3>
+      
+<p>在 <code>NIO</code> 中，<code>Buffer</code> 是一个顶层父类，它是一个抽象类，类的层级关系图：</p>
+<p><img src="https://dongzl.github.io/netty-handbook/_media/chapter03/chapter03_03.png" alt="img" /></p>
+<p><code>Buffer</code> 类定义了所有的缓冲区都具有的四个属性来提供关于其所包含的数据元素的信息：</p>
+<p><img src="https://dongzl.github.io/netty-handbook/_media/chapter03/chapter03_05.png" alt="img" /></p>
+<p><code>Buffer</code> 类相关方法一览</p>
+<p><img src="https://dongzl.github.io/netty-handbook/_media/chapter03/chapter03_06.png" alt="img" /></p>
+
+        <h3 id="bytebuffer"   >
+          <a href="#bytebuffer" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#bytebuffer"></a> ByteBuffer</h3>
+      
+<p>从前面可以看出对于 <code>Java</code> 中的基本数据类型（<code>boolean</code> 除外），都有一个 <code>Buffer</code> 类型与之相对应，最常用的自然是 <code>ByteBuffer</code> 类（二进制数据），该类的主要方法如下：</p>
+<p><img src="https://dongzl.github.io/netty-handbook/_media/chapter03/chapter03_07.png" alt="img" /></p>
+
+        <h2 id="通道channel"   >
+          <a href="#通道channel" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#通道channel"></a> 通道（Channel）</h2>
+      
+
+        <h3 id="简介-2"   >
+          <a href="#简介-2" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#简介-2"></a> 简介</h3>
+      
+<p>NIO的通道类似于流，但有些区别如下：</p>
+<ul>
+<li>通道可以同时进行读写，而流只能读或者只能写</li>
+<li>通道可以实现异步读写数据</li>
+<li>通道可以从缓冲读数据，也可以写数据到缓冲s</li>
+</ul>
+<p><code>BIO</code> 中的 <code>Stream</code> 是单向的，例如 <code>FileInputStream</code> 对象只能进行读取数据的操作，而 <code>NIO</code> 中的通道（<code>Channel</code>）是双向的，可以读操作，也可以写操作。</p>
+<p><code>Channel</code> 在 <code>NIO</code> 中是一个接口 <code>public interface Channel extends Closeable&#123;&#125;</code>。常用的 <code>Channel</code> 子类有：<strong><code>FileChannel</code>、<code>DatagramChannel</code>、<code>ServerSocketChannel</code> 和 <code>SocketChannel</code></strong>。【<code>ServerSocketChanne</code> 类似 <code>ServerSocket</code>、<code>SocketChannel</code> 类似 <code>Socket</code>】</p>
+<p><code>FileChannel</code> 用于文件的数据读写，<code>DatagramChannel</code> 用于 <code>UDP</code> 的数据读写，<code>ServerSocketChannel</code> 和 <code>SocketChannel</code> 用于 <code>TCP</code> 的数据读写。</p>
+<p><img src="https://dongzl.github.io/netty-handbook/_media/chapter03/chapter03_08.png" alt="img" /></p>
+
+        <h3 id="filechannel-类"   >
+          <a href="#filechannel-类" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#filechannel-类"></a> FileChannel 类</h3>
+      
+<p><code>FileChannel</code> 主要用来对本地文件进行 <code>IO</code> 操作，常见的方法有：</p>
+<ul>
+<li><code>public int read(ByteBuffer dst)</code>，从通道读取数据并放到缓冲区中</li>
+<li><code>public int write(ByteBuffer src)</code>，把缓冲区的数据写到通道中</li>
+<li><code>public long transferFrom(ReadableByteChannel src, long position, long count)</code>，从目标通道中复制数据到当前通道</li>
+<li><code>public long transferTo(long position, long count, WritableByteChannel target)</code>，把数据从当前通道复制给目标通道</li>
+</ul>
+
+        <h3 id="应用实例1-本地文件写数据"   >
+          <a href="#应用实例1-本地文件写数据" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#应用实例1-本地文件写数据"></a> 应用实例1 - 本地文件写数据</h3>
+      
+<p>实例要求：</p>
+<ul>
+<li>使用 <code>ByteBuffer</code>（缓冲）和 <code>FileChannel</code>（通道），将 “hello,尚硅谷” 写入到 <code>file01.txt</code> 中</li>
+<li>文件不存在就创建</li>
+</ul>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.atguigu.nio;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.FileOutputStream;</span><br><span class="line"><span class="keyword">import</span> java.nio.ByteBuffer;</span><br><span class="line"><span class="keyword">import</span> java.nio.channels.FileChannel;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NIOFileChannel01</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        String str = <span class="string">&quot;hello,尚硅谷&quot;</span>;</span><br><span class="line">        <span class="comment">//创建一个输出流 -&gt; channel</span></span><br><span class="line">        FileOutputStream fileOutputStream = <span class="keyword">new</span> FileOutputStream(<span class="string">&quot;d:\\file01.txt&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//通过 fileOutputStream 获取对应的 FileChannel</span></span><br><span class="line">        <span class="comment">//这个 fileChannel 真实类型是 FileChannelImpl</span></span><br><span class="line">        FileChannel fileChannel = fileOutputStream.getChannel();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//创建一个缓冲区 ByteBuffer</span></span><br><span class="line">        ByteBuffer byteBuffer = ByteBuffer.allocate(<span class="number">1024</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//将 str 放入 byteBuffer</span></span><br><span class="line">        byteBuffer.put(str.getBytes());</span><br><span class="line"></span><br><span class="line">        <span class="comment">//对 byteBuffer 进行 flip</span></span><br><span class="line">        byteBuffer.flip();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//将 byteBuffer 数据写入到 fileChannel</span></span><br><span class="line">        fileChannel.write(byteBuffer);</span><br><span class="line">        fileOutputStream.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="应用实例2-本地文件读数据"   >
+          <a href="#应用实例2-本地文件读数据" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#应用实例2-本地文件读数据"></a> 应用实例2 - 本地文件读数据</h3>
+      
+<p>实例要求：</p>
+<ul>
+<li>使用 <code>ByteBuffer</code>（缓冲）和 <code>FileChannel</code>（通道），将 <code>file01.txt</code> 中的数据读入到程序，并显示在控制台屏幕</li>
+<li>假定文件已经存在</li>
+</ul>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.atguigu.nio;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.File;</span><br><span class="line"><span class="keyword">import</span> java.io.FileInputStream;</span><br><span class="line"><span class="keyword">import</span> java.nio.ByteBuffer;</span><br><span class="line"><span class="keyword">import</span> java.nio.channels.FileChannel;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NIOFileChannel02</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//创建文件的输入流</span></span><br><span class="line">        File file = <span class="keyword">new</span> File(<span class="string">&quot;d:\\file01.txt&quot;</span>);</span><br><span class="line">        FileInputStream fileInputStream = <span class="keyword">new</span> FileInputStream(file);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//通过 fileInputStream 获取对应的 FileChannel -&gt; 实际类型 FileChannelImpl</span></span><br><span class="line">        FileChannel fileChannel = fileInputStream.getChannel();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//创建缓冲区</span></span><br><span class="line">        ByteBuffer byteBuffer = ByteBuffer.allocate((<span class="keyword">int</span>)file.length());</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//将通道的数据读入到 Buffer</span></span><br><span class="line">        fileChannel.read(byteBuffer);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//将 byteBuffer 的字节数据转成 String</span></span><br><span class="line">        System.out.println(<span class="keyword">new</span> String(byteBuffer.array()));</span><br><span class="line">        fileInputStream.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="应用实例3-使用一个-buffer-完成文件读取-写入"   >
+          <a href="#应用实例3-使用一个-buffer-完成文件读取-写入" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#应用实例3-使用一个-buffer-完成文件读取-写入"></a> 应用实例3 - 使用一个 Buffer 完成文件读取、写入</h3>
+      
+<p>实例要求：</p>
+<ul>
+<li>使用 <code>FileChannel</code>（通道）和方法 <code>read、write</code>，完成文件的拷贝</li>
+<li>拷贝一个文本文件 <code>1.txt</code>，放在项目下即可</li>
+</ul>
+<p><img src="https://dongzl.github.io/netty-handbook/_media/chapter03/chapter03_09.png" alt="img" /></p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.atguigu.nio;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.FileInputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.FileOutputStream;</span><br><span class="line"><span class="keyword">import</span> java.nio.ByteBuffer;</span><br><span class="line"><span class="keyword">import</span> java.nio.channels.FileChannel;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NIOFileChannel03</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">        FileInputStream fileInputStream = <span class="keyword">new</span> FileInputStream(<span class="string">&quot;1.txt&quot;</span>);</span><br><span class="line">        FileChannel fileChannel01 = fileInputStream.getChannel();</span><br><span class="line">        FileOutputStream fileOutputStream = <span class="keyword">new</span> FileOutputStream(<span class="string">&quot;2.txt&quot;</span>);</span><br><span class="line">        FileChannel fileChannel02 = fileOutputStream.getChannel();</span><br><span class="line"></span><br><span class="line">        ByteBuffer byteBuffer = ByteBuffer.allocate(<span class="number">512</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) &#123; <span class="comment">//循环读取</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">//这里有一个重要的操作，一定不要忘了</span></span><br><span class="line">            <span class="comment">/*</span></span><br><span class="line"><span class="comment">            public final Buffer clear() &#123;</span></span><br><span class="line"><span class="comment">                position = 0;</span></span><br><span class="line"><span class="comment">                limit = capacity;</span></span><br><span class="line"><span class="comment">                mark = -1;</span></span><br><span class="line"><span class="comment">                return this;</span></span><br><span class="line"><span class="comment">            &#125;</span></span><br><span class="line"><span class="comment">            */</span></span><br><span class="line">            byteBuffer.clear(); <span class="comment">//清空 buffer</span></span><br><span class="line">            <span class="keyword">int</span> read = fileChannel01.read(byteBuffer);</span><br><span class="line">            System.out.println(<span class="string">&quot;read = &quot;</span> + read);</span><br><span class="line">            <span class="keyword">if</span> (read == -<span class="number">1</span>) &#123; <span class="comment">//表示读完</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">//将 buffer 中的数据写入到 fileChannel02--2.txt</span></span><br><span class="line">            byteBuffer.flip();</span><br><span class="line">            fileChannel02.write(byteBuffer);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//关闭相关的流</span></span><br><span class="line">        fileInputStream.close();</span><br><span class="line">        fileOutputStream.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="应用实例4-拷贝文件-transferfrom-方法"   >
+          <a href="#应用实例4-拷贝文件-transferfrom-方法" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#应用实例4-拷贝文件-transferfrom-方法"></a> 应用实例4 - 拷贝文件 transferFrom 方法</h3>
+      
+<p>实例要求：</p>
+<ul>
+<li>使用 <code>FileChannel</code>（通道）和方法 <code>transferFrom</code>，完成文件的拷贝</li>
+<li>拷贝一张图片</li>
+</ul>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.atguigu.nio;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.FileInputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.FileOutputStream;</span><br><span class="line"><span class="keyword">import</span> java.nio.channels.FileChannel;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NIOFileChannel04</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//创建相关流</span></span><br><span class="line">        FileInputStream fileInputStream = <span class="keyword">new</span> FileInputStream(<span class="string">&quot;d:\\a.jpg&quot;</span>);</span><br><span class="line">        FileOutputStream fileOutputStream = <span class="keyword">new</span> FileOutputStream(<span class="string">&quot;d:\\a2.jpg&quot;</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//获取各个流对应的 FileChannel</span></span><br><span class="line">        FileChannel sourceCh = fileInputStream.getChannel();</span><br><span class="line">        FileChannel destCh = fileOutputStream.getChannel();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//使用 transferForm 完成拷贝</span></span><br><span class="line">        destCh.transferFrom(sourceCh, <span class="number">0</span>, sourceCh.size());</span><br><span class="line"></span><br><span class="line">        <span class="comment">//关闭相关通道和流</span></span><br><span class="line">        sourceCh.close();</span><br><span class="line">        destCh.close();</span><br><span class="line">        fileInputStream.close();</span><br><span class="line">        fileOutputStream.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="关于-buffer-和-channel-的注意事项和细节"   >
+          <a href="#关于-buffer-和-channel-的注意事项和细节" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#关于-buffer-和-channel-的注意事项和细节"></a> 关于 Buffer 和 Channel 的注意事项和细节</h3>
+      
+<p><code>ByteBuffer</code> 支持类型化的 <code>put</code> 和 <code>get</code>，<code>put</code> 放入的是什么数据类型，<code>get</code> 就应该使用相应的数据类型来取出，否则可能有 <code>BufferUnderflowException</code> 异常。</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.atguigu.nio;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.nio.ByteBuffer;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NIOByteBufferPutGet</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//创建一个 Buffer</span></span><br><span class="line">        ByteBuffer buffer = ByteBuffer.allocate(<span class="number">64</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//类型化方式放入数据</span></span><br><span class="line">        buffer.putInt(<span class="number">100</span>);</span><br><span class="line">        buffer.putLong(<span class="number">9</span>);</span><br><span class="line">        buffer.putChar(<span class="string">&#x27;尚&#x27;</span>);</span><br><span class="line">        buffer.putShort((<span class="keyword">short</span>) <span class="number">4</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//取出</span></span><br><span class="line">        buffer.flip();</span><br><span class="line">        </span><br><span class="line">        System.out.println();</span><br><span class="line">        </span><br><span class="line">        System.out.println(buffer.getInt());</span><br><span class="line">        System.out.println(buffer.getLong());</span><br><span class="line">        System.out.println(buffer.getChar());</span><br><span class="line">        System.out.println(buffer.getShort());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>可以将一个普通 <code>Buffer</code> 转成只读 <code>Buffer</code></p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.atguigu.nio;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.nio.ByteBuffer;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ReadOnlyBuffer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//创建一个 buffer</span></span><br><span class="line">        ByteBuffer buffer = ByteBuffer.allocate(<span class="number">64</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">64</span>; i++) &#123;</span><br><span class="line">            buffer.put((<span class="keyword">byte</span>) i);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//读取</span></span><br><span class="line">        buffer.flip();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//得到一个只读的 Buffer</span></span><br><span class="line">        ByteBuffer readOnlyBuffer = buffer.asReadOnlyBuffer();</span><br><span class="line">        System.out.println(readOnlyBuffer.getClass());</span><br><span class="line"></span><br><span class="line">        <span class="comment">//读取</span></span><br><span class="line">        <span class="keyword">while</span> (readOnlyBuffer.hasRemaining()) &#123;</span><br><span class="line">            System.out.println(readOnlyBuffer.get());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        readOnlyBuffer.put((<span class="keyword">byte</span>) <span class="number">100</span>); <span class="comment">//ReadOnlyBufferException</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p><code>NIO</code> 还提供了 <code>MappedByteBuffer</code>，可以让文件直接在内存（堆外的内存）中进行修改，而如何同步到文件由 <code>NIO</code> 来完成。</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.atguigu.nio;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.RandomAccessFile;</span><br><span class="line"><span class="keyword">import</span> java.nio.MappedByteBuffer;</span><br><span class="line"><span class="keyword">import</span> java.nio.channels.FileChannel;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 说明 1.MappedByteBuffer 可让文件直接在内存（堆外内存）修改,操作系统不需要拷贝一次</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MappedByteBufferTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">        RandomAccessFile randomAccessFile = <span class="keyword">new</span> RandomAccessFile(<span class="string">&quot;1.txt&quot;</span>, <span class="string">&quot;rw&quot;</span>);</span><br><span class="line">        <span class="comment">//获取对应的通道</span></span><br><span class="line">        FileChannel channel = randomAccessFile.getChannel();</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 参数 1:FileChannel.MapMode.READ_WRITE 使用的读写模式</span></span><br><span class="line"><span class="comment">         * 参数 2：0：可以直接修改的起始位置</span></span><br><span class="line"><span class="comment">         * 参数 3:5: 是映射到内存的大小（不是索引位置），即将 1.txt 的多少个字节映射到内存</span></span><br><span class="line"><span class="comment">         * 可以直接修改的范围就是 0-5</span></span><br><span class="line"><span class="comment">         * 实际类型 DirectByteBuffer</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        MappedByteBuffer mappedByteBuffer = channel.map(FileChannel.MapMode.READ_WRITE, <span class="number">0</span>, <span class="number">5</span>);</span><br><span class="line"></span><br><span class="line">        mappedByteBuffer.put(<span class="number">0</span>, (<span class="keyword">byte</span>) <span class="string">&#x27;H&#x27;</span>);</span><br><span class="line">        mappedByteBuffer.put(<span class="number">3</span>, (<span class="keyword">byte</span>) <span class="string">&#x27;9&#x27;</span>);</span><br><span class="line">        mappedByteBuffer.put(<span class="number">5</span>, (<span class="keyword">byte</span>) <span class="string">&#x27;Y&#x27;</span>);<span class="comment">//IndexOutOfBoundsException</span></span><br><span class="line"></span><br><span class="line">        randomAccessFile.close();</span><br><span class="line">        System.out.println(<span class="string">&quot;修改成功~~&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>前面的读写操作，都是通过一个 <code>Buffer</code> 完成的，<code>NIO</code> 还支持通过多个 <code>Buffer</code>（即 <code>Buffer</code>数组）完成读写操作，即 <code>Scattering</code> 和 <code>Gathering</code></p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.atguigu.nio;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.net.InetSocketAddress;</span><br><span class="line"><span class="keyword">import</span> java.nio.ByteBuffer;</span><br><span class="line"><span class="keyword">import</span> java.nio.channels.ServerSocketChannel;</span><br><span class="line"><span class="keyword">import</span> java.nio.channels.SocketChannel;</span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Scattering：将数据写入到 buffer 时，可以采用 buffer 数组，依次写入 [分散]</span></span><br><span class="line"><span class="comment"> * Gathering：从 buffer 读取数据时，可以采用 buffer 数组，依次读</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ScatteringAndGatheringTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//使用 ServerSocketChannel 和 SocketChannel 网络</span></span><br><span class="line">        ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();</span><br><span class="line">        InetSocketAddress inetSocketAddress = <span class="keyword">new</span> InetSocketAddress(<span class="number">7000</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//绑定端口到 socket，并启动</span></span><br><span class="line">        serverSocketChannel.socket().bind(inetSocketAddress);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//创建 buffer 数组</span></span><br><span class="line">        ByteBuffer[] byteBuffers = <span class="keyword">new</span> ByteBuffer[<span class="number">2</span>];</span><br><span class="line">        byteBuffers[<span class="number">0</span>] = ByteBuffer.allocate(<span class="number">5</span>);</span><br><span class="line">        byteBuffers[<span class="number">1</span>] = ByteBuffer.allocate(<span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//等客户端连接 (telnet)</span></span><br><span class="line">        SocketChannel socketChannel = serverSocketChannel.accept();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> messageLength = <span class="number">8</span>; <span class="comment">//假定从客户端接收 8 个字节</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//循环的读取</span></span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">            <span class="keyword">int</span> byteRead = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">while</span> (byteRead &lt; messageLength) &#123;</span><br><span class="line">                <span class="keyword">long</span> l = socketChannel.read(byteBuffers);</span><br><span class="line">                byteRead += l; <span class="comment">//累计读取的字节数</span></span><br><span class="line">                System.out.println(<span class="string">&quot;byteRead = &quot;</span> + byteRead);</span><br><span class="line">                <span class="comment">//使用流打印,看看当前的这个 buffer 的 position 和 limit</span></span><br><span class="line">                Arrays.asList(byteBuffers).stream().map(buffer -&gt; <span class="string">&quot;position = &quot;</span> + buffer.position() + <span class="string">&quot;, limit = &quot;</span> + buffer.limit()).forEach(System.out::println);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">//将所有的 buffer 进行 flip</span></span><br><span class="line">            Arrays.asList(byteBuffers).forEach(buffer -&gt; buffer.flip());</span><br><span class="line">            <span class="comment">//将数据读出显示到客户端</span></span><br><span class="line">            <span class="keyword">long</span> byteWirte = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">while</span> (byteWirte &lt; messageLength) &#123;</span><br><span class="line">                <span class="keyword">long</span> l = socketChannel.write(byteBuffers);<span class="comment">//</span></span><br><span class="line">                byteWirte += l;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            <span class="comment">//将所有的buffer进行clear</span></span><br><span class="line">            Arrays.asList(byteBuffers).forEach(buffer -&gt; &#123;</span><br><span class="line">                buffer.clear();</span><br><span class="line">            &#125;);</span><br><span class="line">            </span><br><span class="line">            System.out.println(<span class="string">&quot;byteRead = &quot;</span> + byteRead + <span class="string">&quot;, byteWrite = &quot;</span> + byteWirte + <span class="string">&quot;, messagelength = &quot;</span> + messageLength);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h2 id="selector选择器"   >
+          <a href="#selector选择器" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#selector选择器"></a> Selector（选择器）</h2>
+      
+
+        <h3 id="简介-3"   >
+          <a href="#简介-3" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#简介-3"></a> 简介</h3>
+      
+<p>尚硅谷替换 atguigu</p>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yuyun-zhao.gitee.io">yuyun zhao</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yuyun-zhao.gitee.io/2021/08/13/%E3%80%90Java%E3%80%91NIO/">http://yuyun-zhao.gitee.io/2021/08/13/%E3%80%90Java%E3%80%91NIO/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.gitee.io/tags/Java/">Java</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.gitee.io/tags/Netty/">Netty</a></span></div><nav class="post-paginator paginator"><div class="paginator-next"><a class="paginator-next__link" href="/2021/08/12/%E3%80%90Netty%E3%80%91Netty/"><span class="paginator-prev__text">【Netty】Netty</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#io-%E6%A8%A1%E5%9E%8B"><span class="toc-text">
+           I&#x2F;O 模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#io%E6%A8%A1%E5%9E%8B%E5%9F%BA%E6%9C%AC%E8%AF%B4%E6%98%8E"><span class="toc-text">
+           IO模型基本说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bio-nio-aio-%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">
+           BIO、NIO、AIO 使用场景</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#bio"><span class="toc-text">
+           BIO</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#bio-%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6"><span class="toc-text">
+           BIO 工作机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bio-%E5%BA%94%E7%94%A8%E5%AE%9E%E4%BE%8B"><span class="toc-text">
+           BIO 应用实例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bio-%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%90"><span class="toc-text">
+           BIO 问题分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nio"><span class="toc-text">
+           NIO</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#nio-%E5%92%8C-bio-%E7%9A%84%E6%AF%94%E8%BE%83"><span class="toc-text">
+           NIO 和 BIO 的比较</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nio-%E4%B8%89%E5%A4%A7%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%E7%A4%BA%E6%84%8F%E5%9B%BE"><span class="toc-text">
+           NIO 三大核心原理示意图</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%93%E5%86%B2%E5%8C%BAbuffer"><span class="toc-text">
+           缓冲区（Buffer）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-text">
+           简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#buffer%E7%B1%BB%E5%8F%8A%E5%85%B6%E5%AD%90%E7%B1%BB"><span class="toc-text">
+           Buffer类及其子类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bytebuffer"><span class="toc-text">
+           ByteBuffer</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9A%E9%81%93channel"><span class="toc-text">
+           通道（Channel）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B-2"><span class="toc-text">
+           简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#filechannel-%E7%B1%BB"><span class="toc-text">
+           FileChannel 类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%AE%9E%E4%BE%8B1-%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E5%86%99%E6%95%B0%E6%8D%AE"><span class="toc-text">
+           应用实例1 - 本地文件写数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%AE%9E%E4%BE%8B2-%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E8%AF%BB%E6%95%B0%E6%8D%AE"><span class="toc-text">
+           应用实例2 - 本地文件读数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%AE%9E%E4%BE%8B3-%E4%BD%BF%E7%94%A8%E4%B8%80%E4%B8%AA-buffer-%E5%AE%8C%E6%88%90%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96-%E5%86%99%E5%85%A5"><span class="toc-text">
+           应用实例3 - 使用一个 Buffer 完成文件读取、写入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%AE%9E%E4%BE%8B4-%E6%8B%B7%E8%B4%9D%E6%96%87%E4%BB%B6-transferfrom-%E6%96%B9%E6%B3%95"><span class="toc-text">
+           应用实例4 - 拷贝文件 transferFrom 方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E-buffer-%E5%92%8C-channel-%E7%9A%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9%E5%92%8C%E7%BB%86%E8%8A%82"><span class="toc-text">
+           关于 Buffer 和 Channel 的注意事项和细节</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#selector%E9%80%89%E6%8B%A9%E5%99%A8"><span class="toc-text">
+           Selector（选择器）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B-3"><span class="toc-text">
+           简介</span></a></li></ol></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/author.png" alt="avatar"></div><p class="sidebar-ov-author__text">no code no life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/YUYUN-ZHAO" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="zyy1024462136" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a><a class="sidebar-ov-social-item" href="1024462136" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="mailto:im.yuyunzhao@gmail.com" target="_blank" rel="noopener" data-popover="social.Gmail" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">Gmail</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">51</div><div class="sidebar-ov-state-item__name">文章</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">21</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">21</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2021</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>yuyun zhao</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script>function initSearch() {
+  var isXML = true;
+  var search_path = 'search.xml';
+
+  if (!search_path) {
+    search_path = 'search.xml';
+  } else if (/json$/i.test(search_path)) {
+    isXML = false;
+  }
+
+  var path = '/' + search_path;
+  $.ajax({
+    url: path,
+    dataType: isXML ? 'xml' : 'json',
+    async: true,
+    success: function (res) {
+      var datas = isXML ? $('entry', res).map(function () {
+        // 将 XML 转为 JSON
+        return {
+          title: $('title', this).text(),
+          content: $('content', this).text(),
+          url: $('url', this).text()
+        };
+      }).get() : res;
+      var $input = $('.search-input input');
+      var $result = $('.search-results');
+      // 搜索对象（标题、内容）的权重，影响显示顺序
+      var WEIGHT = { title: 100, content: 1 };
+      var searchPost = function () {
+        var searchText = $input.val().toLowerCase().trim();
+        // 根据空白字符分隔关键字
+        var keywords = searchText.split(/[\s]+/);
+        // 搜索结果
+        var matchPosts = [];
+
+        // 有多个关键字时，将原文字整个保存下来
+        if (keywords.length > 1) {
+          keywords.push(searchText);
+        }
+        // 防止未输入字符时搜索
+        if (searchText.length > 0) {
+          datas.forEach(function (data) {
+            var isMatch  = false;
+            // 没有标题的文章使用预设的 i18n 变量代替
+            var title = (data.title && data.title.trim()) || '[ 文章无标题 ]';
+            var titleLower = title && title.toLowerCase();
+            // 删除 HTML 标签 和 所有空白字符
+            var content = data.content && data.content.replace(/<[^>]+>/g, '');
+            var contentLower = content && content.toLowerCase();
+            // 删除重复的 /
+            var postURL = data.url && decodeURI(data.url).replace(/\/{2,}/g, '/');
+            // 标题中匹配到的关键词
+            var titleHitSlice = [];
+            // 内容中匹配到的关键词
+            var contentHitSlice = [];
+
+            keywords.forEach(function (keyword) {
+              /**
+              * 获取匹配的关键词的索引
+              * @param {String} keyword 要匹配的关键字
+              * @param {String} text 原文字
+              * @param {Boolean} caseSensitive 是否区分大小写
+              * @param {Number} weight 匹配对象的权重。权重大的优先显示
+              * @return {Array}
+              */
+              function getIndexByword (word, text, caseSensitive, weight) {
+                if (!word || !text) {
+                  return [];
+                };
+
+                var startIndex = 0; // 每次匹配的开始索引
+                var index = -1;     // 匹配到的索引值
+                var result = [];    // 匹配结果
+
+                if (!caseSensitive) {
+                  word = word.toLowerCase();
+                  text = text.toLowerCase();
+                }
+
+                while((index = text.indexOf(word, startIndex)) !== -1) {
+                  var hasMatch = false;
+                  // 索引位置相同的关键词，保留长度较长的
+                  titleHitSlice.forEach(function (hit) {
+                    if (hit.index === index && hit.word.length < word.length) {
+                      hit.word = word;
+                      hasMatch = true;
+                    }
+                  });
+                  startIndex = index + word.length;
+                  !hasMatch && result.push({ index: index, word: word, weight: weight });
+                }
+                return result;
+              }
+              titleHitSlice = titleHitSlice.concat(getIndexByword(keyword, titleLower, false, WEIGHT.title));
+              contentHitSlice = contentHitSlice.concat(getIndexByword(keyword, contentLower, false, WEIGHT.content));
+            });
+
+            var hitTitle = titleHitSlice.length;
+            var hitContent = contentHitSlice.length;
+
+            if (hitTitle > 0 || hitContent > 0) {
+              isMatch = true;
+            }
+            if (isMatch) {
+              ;[titleHitSlice, contentHitSlice].forEach(function (hit) {
+                // 按照匹配文字的索引的递增顺序排序
+                hit.sort(function (left, right) {
+                  return left.index - right.index;
+                });
+              });
+              /**
+              * 给文本中匹配到的关键词添加标记，从而进行高亮显示
+              * @param {String} text 原文本
+              * @param {Array} hitSlice 匹配项的索引信息
+              * @param {Number} start 开始索引
+              * @param {Number} end 结束索引
+              * @return {String}
+              */
+              function highlightKeyword (text, hitSlice, start, end) {
+                if (!text || !hitSlice || !hitSlice.length) {
+                  return;
+                }
+
+                var result = '';
+                var startIndex = start;
+                var endIndex = end;
+                hitSlice.forEach(function (hit) {
+                  if (hit.index < startIndex) {
+                    return;
+                  }
+
+                  var hitWordEnd = hit.index + hit.word.length;
+                  result += text.slice(startIndex, hit.index);
+                  result += '<b>' + text.slice(hit.index, hitWordEnd) + '</b>';
+                  startIndex = hitWordEnd;
+                });
+                result += text.slice(startIndex, endIndex);
+                return result;
+              }
+
+              var postData = {};
+              // 文章总的搜索权重
+              var postWeight = titleHitSlice.length * WEIGHT.title + contentHitSlice.length * WEIGHT.content;
+              // 标记匹配关键词后的标题
+              var postTitle = highlightKeyword(title, titleHitSlice, 0, title.length) || title;
+              // 标记匹配关键词后的内容
+              var postContent;
+              // 显示内容的长度
+              var SHOW_WORD_LENGTH = 200;
+              // 命中关键词前的字符显示长度
+              var SHOW_WORD_FRONT_LENGTH = 20;
+              var SHOW_WORD_END_LENGTH = SHOW_WORD_LENGTH - SHOW_WORD_FRONT_LENGTH;
+
+              // 截取匹配的第一个字符，前后共 200 个字符来显示
+              if (contentHitSlice.length > 0) {
+                var firstIndex = contentHitSlice[0].index;
+                var start = firstIndex > SHOW_WORD_FRONT_LENGTH ? firstIndex - SHOW_WORD_FRONT_LENGTH : 0;
+                var end = firstIndex + SHOW_WORD_END_LENGTH;
+                postContent = highlightKeyword(content, contentHitSlice, start, end);
+              } else { // 未匹配到内容，直接截取前 200 个字符来显示
+                postContent = content.slice(0, SHOW_WORD_LENGTH);
+              }
+              postData.title = postTitle;
+              postData.content = postContent;
+              postData.url = postURL;
+              postData.weight = postWeight;
+              matchPosts.push(postData);
+            }
+          });
+        }
+
+        var resultInnerHtml = '';
+        if (matchPosts.length) {
+          // 按权重递增的顺序排序，使权重大的优先显示
+          matchPosts.sort(function (left, right) {
+            return right.weight - left.weight;
+          });
+          resultInnerHtml += '<ul>';
+          matchPosts.forEach(function (post) {
+            resultInnerHtml += '<li><a class="search-results-title" href="' + post.url + '">';
+            resultInnerHtml += post.title;
+            resultInnerHtml += '</a><div class="search-results-content">';
+            resultInnerHtml += post.content;
+            resultInnerHtml += '</div></li>';
+          });
+          resultInnerHtml += '</ul>';
+        } else {
+          resultInnerHtml += '<div class="search-results-none"><i class="far fa-meh"></i></div>';
+        }
+        $result.html(resultInnerHtml);
+      };
+      $input.on('input', searchPost);
+      $input.on('keyup', function (e) {
+        if (e.keyCode === Stun.utils.codeToKeyCode('Enter')) {
+          searchPost();
+        }
+      });
+    }
+  });
+}
+
+function closeSearch () {
+  $('body').css({ overflow: 'auto' });
+  $('.search-popup').css({ display: 'none' });
+  $('.search-mask').css({ display: 'none' });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+  Stun.utils.pjaxReloadLocalSearch = function () {
+    $('.header-nav-search').on('click', function (e) {
+      e.stopPropagation();
+      $('body').css('overflow', 'hidden');
+      $('.search-popup')
+        .velocity('stop')
+        .velocity('transition.expandIn', {
+          duration: 300,
+          complete: function () {
+            $('.search-popup input').focus();
+          }
+        });
+      $('.search-mask')
+        .velocity('stop')
+        .velocity('transition.fadeIn', {
+          duration: 300
+        });
+
+      initSearch();
+    });
+    $('.search-mask, .search-close').on('click', function () {
+      closeSearch();
+    });
+    $(document).on('keydown', function (e) {
+      // Escape <=> 27
+      if (e.keyCode === Stun.utils.codeToKeyCode('Escape')) {
+        closeSearch();
+      }
+    });
+  };
+
+  Stun.utils.pjaxReloadLocalSearch();
+}, false);
+
+function safeOpenUrl(url) {
+  var newTab = window.open();
+  newTab.opener = null;
+  newTab.location = url;
+}
+
+function extSearch(engine) {
+  var engines = {
+    google: 'https://www.google.com/search?q=',
+    bing: 'https://cn.bing.com/search?q=',
+    baidu: 'https://www.baidu.com/s?ie=UTF-8&wd=',
+  };
+  var host = window.location.host;
+  var query = $('.search-input input').val().toLowerCase().trim();
+  var uri = engines[engine] + query + ' site:' + host;
+
+  if (query) {
+    safeOpenUrl(uri);
+  } else {
+    Stun.utils.popAlert('warning', '请输入字符');
+  }
+}
+
+var assistSearchList = window.CONFIG.assistSearch;
+
+if (Array.isArray(assistSearchList)) {
+  assistSearchList.forEach(function (name) {
+    document.querySelector('.search-btns-item--' + name).addEventListener('click', function () {
+      extSearch(name);
+    }, false);
+  });
+}</script><script src="https://cdn.jsdelivr.net/npm/pjax@latest/pjax.min.js"></script><script>window.addEventListener('DOMContentLoaded', function () {
+  var pjax = new Pjax({"selectors":["head title","#main",".pjax-reload"],"history":true,"scrollTo":false,"scrollRestoration":false,"cacheBust":false,"debug":false,"currentUrlFullReload":false,"timeout":0});
+  // 加载进度条的计时器
+  var loadingTimer = null;
+
+  // 重置页面 Y 方向上的滚动偏移量
+  document.addEventListener('pjax:send', function () {
+    $('.header-nav-menu').removeClass('show');
+    if (CONFIG.pjax && CONFIG.pjax.avoidBanner) {
+      $('html').velocity('scroll', {
+        duration: 500,
+        offset: $('#header').height(),
+        easing: 'easeInOutCubic'
+      });
+    }
+
+    var loadingBarWidth = 20;
+    var MAX_LOADING_WIDTH = 95;
+
+    $('.loading-bar').addClass('loading');
+    $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    clearInterval(loadingTimer);
+    loadingTimer = setInterval(function () {
+      loadingBarWidth += 3;
+      if (loadingBarWidth > MAX_LOADING_WIDTH) {
+        loadingBarWidth = MAX_LOADING_WIDTH;
+      }
+      $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    }, 500);
+  }, false);
+
+  window.addEventListener('pjax:complete', function () {
+    clearInterval(loadingTimer);
+    $('.loading-bar__progress').css('width', '100%');
+    $('.loading-bar').removeClass('loading');
+    setTimeout(function () {
+      $('.loading-bar__progress').css('width', '0');
+    }, 400);
+    $('link[rel=prefetch], script[data-pjax-rm]').each(function () {
+      $(this).remove();
+    });
+    $('script[data-pjax], #pjax-reload script').each(function () {
+      $(this).parent().append($(this).remove());
+    });
+
+    if (Stun.utils.pjaxReloadBoot) {
+      Stun.utils.pjaxReloadBoot();
+    }
+    if (Stun.utils.pjaxReloadScroll) {
+      Stun.utils.pjaxReloadScroll();
+    }
+    if (Stun.utils.pjaxReloadSidebar) {
+      Stun.utils.pjaxReloadSidebar();
+    }
+    if (false) {
+      if (Stun.utils.pjaxReloadHeader) {
+        Stun.utils.pjaxReloadHeader();
+      }
+      if (Stun.utils.pjaxReloadScrollIcon) {
+        Stun.utils.pjaxReloadScrollIcon();
+      }
+      if (Stun.utils.pjaxReloadLocalSearch) {
+        Stun.utils.pjaxReloadLocalSearch();
+      }
+    }
+  }, false);
+}, false);</script><div id="pjax-reload"><link href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" rel="stylesheet" type="text/css"><link href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/copy-tex.css" rel="stylesheet" type="text/css"><script src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/copy-tex.min.js"></script><script src="https://cdn.jsdelivr.net/gh/sukkaw/busuanzi@latest/bsz.pure.mini.js" async></script></div><script src="/js/utils.js?v=2.6.2"></script><script src="/js/stun-boot.js?v=2.6.2"></script><script src="/js/scroll.js?v=2.6.2"></script><script src="/js/header.js?v=2.6.2"></script><script src="/js/sidebar.js?v=2.6.2"></script><script type="application/json" src="/search.xml"></script></body></html>
