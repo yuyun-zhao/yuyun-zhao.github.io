@@ -14,7 +14,7 @@
 <meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Linux%E3%80%91Linux%E6%8C%87%E4%BB%A4/image-20210722210529000.png">
 <meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Linux%E3%80%91Linux/image-20210806210724476.png">
 <meta property="article:published_time" content="2021-07-21T01:37:50.000Z">
-<meta property="article:modified_time" content="2021-08-18T05:53:50.826Z">
+<meta property="article:modified_time" content="2021-08-19T10:07:19.032Z">
 <meta property="article:author" content="yuyun zhao">
 <meta property="article:tag" content="Linux">
 <meta name="twitter:card" content="summary">
@@ -42,7 +42,7 @@ var CONFIG = {
   sourcePath: {"js":"js","css":"css","images":"images"},
 };
 
-window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【Linux】Linux常用命令</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-07-21</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-08-18</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">7.3k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">45分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body">
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【Linux】Linux常用命令</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-07-21</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-08-19</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">8.1k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">50分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body">
         <h2 id="linux和unix"   >
           <a href="#linux和unix" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#linux和unix"></a> Linux和Unix</h2>
       
@@ -51,6 +51,9 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 </blockquote>
 <p>Unix于1969年由贝尔实验室开发出来，使用至今已变更了很多个版本。目前主流的Unix系统有三种，分别是AIX、HP-UX、Solaris，这些Unix系统互不兼容。</p>
 <p>Linux于1991年由芬兰大学生Linus开发出来，是一个类Unix系统，但是其代码不源自任何Unix版本，完全不是Unix的一个分支，而是一个<strong>开源版</strong>的模仿。</p>
+<blockquote>
+<p>安装Linux虚拟机教程：<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://blog.csdn.net/qq_41571900/article/details/84728480;" >https://blog.csdn.net/qq_41571900/article/details/84728480;</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span> <span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/onVwwEQ1DAwbvK7qS2YNxg" >https://mp.weixin.qq.com/s/onVwwEQ1DAwbvK7qS2YNxg</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+</blockquote>
 
         <h2 id="linux-目录结构"   >
           <a href="#linux-目录结构" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#linux-目录结构"></a> Linux 目录结构</h2>
@@ -368,9 +371,9 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <p>locate指令可以快速定位文件路径。locate指令利用事先建立的系统中所有文件名称及路径的locate数据库实现快速定位给定的文件。Locate指令无需遍历整个文件系统，查询速度较快。为了保证查询结果的准确度，管理员必须定期更新locate时刻。</p>
 <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost root] locate &lt;关键词&gt; </span><br></pre></td></tr></table></div></figure>
 <p>由于locate指令基于数据库进行查询，所以第一次运行前，必须使用<strong>updatedb</strong>指令创建locate数据库。</p>
-<p><strong>grep</strong>：Global regular expression print</p>
+<p><strong>grep</strong>：Global regular expression print。用于查找文件里符合条件的字符串。</p>
 <p>全局正则表达搜索：</p>
-<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost root] grep xxx hello.txt <span class="comment">#在⽂件hello.txt中查找关键词 xxx</span></span><br></pre></td></tr></table></div></figure>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost root] grep xxx hello.txt <span class="comment"># 在⽂件hello.txt中查找关键词 xxx</span></span><br></pre></td></tr></table></div></figure>
 <p><strong>gzip/gunzip</strong>：</p>
 <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost root] gzip 文件       <span class="comment"># 压缩文件，只能将文件压缩为*.gz文件</span></span><br><span class="line"></span><br><span class="line">[root@localhost root] gunzip 文件.gz  <span class="comment"># 解压缩文件命令</span></span><br></pre></td></tr></table></div></figure>
 <p><strong>zip/unzip</strong>：</p>
@@ -408,6 +411,15 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 </tbody>
 </table></div>
 <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost root] tar -cvf xxx.tar file1 file2 dir1 <span class="comment"># 将多个⽂件+⽬录打tar包</span></span><br><span class="line"></span><br><span class="line">[root@localhost root] tar -tf xxx.tar <span class="comment"># 查看tar包的内容</span></span><br><span class="line"></span><br><span class="line">[root@localhost root] tar -xvf xxx.tar <span class="comment"># 解压tar包</span></span><br><span class="line"></span><br><span class="line">[root@localhost root] tar -xvf xxx.tar -C /dir <span class="comment"># 将tar包解压⾄指定⽬录</span></span><br><span class="line"></span><br><span class="line">[root@localhost root] tar -cvfj xxx.tar.bz2 dir <span class="comment"># 创建bz2压缩包</span></span><br><span class="line"></span><br><span class="line">[root@localhost root] tar -jxvf xxx.tar.bz2 <span class="comment"># 解压bz2压缩包</span></span><br><span class="line"></span><br><span class="line">[root@localhost root] tar -cvfz xxx.tar.gz dir <span class="comment"># 创建gzip压缩包</span></span><br><span class="line"></span><br><span class="line">[root@localhost root] tar -zxvf xxx.tar.gz <span class="comment"># 解压gzip压缩包</span></span><br></pre></td></tr></table></div></figure>
+
+        <h4 id="网络通讯类"   >
+          <a href="#网络通讯类" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#网络通讯类"></a> 网络通讯类</h4>
+      
+<blockquote>
+<p>Telnet协议是<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://baike.baidu.com/item/TCP%2FIP%E5%8D%8F%E8%AE%AE" >TCP/IP协议</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>族中的一员，是Internet远程登录服务的标准协议和主要方式。它为用户提供了在本地计算机上完成远程<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E4%B8%BB%E6%9C%BA/455151" >主机</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>工作的能力。在<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E7%BB%88%E7%AB%AF/1903878" >终端</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>使用者的电脑上使用telnet程序，用它连接到<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%9C%8D%E5%8A%A1%E5%99%A8/100571" >服务器</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>。<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E7%BB%88%E7%AB%AF/1903878" >终端</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>使用者可以在telnet程序中输入命令，这些命令会在<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%9C%8D%E5%8A%A1%E5%99%A8/100571" >服务器</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>上运行，就像直接在服务器的控制台上输入一样。可以在本地就能控制<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%9C%8D%E5%8A%A1%E5%99%A8/100571" >服务器</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>。要开始一个telnet会话，必须输入用户名和密码来登录<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%9C%8D%E5%8A%A1%E5%99%A8/100571" >服务器</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>。Telnet是常用的<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6/934368" >远程控制</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>Web<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%9C%8D%E5%8A%A1%E5%99%A8" >服务器</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>的方法。</p>
+</blockquote>
+<p><strong>telnet</strong>：</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost root] telnet IP 端口</span><br></pre></td></tr></table></div></figure>
 
         <h2 id="定时任务调度"   >
           <a href="#定时任务调度" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#定时任务调度"></a> 定时任务调度</h2>
@@ -500,12 +512,50 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <li>-c 列出明细的同时，增加汇总值</li>
 </ul>
 
-        <h2 id="进程管理"   >
-          <a href="#进程管理" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#进程管理"></a> 进程管理</h2>
+        <h2 id="进程"   >
+          <a href="#进程" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#进程"></a> 进程</h2>
       
 <p>在LINUX中，每个执行的程序（代码）都称为一个进程。每一个进程都分配一个ID号。每一个进程，都会对应一个父进程，而这个父进程可以复制多个子进程。例如www服务器。</p>
 <p>每个进程都可能以两种方式存在的。前台与后台，所谓前台进程就是用户目前的屏幕上可以进行操作的。后台进程则是实际在操作，但由于屏幕上无法看到的进程，通常使用后台方式执行。一般系统的服务都是以后台进程的方式存在，而且都会常驻在系统中。直到关机才结束。</p>
-<p>ps命令是用来查看目前系统中，有哪些正在执行，以及它们执行的状况。可以不加任何参数。</p>
+
+        <h3 id="进程历史"   >
+          <a href="#进程历史" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#进程历史"></a> 进程历史</h3>
+      
+<p><mark>补充兄弟连</mark></p>
+<blockquote>
+<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/zwcry/p/9602756.html" >https://www.cnblogs.com/zwcry/p/9602756.html</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+</blockquote>
+<p>历史上，Linux 的启动一直采用<code>init</code>进程。CentOS 6.0中使用下面的命令用来启动服务。</p>
+<blockquote>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ sudo /etc/init.d/apache2 start</span><br><span class="line"><span class="comment"># 或者</span></span><br><span class="line">$ service apache2 start</span><br></pre></td></tr></table></div></figure>
+</blockquote>
+<p>这种方法有两个缺点：</p>
+<ul>
+<li>一是启动时间长。<code>init</code>进程是串行启动，只有前一个进程启动完，才会启动下一个进程。</li>
+<li>二是启动脚本复杂。<code>init</code>进程只是执行启动脚本，不管其他事情。脚本需要自己处理各种情况，这往往使得脚本变得很长。</li>
+</ul>
+
+        <h3 id="systemd-概述"   >
+          <a href="#systemd-概述" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#systemd-概述"></a> Systemd 概述</h3>
+      
+<p><code>Systemd</code> 就是为了解决这些问题而诞生的。它的设计目标是为系统的启动和管理提供一套完整的解决方案。根据 Linux 惯例，字母<code>d</code>是守护进程（daemon）的缩写。 <code>Systemd</code> 这个名字的含义，就是<strong>它要守护整个系统</strong>。</p>
+<p>使用了 <code>Systemd</code>，就不需要再用<code>init</code>了。<code>Systemd</code> 取代了<code>initd</code>，<strong>成为系统的第一个进程（PID 等于 1），其他进程都是它的子进程</strong></p>
+<blockquote>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ systemctl --version</span><br></pre></td></tr></table></div></figure>
+</blockquote>
+<p>上面的命令查看 <code>Systemd</code> 的版本。</p>
+<p><code>Systemd</code> 的优点是功能强大，使用方便，缺点是体系庞大，非常复杂。<code>Systemd</code> 并不是一个命令，而是一组命令，涉及到系统管理的方方面面。</p>
+<p><strong><code>systemctl</code>是 Systemd 的主命令，用于管理系统。</strong></p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 重启系统</span></span><br><span class="line">$ sudo systemctl reboot</span><br><span class="line"></span><br><span class="line"><span class="comment"># 关闭系统，切断电源</span></span><br><span class="line">$ sudo systemctl poweroff</span><br><span class="line"></span><br><span class="line"><span class="comment"># CPU停止工作</span></span><br><span class="line">$ sudo systemctl halt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 暂停系统</span></span><br><span class="line">$ sudo systemctl <span class="built_in">suspend</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 让系统进入冬眠状态</span></span><br><span class="line">$ sudo systemctl hibernate</span><br><span class="line"></span><br><span class="line"><span class="comment"># 让系统进入交互式休眠状态</span></span><br><span class="line">$ sudo systemctl hybrid-sleep</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动进入救援状态（单用户状态）</span></span><br><span class="line">$ sudo systemctl rescue</span><br></pre></td></tr></table></div></figure>
+<p><code>systemctl</code>命令是Linux系统服务管理器指令，它实际上将 service 和 chkconfig 这两个命令组合到一起。<code>ctl</code>代表<code>Control</code></p>
+<blockquote>
+<p>systemctl — Control the systemd system and service manager</p>
+</blockquote>
+
+        <h3 id="查看进程"   >
+          <a href="#查看进程" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#查看进程"></a> 查看进程</h3>
+      
+<p><code>ps</code>（process status）命令是用来查看目前系统中，有哪些正在执行，以及它们执行的状况。可以不加任何参数。</p>
 <ol>
 <li>查看某种服务的进程（例如查看java相关服务的进程）：</li>
 </ol>
@@ -531,8 +581,8 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost root] ps -ef</span><br></pre></td></tr></table></div></figure>
 <p>参数说明：</p>
 <ul>
-<li>-e 显示所有进程</li>
-<li>-f 全格式</li>
+<li><code>-e</code> 显示所有进程</li>
+<li><code>-f</code> 全格式</li>
 </ul>
 <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost root] ps -ef | grep xxx</span><br></pre></td></tr></table></div></figure>
 <p>说明：</p>
@@ -548,21 +598,27 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <li>CMD：启动进程所用的命令和参数</li>
 </ul>
 <ol start="3">
+<li>以树状结构展示进程</li>
+</ol>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost root] pstree</span><br></pre></td></tr></table></div></figure>
+<ol start="4">
 <li>终止进程（强迫进程立即停止）：</li>
 </ol>
-<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">kill</span> -9 进程号</span><br></pre></td></tr></table></div></figure>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost root] <span class="built_in">kill</span> -9 进程号</span><br></pre></td></tr></table></div></figure>
 
         <h3 id="服务管理"   >
           <a href="#服务管理" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#服务管理"></a> 服务管理</h3>
       
 <p>服务(service) 本质就是进程，但是是运行在后台的，通常都会监听某个端口，等待其它程序的请求，比如(mysql , sshd 防火墙等)，因此我们又称为守护进程。</p>
 <p>CentOS 6.0：</p>
-<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost root] service 服务名[start | stop | restart | reload | status]</span><br></pre></td></tr></table></div></figure>
-<p>CentOS7.0后不再使用service，而是<code>systemctl</code>：</p>
-<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost root] systemctl 服务名[start | stop | restart | reload | status]</span><br></pre></td></tr></table></div></figure>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost root] service 服务名 [start | stop | restart | reload | status] </span><br></pre></td></tr></table></div></figure>
+<p>CentOS 7.0 后不再使用<code>service</code>，而是<code>systemctl</code>：</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost root] systemctl [start | stop | restart | reload | status] 服务名</span><br></pre></td></tr></table></div></figure>
+<p>例如修改网络设置后，重启网络设置：</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost root] systemctl restart network.service</span><br></pre></td></tr></table></div></figure>
 <p>查看服务名：查看 <code>/etc/init.d/服务名称</code></p>
 <ul>
-<li>当使用指令关闭或者启用防火墙后，将立即生效。[telnet 测试某个端口即可]</li>
+<li>当使用指令关闭或者启用防火墙后，将立即生效。[<code>telnet</code> 测试某个端口即可]</li>
 <li>但这种方式只是临时生效，当重启系统后，还是回归以前对服务的设置。</li>
 <li>如果希望设置某个服务自启动或关闭永久生效，要使用<code>chkconfig</code>指令</li>
 </ul>
@@ -593,7 +649,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
         <h3 id="动态监控进程"   >
           <a href="#动态监控进程" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#动态监控进程"></a> 动态监控进程</h3>
       
-<p>top与ps命令很相似。它们都用来显示正在执行的进程。Top与ps最大的不同之处，在于top在执行一段时间可以更新正在运行的的进程。</p>
+<p><code>top</code>与<code>ps</code>命令很相似。它们都用来显示正在执行的进程。<code>top</code>与<code>ps</code>最大的不同之处，在于<code>top</code>在执行一段时间可以更新正在运行的的进程。</p>
 <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost root] top [选项]</span><br></pre></td></tr></table></div></figure>
 <div class="table-container"><table>
 <thead>
@@ -661,7 +717,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
       
 <p>查看系统网络情况<code>netstat</code>：</p>
 <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost root] netstat [选项]</span><br></pre></td></tr></table></div></figure>
-<p>选项说明:</p>
+<p>选项说明：</p>
 <ul>
 <li>-an 按一定顺序排列输出</li>
 <li>-p 显示哪个进程在调用</li>
@@ -671,7 +727,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
           <a href="#rpm包管理" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#rpm包管理"></a> RPM包管理</h2>
       
 <p>RPM：一种用于互联网下载包的打包及安装工具，它包含在某些Linux分发版中。它生成具有.RPM扩展名的文件。RPM是RedHat Package Manager（RedHat软件包管理工具）的缩写，类似windows的setup.exe，这一文件格式名称虽然打上了RedHat的标志，但理念是通用的。Linux的分发版本都有采用（suse,redhat, centos 等等），可以算是公认的行业标准。</p>
-<p>一个rpm包名：firefox-45.0.1-1.el6.centos.x86_64.rpm</p>
+<p>一个rpm包名：<code>firefox-45.0.1-1.el6.centos.x86_64.rpm</code></p>
 <ul>
 <li>名称:firefox</li>
 <li>版本号：45.0.1-1</li>
@@ -745,10 +801,14 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
            常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E7%B1%BB"><span class="toc-text">
            文件目录类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E9%98%85%E8%AF%BB%E7%B1%BB"><span class="toc-text">
            文件阅读类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%90%9C%E7%B4%A2%E6%9F%A5%E6%89%BE%E7%B1%BB"><span class="toc-text">
-           搜索查找类</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6"><span class="toc-text">
+           搜索查找类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E9%80%9A%E8%AE%AF%E7%B1%BB"><span class="toc-text">
+           网络通讯类</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6"><span class="toc-text">
            定时任务调度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E5%8C%BA"><span class="toc-text">
-           分区</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86"><span class="toc-text">
-           进程管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E7%AE%A1%E7%90%86"><span class="toc-text">
+           分区</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B"><span class="toc-text">
+           进程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E5%8E%86%E5%8F%B2"><span class="toc-text">
+           进程历史</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#systemd-%E6%A6%82%E8%BF%B0"><span class="toc-text">
+           Systemd 概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B"><span class="toc-text">
+           查看进程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E7%AE%A1%E7%90%86"><span class="toc-text">
            服务管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E7%9A%84%E8%BF%90%E8%A1%8C%E7%BA%A7%E5%88%ABrunlevel"><span class="toc-text">
            服务的运行级别(runlevel)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#chkconfig%E6%8C%87%E4%BB%A4"><span class="toc-text">
            chkconfig指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E7%9B%91%E6%8E%A7%E8%BF%9B%E7%A8%8B"><span class="toc-text">
