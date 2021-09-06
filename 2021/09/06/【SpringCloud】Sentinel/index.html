@@ -1,0 +1,657 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="Sentinel 简介         官方Github、官方文档  随着微服务的流行，服务和服务之间的稳定性变得越来越重要。Sentinel 以流量为切入点，从流量控制、熔断降级、系统负载保护等多个维度保护服务的稳定性。Sentinel 具有以下特征：  丰富的应用场景：Sentinel 承接了阿里巴巴近 10 年的双十一大促流量的核心场景，例如秒杀（即突发流量控制在系统">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Spring Cloud】Spring Cloud Alibaba Sentinel">
+<meta property="og:url" content="http://yuyun-zhao.gitee.io/2021/09/06/%E3%80%90SpringCloud%E3%80%91Sentinel/index.html">
+<meta property="og:site_name" content="yuyun zhao&#39;s blog">
+<meta property="og:description" content="Sentinel 简介         官方Github、官方文档  随着微服务的流行，服务和服务之间的稳定性变得越来越重要。Sentinel 以流量为切入点，从流量控制、熔断降级、系统负载保护等多个维度保护服务的稳定性。Sentinel 具有以下特征：  丰富的应用场景：Sentinel 承接了阿里巴巴近 10 年的双十一大促流量的核心场景，例如秒杀（即突发流量控制在系统">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/e4efa9c3547366ae4f747ad4007f6447.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/d8ae2bea252af0bb278332b3aeb8fb77.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/56642cc2b7dd5b0d1252235c84f69173.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/65af4de19564cceebe7cd67589babd69.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/ede9b7e029c54840e3b40b69c4f371b5.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/c26846d68d79eae1e962f37942a2c99f.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/0ddd217545dd0fe2b1f251dbea814ac2.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/79f93ab9f5dc11b05bbed9b793ef7c20.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/c89a2124391676992c8fabffdaf1a07c.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/6a002ef360a4e5f20ee2748a092f0211.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/dcf85d4362c017e543173c76b7dcc2a8.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/3a608908cef3d557322967e6bc0e5696.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/b8f35b00fffd79ef68e8f744403b92f3.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/ab66591ba085c32e9303d96be7b44f0d.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/d92c6a9ae5ed514b52ddf43fdf0d5f0e.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/218fe52e19c07b30bbf4d994d05e6a8e.png">
+<meta property="article:published_time" content="2021-09-06T11:07:49.000Z">
+<meta property="article:modified_time" content="2021-09-06T12:56:24.813Z">
+<meta property="article:author" content="yuyun zhao">
+<meta property="article:tag" content="Spring Cloud">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/e4efa9c3547366ae4f747ad4007f6447.png"><title>【Spring Cloud】Spring Cloud Alibaba Sentinel | yuyun zhao's blog</title><link ref="canonical" href="http://yuyun-zhao.gitee.io/2021/09/06/%E3%80%90SpringCloud%E3%80%91Sentinel/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":true},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"carbon","highlight":"light","wordWrap":false},
+  reward: false,
+  fancybox: true,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: {"avoidBanner":false},
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"复制","copySuccess":"复制成功","copyError":"复制失败"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【Spring Cloud】Spring Cloud Alibaba Sentinel</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-09-06</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-09-06</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">4.3k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">28分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body">
+        <h2 id="sentinel-简介"   >
+          <a href="#sentinel-简介" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#sentinel-简介"></a> Sentinel 简介</h2>
+      
+<blockquote>
+<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://github.com/alibaba/Sentinel" >官方Github</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>、<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://sentinelguard.io/zh-cn/docs/introduction.html" >官方文档</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+</blockquote>
+<p>随着微服务的流行，服务和服务之间的稳定性变得越来越重要。Sentinel 以流量为切入点，从<strong>流量控制</strong>、<strong>熔断降级</strong>、<strong>系统负载保护</strong>等多个维度保护服务的稳定性。Sentinel 具有以下特征：</p>
+<ul>
+<li><strong>丰富的应用场景</strong>：Sentinel 承接了阿里巴巴近 10 年的双十一大促流量的核心场景，例如秒杀（即突发流量控制在系统容量可以承受的范围）、消息削峰填谷、集群流量控制、实时熔断下游不可用应用等。</li>
+<li><strong>完备的实时监控</strong>：Sentinel 同时提供实时的监控功能。您可以在控制台中看到接入应用的单台机器秒级数据，甚至 500 台以下规模的集群的汇总运行情况。</li>
+<li><strong>广泛的开源生态</strong>：Sentinel 提供开箱即用的与其它开源框架/库的整合模块，例如与 Spring Cloud、Dubbo、gRPC 的整合。您只需要引入相应的依赖并进行简单的配置即可快速地接入 Sentinel。</li>
+<li><strong>完善的 SPI 扩展点</strong>：Sentinel 提供简单易用、完善的 SPI 扩展接口。您可以通过实现扩展接口来快速地定制逻辑。例如定制规则管理、适配动态数据源等。</li>
+</ul>
+<p>Sentinel 的主要特性：</p>
+<p><img src="/images/%E3%80%90SpringCloud%E3%80%91Sentinel/e4efa9c3547366ae4f747ad4007f6447.png" alt="img" /></p>
+<span id="more"></span>
+<p>Hystrix 与 Sentinel 比较：</p>
+<ul>
+<li>Hystrix（<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://yuyun-zhao.github.io/2021/08/30/%E3%80%90SpringCloud%E3%80%91Hystrix/" >【Spring Cloud】Hystrix</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>）
+<ol>
+<li>需要我们程序员自己手工搭建监控平台</li>
+<li>没有一套web界面可以给我们进行更加细粒度化得配置流控、速率控制、服务熔断、服务降级</li>
+</ol>
+</li>
+<li>Sentinel
+<ol>
+<li>单独一个组件，可以独立出来。</li>
+<li>直接界面化的细粒度统一配置。</li>
+</ol>
+</li>
+</ul>
+<blockquote>
+<p>sentinel<br />
+英 [ˈsentɪnl] 美 [ˈsentɪnl]<br />
+n. 哨兵</p>
+</blockquote>
+<p>服务使用中的各种问题：</p>
+<ul>
+<li>服务雪崩</li>
+<li>服务降级</li>
+<li>服务熔断</li>
+<li>服务限流</li>
+</ul>
+<p>Sentinel 分为两个部分：</p>
+<ul>
+<li>核心库（Java 客户端）不依赖任何框架/库，能够运行于所有 Java 运行时环境，同时对 Dubbo / Spring Cloud 等框架也有较好的支持。</li>
+<li>控制台（Dashboard）基于 Spring Boot 开发，打包后可以直接运行，不需要额外的 Tomcat 等应用容器。</li>
+</ul>
+
+        <h2 id="sentinel-下载安装运行"   >
+          <a href="#sentinel-下载安装运行" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#sentinel-下载安装运行"></a> Sentinel 下载安装运行</h2>
+      
+<blockquote>
+<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://spring-cloud-alibaba-group.github.io/github-pages/greenwich/spring-cloud-alibaba.html#_spring_cloud_alibaba_sentinel" >官方文档</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+</blockquote>
+<p>下载地址：<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://github.com/alibaba/Sentinel/release" >https://github.com/alibaba/Sentinel/release</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+<p>安装步骤：</p>
+<ul>
+<li>下载到本地 <code>sentinel-dashboard-1.7.0.jar</code></li>
+<li>运行命令 <code>java -jar sentinel-dashboard-1.7.0.jar</code></li>
+</ul>
+<p>前提：</p>
+<ul>
+<li>Java 8 环境</li>
+<li>8080端口不能被占用</li>
+</ul>
+<p>进入Sentinel管理界面方式：访问 <span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="http://localhost:8080" >http://localhost:8080</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>，登录账号密码均为sentinel</p>
+
+        <h2 id="sentinel-初始化监控"   >
+          <a href="#sentinel-初始化监控" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#sentinel-初始化监控"></a> Sentinel 初始化监控</h2>
+      
+<ol>
+<li>启动Nacos服务中心（见文章<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://yuyun-zhao.github.io/2021/09/05/%E3%80%90SpringCloud%E3%80%91Nacos/#spring-cloud-alibaba-%E7%AE%80%E4%BB%8B" >【Spring Cloud】Spring Cloud Alibaba Nacos</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>）</li>
+<li>新建Module：<code>cloudalibaba-sentinel-service8401</code></li>
+<li>导入Maven依赖：</li>
+</ol>
+<figure class="highlight xml"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">project</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://maven.apache.org/POM/4.0.0&quot;</span></span></span><br><span class="line"><span class="tag">         <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">         <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">parent</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>cloud2021<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.zhao.springcloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">parent</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">modelVersion</span>&gt;</span>4.0.0<span class="tag">&lt;/<span class="name">modelVersion</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>cloudalibaba-sentinel-service8401<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span><span class="comment">&lt;!-- 引入自己定义的api通用包，可以使用Payment支付Entity --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.atguigu.springcloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>cloud-api-commons<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;project.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--SpringCloud ailibaba nacos --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-alibaba-nacos-discovery<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--SpringCloud ailibaba sentinel-datasource-nacos 后续做持久化用到--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.csp<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>sentinel-datasource-nacos<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--SpringCloud ailibaba sentinel --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-alibaba-sentinel<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--openfeign--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-openfeign<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- SpringBoot整合Web组件+actuator --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-actuator<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--日常通用jar包配置--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-devtools<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">scope</span>&gt;</span>runtime<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">optional</span>&gt;</span>true<span class="tag">&lt;/<span class="name">optional</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>cn.hutool<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hutool-all<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.6.3<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.projectlombok<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>lombok<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">optional</span>&gt;</span>true<span class="tag">&lt;/<span class="name">optional</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-test<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></span><br></pre></td></tr></table></div></figure>
+<ol start="4">
+<li>配置文件：</li>
+</ol>
+<figure class="highlight yaml"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">8401</span></span><br><span class="line"></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">cloudalibaba-sentinel-service</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">nacos:</span></span><br><span class="line">      <span class="attr">discovery:</span></span><br><span class="line">        <span class="attr">server-addr:</span> <span class="string">localhost:8848</span> <span class="comment"># Nacos服务注册中心地址</span></span><br><span class="line">    <span class="attr">sentinel:</span></span><br><span class="line">      <span class="attr">transport:</span></span><br><span class="line">        <span class="attr">dashboard:</span> <span class="string">localhost:8080</span>  <span class="comment"># 配置Sentinel dashboard地址</span></span><br><span class="line">        <span class="attr">port:</span> <span class="number">8719</span>  <span class="comment"># sentinel 会启动一个 httpServer 与 dashboard 通讯，其端口号为8719</span></span><br><span class="line"></span><br><span class="line"><span class="attr">management:</span></span><br><span class="line">  <span class="attr">endpoints:</span></span><br><span class="line">    <span class="attr">web:</span></span><br><span class="line">      <span class="attr">exposure:</span></span><br><span class="line">        <span class="attr">include:</span> <span class="string">&#x27;*&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">feign:</span></span><br><span class="line">  <span class="attr">sentinel:</span></span><br><span class="line">    <span class="attr">enabled:</span> <span class="literal">true</span>  <span class="comment"># 激活Sentinel对Feign的支持</span></span><br></pre></td></tr></table></div></figure>
+<ol start="5">
+<li>主启动类：</li>
+</ol>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.boot.SpringApplication;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.autoconfigure.SpringBootApplication;</span><br><span class="line"><span class="keyword">import</span> org.springframework.cloud.client.discovery.EnableDiscoveryClient;</span><br><span class="line"></span><br><span class="line"><span class="meta">@EnableDiscoveryClient</span></span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainApp8401</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(MainApp8401.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<ol start="6">
+<li>业务类 FlowLimitController：</li>
+</ol>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.alibaba.csp.sentinel.annotation.SentinelResource;</span><br><span class="line"><span class="keyword">import</span> com.alibaba.csp.sentinel.slots.block.BlockException;</span><br><span class="line"><span class="keyword">import</span> lombok.extern.slf4j.Slf4j;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.GetMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RequestParam;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RestController;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.TimeUnit;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FlowLimitController</span> </span>&#123;</span><br><span class="line">    <span class="meta">@GetMapping(&quot;/testA&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">testA</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;------testA&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/testB&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">testB</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        log.info(Thread.currentThread().getName()+<span class="string">&quot;\t&quot;</span>+<span class="string">&quot;...testB&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;------testB&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<ol start="7">
+<li>启动Sentinel Dashboard：<code>java -jar sentinel-dashboard-1.7.0.jar</code></li>
+<li>测试：发出请求 <span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="http://localhost:8401/testA" >http://localhost:8401/testA</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span> 后，可在Sentinel Dashboard看到监控中的微服务8401</li>
+</ol>
+
+        <h2 id="sentinel-流控规则"   >
+          <a href="#sentinel-流控规则" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#sentinel-流控规则"></a> Sentinel 流控规则</h2>
+      
+<p><img src="/images/%E3%80%90SpringCloud%E3%80%91Sentinel/d8ae2bea252af0bb278332b3aeb8fb77.png" alt="img" /></p>
+<p>进一步解释说明：</p>
+<ul>
+<li>资源名：唯一名称，默认请求路径。</li>
+<li>针对来源：Sentinel可以针对调用者进行限流，填写微服务名，默认default（不区分来源）。</li>
+<li>阈值类型/单机阈值：
+<ul>
+<li>QPS（每秒钟的请求数量）︰当调用该API的QPS达到阈值的时候，进行限流。</li>
+<li>线程数：当调用该API的线程数达到阈值的时候，进行限流。</li>
+</ul>
+</li>
+<li>是否集群：不需要集群。</li>
+<li>流控模式：
+<ul>
+<li>直接：API达到限流条件时，直接限流。</li>
+<li>关联：当关联的资源达到阈值时，就限流自己。</li>
+<li>链路：只记录指定链路上的流量（指定资源从入口资源进来的流量，如果达到阈值，就进行限流)【API级别的针对来源】。</li>
+</ul>
+</li>
+<li>流控效果：
+<ul>
+<li>快速失败：直接失败，抛异常。</li>
+<li>Warm up：根据Code Factor（冷加载因子，默认3）的值，从阈值/codeFactor，经过预热时长，才达到设置的QPS阈值。</li>
+<li>排队等待：匀速排队，让请求以匀速的速度通过，阈值类型必须设置为QPS，否则无效。</li>
+</ul>
+</li>
+</ul>
+
+        <h3 id="qps-直接失败"   >
+          <a href="#qps-直接失败" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#qps-直接失败"></a> QPS 直接失败</h3>
+      
+<p>QPS（每秒钟的请求数量），系统默认为<strong>直接 -&gt; 快速失败</strong>：</p>
+<p><img src="/images/%E3%80%90SpringCloud%E3%80%91Sentinel/56642cc2b7dd5b0d1252235c84f69173.png" alt="img" /></p>
+<p>上图配置表示1秒钟内查询1次就是OK，若超过次数1，就直接-&gt;快速失败，报默认错误 <code>Blocked by Sentinel (flow limiting)</code>。</p>
+
+        <h3 id="线程数直接失败"   >
+          <a href="#线程数直接失败" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#线程数直接失败"></a> 线程数直接失败</h3>
+      
+<p>线程数：当调用该请求的线程数达到阈值的时候，进行限流。</p>
+<p><img src="/images/%E3%80%90SpringCloud%E3%80%91Sentinel/65af4de19564cceebe7cd67589babd69.png" alt="img" /></p>
+
+        <h3 id="关联"   >
+          <a href="#关联" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#关联"></a> 关联</h3>
+      
+<p>关联模式下，当自己关联的资源达到阈值时，就限流自己。例如当与A关联的资源B达到阀值后，就限流A自己（B惹事，A挂了）</p>
+
+        <h3 id="链路"   >
+          <a href="#链路" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#链路"></a> 链路</h3>
+      
+<p>只记录指定链路上的流量（指定资源从入口资源进来的流量，如果达到阈值，就进行限流）【API级别的针对来源】</p>
+
+        <h3 id="预热-warm-up"   >
+          <a href="#预热-warm-up" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#预热-warm-up"></a> 预热 Warm Up</h3>
+      
+<p>Warm Up（RuleConstant.CONTROL_BEHAVIOR_WARM_UP）方式，即预热/冷启动方式。当系统长期处于低水位的情况下，当流量突然增加时，直接把系统拉升到高水位可能瞬间把系统压垮。通过&quot;冷启动&quot;，让通过的流量缓慢增加，在一定时间内逐渐增加到阈值上限，给冷系统一个预热的时间，避免冷系统被压垮。详细文档可以参考<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://github.com/alibaba/Sentinel/wiki/%E9%99%90%E6%B5%81---%E5%86%B7%E5%90%AF%E5%8A%A8" >流量控制 - Warm Up 文档</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>，具体的例子可以参见 WarmUpFlowDemo。</p>
+<p>通常冷启动的过程系统允许通过的 QPS 曲线如下图所示：</p>
+<p><img src="/images/%E3%80%90SpringCloud%E3%80%91Sentinel/ede9b7e029c54840e3b40b69c4f371b5.png" alt="img" /></p>
+<p>默认<code>coldFactor</code>为3，即请求QPS 从 <code>threshold / 3</code>开始，经预热时长逐渐升至设定的QPS阈值。</p>
+<p>WarmUp配置案例，阀值为10 + 预热时长设置5秒：</p>
+<p>系统初始化的阀值为 <code>10 / 3</code> 约等于3，即阀值刚开始为3。然后过了5秒后阀值才慢慢升高恢复到10：</p>
+<p><img src="/images/%E3%80%90SpringCloud%E3%80%91Sentinel/c26846d68d79eae1e962f37942a2c99f.png" alt="img" /></p>
+<p><strong>应用场景</strong></p>
+<p>如：秒杀系统在开启的瞬间，会有很多流量上来，很有可能把系统打死，预热方式就是把为了保护系统，可慢慢的把流量放进来,慢慢的把阀值增长到设置的阀值。</p>
+
+        <h3 id="排队等待"   >
+          <a href="#排队等待" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#排队等待"></a> 排队等待</h3>
+      
+<p>匀速排队，让请求以均匀的速度通过，阀值类型必须设成QPS，否则无效。</p>
+<p>设置：<code>/testA</code>每秒1次请求，超过的话就<strong>排队等待</strong>，等待的超时时间为20000毫秒：</p>
+<p><img src="/images/%E3%80%90SpringCloud%E3%80%91Sentinel/0ddd217545dd0fe2b1f251dbea814ac2.png" alt="img" /></p>
+<p><strong>匀速排队</strong></p>
+<p>匀速排队（RuleConstant.CONTROL_BEHAVIOR_RATE_LIMITER）方式会严格控制请求通过的间隔时间，也即是让请求以均匀的速度通过，对应的是漏桶算法。详细文档可以参考 <span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://github.com/alibaba/Sentinel/wiki/%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6-%E5%8C%80%E9%80%9F%E6%8E%92%E9%98%9F%E6%A8%A1%E5%BC%8F" >流量控制 - 匀速器模式</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>，具体的例子可以参见 PaceFlowDemo。</p>
+<p><img src="/images/%E3%80%90SpringCloud%E3%80%91Sentinel/79f93ab9f5dc11b05bbed9b793ef7c20.png" alt="img" /></p>
+<p>这种方式主要用于处理<strong>间隔性突发</strong>的流量，例如<strong>消息队列</strong>。想象一下这样的场景，在某一秒有大量的请求到来，而接下来的几秒则处于空闲状态，<strong>我们希望系统能够在接下来的空闲期间逐渐处理这些请求，而不是在第一秒直接拒绝多余的请求。</strong></p>
+<p><strong>测试</strong>：添加日志记录代码到<code>FlowLimitController</code>的<code>testA</code>方法</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FlowLimitController</span> </span>&#123;</span><br><span class="line">    <span class="meta">@GetMapping(&quot;/testA&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">testA</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        log.info(Thread.currentThread().getName()+<span class="string">&quot;\t&quot;</span>+<span class="string">&quot;...testA&quot;</span>);<span class="comment">//&lt;----</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;------testA&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>Postman模拟并发密集访问 <code>/testA</code>。后台显示：</p>
+<p><img src="/images/%E3%80%90SpringCloud%E3%80%91Sentinel/c89a2124391676992c8fabffdaf1a07c.png" alt="img" /></p>
+
+        <h2 id="sentinel-服务降级"   >
+          <a href="#sentinel-服务降级" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#sentinel-服务降级"></a> Sentinel 服务降级</h2>
+      
+
+        <h3 id="熔断降级概述"   >
+          <a href="#熔断降级概述" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#熔断降级概述"></a> 熔断降级概述</h3>
+      
+<blockquote>
+<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://yuyun-zhao.github.io/2021/08/30/%E3%80%90SpringCloud%E3%80%91Hystrix/" >【Spring Cloud】Hystrix</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+</blockquote>
+<p>除了流量控制以外，对调用链路中不稳定的资源进行熔断降级也是保障高可用的重要措施之一。一个服务常常会调用别的模块，可能是另外的一个远程服务、数据库，或者第三方 API 等。例如，支付的时候，可能需要远程调用银联提供的 API；查询某个商品的价格，可能需要进行数据库查询。然而，这个被依赖服务的稳定性是不能保证的。如果依赖的服务出现了不稳定的情况，请求的响应时间变长，那么调用服务的方法的响应时间也会变长，线程会产生堆积，最终可能耗尽业务自身的线程池，服务本身也变得不可用。</p>
+<p>现代微服务架构都是分布式的，由非常多的服务组成。不同服务之间相互调用，组成复杂的调用链路。以上的问题在链路调用中会产生放大的效果。复杂链路上的某一环不稳定，就可能会层层级联，最终导致整个链路都不可用。因此我们需要对不稳定的弱依赖服务调用进行熔断降级，暂时切断不稳定调用，避免局部不稳定因素导致整体的雪崩。<strong>熔断降级作为保护自身的手段，通常在客户端（调用端）进行配置。</strong></p>
+
+        <h3 id="sentinel-服务降级规则"   >
+          <a href="#sentinel-服务降级规则" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#sentinel-服务降级规则"></a> Sentinel 服务降级规则</h3>
+      
+<p><img src="/images/%E3%80%90SpringCloud%E3%80%91Sentinel/6a002ef360a4e5f20ee2748a092f0211.png" alt="img" /></p>
+<ul>
+<li><strong>RT（平均响应时间，毫秒级）</strong>
+<ul>
+<li>平均响应时间超出阈值且<code>QPS &gt;= 5</code>（在1s时间窗口内通过的请求&gt;=5），两个条件同时满足后触发降级</li>
+<li>窗口期过后关闭断路器</li>
+<li>RT最大4900（更大的需要通过<code>-Dcsp.sentinel.statistic.max.rt=XXXX</code>才能生效）</li>
+</ul>
+</li>
+<li><strong>异常比列（秒级）</strong>：<code>QPS &gt;= 5</code>且异常比例（秒级统计）超过阈值时触发降级；时间窗口结束后，关闭降级</li>
+<li><strong>异常数（分钟级）</strong>：异常数（分钟统计）超过阈值时，触发降级；时间窗口结束后，关闭降级</li>
+</ul>
+<p>Sentinel 熔断降级会在调用链路中某个资源出现不稳定状态时（例如调用超时或异常比例升高)，对这个资源的调用进行限制，让请求快速失败，避免影响到其它的资源而导致级联错误。</p>
+<p>当资源被降级后，在接下来的降级时间窗口之内，对该资源的调用都自动熔断（默认行为是抛出 <code>DegradeException</code>）。</p>
+<p>1.7.0版本的 Sentinel 的断路器是没有类似Hystrix半开状态的(Sentinei 1.8.0 已有半开状态)。半开的状态系统自动去检测是否请求有异常，没有异常就关闭断路器恢复使用，有异常则继续打开断路器不可用。断路器的介绍见<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://yuyun-zhao.github.io/2021/08/30/%E3%80%90SpringCloud%E3%80%91Hystrix/" >【Spring Cloud】Hystrix</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>。</p>
+
+        <h3 id="sentinel-降级-rt"   >
+          <a href="#sentinel-降级-rt" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#sentinel-降级-rt"></a> Sentinel 降级 - RT</h3>
+      
+<p>Sentinel 1.7.0 版本的<strong>平均响应时间</strong>（<code>DEGRADE_GRADE_RT</code>）：</p>
+<p>RT 平均响应时间（<code>DEGRADE_GRADE_RT</code>）：当1s内持续进入5个请求，对应时刻的平均响应时间均超过阈值（ count，以ms为单位），那么在接下的时间窗口（<code>DegradeRule</code>中的<code>timeWindow</code>，以s为单位）之内，对这个方法的调用都会自动地熔断（抛出<code>DegradeException</code>）。注意 Sentinel 默认统计的RT上限是4900 ms，超出此阈值的都会算作4900ms，若需要变更此上限可以通过启动配置项<code>-Dcsp.sentinel.statistic.max.rt=xxx</code>来配置。窗口期时间到了，自动结束熔断。</p>
+<p>Sentinel 1.8.0 没有平均响应时间，取而代之的是<strong>慢调用比例</strong> (<code>SLOW_REQUEST_RATIO</code>)：</p>
+<p>慢调用比例 （<code>SLOW_REQUEST_RATIO</code>）：选择以慢调用比例作为阈值，需要设置允许的慢调用 RT（即最大的响应时间），请求的响应时间大于该值则统计为慢调用。当单位统计时长（<code>statIntervalMs</code>）内请求数目大于设置的最小请求数目，并且慢调用的比例大于阈值，则接下来的熔断时长内请求会自动被熔断。经过熔断时长后熔断器会进入<strong>探测恢复状态</strong>（<code>HALF-OPEN</code> 状态），<strong>若接下来的一个请求响应时间小于设置的慢调用 RT 则结束熔断，若大于设置的慢调用 RT 则会再次被熔断</strong></p>
+<p>Sentinel 1.7.0 版本平均响应时间示意图：</p>
+<p><img src="/images/%E3%80%90SpringCloud%E3%80%91Sentinel/dcf85d4362c017e543173c76b7dcc2a8.png" alt="img" /></p>
+<p><img src="/images/%E3%80%90SpringCloud%E3%80%91Sentinel/3a608908cef3d557322967e6bc0e5696.png" alt="img" /></p>
+<p>如上配置时，若1s内请求数&gt;=5，并且平均响应时间&gt;200ms，则触发熔断，在1s的时间窗后结束熔断。</p>
+
+        <h3 id="sentinel-降级-异常比例"   >
+          <a href="#sentinel-降级-异常比例" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#sentinel-降级-异常比例"></a> Sentinel 降级 - 异常比例</h3>
+      
+<p>Sentinel 1.7.0 版本的异常比例：</p>
+<p>异常比例（<code>DEGRADE_GRADE_EXCEPTION_RATIO</code>）：当资源的每秒请求量 &gt;= 5，并且每秒异常总数占通过量的比值超过阈值（ <code>DegradeRule</code>中的 <code>count</code>）之后，资源进入降级状态，即在接下的时间窗口( <code>DegradeRule</code>中的<code>timeWindow</code>，以s为单位）之内，对这个方法的调用都会自动地返回。异常比率的阈值范围是[0.0, 1.0]，代表0% -100%。</p>
+<p>Sentinel 1.8.0 版本的异常比例：</p>
+<p>异常比例 （<code>ERROR_RATIO</code>）：当单位统计时长（<code>statIntervalMs</code>）内请求数目大于设置的最小请求数目，并且异常的比例大于阈值，则接下来的熔断时长内请求会自动被熔断。经过熔断时长后熔断器会进入<strong>探测恢复状态</strong>（<code>HALF-OPEN</code> 状态），<strong>若接下来的一个请求成功完成（没有错误）则结束熔断，否则会再次被熔断</strong>。异常比率的阈值范围是 [0.0, 1.0]，代表 0% - 100%。</p>
+<p>Sentinel 1.7.0 版本异常比例示意图：</p>
+<p><img src="/images/%E3%80%90SpringCloud%E3%80%91Sentinel/b8f35b00fffd79ef68e8f744403b92f3.png" alt="img" /></p>
+<p><img src="/images/%E3%80%90SpringCloud%E3%80%91Sentinel/ab66591ba085c32e9303d96be7b44f0d.png" alt="img" /></p>
+<p>如上配置时，若1s内请求数&gt;=5且出现异常的请求数占比大于0.2时触发熔断，在1s的时间窗后结束熔断。</p>
+
+        <h3 id="sentinel-降级-异常数"   >
+          <a href="#sentinel-降级-异常数" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#sentinel-降级-异常数"></a> Sentinel 降级 - 异常数</h3>
+      
+<p>Sentinel 1.7.0 版本的异常数：</p>
+<p>异常数（<code>DEGRADE_GRADF_EXCEPTION_COUNT</code> ）：当资源近1分钟的异常数目超过阈值之后会进行熔断。注意由于统计时间窗口是分钟级别的，若<code>timeWindow</code>小于60s，则结束熔断状态后码可能再进入熔断状态。<strong>异常数是按照分钟统计的，时间窗口一定要大于等于60秒</strong>。</p>
+<p>Sentinel 1.8.0 版本的异常数：</p>
+<p>异常数（<code>ERROR_COUNT</code>）：当单位统计时长内的异常数目超过阈值之后会自动进行熔断。经过熔断时长后熔断器会进入探测恢复状态（<code>HALF-OPEN</code> 状态），若接下来的一个请求成功完成（没有错误）则结束熔断，否则会再次被熔断。</p>
+<p>Sentinel 1.8.0 版本异常比例示意图：</p>
+<p><img src="/images/%E3%80%90SpringCloud%E3%80%91Sentinel/d92c6a9ae5ed514b52ddf43fdf0d5f0e.png" alt="img" /></p>
+<p><img src="/images/%E3%80%90SpringCloud%E3%80%91Sentinel/218fe52e19c07b30bbf4d994d05e6a8e.png" alt="img" /></p>
+<p>如上配置时，若1s内请求数&gt;=5且出现异常的请求数大于5时触发熔断，在61s的时间窗后结束熔断。（<strong>异常数是按照分钟统计的，时间窗口一定要大于等于60秒</strong>）</p>
+
+        <h2 id="sentinel-热点-key"   >
+          <a href="#sentinel-热点-key" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#sentinel-热点-key"></a> Sentinel 热点 key</h2>
+      
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yuyun-zhao.gitee.io">yuyun zhao</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yuyun-zhao.gitee.io/2021/09/06/%E3%80%90SpringCloud%E3%80%91Sentinel/">http://yuyun-zhao.gitee.io/2021/09/06/%E3%80%90SpringCloud%E3%80%91Sentinel/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.gitee.io/tags/Spring-Cloud/">Spring Cloud</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2021/09/13/%E3%80%90Docker%E3%80%91Docker/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">【Docker】Docker</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2021/09/05/%E3%80%90SpringCloud%E3%80%91Nacos/"><span class="paginator-prev__text">【Spring Cloud】Spring Cloud Alibaba Nacos</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#sentinel-%E7%AE%80%E4%BB%8B"><span class="toc-text">
+           Sentinel 简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sentinel-%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85%E8%BF%90%E8%A1%8C"><span class="toc-text">
+           Sentinel 下载安装运行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sentinel-%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9B%91%E6%8E%A7"><span class="toc-text">
+           Sentinel 初始化监控</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sentinel-%E6%B5%81%E6%8E%A7%E8%A7%84%E5%88%99"><span class="toc-text">
+           Sentinel 流控规则</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#qps-%E7%9B%B4%E6%8E%A5%E5%A4%B1%E8%B4%A5"><span class="toc-text">
+           QPS 直接失败</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E6%95%B0%E7%9B%B4%E6%8E%A5%E5%A4%B1%E8%B4%A5"><span class="toc-text">
+           线程数直接失败</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E8%81%94"><span class="toc-text">
+           关联</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%93%BE%E8%B7%AF"><span class="toc-text">
+           链路</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%84%E7%83%AD-warm-up"><span class="toc-text">
+           预热 Warm Up</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%92%E9%98%9F%E7%AD%89%E5%BE%85"><span class="toc-text">
+           排队等待</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sentinel-%E6%9C%8D%E5%8A%A1%E9%99%8D%E7%BA%A7"><span class="toc-text">
+           Sentinel 服务降级</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%86%94%E6%96%AD%E9%99%8D%E7%BA%A7%E6%A6%82%E8%BF%B0"><span class="toc-text">
+           熔断降级概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sentinel-%E6%9C%8D%E5%8A%A1%E9%99%8D%E7%BA%A7%E8%A7%84%E5%88%99"><span class="toc-text">
+           Sentinel 服务降级规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sentinel-%E9%99%8D%E7%BA%A7-rt"><span class="toc-text">
+           Sentinel 降级 - RT</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sentinel-%E9%99%8D%E7%BA%A7-%E5%BC%82%E5%B8%B8%E6%AF%94%E4%BE%8B"><span class="toc-text">
+           Sentinel 降级 - 异常比例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sentinel-%E9%99%8D%E7%BA%A7-%E5%BC%82%E5%B8%B8%E6%95%B0"><span class="toc-text">
+           Sentinel 降级 - 异常数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sentinel-%E7%83%AD%E7%82%B9-key"><span class="toc-text">
+           Sentinel 热点 key</span></a></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/author.png" alt="avatar"></div><p class="sidebar-ov-author__text">no code no life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/YUYUN-ZHAO" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="zyy1024462136" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a><a class="sidebar-ov-social-item" href="1024462136" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="mailto:im.yuyunzhao@gmail.com" target="_blank" rel="noopener" data-popover="social.Gmail" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">Gmail</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">73</div><div class="sidebar-ov-state-item__name">文章</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">28</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">28</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2021</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>yuyun zhao</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script>function initSearch() {
+  var isXML = true;
+  var search_path = 'search.xml';
+
+  if (!search_path) {
+    search_path = 'search.xml';
+  } else if (/json$/i.test(search_path)) {
+    isXML = false;
+  }
+
+  var path = '/' + search_path;
+  $.ajax({
+    url: path,
+    dataType: isXML ? 'xml' : 'json',
+    async: true,
+    success: function (res) {
+      var datas = isXML ? $('entry', res).map(function () {
+        // 将 XML 转为 JSON
+        return {
+          title: $('title', this).text(),
+          content: $('content', this).text(),
+          url: $('url', this).text()
+        };
+      }).get() : res;
+      var $input = $('.search-input input');
+      var $result = $('.search-results');
+      // 搜索对象（标题、内容）的权重，影响显示顺序
+      var WEIGHT = { title: 100, content: 1 };
+      var searchPost = function () {
+        var searchText = $input.val().toLowerCase().trim();
+        // 根据空白字符分隔关键字
+        var keywords = searchText.split(/[\s]+/);
+        // 搜索结果
+        var matchPosts = [];
+
+        // 有多个关键字时，将原文字整个保存下来
+        if (keywords.length > 1) {
+          keywords.push(searchText);
+        }
+        // 防止未输入字符时搜索
+        if (searchText.length > 0) {
+          datas.forEach(function (data) {
+            var isMatch  = false;
+            // 没有标题的文章使用预设的 i18n 变量代替
+            var title = (data.title && data.title.trim()) || '[ 文章无标题 ]';
+            var titleLower = title && title.toLowerCase();
+            // 删除 HTML 标签 和 所有空白字符
+            var content = data.content && data.content.replace(/<[^>]+>/g, '');
+            var contentLower = content && content.toLowerCase();
+            // 删除重复的 /
+            var postURL = data.url && decodeURI(data.url).replace(/\/{2,}/g, '/');
+            // 标题中匹配到的关键词
+            var titleHitSlice = [];
+            // 内容中匹配到的关键词
+            var contentHitSlice = [];
+
+            keywords.forEach(function (keyword) {
+              /**
+              * 获取匹配的关键词的索引
+              * @param {String} keyword 要匹配的关键字
+              * @param {String} text 原文字
+              * @param {Boolean} caseSensitive 是否区分大小写
+              * @param {Number} weight 匹配对象的权重。权重大的优先显示
+              * @return {Array}
+              */
+              function getIndexByword (word, text, caseSensitive, weight) {
+                if (!word || !text) {
+                  return [];
+                };
+
+                var startIndex = 0; // 每次匹配的开始索引
+                var index = -1;     // 匹配到的索引值
+                var result = [];    // 匹配结果
+
+                if (!caseSensitive) {
+                  word = word.toLowerCase();
+                  text = text.toLowerCase();
+                }
+
+                while((index = text.indexOf(word, startIndex)) !== -1) {
+                  var hasMatch = false;
+                  // 索引位置相同的关键词，保留长度较长的
+                  titleHitSlice.forEach(function (hit) {
+                    if (hit.index === index && hit.word.length < word.length) {
+                      hit.word = word;
+                      hasMatch = true;
+                    }
+                  });
+                  startIndex = index + word.length;
+                  !hasMatch && result.push({ index: index, word: word, weight: weight });
+                }
+                return result;
+              }
+              titleHitSlice = titleHitSlice.concat(getIndexByword(keyword, titleLower, false, WEIGHT.title));
+              contentHitSlice = contentHitSlice.concat(getIndexByword(keyword, contentLower, false, WEIGHT.content));
+            });
+
+            var hitTitle = titleHitSlice.length;
+            var hitContent = contentHitSlice.length;
+
+            if (hitTitle > 0 || hitContent > 0) {
+              isMatch = true;
+            }
+            if (isMatch) {
+              ;[titleHitSlice, contentHitSlice].forEach(function (hit) {
+                // 按照匹配文字的索引的递增顺序排序
+                hit.sort(function (left, right) {
+                  return left.index - right.index;
+                });
+              });
+              /**
+              * 给文本中匹配到的关键词添加标记，从而进行高亮显示
+              * @param {String} text 原文本
+              * @param {Array} hitSlice 匹配项的索引信息
+              * @param {Number} start 开始索引
+              * @param {Number} end 结束索引
+              * @return {String}
+              */
+              function highlightKeyword (text, hitSlice, start, end) {
+                if (!text || !hitSlice || !hitSlice.length) {
+                  return;
+                }
+
+                var result = '';
+                var startIndex = start;
+                var endIndex = end;
+                hitSlice.forEach(function (hit) {
+                  if (hit.index < startIndex) {
+                    return;
+                  }
+
+                  var hitWordEnd = hit.index + hit.word.length;
+                  result += text.slice(startIndex, hit.index);
+                  result += '<b>' + text.slice(hit.index, hitWordEnd) + '</b>';
+                  startIndex = hitWordEnd;
+                });
+                result += text.slice(startIndex, endIndex);
+                return result;
+              }
+
+              var postData = {};
+              // 文章总的搜索权重
+              var postWeight = titleHitSlice.length * WEIGHT.title + contentHitSlice.length * WEIGHT.content;
+              // 标记匹配关键词后的标题
+              var postTitle = highlightKeyword(title, titleHitSlice, 0, title.length) || title;
+              // 标记匹配关键词后的内容
+              var postContent;
+              // 显示内容的长度
+              var SHOW_WORD_LENGTH = 200;
+              // 命中关键词前的字符显示长度
+              var SHOW_WORD_FRONT_LENGTH = 20;
+              var SHOW_WORD_END_LENGTH = SHOW_WORD_LENGTH - SHOW_WORD_FRONT_LENGTH;
+
+              // 截取匹配的第一个字符，前后共 200 个字符来显示
+              if (contentHitSlice.length > 0) {
+                var firstIndex = contentHitSlice[0].index;
+                var start = firstIndex > SHOW_WORD_FRONT_LENGTH ? firstIndex - SHOW_WORD_FRONT_LENGTH : 0;
+                var end = firstIndex + SHOW_WORD_END_LENGTH;
+                postContent = highlightKeyword(content, contentHitSlice, start, end);
+              } else { // 未匹配到内容，直接截取前 200 个字符来显示
+                postContent = content.slice(0, SHOW_WORD_LENGTH);
+              }
+              postData.title = postTitle;
+              postData.content = postContent;
+              postData.url = postURL;
+              postData.weight = postWeight;
+              matchPosts.push(postData);
+            }
+          });
+        }
+
+        var resultInnerHtml = '';
+        if (matchPosts.length) {
+          // 按权重递增的顺序排序，使权重大的优先显示
+          matchPosts.sort(function (left, right) {
+            return right.weight - left.weight;
+          });
+          resultInnerHtml += '<ul>';
+          matchPosts.forEach(function (post) {
+            resultInnerHtml += '<li><a class="search-results-title" href="' + post.url + '">';
+            resultInnerHtml += post.title;
+            resultInnerHtml += '</a><div class="search-results-content">';
+            resultInnerHtml += post.content;
+            resultInnerHtml += '</div></li>';
+          });
+          resultInnerHtml += '</ul>';
+        } else {
+          resultInnerHtml += '<div class="search-results-none"><i class="far fa-meh"></i></div>';
+        }
+        $result.html(resultInnerHtml);
+      };
+      $input.on('input', searchPost);
+      $input.on('keyup', function (e) {
+        if (e.keyCode === Stun.utils.codeToKeyCode('Enter')) {
+          searchPost();
+        }
+      });
+    }
+  });
+}
+
+function closeSearch () {
+  $('body').css({ overflow: 'auto' });
+  $('.search-popup').css({ display: 'none' });
+  $('.search-mask').css({ display: 'none' });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+  Stun.utils.pjaxReloadLocalSearch = function () {
+    $('.header-nav-search').on('click', function (e) {
+      e.stopPropagation();
+      $('body').css('overflow', 'hidden');
+      $('.search-popup')
+        .velocity('stop')
+        .velocity('transition.expandIn', {
+          duration: 300,
+          complete: function () {
+            $('.search-popup input').focus();
+          }
+        });
+      $('.search-mask')
+        .velocity('stop')
+        .velocity('transition.fadeIn', {
+          duration: 300
+        });
+
+      initSearch();
+    });
+    $('.search-mask, .search-close').on('click', function () {
+      closeSearch();
+    });
+    $(document).on('keydown', function (e) {
+      // Escape <=> 27
+      if (e.keyCode === Stun.utils.codeToKeyCode('Escape')) {
+        closeSearch();
+      }
+    });
+  };
+
+  Stun.utils.pjaxReloadLocalSearch();
+}, false);
+
+function safeOpenUrl(url) {
+  var newTab = window.open();
+  newTab.opener = null;
+  newTab.location = url;
+}
+
+function extSearch(engine) {
+  var engines = {
+    google: 'https://www.google.com/search?q=',
+    bing: 'https://cn.bing.com/search?q=',
+    baidu: 'https://www.baidu.com/s?ie=UTF-8&wd=',
+  };
+  var host = window.location.host;
+  var query = $('.search-input input').val().toLowerCase().trim();
+  var uri = engines[engine] + query + ' site:' + host;
+
+  if (query) {
+    safeOpenUrl(uri);
+  } else {
+    Stun.utils.popAlert('warning', '请输入字符');
+  }
+}
+
+var assistSearchList = window.CONFIG.assistSearch;
+
+if (Array.isArray(assistSearchList)) {
+  assistSearchList.forEach(function (name) {
+    document.querySelector('.search-btns-item--' + name).addEventListener('click', function () {
+      extSearch(name);
+    }, false);
+  });
+}</script><script src="https://cdn.jsdelivr.net/npm/pjax@latest/pjax.min.js"></script><script>window.addEventListener('DOMContentLoaded', function () {
+  var pjax = new Pjax({"selectors":["head title","#main",".pjax-reload"],"history":true,"scrollTo":false,"scrollRestoration":false,"cacheBust":false,"debug":false,"currentUrlFullReload":false,"timeout":0});
+  // 加载进度条的计时器
+  var loadingTimer = null;
+
+  // 重置页面 Y 方向上的滚动偏移量
+  document.addEventListener('pjax:send', function () {
+    $('.header-nav-menu').removeClass('show');
+    if (CONFIG.pjax && CONFIG.pjax.avoidBanner) {
+      $('html').velocity('scroll', {
+        duration: 500,
+        offset: $('#header').height(),
+        easing: 'easeInOutCubic'
+      });
+    }
+
+    var loadingBarWidth = 20;
+    var MAX_LOADING_WIDTH = 95;
+
+    $('.loading-bar').addClass('loading');
+    $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    clearInterval(loadingTimer);
+    loadingTimer = setInterval(function () {
+      loadingBarWidth += 3;
+      if (loadingBarWidth > MAX_LOADING_WIDTH) {
+        loadingBarWidth = MAX_LOADING_WIDTH;
+      }
+      $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    }, 500);
+  }, false);
+
+  window.addEventListener('pjax:complete', function () {
+    clearInterval(loadingTimer);
+    $('.loading-bar__progress').css('width', '100%');
+    $('.loading-bar').removeClass('loading');
+    setTimeout(function () {
+      $('.loading-bar__progress').css('width', '0');
+    }, 400);
+    $('link[rel=prefetch], script[data-pjax-rm]').each(function () {
+      $(this).remove();
+    });
+    $('script[data-pjax], #pjax-reload script').each(function () {
+      $(this).parent().append($(this).remove());
+    });
+
+    if (Stun.utils.pjaxReloadBoot) {
+      Stun.utils.pjaxReloadBoot();
+    }
+    if (Stun.utils.pjaxReloadScroll) {
+      Stun.utils.pjaxReloadScroll();
+    }
+    if (Stun.utils.pjaxReloadSidebar) {
+      Stun.utils.pjaxReloadSidebar();
+    }
+    if (false) {
+      if (Stun.utils.pjaxReloadHeader) {
+        Stun.utils.pjaxReloadHeader();
+      }
+      if (Stun.utils.pjaxReloadScrollIcon) {
+        Stun.utils.pjaxReloadScrollIcon();
+      }
+      if (Stun.utils.pjaxReloadLocalSearch) {
+        Stun.utils.pjaxReloadLocalSearch();
+      }
+    }
+  }, false);
+}, false);</script><div id="pjax-reload"><link href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" rel="stylesheet" type="text/css"><link href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/copy-tex.css" rel="stylesheet" type="text/css"><script src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/copy-tex.min.js"></script><script src="https://cdn.jsdelivr.net/gh/sukkaw/busuanzi@latest/bsz.pure.mini.js" async></script></div><script src="/js/utils.js?v=2.6.2"></script><script src="/js/stun-boot.js?v=2.6.2"></script><script src="/js/scroll.js?v=2.6.2"></script><script src="/js/header.js?v=2.6.2"></script><script src="/js/sidebar.js?v=2.6.2"></script><script type="application/json" src="/search.xml"></script></body></html>
