@@ -1,0 +1,858 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="Seata简介         Seata：https:&#x2F;&#x2F;github.com&#x2F;seata&#x2F;seata  Seata（Simple Extensible Autonomous Transaction Architecture，简单可扩展自治事务框架）是 2019 年 1 月份蚂蚁金服和阿里巴巴共同开源的分布式事务解决方案。Seata 开源半年左右，目前已经有接近一万 st">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Spring Cloud】Spring Cloud Alibaba Seata">
+<meta property="og:url" content="http://yuyun-zhao.gitee.io/2021/09/08/%E3%80%90SpringCloud%E3%80%91Seata/index.html">
+<meta property="og:site_name" content="yuyun zhao&#39;s blog">
+<meta property="og:description" content="Seata简介         Seata：https:&#x2F;&#x2F;github.com&#x2F;seata&#x2F;seata  Seata（Simple Extensible Autonomous Transaction Architecture，简单可扩展自治事务框架）是 2019 年 1 月份蚂蚁金服和阿里巴巴共同开源的分布式事务解决方案。Seata 开源半年左右，目前已经有接近一万 st">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Seata/1561960344792-8810110b-1eda-4417-944e-7051ca52f90d.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Seata/image-20200305230513415.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Seata/image-20200305225811888-1631068234111.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Seata/image-20200305225811888.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Seata/302377d33ddcd708e20b996bd9f2c7b8.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Seata/302377d33ddcd708e20b996bd9f2c7b8.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Seata/image-20200306164728739.png">
+<meta property="article:published_time" content="2021-09-08T03:52:57.000Z">
+<meta property="article:modified_time" content="2021-09-08T07:02:40.079Z">
+<meta property="article:author" content="yuyun zhao">
+<meta property="article:tag" content="Spring Cloud">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Seata/1561960344792-8810110b-1eda-4417-944e-7051ca52f90d.png"><title>【Spring Cloud】Spring Cloud Alibaba Seata | yuyun zhao's blog</title><link ref="canonical" href="http://yuyun-zhao.gitee.io/2021/09/08/%E3%80%90SpringCloud%E3%80%91Seata/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":true},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"carbon","highlight":"light","wordWrap":false},
+  reward: false,
+  fancybox: true,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: {"avoidBanner":false},
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"复制","copySuccess":"复制成功","copyError":"复制失败"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【Spring Cloud】Spring Cloud Alibaba Seata</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-09-08</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-09-08</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">6.9k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">60分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body">
+        <h2 id="seata简介"   >
+          <a href="#seata简介" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#seata简介"></a> Seata简介</h2>
+      
+<blockquote>
+<p>Seata：<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://github.com/seata/seata" >https://</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://github.com/seata/seata" >github.com/seata/seata</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+</blockquote>
+<p>Seata（Simple Extensible Autonomous Transaction Architecture，简单可扩展自治事务框架）是 2019 年 1 月份蚂蚁金服和阿里巴巴共同开源的分布式事务解决方案。Seata 开源半年左右，目前已经有接近一万 star，社区非常活跃。</p>
+<p><img src="/images/%E3%80%90SpringCloud%E3%80%91Seata/1561960344792-8810110b-1eda-4417-944e-7051ca52f90d.png" alt="Seata" /></p>
+<p>Seata 会有 4 种分布式事务解决方案，分别是 AT 模式、TCC 模式、Saga 模式和 XA 模式：</p>
+<p><img src="/images/%E3%80%90SpringCloud%E3%80%91Seata/image-20200305230513415.png" alt="image-20200305230513415" /></p>
+<p>Seata中比较常用的是<strong>AT模式</strong>。下面将介绍其工作原理。</p>
+
+        <h3 id="seata-产品模块"   >
+          <a href="#seata-产品模块" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#seata-产品模块"></a> Seata 产品模块</h3>
+      
+<p>如下图所示，Seata 中有三大模块，分别是 <strong>TM</strong>、<strong>RM</strong> 和 <strong>TC</strong>。 <strong>其中 TM 和 RM 是作为 Seata 的客户端与业务系统集成在一起（集成在业务代码中）</strong>，<strong>TC 作为 Seata 的服务端独立部署，并被注册到注册中心和配置中心</strong>。</p>
+<p><img src="/images/%E3%80%90SpringCloud%E3%80%91Seata/image-20200305225811888-1631068234111.png" alt="image-20200305225811888" /></p>
+<span id="more"></span>
+
+        <h3 id="seata-详细架构和流程"   >
+          <a href="#seata-详细架构和流程" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#seata-详细架构和流程"></a> Seata 详细架构和流程</h3>
+      
+<p>Seata 中的几个基本概念：</p>
+<ul>
+<li><strong>TC（Transaction Coordinator）</strong> ：事务协调者，维护全局和分支事务的状态，驱动全局事务提交或回滚（TM之间的协调者），<strong>TC作为Seata的服务端 Seata-Serve，下载后直接使用jar包运行，其将被注册到注册中心和配置中心从而被各个微服务订阅</strong>。</li>
+<li><strong>TM（Transaction Manager）</strong> ：事务管理器，定义全局事务的范围：开始全局事务、提交或回滚全局事务。TM对应的方法使用 <strong>@GlobalTransactional</strong> 注解标注，其内的业务代码处于同一个全局事务下。</li>
+<li><strong>RM（Resource Manager）</strong> ：资源管理器，管理分支事务处理的资源，与TC交谈以注册分支事务和报告分支事务的状态，并驱动分支事务提交或回滚。</li>
+</ul>
+<p><img src="/images/%E3%80%90SpringCloud%E3%80%91Seata/image-20200305225811888.png" alt="image-20200305225811888" /></p>
+<p><img src="/images/%E3%80%90SpringCloud%E3%80%91Seata/302377d33ddcd708e20b996bd9f2c7b8.png" alt="img" /></p>
+<p><strong>三者工作分工</strong>：</p>
+<ul>
+<li>TM：业务模块中全局事务的开启者
+<ul>
+<li>向TC开启一个全局事务（标注 <strong>@GlobalTransactionnal</strong> 注解代表开启一个全局事务）</li>
+<li>全局事务创建成功并生成一个全局唯一的<code>XID</code>，<code>XID</code>在微服务调用链路的上下文中传播；</li>
+<li>调用其它微服务（例如订单模块作为TM调用了库存模块和支付模块）</li>
+<li>TM向TC发起针对<code>XID</code>的<strong>全局提交或回滚决议</strong></li>
+</ul>
+</li>
+<li>RM：业务模块执行者中包含RM部分，负责<strong>向TC汇报事务执行状态</strong>
+<ul>
+<li>负责与数据库交互，执行本地事务</li>
+<li><strong>向TC注册分支事务</strong>，并提交本地事务执行结果</li>
+<li>将其纳入XID对应全局事务的管辖</li>
+</ul>
+</li>
+<li>TM：结束对微服务的调用，<strong>通知TC全局事务执行完毕，事务一阶段结束</strong></li>
+<li>TC：<strong>汇总各个分支事务执行结果，决定分布式事务是提交还是回滚</strong>，通知所有 RM提交/回滚资源，事务二阶段结束。</li>
+</ul>
+<p><strong>三者的关系</strong>：</p>
+<ul>
+<li>TM用于开启全局事务生成<code>XID</code>，调用其他微服务，并在全局事务的方法执行完毕后通知TC全局事务执行完毕（即一阶段结束），此时TC即可统计各个分支事务的执行结果判断二阶段应该是提交还是回滚；</li>
+<li>每个RM与本地数据库交互，执行本地事务并立即提交（不阻塞），之后向TC注册当前分支事务的信息，最后将本地事务提交的结果上报给 TC；</li>
+<li>TC调度<code>XID</code>下管辖的全部分支事务完成提交或回滚请求。其先保存每个RM注册的分支事务信息，当收到TM的一阶段结束通知后，根据接收汇总到的各个分支事务的执行结果判断二阶段应该是提交还是回滚：若都成功，则通知每个RM二阶段提交；若有失败，则通知每个RM二阶段回滚</li>
+</ul>
+
+        <h3 id="seata-两个阶段具体工作流程"   >
+          <a href="#seata-两个阶段具体工作流程" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#seata-两个阶段具体工作流程"></a> Seata 两个阶段具体工作流程</h3>
+      
+<p><img src="/images/%E3%80%90SpringCloud%E3%80%91Seata/302377d33ddcd708e20b996bd9f2c7b8.png" alt="img" /></p>
+<p><strong>一阶段</strong>：</p>
+<ul>
+<li>TM开启全局事务，并向TC声明全局事务，包括全局事务<code>XID</code>信息</li>
+<li>TM所在服务调用其它微服务</li>
+<li>微服务主要由RM来执行
+<ul>
+<li>查询<code>before_image</code></li>
+<li>执行本地事务</li>
+<li>查询<code>after_image</code></li>
+<li>生成<code>undo_log</code>并写入数据库</li>
+<li>向TC注册分支事务，告知事务执行结果</li>
+<li>获取全局锁（阻止其它全局事务并发修改当前数据）</li>
+<li>释放本地锁（不影响其它业务对数据的操作）</li>
+</ul>
+</li>
+<li>待所有业务执行完毕，事务发起者（TM）会尝试向TC提交全局事务</li>
+</ul>
+<p><strong>二阶段</strong>：</p>
+<ul>
+<li>TC统计分支事务执行情况，根据结果判断下一步行为：
+<ul>
+<li>分支都成功：通知分支事务，提交事务</li>
+<li>有分支执行失败：通知执行成功的分支事务，回滚数据</li>
+</ul>
+</li>
+<li>分支事务的RM收到TC传来的消息：
+<ul>
+<li>提交事务：直接清空<code>before_image</code>和<code>after_image</code>信息，释放全局锁</li>
+<li>回滚事务：
+<ul>
+<li>校验<code>after_image</code>，判断是否有脏写</li>
+<li>如果没有脏写，回滚数据到<code>before_image</code>，清除<code>before_image</code>和<code>after_image</code></li>
+<li>如果有脏写，请求人工介入</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        <h3 id="seata-工作流程示例"   >
+          <a href="#seata-工作流程示例" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#seata-工作流程示例"></a> Seata 工作流程示例</h3>
+      
+<p>详见Seata的官方文档：<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://seata.io/zh-cn/docs/overview/what-is-seata.html" >https://seata.io/zh-cn/docs/overview/what-is-seata.html</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+<blockquote>
+
+        <h4 id="场景"   >
+          <a href="#场景" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#场景"></a> 场景</h4>
+      
+</blockquote>
+<p>以一个示例来说明 AT 分支的整个工作过程。</p>
+<p>业务表：<code>product</code></p>
+<div class="table-container"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Key</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>bigint(20)</td>
+<td>PRI</td>
+</tr>
+<tr>
+<td>name</td>
+<td>varchar(100)</td>
+<td></td>
+</tr>
+<tr>
+<td>since</td>
+<td>varchar(100)</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>AT 分支事务的业务逻辑：</p>
+<figure class="highlight sql"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">update product <span class="keyword">set</span> name <span class="operator">=</span> <span class="string">&#x27;GTS&#x27;</span> <span class="keyword">where</span> name <span class="operator">=</span> <span class="string">&#x27;TXC&#x27;</span>;</span><br></pre></td></tr></table></div></figure>
+<blockquote>
+
+        <h4 id="一阶段"   >
+          <a href="#一阶段" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#一阶段"></a> 一阶段</h4>
+      
+</blockquote>
+<p>过程：</p>
+<ol>
+<li><strong>解析 SQL</strong>：得到 SQL 的类型（UPDATE），表（product），条件（where name = ‘TXC’）等相关的信息。</li>
+<li><strong>查询 before image（前镜像）</strong>：根据解析得到的条件信息，生成查询语句，定位数据（即修改前先查询出来当前这，保存到undo log）。</li>
+</ol>
+<figure class="highlight sql"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> id, name, since <span class="keyword">from</span> product <span class="keyword">where</span> name <span class="operator">=</span> <span class="string">&#x27;TXC&#x27;</span>;</span><br></pre></td></tr></table></div></figure>
+<p>得到前镜像：</p>
+<div class="table-container"><table>
+<thead>
+<tr>
+<th>id</th>
+<th>name</th>
+<th>since</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>TXC</td>
+<td>2014</td>
+</tr>
+</tbody>
+</table></div>
+<ol start="3">
+<li><strong>执行业务 SQL</strong>：更新这条记录的 name 为 ‘GTS’。</li>
+<li><strong>查询 after image（后镜像）</strong>：根据前镜像的结果，通过 <strong>主键（id）</strong> 定位数据。</li>
+</ol>
+<figure class="highlight sql"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> id, name, since <span class="keyword">from</span> product <span class="keyword">where</span> id <span class="operator">=</span> `<span class="number">1</span>`;</span><br></pre></td></tr></table></div></figure>
+<p>得到后镜像：</p>
+<div class="table-container"><table>
+<thead>
+<tr>
+<th>id</th>
+<th>name</th>
+<th>since</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>GTS</td>
+<td>2014</td>
+</tr>
+</tbody>
+</table></div>
+<ol start="5">
+<li><strong>插入回滚日志</strong>：把前后镜像数据以及业务 SQL 相关的信息组成一条回滚日志记录，插入到 <code>UNDO_LOG</code> 表中：</li>
+</ol>
+<figure class="highlight json"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;branchId&quot;</span>: <span class="number">641789253</span>,</span><br><span class="line">    <span class="attr">&quot;undoItems&quot;</span>: [&#123;</span><br><span class="line">        <span class="attr">&quot;afterImage&quot;</span>: &#123;</span><br><span class="line">            <span class="attr">&quot;rows&quot;</span>: [&#123;</span><br><span class="line">                <span class="attr">&quot;fields&quot;</span>: [&#123;</span><br><span class="line">                    <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;id&quot;</span>,</span><br><span class="line">                    <span class="attr">&quot;type&quot;</span>: <span class="number">4</span>,</span><br><span class="line">                    <span class="attr">&quot;value&quot;</span>: <span class="number">1</span></span><br><span class="line">                &#125;, &#123;</span><br><span class="line">                    <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;name&quot;</span>,</span><br><span class="line">                    <span class="attr">&quot;type&quot;</span>: <span class="number">12</span>,</span><br><span class="line">                    <span class="attr">&quot;value&quot;</span>: <span class="string">&quot;GTS&quot;</span></span><br><span class="line">                &#125;, &#123;</span><br><span class="line">                    <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;since&quot;</span>,</span><br><span class="line">                    <span class="attr">&quot;type&quot;</span>: <span class="number">12</span>,</span><br><span class="line">                    <span class="attr">&quot;value&quot;</span>: <span class="string">&quot;2014&quot;</span></span><br><span class="line">                &#125;]</span><br><span class="line">            &#125;],</span><br><span class="line">            <span class="attr">&quot;tableName&quot;</span>: <span class="string">&quot;product&quot;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">&quot;beforeImage&quot;</span>: &#123;</span><br><span class="line">            <span class="attr">&quot;rows&quot;</span>: [&#123;</span><br><span class="line">                <span class="attr">&quot;fields&quot;</span>: [&#123;</span><br><span class="line">                    <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;id&quot;</span>,</span><br><span class="line">                    <span class="attr">&quot;type&quot;</span>: <span class="number">4</span>,</span><br><span class="line">                    <span class="attr">&quot;value&quot;</span>: <span class="number">1</span></span><br><span class="line">                &#125;, &#123;</span><br><span class="line">                    <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;name&quot;</span>,</span><br><span class="line">                    <span class="attr">&quot;type&quot;</span>: <span class="number">12</span>,</span><br><span class="line">                    <span class="attr">&quot;value&quot;</span>: <span class="string">&quot;TXC&quot;</span></span><br><span class="line">                &#125;, &#123;</span><br><span class="line">                    <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;since&quot;</span>,</span><br><span class="line">                    <span class="attr">&quot;type&quot;</span>: <span class="number">12</span>,</span><br><span class="line">                    <span class="attr">&quot;value&quot;</span>: <span class="string">&quot;2014&quot;</span></span><br><span class="line">                &#125;]</span><br><span class="line">            &#125;],</span><br><span class="line">            <span class="attr">&quot;tableName&quot;</span>: <span class="string">&quot;product&quot;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">&quot;sqlType&quot;</span>: <span class="string">&quot;UPDATE&quot;</span></span><br><span class="line">    &#125;],</span><br><span class="line">    <span class="attr">&quot;xid&quot;</span>: <span class="string">&quot;xid:xxx&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<ol start="6">
+<li><strong>提交前，向 TC 注册分支</strong>：申请 <code>product</code> 表中，主键值等于 1 的记录的 <strong>全局锁</strong> 。</li>
+<li><strong>本地事务提交</strong>：业务数据的更新和前面步骤中生成的 <code>UNDO LOG</code> 一并提交。</li>
+<li><strong>将本地事务提交的结果上报给 TC</strong>。</li>
+</ol>
+<blockquote>
+
+        <h4 id="二阶段-回滚"   >
+          <a href="#二阶段-回滚" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#二阶段-回滚"></a> 二阶段-回滚</h4>
+      
+</blockquote>
+<p>若收到 TC 的<strong>分支回滚</strong>请求，开启一个本地事务，执行如下操作：</p>
+<ol>
+<li>通过 <code>XID</code> 和 <code>Branch ID</code> 查找到相应的 <code>UNDO LOG</code> 记录（同一个微服务可能同时参与多个不同的事务组，有多个 <code>XID</code>）。</li>
+<li><strong>数据校验</strong>：拿 <code>UNDO LOG</code> 中的后镜像与当前数据进行比较，如果有不同，说明数据被当前全局事务之外的动作做了修改。这种情况，需要根据配置策略来做处理。</li>
+<li>根据 <code>UNDO LOG</code> 中的<strong>前镜像</strong>和<strong>业务 SQL 的相关信息</strong>生成并执行回滚的语句：</li>
+</ol>
+<figure class="highlight sql"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">update product <span class="keyword">set</span> name <span class="operator">=</span> <span class="string">&#x27;TXC&#x27;</span> <span class="keyword">where</span> id <span class="operator">=</span> <span class="number">1</span>;</span><br></pre></td></tr></table></div></figure>
+<ol start="4">
+<li><strong>提交本地事务。并把本地事务的执行结果（即分支事务回滚的结果）上报给 TC</strong>。</li>
+</ol>
+<blockquote>
+
+        <h4 id="二阶段-提交"   >
+          <a href="#二阶段-提交" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#二阶段-提交"></a> 二阶段-提交</h4>
+      
+</blockquote>
+<ol>
+<li>收到 TC 的<strong>分支提交</strong>请求，把请求放入一个<strong>异步任务的队列</strong>中，<strong>马上返回提交成功</strong>的结果给 TC。</li>
+<li>异步任务阶段的分支提交请求将<strong>异步和批量地删除相应 <code>UNDO LOG</code> 记录</strong>。</li>
+</ol>
+
+        <h2 id="seata-at-模式实战"   >
+          <a href="#seata-at-模式实战" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#seata-at-模式实战"></a> Seata AT 模式实战</h2>
+      
+<p>假定一个用户购买商品的业务逻辑。整个业务逻辑由3个微服务提供支持：</p>
+<ul>
+<li><strong>仓储服务</strong>：对给定的商品扣除仓储数量。</li>
+<li><strong>订单服务</strong>：根据采购需求创建订单。</li>
+<li><strong>帐户服务</strong>：从用户帐户中扣除余额。</li>
+</ul>
+<p>流程图：</p>
+<p><img src="/images/%E3%80%90SpringCloud%E3%80%91Seata/image-20200306164728739.png" alt="image-20200306164728739" /></p>
+<p>订单服务在下单时，同时调用库存服务和用户服务，此时就会发生跨服务和跨数据源的分布式事务问题。</p>
+
+        <h2 id="安装-tcseata-server"   >
+          <a href="#安装-tcseata-server" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#安装-tcseata-server"></a> 安装 TC：Seata-Server</h2>
+      
+<blockquote>
+<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://blog.csdn.net/u011863024/article/details/114298288" >https://blog.csdn.net/u011863024/article/details/114298288</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+</blockquote>
+<p>Seata 模型中的TC即为其官方提供的<code>Seata-Server</code>，<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://github.com/seata/seata/releases" >下载地址</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>。</p>
+<p>将<code>seata-server-0.9.0.zip</code>解压到指定目录。其核心配置文件主要有两个（<code>$&#123;seata_home&#125;/conf/</code>目录）：</p>
+<ul>
+<li><code>registry.conf</code>：配置注册中心信息</li>
+<li><code>file.conf</code>：配置事务信息以及数据库信息</li>
+</ul>
+
+        <h3 id="registryconf"   >
+          <a href="#registryconf" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#registryconf"></a> registry.conf</h3>
+      
+<p><code>registry.conf</code>配置文件需要指定使用的注册中心和配置中心信息（本案例使用Nacos）， TC 将被注册到注册中心和配置中心，其他的微服务模块都去注册中心订阅TC的地址：</p>
+<figure class="highlight"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">registry &#123;</span><br><span class="line">  # file 、nacos 、eureka、redis、zk、consul、etcd3、sofa</span><br><span class="line">  # 注册中心改用为nacos</span><br><span class="line">  type = &quot;nacos&quot;</span><br><span class="line"></span><br><span class="line">  nacos &#123;</span><br><span class="line">  	## 加端口号</span><br><span class="line">    serverAddr = &quot;localhost:8848&quot;</span><br><span class="line">    namespace = &quot;&quot;</span><br><span class="line">    cluster = &quot;default&quot;</span><br><span class="line">  &#125;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">config &#123;</span><br><span class="line">  # file、nacos 、apollo、zk、consul、etcd3</span><br><span class="line">  type = &quot;nacos&quot;</span><br><span class="line"></span><br><span class="line">  nacos &#123;</span><br><span class="line">    serverAddr = &quot;localhost:8848&quot;</span><br><span class="line">    namespace = &quot;&quot;</span><br><span class="line">  &#125;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="fileconf"   >
+          <a href="#fileconf" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#fileconf"></a> file.conf</h3>
+      
+<p><code>file.conf</code>配置文件需要修改的内容：</p>
+<ul>
+<li>事务组名称：<code>my_tx_group</code>（同一个事务组里的业务模块应配置相同的组名）</li>
+<li>事务日志存储模式： <code>&quot;db&quot;</code></li>
+<li>数据库信息</li>
+</ul>
+<figure class="highlight"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">service &#123;</span><br><span class="line">    ## my_tx_group 是自定义的事务组名</span><br><span class="line">    vgroup_mapping.my.test.tx_group=&quot;my_tx_group&quot; </span><br><span class="line">    default.grouplist = &quot;127.0.0.1:8091&quot;</span><br><span class="line">    enableDegrade = false</span><br><span class="line">    disable = false</span><br><span class="line">    max.commitretry.timeout= &quot;-1&quot;</span><br><span class="line">    max.ollbackretry.timeout= &quot;-1&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">## transaction log store</span><br><span class="line">store &#123;</span><br><span class="line">	## store mode: file, db</span><br><span class="line">	## 事务日志的存储模式改成db</span><br><span class="line">	mode = &quot;db&quot;</span><br><span class="line">	</span><br><span class="line">	## file store</span><br><span class="line">	file &#123;</span><br><span class="line">            dir = &quot;sessionStore&quot;</span><br><span class="line"></span><br><span class="line">            # branch session size, if exceeded first try compress lockkey, still exceeded throws exceptions</span><br><span class="line">            max-branch-session-size = 16384</span><br><span class="line">            # globe session size, if exceeded throws exceptions</span><br><span class="line">            max-global-session-size = 512</span><br><span class="line">            # file buffer size, if exceeded allocate new buffer</span><br><span class="line">            file-write-buffer-cache-size = 16384</span><br><span class="line">            # when recover batch read size</span><br><span class="line">            session.reload.read_size= 100</span><br><span class="line">            # async, sync</span><br><span class="line">            flush-disk-mode = async</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	# database store</span><br><span class="line">	db &#123;</span><br><span class="line">            ## the implement of javax.sql.DataSource, such as DruidDataSource(druid)/BasicDataSource(dbcp) etc.</span><br><span class="line">            datasource = &quot;dbcp&quot;</span><br><span class="line">            ## mysql/oracle/h2/oceanbase etc.</span><br><span class="line">            ## 配置数据源</span><br><span class="line">            db-type = &quot;mysql&quot;</span><br><span class="line">            driver-class-name = &quot;com.mysql.jdbc.Driver&quot;</span><br><span class="line">            url = &quot;jdbc:mysql://127.0.0.1:3306/seata&quot;</span><br><span class="line">            user = &quot;root&quot;</span><br><span class="line">            password = &quot;你自己密码&quot;</span><br><span class="line">            min-conn= 1</span><br><span class="line">            max-conn = 3</span><br><span class="line">            global.table = &quot;global_table&quot;</span><br><span class="line">            branch.table = &quot;branch_table&quot;</span><br><span class="line">            lock-table = &quot;lock_table&quot;</span><br><span class="line">            query-limit = 100</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>关键配置：</p>
+<p><code>store</code>：TC的服务端数据存储配置</p>
+<ul>
+<li><code>mode</code>：数据存储方式，支持两种：file和db
+<ul>
+<li><code>file</code>：将数据存储在本地文件中，性能比较好，但不支持水平扩展</li>
+<li><code>db</code>：将数据保存在指定的数据库中，需要指定数据库连接信息</li>
+</ul>
+</li>
+</ul>
+<p>如果用文件作为存储介质，不需要其它配置了，直接运行即可。但是如果使用db作为存储介质，还需要在数据库中创建3张表：<code>&quot;global_table&quot;</code>、<code>&quot;branch_table&quot;</code>、<code>&quot;lock_table&quot;</code>，用于存储全局XID信息，分支信息和锁信息。在 Mysql 5.7 数据库新建库<code>seata</code>，在<code>seata</code>库里创建这三张表。建表<code>db_store.sql</code>在<code>\seata-server-0.9.0\seata\conf</code>目录里面：</p>
+<figure class="highlight sql"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- the table to store GlobalSession data</span></span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> if <span class="keyword">exists</span> `global_table`;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> `global_table` (</span><br><span class="line">  `xid` <span class="type">varchar</span>(<span class="number">128</span>)  <span class="keyword">not</span> <span class="keyword">null</span>,</span><br><span class="line">  `transaction_id` <span class="type">bigint</span>,</span><br><span class="line">  `status` tinyint <span class="keyword">not</span> <span class="keyword">null</span>,</span><br><span class="line">  `application_id` <span class="type">varchar</span>(<span class="number">32</span>),</span><br><span class="line">  `transaction_service_group` <span class="type">varchar</span>(<span class="number">32</span>),</span><br><span class="line">  `transaction_name` <span class="type">varchar</span>(<span class="number">128</span>),</span><br><span class="line">  `timeout` <span class="type">int</span>,</span><br><span class="line">  `begin_time` <span class="type">bigint</span>,</span><br><span class="line">  `application_data` <span class="type">varchar</span>(<span class="number">2000</span>),</span><br><span class="line">  `gmt_create` datetime,</span><br><span class="line">  `gmt_modified` datetime,</span><br><span class="line">  <span class="keyword">primary</span> key (`xid`),</span><br><span class="line">  key `idx_gmt_modified_status` (`gmt_modified`, `status`),</span><br><span class="line">  key `idx_transaction_id` (`transaction_id`)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- the table to store BranchSession data</span></span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> if <span class="keyword">exists</span> `branch_table`;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> `branch_table` (</span><br><span class="line">  `branch_id` <span class="type">bigint</span> <span class="keyword">not</span> <span class="keyword">null</span>,</span><br><span class="line">  `xid` <span class="type">varchar</span>(<span class="number">128</span>) <span class="keyword">not</span> <span class="keyword">null</span>,</span><br><span class="line">  `transaction_id` <span class="type">bigint</span> ,</span><br><span class="line">  `resource_group_id` <span class="type">varchar</span>(<span class="number">32</span>),</span><br><span class="line">  `resource_id` <span class="type">varchar</span>(<span class="number">256</span>) ,</span><br><span class="line">  `lock_key` <span class="type">varchar</span>(<span class="number">128</span>) ,</span><br><span class="line">  `branch_type` <span class="type">varchar</span>(<span class="number">8</span>) ,</span><br><span class="line">  `status` tinyint,</span><br><span class="line">  `client_id` <span class="type">varchar</span>(<span class="number">64</span>),</span><br><span class="line">  `application_data` <span class="type">varchar</span>(<span class="number">2000</span>),</span><br><span class="line">  `gmt_create` datetime,</span><br><span class="line">  `gmt_modified` datetime,</span><br><span class="line">  <span class="keyword">primary</span> key (`branch_id`),</span><br><span class="line">  key `idx_xid` (`xid`)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- the table to store lock data</span></span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> if <span class="keyword">exists</span> `lock_table`;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> `lock_table` (</span><br><span class="line">  `row_key` <span class="type">varchar</span>(<span class="number">128</span>) <span class="keyword">not</span> <span class="keyword">null</span>,</span><br><span class="line">  `xid` <span class="type">varchar</span>(<span class="number">96</span>),</span><br><span class="line">  `transaction_id` long ,</span><br><span class="line">  `branch_id` long,</span><br><span class="line">  `resource_id` <span class="type">varchar</span>(<span class="number">256</span>) ,</span><br><span class="line">  `table_name` <span class="type">varchar</span>(<span class="number">32</span>) ,</span><br><span class="line">  `pk` <span class="type">varchar</span>(<span class="number">36</span>) ,</span><br><span class="line">  `gmt_create` datetime ,</span><br><span class="line">  `gmt_modified` datetime,</span><br><span class="line">  <span class="keyword">primary</span> key(`row_key`)</span><br><span class="line">);</span><br></pre></td></tr></table></div></figure>
+<p>以上步骤即完成了Seata-Server的配置工作，接下来先启动Nacos服务中心，再启动<code>seata-server - seata-server-0.9.0\seata\bin\seata-server.bat</code>。此时的 Seata-Server 即注册到了Nacos服务中心，后续的微服务即可订阅到其信息。</p>
+
+        <h2 id="seata-业务数据库准备"   >
+          <a href="#seata-业务数据库准备" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#seata-业务数据库准备"></a> Seata 业务数据库准备</h2>
+      
+<p>创建三个业务数据库：</p>
+<ul>
+<li><code>seata_ order</code>：订单信息数据库</li>
+<li><code>seata_ storage</code>：库存信息数据库</li>
+<li><code>seata_ account</code>：账户信息数据库</li>
+</ul>
+<ol>
+<li>在 <code>seata_order</code> 库下建 <code>t_order</code> 表：</li>
+</ol>
+<figure class="highlight sql"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> t_order (</span><br><span class="line">    `id` <span class="type">BIGINT</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> AUTO_INCREMENT <span class="keyword">PRIMARY</span> KEY,</span><br><span class="line">    `user_id` <span class="type">BIGINT</span>(<span class="number">11</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;用户id&#x27;</span>,</span><br><span class="line">    `product_id` <span class="type">BIGINT</span>(<span class="number">11</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;产品id&#x27;</span>,</span><br><span class="line">    `count` <span class="type">INT</span>(<span class="number">11</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;数量&#x27;</span>,</span><br><span class="line">    `money` <span class="type">DECIMAL</span>(<span class="number">11</span>,<span class="number">0</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT<span class="string">&#x27;金额&#x27;</span>,</span><br><span class="line">    `status` <span class="type">INT</span>(<span class="number">1</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;订单状态: 0:创建中; 1:已完结&#x27;</span>,</span><br><span class="line">) ENGINE<span class="operator">=</span>INNODB AUTO_INCREMENT<span class="operator">=</span>` <span class="keyword">DEFAULT</span> CHARSET<span class="operator">=</span>utf8;</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> t_order;</span><br></pre></td></tr></table></div></figure>
+<ol start="2">
+<li>在 <code>seata_storage</code> 库下建 <code>t_storage</code> 表：</li>
+</ol>
+<figure class="highlight sql"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> t_storage (</span><br><span class="line">`id` <span class="type">BIGINT</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> AUTO_INCREMENT <span class="keyword">PRIMARY</span> KEY,</span><br><span class="line">`product_id` <span class="type">BIGINT</span>(<span class="number">11</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;产品id&#x27;</span>,</span><br><span class="line">`total` <span class="type">INT</span>(<span class="number">11</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;总库存&#x27;</span>，</span><br><span class="line">`used` <span class="type">INT</span>(<span class="number">11</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;已用库存&#x27;</span>，</span><br><span class="line">`residue` <span class="type">INT</span>(<span class="number">11</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;剩余库存&#x27;</span></span><br><span class="line">) ENGINE<span class="operator">=</span>INNODB AUTO_INCREMENT<span class="operator">=</span><span class="number">2</span> <span class="keyword">DEFAULT</span> CHARSET<span class="operator">=</span>utf8;</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> seata_storage.t_storage(`id`, `product_id`, `total`, `used`, `residue`)</span><br><span class="line"><span class="keyword">VALUES</span> (<span class="string">&#x27;1&#x27;</span>, <span class="string">&#x27;1&#x27;</span>, <span class="string">&#x27;100&#x27;</span>, <span class="string">&#x27;0&#x27;</span>,<span class="string">&#x27;100&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> t_storage;</span><br></pre></td></tr></table></div></figure>
+<ol start="3">
+<li>在 <code>seata_account</code>库下建 <code>t_account</code> 表：</li>
+</ol>
+<figure class="highlight sql"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> t_account(</span><br><span class="line">	`id` <span class="type">BIGINT</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> AUTO_INCREMENT <span class="keyword">PRIMARY</span> KEY COMMENT <span class="string">&#x27;id&#x27;</span>,</span><br><span class="line">	`user_id` <span class="type">BIGINT</span>(<span class="number">11</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;用户id&#x27;</span>,</span><br><span class="line">	`total` <span class="type">DECIMAL</span>(<span class="number">10</span>,<span class="number">0</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;总额度&#x27;</span>,</span><br><span class="line">	`used` <span class="type">DECIMAL</span>(<span class="number">10</span>,<span class="number">0</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;已用余额&#x27;</span>, I</span><br><span class="line">	`residue` <span class="type">DECIMAL</span>(<span class="number">10</span>,<span class="number">0</span>) <span class="keyword">DEFAULT</span> <span class="string">&#x27;0&#x27;</span> COMMENT <span class="string">&#x27;剩余可用额度&#x27;</span></span><br><span class="line">) ENGINE<span class="operator">=</span>INNODB AUTO_INCREMENT<span class="operator">=</span><span class="number">2</span> <span class="keyword">DEFAULT</span> CHARSET<span class="operator">=</span>utf8;</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> seata_account.t_account(`id`, `user_id`, `total`, `used`, `residue`)</span><br><span class="line"><span class="keyword">VALUES</span> (<span class="string">&#x27;1&#x27;</span>, <span class="string">&#x27;1&#x27;</span>, <span class="string">&#x27;1000&#x27;</span>, <span class="string">&#x27;0&#x27;</span>, <span class="string">&#x27;1000&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> t_account;</span><br></pre></td></tr></table></div></figure>
+<ol start="4">
+<li>按照上述三个库分别建对应的回滚日志表 <code>undo log</code></li>
+</ol>
+<ul>
+<li>订单-库存-账户3个库下<strong>都需要建各自的回滚日志表</strong></li>
+<li>建表语句见 <code>\seata-server-0.9.0\seata\conf</code> 目录下的 <code>db_ undo_ log.sql</code></li>
+</ul>
+<figure class="highlight sql"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- the table to store seata xid data</span></span><br><span class="line"><span class="comment">-- 0.7.0+ add context</span></span><br><span class="line"><span class="comment">-- you must to init this sql for you business databese. the seata server not need it.</span></span><br><span class="line"><span class="comment">-- 此脚本必须初始化在你当前的业务数据库中，用于AT 模式XID记录。与server端无关（注：业务数据库）</span></span><br><span class="line"><span class="comment">-- 注意此处0.3.0+ 增加唯一索引 ux_undo_log</span></span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> `undo_log`;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `undo_log` (</span><br><span class="line">  `id` <span class="type">bigint</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  `branch_id` <span class="type">bigint</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `xid` <span class="type">varchar</span>(<span class="number">100</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `context` <span class="type">varchar</span>(<span class="number">128</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `rollback_info` longblob <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `log_status` <span class="type">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `log_created` datetime <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `log_modified` datetime <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `ext` <span class="type">varchar</span>(<span class="number">100</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  <span class="keyword">PRIMARY</span> KEY (`id`),</span><br><span class="line">  <span class="keyword">UNIQUE</span> KEY `ux_undo_log` (`xid`,`branch_id`)</span><br><span class="line">) ENGINE<span class="operator">=</span>InnoDB AUTO_INCREMENT<span class="operator">=</span><span class="number">1</span> <span class="keyword">DEFAULT</span> CHARSET<span class="operator">=</span>utf8;</span><br></pre></td></tr></table></div></figure>
+
+        <h2 id="order-module-搭建"   >
+          <a href="#order-module-搭建" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#order-module-搭建"></a> Order-Module 搭建</h2>
+      
+<p>创建订单模块 <code>seata-order-service2001</code></p>
+
+        <h3 id="导入-maven-依赖"   >
+          <a href="#导入-maven-依赖" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#导入-maven-依赖"></a> 导入 Maven 依赖</h3>
+      
+<p>注意，排除了<code>spring-cloud-starter-alibaba-seata</code>中的seata版本，而使用自定义的seata版本包：</p>
+<figure class="highlight xml"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">project</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://maven.apache.org/POM/4.0.0&quot;</span></span></span><br><span class="line"><span class="tag">         <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">         <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">parent</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>cloud2020<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.atguigu.springcloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">parent</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">modelVersion</span>&gt;</span>4.0.0<span class="tag">&lt;/<span class="name">modelVersion</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>seata-order-service2001<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--nacos--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-alibaba-nacos-discovery<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--seata--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-alibaba-seata<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">exclusions</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">exclusion</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>seata-all<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.seata<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">exclusion</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">exclusions</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.seata<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>seata-all<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>0.9.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--feign--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-openfeign<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--web-actuator--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-actuator<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--mysql-druid--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>mysql<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mysql-connector-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.1.37<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>druid-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.1.10<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.mybatis.spring.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.0.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-test<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.projectlombok<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>lombok<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">optional</span>&gt;</span>true<span class="tag">&lt;/<span class="name">optional</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="配置文件-applicationyaml"   >
+          <a href="#配置文件-applicationyaml" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#配置文件-applicationyaml"></a> 配置文件 application.yaml</h3>
+      
+<figure class="highlight yaml"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">2001</span></span><br><span class="line"></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">seata-order-service</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">alibaba:</span></span><br><span class="line">      <span class="attr">seata:</span></span><br><span class="line">        <span class="comment"># 自定义事务组名称需要与seata-server中的对应，三个模块的组名应该相同</span></span><br><span class="line">        <span class="attr">tx-service-group:</span> <span class="string">my_tx_group</span></span><br><span class="line">    <span class="attr">nacos:</span></span><br><span class="line">      <span class="attr">discovery:</span></span><br><span class="line">        <span class="attr">server-addr:</span> <span class="string">localhost:8848</span></span><br><span class="line">  <span class="attr">datasource:</span></span><br><span class="line">    <span class="attr">driver-class-name:</span> <span class="string">com.mysql.jdbc.Driver</span></span><br><span class="line">    <span class="attr">url:</span> <span class="string">jdbc:mysql://localhost:3306/seata_order</span></span><br><span class="line">    <span class="attr">username:</span> <span class="string">root</span></span><br><span class="line">    <span class="attr">password:</span> <span class="number">123456</span></span><br><span class="line"></span><br><span class="line"><span class="attr">feign:</span></span><br><span class="line">  <span class="attr">hystrix:</span></span><br><span class="line">    <span class="attr">enabled:</span> <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="attr">logging:</span></span><br><span class="line">  <span class="attr">level:</span></span><br><span class="line">    <span class="attr">io:</span></span><br><span class="line">      <span class="attr">seata:</span> <span class="string">info</span></span><br><span class="line"></span><br><span class="line"><span class="attr">mybatis:</span></span><br><span class="line">  <span class="attr">mapperLocations:</span> <span class="string">classpath:mapper/*.xml</span></span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="fileconf-2"   >
+          <a href="#fileconf-2" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#fileconf-2"></a> file.conf</h3>
+      
+<p>在 <code>resouces</code> 目录下创建 <code>file.conf</code> 配置事务组名和数据等信息（另外两个模块同样需要创建该文件）</p>
+<figure class="highlight"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br></pre></td><td class="code"><pre><span class="line">transport &#123;</span><br><span class="line">  # tcp udt unix-domain-socket</span><br><span class="line">  type = &quot;TCP&quot;</span><br><span class="line">  #NIO NATIVE</span><br><span class="line">  server = &quot;NIO&quot;</span><br><span class="line">  #enable heartbeat</span><br><span class="line">  heartbeat = true</span><br><span class="line">  #thread factory for netty</span><br><span class="line">  thread-factory &#123;</span><br><span class="line">    boss-thread-prefix = &quot;NettyBoss&quot;</span><br><span class="line">    worker-thread-prefix = &quot;NettyServerNIOWorker&quot;</span><br><span class="line">    server-executor-thread-prefix = &quot;NettyServerBizHandler&quot;</span><br><span class="line">    share-boss-worker = false</span><br><span class="line">    client-selector-thread-prefix = &quot;NettyClientSelector&quot;</span><br><span class="line">    client-selector-thread-size = 1</span><br><span class="line">    client-worker-thread-prefix = &quot;NettyClientWorkerThread&quot;</span><br><span class="line">    # netty boss thread size,will not be used for UDT</span><br><span class="line">    boss-thread-size = 1</span><br><span class="line">    #auto default pin or 8</span><br><span class="line">    worker-thread-size = 8</span><br><span class="line">  &#125;</span><br><span class="line">  shutdown &#123;</span><br><span class="line">    # when destroy server, wait seconds</span><br><span class="line">    wait = 3</span><br><span class="line">  &#125;</span><br><span class="line">  serialization = &quot;seata&quot;</span><br><span class="line">  compressor = &quot;none&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">service &#123;</span><br><span class="line">  vgroup_mapping.my_tx_group = &quot;my_tx_group&quot;  # 修改自定义事务组名称</span><br><span class="line">  default.grouplist = &quot;127.0.0.1:8091&quot;</span><br><span class="line">  enableDegrade = false</span><br><span class="line">  disable = false</span><br><span class="line">  max.commit.retry.timeout = &quot;-1&quot;</span><br><span class="line">  max.rollback.retry.timeout = &quot;-1&quot;</span><br><span class="line">  disableGlobalTransaction = false</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">client &#123;</span><br><span class="line">  async.commit.buffer.limit = 10000</span><br><span class="line">  lock &#123;</span><br><span class="line">    retry.internal = 10</span><br><span class="line">    retry.times = 30</span><br><span class="line">  &#125;</span><br><span class="line">  report.retry.count = 5</span><br><span class="line">  tm.commit.retry.count = 1</span><br><span class="line">  tm.rollback.retry.count = 1</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">## transaction log store</span><br><span class="line">store &#123;</span><br><span class="line">  ## store mode: file、db</span><br><span class="line">  mode = &quot;db&quot;</span><br><span class="line"></span><br><span class="line">  ## file store</span><br><span class="line">  file &#123;</span><br><span class="line">    dir = &quot;sessionStore&quot;</span><br><span class="line"></span><br><span class="line">    # branch session size , if exceeded first try compress lockkey, still exceeded throws exceptions</span><br><span class="line">    max-branch-session-size = 16384</span><br><span class="line">    # globe session size , if exceeded throws exceptions</span><br><span class="line">    max-global-session-size = 512</span><br><span class="line">    # file buffer size , if exceeded allocate new buffer</span><br><span class="line">    file-write-buffer-cache-size = 16384</span><br><span class="line">    # when recover batch read size</span><br><span class="line">    session.reload.read_size = 100</span><br><span class="line">    # async, sync</span><br><span class="line">    flush-disk-mode = async</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  ## database store</span><br><span class="line">  db &#123;</span><br><span class="line">    ## the implement of javax.sql.DataSource, such as DruidDataSource(druid)/BasicDataSource(dbcp) etc.</span><br><span class="line">    datasource = &quot;dbcp&quot;</span><br><span class="line">    ## mysql/oracle/h2/oceanbase etc.</span><br><span class="line">    db-type = &quot;mysql&quot;</span><br><span class="line">    driver-class-name = &quot;com.mysql.jdbc.Driver&quot;</span><br><span class="line">    url = &quot;jdbc:mysql://127.0.0.1:3306/seata&quot;</span><br><span class="line">    user = &quot;root&quot;</span><br><span class="line">    password = &quot;123456&quot;</span><br><span class="line">    min-conn = 1</span><br><span class="line">    max-conn = 3</span><br><span class="line">    global.table = &quot;global_table&quot;</span><br><span class="line">    branch.table = &quot;branch_table&quot;</span><br><span class="line">    lock-table = &quot;lock_table&quot;</span><br><span class="line">    query-limit = 100</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">lock &#123;</span><br><span class="line">  ## the lock store mode: local、remote</span><br><span class="line">  mode = &quot;remote&quot;</span><br><span class="line"></span><br><span class="line">  local &#123;</span><br><span class="line">    ## store locks in user&#x27;s database</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  remote &#123;</span><br><span class="line">    ## store locks in the seata&#x27;s server</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">recovery &#123;</span><br><span class="line">  #schedule committing retry period in milliseconds</span><br><span class="line">  committing-retry-period = 1000</span><br><span class="line">  #schedule asyn committing retry period in milliseconds</span><br><span class="line">  asyn-committing-retry-period = 1000</span><br><span class="line">  #schedule rollbacking retry period in milliseconds</span><br><span class="line">  rollbacking-retry-period = 1000</span><br><span class="line">  #schedule timeout retry period in milliseconds</span><br><span class="line">  timeout-retry-period = 1000</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">transaction &#123;</span><br><span class="line">  undo.data.validation = true</span><br><span class="line">  undo.log.serialization = &quot;jackson&quot;</span><br><span class="line">  undo.log.save.days = 7</span><br><span class="line">  #schedule delete expired undo_log in milliseconds</span><br><span class="line">  undo.log.delete.period = 86400000</span><br><span class="line">  undo.log.table = &quot;undo_log&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">## metrics settings</span><br><span class="line">metrics &#123;</span><br><span class="line">  enabled = false</span><br><span class="line">  registry-type = &quot;compact&quot;</span><br><span class="line">  # multi exporters use comma divided</span><br><span class="line">  exporter-list = &quot;prometheus&quot;</span><br><span class="line">  exporter-prometheus-port = 9898</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">support &#123;</span><br><span class="line">  ## spring</span><br><span class="line">  spring &#123;</span><br><span class="line">    # auto proxy the DataSource bean</span><br><span class="line">    datasource.autoproxy = false</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>配置解读：</p>
+<ul>
+<li><code>transport</code>：与TC交互的一些配置
+<ul>
+<li><code>heartbeat</code>：client和server通信心跳检测开关</li>
+<li><code>enableClientBatchSendRequest</code>：客户端事务消息请求是否批量合并发送</li>
+</ul>
+</li>
+<li><code>service</code>：TC的地址配置，用于获取TC的地址
+<ul>
+<li><code>vgroup_mapping.test_tx_group = &quot;my_tx_group&quot;</code>：
+<ul>
+<li><code>test_tx_group</code>：是事务组名称，要与<code>application.yml</code>中配置一致，</li>
+<li><code>seata_tc_server</code>：是TC服务端在注册中心的id，将来通过注册中心获取TC地址</li>
+<li><code>enableDegrade</code>：服务降级开关，默认关闭。如果开启，当业务重试多次失败后会放弃全局事务</li>
+<li><code>disableGlobalTransaction</code>：全局事务开关，默认false。false为开启，true为关闭</li>
+</ul>
+</li>
+<li><code>default.grouplist</code>：这个当注册中心为file的时候，才用到</li>
+</ul>
+</li>
+<li><code>client</code>：客户端配置
+<ul>
+<li><code>rm</code>：资源管理器配
+<ul>
+<li><code>asynCommitBufferLimit</code>：二阶段提交默认是异步执行，这里指定异步队列的大小</li>
+<li><code>lock</code>：全局锁配置
+<ul>
+<li><code>retryInterval</code>：校验或占用全局锁重试间隔，默认10，单位毫秒</li>
+<li><code>retryTimes</code>：校验或占用全局锁重试次数，默认30次</li>
+<li><code>retryPolicyBranchRollbackOnConflict</code>：分支事务与其它全局回滚事务冲突时锁策略，默认true，优先释放本地锁让回滚成功</li>
+</ul>
+</li>
+<li><code>reportRetryCount</code>：一阶段结果上报TC失败后重试次数，默认5次</li>
+</ul>
+</li>
+<li><code>tm</code>：事务管理器配置
+<ul>
+<li><code>commitRetryCount</code>：一阶段全局提交结果上报TC重试次数，默认1</li>
+<li><code>rollbackRetryCount</code>：一阶段全局回滚结果上报TC重试次数，默认1</li>
+</ul>
+</li>
+<li><code>undo</code>：undo_log的配置
+<ul>
+<li><code>dataValidation</code>：是否开启二阶段回滚镜像校验，默认true</li>
+<li><code>logSerialization</code>：undo序列化方式，默认Jackson</li>
+<li><code>logTable</code>：自定义undo表名，默认是<code>undo_log</code></li>
+</ul>
+</li>
+<li><code>log</code>：日志配置
+<ul>
+<li><code>exceptionRate</code>：出现回滚异常时的日志记录频率，默认100，百分之一概率。回滚失败基本是脏数据，无需输出堆栈占用硬盘空间</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        <h3 id="registryconf-2"   >
+          <a href="#registryconf-2" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#registryconf-2"></a> registry.conf</h3>
+      
+<p>在 <code>resouces</code> 目录下创建 <code>registry.conf</code> 配置注册中心和配置中心信息（另外两个模块同样需要创建该文件）</p>
+<figure class="highlight"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line">registry &#123;</span><br><span class="line">  # file 、nacos 、eureka、redis、zk、consul、etcd3、sofa</span><br><span class="line">  type = &quot;nacos&quot;</span><br><span class="line"></span><br><span class="line">  nacos &#123;</span><br><span class="line">    serverAddr = &quot;localhost:8848&quot;</span><br><span class="line">    namespace = &quot;&quot;</span><br><span class="line">    cluster = &quot;default&quot;</span><br><span class="line">  &#125;</span><br><span class="line">  eureka &#123;</span><br><span class="line">    serviceUrl = &quot;http://localhost:8761/eureka&quot;</span><br><span class="line">    application = &quot;default&quot;</span><br><span class="line">    weight = &quot;1&quot;</span><br><span class="line">  &#125;</span><br><span class="line">  redis &#123;</span><br><span class="line">    serverAddr = &quot;localhost:6379&quot;</span><br><span class="line">    db = &quot;0&quot;</span><br><span class="line">  &#125;</span><br><span class="line">  zk &#123;</span><br><span class="line">    cluster = &quot;default&quot;</span><br><span class="line">    serverAddr = &quot;127.0.0.1:2181&quot;</span><br><span class="line">    session.timeout = 6000</span><br><span class="line">    connect.timeout = 2000</span><br><span class="line">  &#125;</span><br><span class="line">  consul &#123;</span><br><span class="line">    cluster = &quot;default&quot;</span><br><span class="line">    serverAddr = &quot;127.0.0.1:8500&quot;</span><br><span class="line">  &#125;</span><br><span class="line">  etcd3 &#123;</span><br><span class="line">    cluster = &quot;default&quot;</span><br><span class="line">    serverAddr = &quot;http://localhost:2379&quot;</span><br><span class="line">  &#125;</span><br><span class="line">  sofa &#123;</span><br><span class="line">    serverAddr = &quot;127.0.0.1:9603&quot;</span><br><span class="line">    application = &quot;default&quot;</span><br><span class="line">    region = &quot;DEFAULT_ZONE&quot;</span><br><span class="line">    datacenter = &quot;DefaultDataCenter&quot;</span><br><span class="line">    cluster = &quot;default&quot;</span><br><span class="line">    group = &quot;SEATA_GROUP&quot;</span><br><span class="line">    addressWaitTime = &quot;3000&quot;</span><br><span class="line">  &#125;</span><br><span class="line">  file &#123;</span><br><span class="line">    name = &quot;file.conf&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">config &#123;</span><br><span class="line">  # file、nacos 、apollo、zk、consul、etcd3</span><br><span class="line">  type = &quot;nacos&quot;</span><br><span class="line"></span><br><span class="line">  nacos &#123;</span><br><span class="line">    serverAddr = &quot;localhost:8848&quot;</span><br><span class="line">    namespace = &quot;&quot;</span><br><span class="line">  &#125;</span><br><span class="line">  consul &#123;</span><br><span class="line">    serverAddr = &quot;127.0.0.1:8500&quot;</span><br><span class="line">  &#125;</span><br><span class="line">  apollo &#123;</span><br><span class="line">    app.id = &quot;seata-server&quot;</span><br><span class="line">    apollo.meta = &quot;http://192.168.1.204:8801&quot;</span><br><span class="line">  &#125;</span><br><span class="line">  zk &#123;</span><br><span class="line">    serverAddr = &quot;127.0.0.1:2181&quot;</span><br><span class="line">    session.timeout = 6000</span><br><span class="line">    connect.timeout = 2000</span><br><span class="line">  &#125;</span><br><span class="line">  etcd3 &#123;</span><br><span class="line">    serverAddr = &quot;http://localhost:2379&quot;</span><br><span class="line">  &#125;</span><br><span class="line">  file &#123;</span><br><span class="line">    name = &quot;file.conf&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="业务代码"   >
+          <a href="#业务代码" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#业务代码"></a> 业务代码</h3>
+      
+<p>domain：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> lombok.AllArgsConstructor;</span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"><span class="keyword">import</span> lombok.NoArgsConstructor;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@AllArgsConstructor</span></span><br><span class="line"><span class="meta">@NoArgsConstructor</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CommonResult</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Integer code;</span><br><span class="line">    <span class="keyword">private</span> String  message;</span><br><span class="line">    <span class="keyword">private</span> T       data;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CommonResult</span><span class="params">(Integer code, String message)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(code,message,<span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.atguigu.springcloud.alibaba.domain;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.AllArgsConstructor;</span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"><span class="keyword">import</span> lombok.NoArgsConstructor;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.math.BigDecimal;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@AllArgsConstructor</span></span><br><span class="line"><span class="meta">@NoArgsConstructor</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Order</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Long id;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Long userId;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Long productId;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Integer count;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> BigDecimal money;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Integer status; <span class="comment">//订单状态：0：创建中；1：已完结</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>Dao接口及实现：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.atguigu.springcloud.alibaba.domain.Order;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.annotations.Mapper;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.annotations.Param;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Mapper</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">OrderDao</span> </span>&#123;</span><br><span class="line">    <span class="comment">//1 新建订单</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">create</span><span class="params">(Order order)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//2 修改订单状态，从零改为1</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">update</span><span class="params">(<span class="meta">@Param(&quot;userId&quot;)</span> Long userId,<span class="meta">@Param(&quot;status&quot;)</span> Integer status)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<figure class="highlight xml"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">mapper</span> <span class="meta-keyword">PUBLIC</span> <span class="meta-string">&quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;</span> <span class="meta-string">&quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;</span> &gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">&quot;com.atguigu.springcloud.alibaba.dao.OrderDao&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">resultMap</span> <span class="attr">id</span>=<span class="string">&quot;BaseResultMap&quot;</span> <span class="attr">type</span>=<span class="string">&quot;com.atguigu.springcloud.alibaba.domain.Order&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">id</span> <span class="attr">column</span>=<span class="string">&quot;id&quot;</span> <span class="attr">property</span>=<span class="string">&quot;id&quot;</span> <span class="attr">jdbcType</span>=<span class="string">&quot;BIGINT&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">result</span> <span class="attr">column</span>=<span class="string">&quot;user_id&quot;</span> <span class="attr">property</span>=<span class="string">&quot;userId&quot;</span> <span class="attr">jdbcType</span>=<span class="string">&quot;BIGINT&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">result</span> <span class="attr">column</span>=<span class="string">&quot;product_id&quot;</span> <span class="attr">property</span>=<span class="string">&quot;productId&quot;</span> <span class="attr">jdbcType</span>=<span class="string">&quot;BIGINT&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">result</span> <span class="attr">column</span>=<span class="string">&quot;count&quot;</span> <span class="attr">property</span>=<span class="string">&quot;count&quot;</span> <span class="attr">jdbcType</span>=<span class="string">&quot;INTEGER&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">result</span> <span class="attr">column</span>=<span class="string">&quot;money&quot;</span> <span class="attr">property</span>=<span class="string">&quot;money&quot;</span> <span class="attr">jdbcType</span>=<span class="string">&quot;DECIMAL&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">result</span> <span class="attr">column</span>=<span class="string">&quot;status&quot;</span> <span class="attr">property</span>=<span class="string">&quot;status&quot;</span> <span class="attr">jdbcType</span>=<span class="string">&quot;INTEGER&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">resultMap</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">insert</span> <span class="attr">id</span>=<span class="string">&quot;create&quot;</span>&gt;</span></span><br><span class="line">        insert into t_order (id,user_id,product_id,count,money,status)</span><br><span class="line">        values (null,#&#123;userId&#125;,#&#123;productId&#125;,#&#123;count&#125;,#&#123;money&#125;,0);</span><br><span class="line">    <span class="tag">&lt;/<span class="name">insert</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">update</span> <span class="attr">id</span>=<span class="string">&quot;update&quot;</span>&gt;</span></span><br><span class="line">        update t_order set status = 1</span><br><span class="line">        where user_id=#&#123;userId&#125; and status = #&#123;status&#125;;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">update</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></span><br></pre></td></tr></table></div></figure>
+<p>Service接口及实现：</p>
+<ul>
+<li>OrderService
+<ul>
+<li>OrderServiceImpl</li>
+</ul>
+</li>
+<li>StorageService</li>
+<li>AccountService</li>
+</ul>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.atguigu.springcloud.alibaba.domain.Order;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">OrderService</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">create</span><span class="params">(Order order)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>StorageService 接口和 AccountService 接口标注 <code>@FeignClient</code> 注解，开启远程调用与负载均衡</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.atguigu.springcloud.alibaba.domain.CommonResult;</span><br><span class="line"><span class="keyword">import</span> org.springframework.cloud.openfeign.FeignClient;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.PostMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RequestParam;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.math.BigDecimal;</span><br><span class="line"></span><br><span class="line"><span class="meta">@FeignClient(value = &quot;seata-storage-service&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">StorageService</span> </span>&#123;</span><br><span class="line">    <span class="meta">@PostMapping(value = &quot;/storage/decrease&quot;)</span></span><br><span class="line">    <span class="function">CommonResult <span class="title">decrease</span><span class="params">(<span class="meta">@RequestParam(&quot;productId&quot;)</span> Long productId, <span class="meta">@RequestParam(&quot;count&quot;)</span> Integer count)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.atguigu.springcloud.alibaba.domain.CommonResult;</span><br><span class="line"><span class="keyword">import</span> org.springframework.cloud.openfeign.FeignClient;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.PostMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RequestParam;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.math.BigDecimal;</span><br><span class="line"></span><br><span class="line"><span class="meta">@FeignClient(value = &quot;seata-account-service&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">AccountService</span> </span>&#123;</span><br><span class="line">    <span class="meta">@PostMapping(value = &quot;/account/decrease&quot;)</span></span><br><span class="line">    <span class="function">CommonResult <span class="title">decrease</span><span class="params">(<span class="meta">@RequestParam(&quot;userId&quot;)</span> Long userId, <span class="meta">@RequestParam(&quot;money&quot;)</span> BigDecimal money)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="globaltransactional-注解"   >
+          <a href="#globaltransactional-注解" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#globaltransactional-注解"></a> @GlobalTransactional 注解</h3>
+      
+<p>订单微服务的 <code>OrderServiceImpl</code> 调用其他微服务，使用 <strong>@GlobalTransactional</strong> 注解开启 Seata 全局事务，表示当前方法内的业务全部处于同一个 Seata 全局事务中</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.atguigu.springcloud.alibaba.dao.OrderDao;</span><br><span class="line"><span class="keyword">import</span> com.atguigu.springcloud.alibaba.domain.Order;</span><br><span class="line"><span class="keyword">import</span> com.atguigu.springcloud.alibaba.service.AccountService;</span><br><span class="line"><span class="keyword">import</span> com.atguigu.springcloud.alibaba.service.OrderService;</span><br><span class="line"><span class="keyword">import</span> com.atguigu.springcloud.alibaba.service.StorageService;</span><br><span class="line"><span class="keyword">import</span> io.seata.spring.annotation.GlobalTransactional;</span><br><span class="line"><span class="keyword">import</span> lombok.extern.slf4j.Slf4j;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.annotation.Resource;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OrderServiceImpl</span> <span class="keyword">implements</span> <span class="title">OrderService</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> OrderDao orderDao;</span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> StorageService storageService;</span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> AccountService accountService;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 创建订单-&gt;调用库存服务扣减库存-&gt;调用账户服务扣减账户余额-&gt;修改订单状态</span></span><br><span class="line"><span class="comment">     * 简单说：下订单-&gt;扣库存-&gt;减余额-&gt;改状态</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="meta">@GlobalTransactional(name = &quot;my-create-order&quot;, rollbackFor = Exception.class)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">create</span><span class="params">(Order order)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        log.info(<span class="string">&quot;-----&gt;开始新建订单&quot;</span>);</span><br><span class="line">        <span class="comment">//1 新建订单</span></span><br><span class="line">        orderDao.create(order);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//2 扣减库存</span></span><br><span class="line">        log.info(<span class="string">&quot;-----&gt;订单微服务开始调用库存，做扣减Count&quot;</span>);</span><br><span class="line">        storageService.decrease(order.getProductId(),order.getCount());</span><br><span class="line">        log.info(<span class="string">&quot;-----&gt;订单微服务开始调用库存，做扣减end&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//3 扣减账户</span></span><br><span class="line">        log.info(<span class="string">&quot;-----&gt;订单微服务开始调用账户，做扣减Money&quot;</span>);</span><br><span class="line">        accountService.decrease(order.getUserId(),order.getMoney());</span><br><span class="line">        log.info(<span class="string">&quot;-----&gt;订单微服务开始调用账户，做扣减end&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//4 修改订单状态，从零到1,1代表已经完成</span></span><br><span class="line">        log.info(<span class="string">&quot;-----&gt;修改订单状态开始&quot;</span>);</span><br><span class="line">        orderDao.update(order.getUserId(),<span class="number">0</span>);</span><br><span class="line">        log.info(<span class="string">&quot;-----&gt;修改订单状态结束&quot;</span>);</span><br><span class="line"></span><br><span class="line">        log.info(<span class="string">&quot;-----&gt;下订单结束了，O(∩_∩)O哈哈~&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="代理-datasource"   >
+          <a href="#代理-datasource" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#代理-datasource"></a> 代理 DataSource</h3>
+      
+<p>Seata 的二阶段执行是通过拦截sql语句，分析语义来指定回滚策略，因此需要对<code>DataSource</code>做代理。在项目中添加一个配置类：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.zhao.order.config;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;</span><br><span class="line"><span class="keyword">import</span> io.seata.rm.datasource.DataSourceProxy;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.session.SqlSessionFactory;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Bean;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.sql.DataSource;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 使用Seata对数据源进行代理</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DataSourceProxyConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;mybatis.mapperLocations&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String mapperLocations;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="meta">@ConfigurationProperties(prefix = &quot;spring.datasource&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> DataSource <span class="title">druidDataSource</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> DruidDataSource();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> DataSourceProxy <span class="title">dataSourceProxy</span><span class="params">(DataSource dataSource)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> DataSourceProxy(dataSource);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> SqlSessionFactory <span class="title">sqlSessionFactoryBean</span><span class="params">(DataSource dataSource)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="comment">// 订单服务中引入了mybatis-plus，所以要使用特殊的SqlSessionFactoryBean</span></span><br><span class="line">        SqlSessionFactoryBean sqlSessionFactoryBean = <span class="keyword">new</span> SqlSessionFactoryBean();</span><br><span class="line">        <span class="comment">// 代理数据源</span></span><br><span class="line">        sqlSessionFactoryBean.setDataSource(<span class="keyword">new</span> DataSourceProxy(dataSource));</span><br><span class="line"></span><br><span class="line">        <span class="comment">// sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources(mapperLocations));</span></span><br><span class="line">        <span class="comment">// sqlSessionFactoryBean.setTransactionFactory(new SpringManagedTransactionFactory());</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 生成SqlSessionFactory</span></span><br><span class="line">        <span class="keyword">return</span> sqlSessionFactoryBean.getObject();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>这里的 <code>DataSourceProxy</code> 是 Seata 提供的代理类，用于代理原始数据源，进行拦截解析SQL语句等操作。</p>
+
+        <h3 id="主启动类"   >
+          <a href="#主启动类" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#主启动类"></a> 主启动类</h3>
+      
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.boot.SpringApplication;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.autoconfigure.SpringBootApplication;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;</span><br><span class="line"><span class="keyword">import</span> org.springframework.cloud.client.discovery.EnableDiscoveryClient;</span><br><span class="line"><span class="keyword">import</span> org.springframework.cloud.openfeign.EnableFeignClients;</span><br><span class="line"></span><br><span class="line"><span class="meta">@EnableDiscoveryClient</span></span><br><span class="line"><span class="meta">@EnableFeignClients</span></span><br><span class="line"><span class="comment">// 取消数据源的自动创建，而是使用自己定义的数据源配置 DataSourceProxyConfig</span></span><br><span class="line"><span class="meta">@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SeataOrderMainApp2001</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(SeataOrderMainApp2001.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h2 id="其他微服务模块"   >
+          <a href="#其他微服务模块" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#其他微服务模块"></a> 其他微服务模块</h2>
+      
+<p>另外两个微服务模块与订单模块配置相同，本文不再赘述。区别在于其他业务模块的事务注解可以使用<code>@Transactionnal</code>，而不是<code>@GlobalTransactional</code>，只有事务发起者TM才需要添加<code>@GlobalTransactional</code>。</p>
+
+        <h2 id="雪花算法"   >
+          <a href="#雪花算法" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#雪花算法"></a> 雪花算法</h2>
+      
+<p>未完待续…</p>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yuyun-zhao.gitee.io">yuyun zhao</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yuyun-zhao.gitee.io/2021/09/08/%E3%80%90SpringCloud%E3%80%91Seata/">http://yuyun-zhao.gitee.io/2021/09/08/%E3%80%90SpringCloud%E3%80%91Seata/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.gitee.io/tags/Spring-Cloud/">Spring Cloud</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2021/09/13/%E3%80%90Docker%E3%80%91Docker/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">【Docker】Docker</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2021/09/07/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/"><span class="paginator-prev__text">【分布式】分布式事务</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#seata%E7%AE%80%E4%BB%8B"><span class="toc-text">
+           Seata简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#seata-%E4%BA%A7%E5%93%81%E6%A8%A1%E5%9D%97"><span class="toc-text">
+           Seata 产品模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#seata-%E8%AF%A6%E7%BB%86%E6%9E%B6%E6%9E%84%E5%92%8C%E6%B5%81%E7%A8%8B"><span class="toc-text">
+           Seata 详细架构和流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#seata-%E4%B8%A4%E4%B8%AA%E9%98%B6%E6%AE%B5%E5%85%B7%E4%BD%93%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="toc-text">
+           Seata 两个阶段具体工作流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#seata-%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B%E7%A4%BA%E4%BE%8B"><span class="toc-text">
+           Seata 工作流程示例</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF"><span class="toc-text">
+           场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%80%E9%98%B6%E6%AE%B5"><span class="toc-text">
+           一阶段</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8C%E9%98%B6%E6%AE%B5-%E5%9B%9E%E6%BB%9A"><span class="toc-text">
+           二阶段-回滚</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8C%E9%98%B6%E6%AE%B5-%E6%8F%90%E4%BA%A4"><span class="toc-text">
+           二阶段-提交</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#seata-at-%E6%A8%A1%E5%BC%8F%E5%AE%9E%E6%88%98"><span class="toc-text">
+           Seata AT 模式实战</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-tcseata-server"><span class="toc-text">
+           安装 TC：Seata-Server</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#registryconf"><span class="toc-text">
+           registry.conf</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fileconf"><span class="toc-text">
+           file.conf</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#seata-%E4%B8%9A%E5%8A%A1%E6%95%B0%E6%8D%AE%E5%BA%93%E5%87%86%E5%A4%87"><span class="toc-text">
+           Seata 业务数据库准备</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#order-module-%E6%90%AD%E5%BB%BA"><span class="toc-text">
+           Order-Module 搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%BC%E5%85%A5-maven-%E4%BE%9D%E8%B5%96"><span class="toc-text">
+           导入 Maven 依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-applicationyaml"><span class="toc-text">
+           配置文件 application.yaml</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fileconf-2"><span class="toc-text">
+           file.conf</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#registryconf-2"><span class="toc-text">
+           registry.conf</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%9A%E5%8A%A1%E4%BB%A3%E7%A0%81"><span class="toc-text">
+           业务代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#globaltransactional-%E6%B3%A8%E8%A7%A3"><span class="toc-text">
+           @GlobalTransactional 注解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%90%86-datasource"><span class="toc-text">
+           代理 DataSource</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E5%90%AF%E5%8A%A8%E7%B1%BB"><span class="toc-text">
+           主启动类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%A8%A1%E5%9D%97"><span class="toc-text">
+           其他微服务模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95"><span class="toc-text">
+           雪花算法</span></a></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/author.png" alt="avatar"></div><p class="sidebar-ov-author__text">no code no life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/YUYUN-ZHAO" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="zyy1024462136" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a><a class="sidebar-ov-social-item" href="1024462136" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="mailto:im.yuyunzhao@gmail.com" target="_blank" rel="noopener" data-popover="social.Gmail" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">Gmail</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">75</div><div class="sidebar-ov-state-item__name">文章</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">29</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">29</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2021</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>yuyun zhao</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script>function initSearch() {
+  var isXML = true;
+  var search_path = 'search.xml';
+
+  if (!search_path) {
+    search_path = 'search.xml';
+  } else if (/json$/i.test(search_path)) {
+    isXML = false;
+  }
+
+  var path = '/' + search_path;
+  $.ajax({
+    url: path,
+    dataType: isXML ? 'xml' : 'json',
+    async: true,
+    success: function (res) {
+      var datas = isXML ? $('entry', res).map(function () {
+        // 将 XML 转为 JSON
+        return {
+          title: $('title', this).text(),
+          content: $('content', this).text(),
+          url: $('url', this).text()
+        };
+      }).get() : res;
+      var $input = $('.search-input input');
+      var $result = $('.search-results');
+      // 搜索对象（标题、内容）的权重，影响显示顺序
+      var WEIGHT = { title: 100, content: 1 };
+      var searchPost = function () {
+        var searchText = $input.val().toLowerCase().trim();
+        // 根据空白字符分隔关键字
+        var keywords = searchText.split(/[\s]+/);
+        // 搜索结果
+        var matchPosts = [];
+
+        // 有多个关键字时，将原文字整个保存下来
+        if (keywords.length > 1) {
+          keywords.push(searchText);
+        }
+        // 防止未输入字符时搜索
+        if (searchText.length > 0) {
+          datas.forEach(function (data) {
+            var isMatch  = false;
+            // 没有标题的文章使用预设的 i18n 变量代替
+            var title = (data.title && data.title.trim()) || '[ 文章无标题 ]';
+            var titleLower = title && title.toLowerCase();
+            // 删除 HTML 标签 和 所有空白字符
+            var content = data.content && data.content.replace(/<[^>]+>/g, '');
+            var contentLower = content && content.toLowerCase();
+            // 删除重复的 /
+            var postURL = data.url && decodeURI(data.url).replace(/\/{2,}/g, '/');
+            // 标题中匹配到的关键词
+            var titleHitSlice = [];
+            // 内容中匹配到的关键词
+            var contentHitSlice = [];
+
+            keywords.forEach(function (keyword) {
+              /**
+              * 获取匹配的关键词的索引
+              * @param {String} keyword 要匹配的关键字
+              * @param {String} text 原文字
+              * @param {Boolean} caseSensitive 是否区分大小写
+              * @param {Number} weight 匹配对象的权重。权重大的优先显示
+              * @return {Array}
+              */
+              function getIndexByword (word, text, caseSensitive, weight) {
+                if (!word || !text) {
+                  return [];
+                };
+
+                var startIndex = 0; // 每次匹配的开始索引
+                var index = -1;     // 匹配到的索引值
+                var result = [];    // 匹配结果
+
+                if (!caseSensitive) {
+                  word = word.toLowerCase();
+                  text = text.toLowerCase();
+                }
+
+                while((index = text.indexOf(word, startIndex)) !== -1) {
+                  var hasMatch = false;
+                  // 索引位置相同的关键词，保留长度较长的
+                  titleHitSlice.forEach(function (hit) {
+                    if (hit.index === index && hit.word.length < word.length) {
+                      hit.word = word;
+                      hasMatch = true;
+                    }
+                  });
+                  startIndex = index + word.length;
+                  !hasMatch && result.push({ index: index, word: word, weight: weight });
+                }
+                return result;
+              }
+              titleHitSlice = titleHitSlice.concat(getIndexByword(keyword, titleLower, false, WEIGHT.title));
+              contentHitSlice = contentHitSlice.concat(getIndexByword(keyword, contentLower, false, WEIGHT.content));
+            });
+
+            var hitTitle = titleHitSlice.length;
+            var hitContent = contentHitSlice.length;
+
+            if (hitTitle > 0 || hitContent > 0) {
+              isMatch = true;
+            }
+            if (isMatch) {
+              ;[titleHitSlice, contentHitSlice].forEach(function (hit) {
+                // 按照匹配文字的索引的递增顺序排序
+                hit.sort(function (left, right) {
+                  return left.index - right.index;
+                });
+              });
+              /**
+              * 给文本中匹配到的关键词添加标记，从而进行高亮显示
+              * @param {String} text 原文本
+              * @param {Array} hitSlice 匹配项的索引信息
+              * @param {Number} start 开始索引
+              * @param {Number} end 结束索引
+              * @return {String}
+              */
+              function highlightKeyword (text, hitSlice, start, end) {
+                if (!text || !hitSlice || !hitSlice.length) {
+                  return;
+                }
+
+                var result = '';
+                var startIndex = start;
+                var endIndex = end;
+                hitSlice.forEach(function (hit) {
+                  if (hit.index < startIndex) {
+                    return;
+                  }
+
+                  var hitWordEnd = hit.index + hit.word.length;
+                  result += text.slice(startIndex, hit.index);
+                  result += '<b>' + text.slice(hit.index, hitWordEnd) + '</b>';
+                  startIndex = hitWordEnd;
+                });
+                result += text.slice(startIndex, endIndex);
+                return result;
+              }
+
+              var postData = {};
+              // 文章总的搜索权重
+              var postWeight = titleHitSlice.length * WEIGHT.title + contentHitSlice.length * WEIGHT.content;
+              // 标记匹配关键词后的标题
+              var postTitle = highlightKeyword(title, titleHitSlice, 0, title.length) || title;
+              // 标记匹配关键词后的内容
+              var postContent;
+              // 显示内容的长度
+              var SHOW_WORD_LENGTH = 200;
+              // 命中关键词前的字符显示长度
+              var SHOW_WORD_FRONT_LENGTH = 20;
+              var SHOW_WORD_END_LENGTH = SHOW_WORD_LENGTH - SHOW_WORD_FRONT_LENGTH;
+
+              // 截取匹配的第一个字符，前后共 200 个字符来显示
+              if (contentHitSlice.length > 0) {
+                var firstIndex = contentHitSlice[0].index;
+                var start = firstIndex > SHOW_WORD_FRONT_LENGTH ? firstIndex - SHOW_WORD_FRONT_LENGTH : 0;
+                var end = firstIndex + SHOW_WORD_END_LENGTH;
+                postContent = highlightKeyword(content, contentHitSlice, start, end);
+              } else { // 未匹配到内容，直接截取前 200 个字符来显示
+                postContent = content.slice(0, SHOW_WORD_LENGTH);
+              }
+              postData.title = postTitle;
+              postData.content = postContent;
+              postData.url = postURL;
+              postData.weight = postWeight;
+              matchPosts.push(postData);
+            }
+          });
+        }
+
+        var resultInnerHtml = '';
+        if (matchPosts.length) {
+          // 按权重递增的顺序排序，使权重大的优先显示
+          matchPosts.sort(function (left, right) {
+            return right.weight - left.weight;
+          });
+          resultInnerHtml += '<ul>';
+          matchPosts.forEach(function (post) {
+            resultInnerHtml += '<li><a class="search-results-title" href="' + post.url + '">';
+            resultInnerHtml += post.title;
+            resultInnerHtml += '</a><div class="search-results-content">';
+            resultInnerHtml += post.content;
+            resultInnerHtml += '</div></li>';
+          });
+          resultInnerHtml += '</ul>';
+        } else {
+          resultInnerHtml += '<div class="search-results-none"><i class="far fa-meh"></i></div>';
+        }
+        $result.html(resultInnerHtml);
+      };
+      $input.on('input', searchPost);
+      $input.on('keyup', function (e) {
+        if (e.keyCode === Stun.utils.codeToKeyCode('Enter')) {
+          searchPost();
+        }
+      });
+    }
+  });
+}
+
+function closeSearch () {
+  $('body').css({ overflow: 'auto' });
+  $('.search-popup').css({ display: 'none' });
+  $('.search-mask').css({ display: 'none' });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+  Stun.utils.pjaxReloadLocalSearch = function () {
+    $('.header-nav-search').on('click', function (e) {
+      e.stopPropagation();
+      $('body').css('overflow', 'hidden');
+      $('.search-popup')
+        .velocity('stop')
+        .velocity('transition.expandIn', {
+          duration: 300,
+          complete: function () {
+            $('.search-popup input').focus();
+          }
+        });
+      $('.search-mask')
+        .velocity('stop')
+        .velocity('transition.fadeIn', {
+          duration: 300
+        });
+
+      initSearch();
+    });
+    $('.search-mask, .search-close').on('click', function () {
+      closeSearch();
+    });
+    $(document).on('keydown', function (e) {
+      // Escape <=> 27
+      if (e.keyCode === Stun.utils.codeToKeyCode('Escape')) {
+        closeSearch();
+      }
+    });
+  };
+
+  Stun.utils.pjaxReloadLocalSearch();
+}, false);
+
+function safeOpenUrl(url) {
+  var newTab = window.open();
+  newTab.opener = null;
+  newTab.location = url;
+}
+
+function extSearch(engine) {
+  var engines = {
+    google: 'https://www.google.com/search?q=',
+    bing: 'https://cn.bing.com/search?q=',
+    baidu: 'https://www.baidu.com/s?ie=UTF-8&wd=',
+  };
+  var host = window.location.host;
+  var query = $('.search-input input').val().toLowerCase().trim();
+  var uri = engines[engine] + query + ' site:' + host;
+
+  if (query) {
+    safeOpenUrl(uri);
+  } else {
+    Stun.utils.popAlert('warning', '请输入字符');
+  }
+}
+
+var assistSearchList = window.CONFIG.assistSearch;
+
+if (Array.isArray(assistSearchList)) {
+  assistSearchList.forEach(function (name) {
+    document.querySelector('.search-btns-item--' + name).addEventListener('click', function () {
+      extSearch(name);
+    }, false);
+  });
+}</script><script src="https://cdn.jsdelivr.net/npm/pjax@latest/pjax.min.js"></script><script>window.addEventListener('DOMContentLoaded', function () {
+  var pjax = new Pjax({"selectors":["head title","#main",".pjax-reload"],"history":true,"scrollTo":false,"scrollRestoration":false,"cacheBust":false,"debug":false,"currentUrlFullReload":false,"timeout":0});
+  // 加载进度条的计时器
+  var loadingTimer = null;
+
+  // 重置页面 Y 方向上的滚动偏移量
+  document.addEventListener('pjax:send', function () {
+    $('.header-nav-menu').removeClass('show');
+    if (CONFIG.pjax && CONFIG.pjax.avoidBanner) {
+      $('html').velocity('scroll', {
+        duration: 500,
+        offset: $('#header').height(),
+        easing: 'easeInOutCubic'
+      });
+    }
+
+    var loadingBarWidth = 20;
+    var MAX_LOADING_WIDTH = 95;
+
+    $('.loading-bar').addClass('loading');
+    $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    clearInterval(loadingTimer);
+    loadingTimer = setInterval(function () {
+      loadingBarWidth += 3;
+      if (loadingBarWidth > MAX_LOADING_WIDTH) {
+        loadingBarWidth = MAX_LOADING_WIDTH;
+      }
+      $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    }, 500);
+  }, false);
+
+  window.addEventListener('pjax:complete', function () {
+    clearInterval(loadingTimer);
+    $('.loading-bar__progress').css('width', '100%');
+    $('.loading-bar').removeClass('loading');
+    setTimeout(function () {
+      $('.loading-bar__progress').css('width', '0');
+    }, 400);
+    $('link[rel=prefetch], script[data-pjax-rm]').each(function () {
+      $(this).remove();
+    });
+    $('script[data-pjax], #pjax-reload script').each(function () {
+      $(this).parent().append($(this).remove());
+    });
+
+    if (Stun.utils.pjaxReloadBoot) {
+      Stun.utils.pjaxReloadBoot();
+    }
+    if (Stun.utils.pjaxReloadScroll) {
+      Stun.utils.pjaxReloadScroll();
+    }
+    if (Stun.utils.pjaxReloadSidebar) {
+      Stun.utils.pjaxReloadSidebar();
+    }
+    if (false) {
+      if (Stun.utils.pjaxReloadHeader) {
+        Stun.utils.pjaxReloadHeader();
+      }
+      if (Stun.utils.pjaxReloadScrollIcon) {
+        Stun.utils.pjaxReloadScrollIcon();
+      }
+      if (Stun.utils.pjaxReloadLocalSearch) {
+        Stun.utils.pjaxReloadLocalSearch();
+      }
+    }
+  }, false);
+}, false);</script><div id="pjax-reload"><link href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" rel="stylesheet" type="text/css"><link href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/copy-tex.css" rel="stylesheet" type="text/css"><script src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/copy-tex.min.js"></script><script src="https://cdn.jsdelivr.net/gh/sukkaw/busuanzi@latest/bsz.pure.mini.js" async></script></div><script src="/js/utils.js?v=2.6.2"></script><script src="/js/stun-boot.js?v=2.6.2"></script><script src="/js/scroll.js?v=2.6.2"></script><script src="/js/header.js?v=2.6.2"></script><script src="/js/sidebar.js?v=2.6.2"></script><script type="application/json" src="/search.xml"></script></body></html>
