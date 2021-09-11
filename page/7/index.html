@@ -28,7 +28,197 @@ var CONFIG = {
   sourcePath: {"js":"js","css":"css","images":"images"},
 };
 
-window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content content-home" id="content"><section class="postlist"><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2021/04/01/%E3%80%90MySQL%E3%80%91JDBC/">【MySQL】JDBC</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-04-01</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-08-16</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">16.6k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">123分</span></span></div></header><div class="post-body"><div class="post-excerpt"><h2 id="jdbc简介"   >
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content content-home" id="content"><section class="postlist"><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2021/04/02/%E3%80%90MySQL%E3%80%91MySQL%E4%BA%8B%E5%8A%A1/">【MySQL】MySQL 事务</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-04-02</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-09-11</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">3.8k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">22分</span></span></div></header><div class="post-body"><div class="post-excerpt">
+        <h2 id="事务原则"   >
+          <a href="#事务原则" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#事务原则"></a> 事务原则</h2>
+      
+<p>TCL: Transaction Control Language 事务控制语言。</p>
+<p>事务（Transaction）：事务由单独单元的一个或一组sql语句组成，在这个单元中，每个MySQL语句是相互依赖的，这个执行单元 <mark><strong>要么全部执行，要么全部不执行</strong></mark></p>
+<ul>
+<li>SQL语句1正在执行：A给B转账200     A：1000  ——&gt; 200   B：200</li>
+<li>SQL语句2正在执行：B收到A的钱        B：800    ——&gt;            B：400</li>
+</ul>
+<p>将一组SQL放在一个批次中去执行。上述两条语句组成一组来执行，要么都成功，要么都失败，否则钱会凭空消失。</p>
+<blockquote>
+<p>事务原则：ACID原则——原子性(Atomicity)、一致性(Consistency)、隔离性(Isolation)、持久性(Durability)；脏读，幻读，不可重复读</p>
+</blockquote>
+<p><strong>1. 原子性（Atomicity）</strong></p>
+<p>原子性是指<strong>事务是一个不可分割的工作单位</strong>，事务中的操作<strong>要么都执行，要么都不执行</strong>，没有中间状态。对于事务在执行中发生错误，所有的操作都会被回滚，整个事务就像从没被执行过一样。</p>
+<p><strong>2. 一致性（Consistency）</strong></p>
+<p>事务必须使数据库从一个一致性状态变换到另一个一致性状态。保证数据库一致性是指当事务完成时，必须使所有数据都具有一致的状态。（例如A给B转账前后，数据库中二者余额之和相等，转账前为一个一致性状态，转账后也为一个一致性状态）。</p>
+<p><strong>3. 隔离性（Isolation）</strong></p>
+<p>隔离性是指一个事务的执行不能被其他事务干扰，即一个事务内部的操作及使用的数据对并发的其他数据是隔离的，并发执行的各个事务之间不能互相干扰。</p>
+<p><strong>4. 持久性（Durability）</strong></p>
+<p>持久性是指一个事务一旦被提交，它对数据库中数据的改变就是永久性的，接下来的其他操作和数据库故障不应该对其有任何影响。</p>
+<p>其中，原子性和持久性靠<strong>undo和redo日志</strong>来实现，隔离性通过线程的控制来实现</p>
+
+        <h2 id="事务隔离级别"   >
+          <a href="#事务隔离级别" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#事务隔离级别"></a> 事务隔离级别</h2>
+      
+<blockquote>
+<p>参考链接：<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1450773" >https://cloud.tencent.com/developer/article/1450773</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+</blockquote>
+<p>对于同时运行的多个事务，当这些事务访问数据库中相同的数据时，如果没有采取必要的隔离机制，就会导致各种并发问题：</p>
+<p><strong>1. 脏读（读取未提交数据）：</strong></p>
+<p>指一个事务读取了另一个事务未提交的数据。例如，两个事务T1和T2，T1读取了已经被T2更新但是<strong>还没有被提交</strong>的字段，之后，若T2回滚，T1读取到的内容就是临时且无效的。</p>
+<p><strong>2. 不可重复读（前后多次读取，数据内容不一致）：</strong></p>
+<p>指在一个事务内读取表中的某一行数据，过段时间，该字段数据被另一事务修改，此时第一个事务<strong>再读时读取结果不同</strong>。例如，两个事务T1和T2，T1读取了一个字段，然后T2<strong>更新</strong>了该字段，之后，T1再此读取同一字段时，值就不同了。</p>
+<p><strong>3. 幻读（前后多次读取，数据总量不一致）：</strong></p>
+<p>事务A在执行读取操作，需要两次统计数据的总量，前一次查询数据总量后，此时事务B执行了新增数据的操作并提交后，这个时候事务A读取的数据总量和之前统计的不一样，就像产生了幻觉一样，平白无故的多了几条数据。（类似班级里刚才看还是一个人，再看变成两个人，就像产生了幻觉）</p>
+<p><strong>不可重复读和幻读的区别:</strong></p>
+<p>(1) 不可重复读是读取了其他事务更改的数据，<strong>针对UPDATE操作</strong></p>
+<p>解决：使用行级锁，锁定该行，事务A多次读取操作完成后才释放该锁，这个时候才允许其他事务更改刚才的数据。</p>
+<p>(2) 幻读是读取了其他事务新增的数据，<strong>针对INSERT和DELETE操作</strong></p>
+<p>解决：使用表级锁，锁定整张表，事务A多次读取数据总量之后才释放该锁，这个时候才允许其他事务新增数据。</p>
+<p><strong>MySQL的JDBC中，默认开启事务，此时每一句sql语句都会在一个单独的事务中执行，例如两次查询语句都会在不同的事务中执行，执行完该语句都会立刻提交。</strong></p>
+<p>MySQL支持4种事务隔离级别，默认级别为 <mark><strong>REPEATABLE READ</strong></mark></p>
+<ul>
+<li><strong>READ UNCOMMITTED（读未提交数据）</strong>：允许事务读取未被其他事务提交的变更。脏读、不可重复读和幻读都可能出现</li>
+<li><strong>READ COMMITTED（读已提交数据）</strong>：只允许事务读取已经被其他事务提交的变更。可以避免脏读，但不可重复读和幻读仍然可能出现</li>
+<li><strong>REPEATABLE READ（可重复读）</strong>：确保事务可以多次从一个字段中读取相同的值，在这个事务持续期间，禁止其他事务对这个字段进行更新。<strong>此时即使其他事务修改某字段并COMMIT，本事务查询时仍是原先值</strong>。可以避免脏读和不可重复读，但幻读仍然可能出现，<strong>即其他事务若插入了新的行，本事务查询时也会多出这些行，导致看起来像幻觉一样，每次读取的数据总量不同</strong></li>
+<li><strong>SERIALIZABLE（串行化）</strong>：确保事务可以从一个表中读取相同的行，在这个事务持续期间，禁止其他事务对该表执行插入，更新和删除操作。所有并发问题都可以避免，但性能十分低下。在某个事务读取时，其他事务阻塞，无法对该表进行操作。<strong>该级别下无法进行并发</strong></li>
+</ul>
+<p>查看隔离级别：</p>
+<figure class="highlight sql"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> @<span class="variable">@TX</span>_ISOLATION           <span class="comment">--（8.0以前） </span></span><br><span class="line"><span class="keyword">SELECT</span> @<span class="variable">@TRANSACTION</span>_ISOLATION  <span class="comment">--（8.0以后）</span></span><br></pre></td></tr></table></div></figure>
+<p>设置<strong>当前</strong>MySQL连接的隔离级别：</p>
+<p><strong>SET <mark>SESSION</mark> TRANSACTION ISOLATION LEVEL <mark>READ COMMITTED</mark></strong></p>
+<p>设置<strong>全局</strong>MySQL连接的隔离级别：</p>
+<p><strong>SET <mark>GLOBAL</mark> TRANSACTION ISOLATION LEVEL <mark>READ COMMITTED</mark></strong></p>
+
+        <h2 id="undo-和-redo-日志"   >
+          <a href="#undo-和-redo-日志" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#undo-和-redo-日志"></a> undo 和 redo 日志</h2>
+      
+<blockquote>
+<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="http://www.zhdba.com/mysqlops/2012/04/06/innodb-log1/" >http://www.zhdba.com/mysqlops/2012/04/06/innodb-log1/</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+</blockquote>
+<p>在数据库系统中，既有存放数据的文件，也有存放日志的文件。在内存中既有日志缓存 log buffer，也有磁盘文件 log file。MySQL中的日志文件，有这么两种与事务有关：<strong>undo日志</strong>与<strong>redo日志</strong>。</p>
+
+        <h3 id="undo-日志"   >
+          <a href="#undo-日志" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#undo-日志"></a> undo 日志</h3>
+      
+<blockquote>
+<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1n7411R7WQ?p=6&amp;spm_id_from=333.1007.top_right_bar_window_history.content.click" >https://www.bilibili.com/video/BV1n7411R7WQ?p=6&amp;spm_id_from=333.1007.top_right_bar_window_history.content.click</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+</blockquote>
+<p>undo日志的原理：为了满足事务的原子性，在操作任何数据之前，首先将数据备份到 undo log。然后进行数据的修改。如果出现了错误或者用户执行了 ROLLBACK 语句，系统可以利用 undo log 中的备份将数据恢复到事务开始之前的状态。并且数据库写入数据到磁盘之前，会把<strong>数据先缓存在内存</strong>中，事务提交时才会写入磁盘中。</p>
+<blockquote>
+<p>用undo日志实现原子性的简化过程</p>
+</blockquote>
+<p>假设有A、B两个数据，值分别为1,2。</p>
+<ul>
+<li>A. 事务开始.</li>
+<li>B. 记录A=1到 undo log.</li>
+<li>C. 修改A=3.</li>
+<li>D. 记录B=2到 undo log.</li>
+<li>E. 修改B=4.</li>
+<li>F. 将 undo log 写到磁盘。</li>
+<li>G. 将数据写到磁盘。</li>
+<li>H. 事务提交</li>
+</ul>
+<p><strong>1. 如何保证持久性？</strong></p>
+<p>事务提交前，会把修改后的数据保存到磁盘，也就是说只要事务提交了，数据肯定持久化了。</p>
+<p><strong>2. 如何保证原子性？</strong></p>
+<ul>
+<li>每次对数据库修改，都会把修改前数据记录在 undo log，那么需要回滚时，可以读取 undo log，恢复数据。</li>
+<li>若系统在G和H之间崩溃，此时事务并未提交，需要回滚。而 undo log 已经被持久化，可以根据 undo log 来恢复数据</li>
+<li>若系统在G之前崩溃，此时数据并未持久化到硬盘，依然保持在事务之前的状态</li>
+</ul>
+<p><strong>缺陷</strong>：每个事务提交前将数据和 undo log 写入磁盘，这样会导致大量的磁盘IO，因此性能很低。</p>
+<p>如果能够将数据缓存一段时间，就能减少IO提高性能。但是这样就会丧失事务的持久性。因此引入了另外一种机制来实现持久化，即 <strong>redo log</strong>。</p>
+
+        <h3 id="redo日志"   >
+          <a href="#redo日志" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#redo日志"></a> redo日志</h3>
+      
+<p>和 undo log 相反，redo log 记录的是<strong>新数据</strong>的备份。在事务提交前，只要将 redo log 持久化即可，不需要将数据库中的数据持久化，减少了IO的次数。</p>
+<blockquote>
+<p>undo + redo 事务的简化过程</p>
+</blockquote>
+<p>假设有A、B两个数据，值分别为1,2</p>
+<ul>
+<li>A. 事务开始.</li>
+<li>B. 记录 A=1 到 undo log buffer.</li>
+<li>C. 修改 A=3.</li>
+<li>D. 记录 A=3 到 redo log buffer.</li>
+<li>E. 记录 B=2 到 undo log buffer</li>
+<li>F. 修改 B=4.</li>
+<li>G. 记录 B=4 到 redo log buffer.</li>
+<li>H. 将 undo log 写入磁盘</li>
+<li>I. 将 redo log 写入磁盘</li>
+<li>J. 事务提交</li>
+</ul>
+<p><strong>1. 如何保证原子性？</strong></p>
+<p>如果在事务提交前故障，通过 undo log 日志恢复数据。如果 undo log 都还没写入，那么数据就尚未持久化，无需回滚</p>
+<p><strong>2. 如何保证持久化？</strong></p>
+<p>注意，这里并没有出现数据的持久化。因为数据已经写入 redo log，而 redo log 持久化到了硬盘，因此只要到了步骤<code>I</code>以后，事务是可以提交的。</p>
+<p><strong>3. 内存中的数据库数据何时持久化到磁盘？</strong></p>
+<p>因为 redo log 已经持久化，因此数据库数据写入磁盘与否影响不大，不过为了避免出现脏数据（内存中与磁盘不一致），事务提交后也会将内存数据刷入磁盘（也可以按照固设定的频率刷新内存数据到磁盘中）。</p>
+<p><strong>4. redo log 何时写入磁盘？</strong></p>
+<p>redo log 会在事务提交之前，或者 redo log buffer满了的时候写入磁盘</p>
+<p>这里存在两个问题：</p>
+<p><strong>问题1</strong>：之前是写 undo 和数据库数据到硬盘，现在是写 undo 和 redo 到磁盘，似乎没有减少IO次数</p>
+<ul>
+<li>数据库数据写入是<strong>随机IO</strong>，性能很差</li>
+<li>redo log 在初始化时会开辟一段<strong>连续的空间</strong>，写入是<strong>顺序IO</strong>，性能很好</li>
+<li>实际上 undo log 并不是直接写入磁盘，而是先写入到 redo log buffer 中，当 redo log 持久化时，undo log 就同时持久化到硬盘了。</li>
+</ul>
+<p>因此事务提交前，只需要对 redo log 持久化即可。另外，redo log 并不是写入一次就持久化一次， redo log 在内存中也有自己的缓冲池：<code>redo log buffer</code>。每次写 redo log 都是写入到 buffer，在提交时一次性持久化到磁盘，减少IO次数。</p>
+<p><strong>问题2</strong>：redo log 数据是写入内存buffer中，当buffer满或者事务提交时，将 buffer 数据写入磁盘。redo log 中记录的数据，有可能包含尚未提交事务，如果此时数据库崩溃，那么如何完成数据恢复？</p>
+<p>数据恢复有两种策略：</p>
+<ul>
+<li>恢复时，只重做已经提交了的事务</li>
+<li>恢复时，重做所有事务包括未提交的事务和回滚了的事务。然后通过 undo log 回滚那些未提交的事务</li>
+</ul>
+<p>Innodb 引擎采用的是第二种方案，因此 undo log 要在 redo log 前持久化</p>
+<p><strong>总结</strong>：</p>
+<ul>
+<li>undo log 记录<strong>更新前</strong>的数据，用于保证事务<strong>原子性</strong></li>
+<li>redo log 记录<strong>更新后</strong>的数据，用于保证事务的<strong>持久性</strong></li>
+<li>redo log 有自己的内存buffer，先写入到 buffer，事务提交时写入磁盘</li>
+<li>redo log 持久化之后，意味着事务是<strong>可提交</strong>的</li>
+</ul>
+
+        <h2 id="悲观锁和乐观锁"   >
+          <a href="#悲观锁和乐观锁" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#悲观锁和乐观锁"></a> 悲观锁和乐观锁</h2>
+      
+<p>参考链接：<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1450773" >https://cloud.tencent.com/developer/article/1450773</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+<blockquote>
+<p>悲观锁</p>
+</blockquote>
+<p>正如其名，它指的是对数据被外界（包括本系统当前的其他事务，以及来自外部系统的事务处理）修改持保守态度，因此，在整个数据处理过程中，将数据处 于锁定状态。</p>
+<p>悲观锁的实现，往往依靠数据库提供的锁机制（也只有数据库层提供的锁机制才能真正保证数据访问的排他性，否则，即使在本系统中实现了加锁机 制，也无法保证外部系统不会修改数据）。</p>
+<p>在悲观锁的情况下，为了保证事务的隔离性，就需要一致性锁定读。读取数据时给加锁，其它事务无法修改这些数据。修改删除数据时也要加锁，其它事务无法读取这些数据。</p>
+<blockquote>
+<p>乐观锁</p>
+</blockquote>
+<p>相对悲观锁而言，乐观锁机制采取了更加宽松的加锁机制。悲观锁大多数情况下依靠数据库的锁机制实现，以保证操作最大程度的独占性。但随之而来的就是数据库性能的大量开销，特别是对长事务而言，这样的开销往往无法承受。</p>
+<p>而乐观锁机制在一定程度上解决了这个问题。乐观锁，大多是基于数据版本（ Version ）记录机制实现。</p>
+<p>何谓数据版本？即为数据增加一个版本标识，在基于数据库表的版本解决方案中，一般是通过为数据库表增加一个 “version” 字段来实现。读取出数据时，将此版本号一同读出，之后更新时，对此版本号加一。</p>
+<p>此时，将提交数据的版本数据与数据库表对应记录的当前版本信息进行比对，如 果提交的数据版本号大于数据库表当前版本号，则予以更新，否则认为是过期数据。</p>
+
+        <h2 id="执行事务顺序"   >
+          <a href="#执行事务顺序" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#执行事务顺序"></a> 执行事务顺序</h2>
+      
+<ol>
+<li>关闭自动提交：<code>SET autocommit = 0</code></li>
+<li>开启一个事务：<code>START TRANSACTION</code>
+<ul>
+<li>提交（执行成功）：<code>COMMIT</code> ，获得新的数据库</li>
+<li>回滚（执行失败）：<code>ROLLBACK</code>，返回原先数据库</li>
+</ul>
+</li>
+<li>开启自动提交：<code>SET autocommit = 1</code></li>
+</ol>
+<figure class="highlight sql"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- MySQL是默认开启事务自动提交的</span></span><br><span class="line"><span class="keyword">SET</span> autocommit <span class="operator">=</span> <span class="number">0</span>;   <span class="comment">-- 关闭</span></span><br><span class="line"><span class="keyword">SET</span> autocommit <span class="operator">=</span> <span class="number">1</span>;	  <span class="comment">-- 开启（默认）</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 手动处理事务</span></span><br><span class="line"><span class="keyword">SET</span> autocommit <span class="operator">=</span> <span class="number">0</span>;   <span class="comment">-- 关闭自动提交</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 事务开启</span></span><br><span class="line"><span class="keyword">START</span> TRANSACTION;    <span class="comment">-- 标记一个事务的开始，从这个之后的sql都在同一个事务内</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> xx;</span><br><span class="line"><span class="keyword">INSERT</span> xx;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 提交：持久化（成功）</span></span><br><span class="line"><span class="keyword">COMMIT</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 回滚：回到原来的样子（失败）</span></span><br><span class="line"><span class="keyword">ROLLBACK</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 事务结束</span></span><br><span class="line"><span class="keyword">SET</span> autocommit <span class="operator">=</span> <span class="number">1</span>; <span class="comment">-- 开启自动提交</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">SAVEPOINT</span> 保存点名称a;              <span class="comment">-- 设置一个事务的保存点</span></span><br><span class="line"><span class="keyword">ROLLBACK</span> <span class="keyword">TO</span> 保存点名称a;            <span class="comment">-- 回滚到保存点 </span></span><br><span class="line"><span class="keyword">RELEASE</span> <span class="keyword">SAVEPOINT</span> 保存点名称;       <span class="comment">-- 撤销保存点 </span></span><br></pre></td></tr></table></div></figure>
+<p>测试案例：</p>
+<figure class="highlight sql"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 模拟转账</span></span><br><span class="line"><span class="keyword">SET</span> autocommit <span class="operator">=</span> <span class="number">0</span>;  <span class="comment">-- 关闭自动提交</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">START</span> TRANSACTION;    <span class="comment">-- 开启一个事务</span></span><br><span class="line"></span><br><span class="line">UPDATE `account` <span class="keyword">SET</span> `money`<span class="operator">=</span>`money` <span class="operator">-</span> <span class="number">500</span> <span class="keyword">WHERE</span> `name` <span class="operator">=</span> <span class="string">&#x27;zhangsan&#x27;</span>;</span><br><span class="line">UPDATE `account` <span class="keyword">SET</span> `money`<span class="operator">=</span>`money` <span class="operator">+</span> <span class="number">500</span> <span class="keyword">WHERE</span> `name` <span class="operator">=</span> <span class="string">&#x27;lisi&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">COMMIT</span>;    <span class="comment">-- 提交事务，执行后数据库内容才会修改</span></span><br><span class="line"><span class="keyword">ROLLBACK</span>;  <span class="comment">-- 回滚，数据库内容不会修改</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">SET</span> autocommit <span class="operator">=</span> <span class="number">1</span>;  <span class="comment">-- 恢复默认值</span></span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="delete-和-truncate-在事务中的区别"   >
+          <a href="#delete-和-truncate-在事务中的区别" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#delete-和-truncate-在事务中的区别"></a> DELETE 和 TRUNCATE 在事务中的区别</h3>
+      
+<ul>
+<li><code>DELETE</code>在事务提交前使用，若回滚，则数据会恢复</li>
+<li><code>TRUNCATE</code>事务提交前使用，若回滚，则数据依旧不会恢复</li>
+</ul>
+</div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2021/04/01/%E3%80%90MySQL%E3%80%91JDBC/">【MySQL】JDBC</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-04-01</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-08-16</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">16.6k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">123分</span></span></div></header><div class="post-body"><div class="post-excerpt"><h2 id="jdbc简介"   >
           <a href="#jdbc简介" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#jdbc简介"></a> JDBC简介</h2>
       
 <blockquote>
@@ -57,7 +247,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <li>获得返回的结果集：<code>ResultSet resultSet = statement.executeQuery(sql);</code></li>
 <li>释放连接：<code>resultSet.close();</code></li>
 </ul>
-<p><img src="/images/%E3%80%90MySQL%E3%80%91JDBC/image-20210709164526603.png" alt="image-20210709164526603" /></p></div><div class="post-readmore"><a class="post-readmore__link" href="/2021/04/01/%E3%80%90MySQL%E3%80%91JDBC/"><span class="post-readmore__text">阅读全文</span><span class="post-readmore__icon"><i class="fas fa-long-arrow-alt-right"></i></span></a></div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2021/03/29/%E3%80%90MySQL%E3%80%91MySQL%E5%9F%BA%E7%A1%80/">【MySQL】MySQL 基础</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-03-29</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-09-07</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">15.9k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">104分</span></span></div></header><div class="post-body"><div class="post-excerpt"><h2 id="1-初识-mysql"   >
+<p><img src="/images/%E3%80%90MySQL%E3%80%91JDBC/image-20210709164526603.png" alt="image-20210709164526603" /></p></div><div class="post-readmore"><a class="post-readmore__link" href="/2021/04/01/%E3%80%90MySQL%E3%80%91JDBC/"><span class="post-readmore__text">阅读全文</span><span class="post-readmore__icon"><i class="fas fa-long-arrow-alt-right"></i></span></a></div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2021/03/29/%E3%80%90MySQL%E3%80%91MySQL%E5%9F%BA%E7%A1%80/">【MySQL】MySQL 基础</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-03-29</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-09-11</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">15.9k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">104分</span></span></div></header><div class="post-body"><div class="post-excerpt"><h2 id="1-初识-mysql"   >
           <a href="#1-初识-mysql" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#1-初识-mysql"></a> 1. 初识 MySQL</h2>
       
 <ul>
@@ -393,264 +583,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <p><strong>Collection接口继承树</strong></p>
 <p><img src="/images/%E3%80%90Java%E3%80%91%E9%9B%86%E5%90%88/image-20210617161218475.png" alt="image-20210617161218475" /></p>
 <p><strong>Map接口继承树</strong></p>
-<p><img src="/images/%E3%80%90Java%E3%80%91%E9%9B%86%E5%90%88/image-20210617161305507.png" alt="image-20210617161305507" /></p></div><div class="post-readmore"><a class="post-readmore__link" href="/2021/03/16/%E3%80%90Java%E3%80%91%E9%9B%86%E5%90%88/"><span class="post-readmore__text">阅读全文</span><span class="post-readmore__icon"><i class="fas fa-long-arrow-alt-right"></i></span></a></div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2021/03/16/%E3%80%90Java%E3%80%91String/">【Java】String</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-03-16</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-06-25</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">5.2k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">38分</span></span></div></header><div class="post-body"><div class="post-excerpt">
-        <h2 id="string的特性"   >
-          <a href="#string的特性" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#string的特性"></a> String的特性</h2>
-      
-<p><code>String</code>类：代表字符串。Java 程序中的所有字符串<strong>字面值</strong>（如&quot;abc&quot;）都作为此类的实例实现。</p>
-<ul>
-<li><code>String</code>是一个<strong>final</strong>类，代表<strong>不可变</strong>的<strong>字符序列</strong>，其不可被继承。</li>
-<li>字符串是<strong>常量</strong>，用双引号引起来表示。它们的值在创建之后<strong>不能更改</strong>。</li>
-<li><code>String</code>对象的字符内容是存储在一个<strong>字符数组常量</strong><code>final char value[]</code>中的。</li>
-<li><code>String</code>实现了<code>Serializable</code>接口：表示字符串是支持<strong>序列化</strong>的。实现了<code>Comparable</code>接口：表示<code>String</code>可以<strong>比较大小</strong>。</li>
-</ul>
-<p><img src="/images/%E3%80%90Java%E3%80%91String/image-20210625102721429.png" alt="image-20210625102721429" /></p>
-<p><code>String</code>特性的体现：</p>
-<ol>
-<li>当对字符串重新赋值时，需要<strong>重新指定内存区域赋值</strong>，不能使用原有的value进行赋值。</li>
-<li>当对现有的字符串进行连接操作时，也需要重新指定内存区域赋值，不能使用原有的value进行赋值。</li>
-<li>当调用<code>String</code>的<code>replace()</code>方法修改指定字符或字符串时，也需要重新指定内存区域赋值，不能使用原有的value进行赋值。</li>
-<li>通过<strong>字面量</strong>（如&quot;abc&quot;）的方式（<strong>区别于new</strong>）给一个字符串赋值，此时的字符串值声明在<strong>字符串常量池</strong>中</li>
-<li>字符串常量池中是<strong>不会存储相同内容</strong>的字符串的。</li>
-</ol>
-<p><img src="/images/%E3%80%90Java%E3%80%91String/image-20210625102749139.png" alt="image-20210625102749139" /></p>
-<blockquote>
-<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Kb411W75N?p=451" >https://www.bilibili.com/video/BV1Kb411W75N?p=451</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
-</blockquote>
-<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test1</span><span class="params">()</span></span>&#123;</span><br><span class="line">    String s1 = <span class="string">&quot;abc&quot;</span>; <span class="comment">//字面量的定义方式</span></span><br><span class="line">    String s2 = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line">    s1 = <span class="string">&quot;hello&quot;</span>;</span><br><span class="line"></span><br><span class="line">    System.out.println(s1 == s2);<span class="comment">//比较s1和s2的地址值 false</span></span><br><span class="line">    System.out.println(s1);<span class="comment">//hello</span></span><br><span class="line">    System.out.println(s2);<span class="comment">//abc</span></span><br><span class="line"></span><br><span class="line">    System.out.println(<span class="string">&quot;*****************&quot;</span>);</span><br><span class="line"></span><br><span class="line">    String s3 = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line">    s3 += <span class="string">&quot;def&quot;</span>;</span><br><span class="line">    System.out.println(s3);<span class="comment">//abcdef</span></span><br><span class="line">    System.out.println(s2);<span class="comment">//abc</span></span><br><span class="line"></span><br><span class="line">    System.out.println(<span class="string">&quot;*****************&quot;</span>);</span><br><span class="line"></span><br><span class="line">    String s4 = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line">    String s5 = s4.replace(<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;m&#x27;</span>);</span><br><span class="line">    System.out.println(s4);<span class="comment">//abc</span></span><br><span class="line">    System.out.println(s5);<span class="comment">//mbc</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
-
-        <h2 id="string的实例化方式"   >
-          <a href="#string的实例化方式" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#string的实例化方式"></a> String的实例化方式</h2>
-      
-<ul>
-<li>方式一：通过<strong>字面量</strong>定义的方式  <code>String str1 = &quot;abc&quot;;</code></li>
-<li>方式二：通过<strong>new + 构造器</strong>的方式  <code>String str2 = new String(&quot;abc&quot;);</code></li>
-</ul>
-<p>二者区别：</p>
-<p><img src="/images/%E3%80%90Java%E3%80%91String/image-20210625103416513.png" alt="image-20210625103416513" /></p>
-<p>字符串对象存储方式：</p>
-<p><img src="/images/%E3%80%90Java%E3%80%91String/image-20210625103432649.png" alt="image-20210625103432649" /></p>
-<p><img src="/images/%E3%80%90Java%E3%80%91String/image-20210625103730602.png" alt="image-20210625103730602" /></p>
-<p>字符串的特性：</p>
-<p><img src="/images/%E3%80%90Java%E3%80%91String/image-20210625103806711.png" alt="image-20210625103806711" /></p>
-<p>结论：</p>
-<ul>
-<li>常量与常量的拼接结果在常量池。且常量池中不会存在相同内容的常量。</li>
-<li>只要其中有一个是变量，结果就在堆中。</li>
-<li>如果拼接的结果调用<code>intern()</code>方法，返回值就在常量池中。</li>
-</ul>
-<p>测试代码：</p>
-<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test2</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//通过字面量定义的方式：此时的s1和s2的数据javaEE声明在方法区中的字符串常量池中。</span></span><br><span class="line">    String s1 = <span class="string">&quot;javaEE&quot;</span>;</span><br><span class="line">    String s2 = <span class="string">&quot;javaEE&quot;</span>;</span><br><span class="line">    <span class="comment">//通过new + 构造器的方式:此时的s3和s4保存的地址值，是数据在堆空间中开辟空间以后对应的地址值。</span></span><br><span class="line">    String s3 = <span class="keyword">new</span> String(<span class="string">&quot;javaEE&quot;</span>);</span><br><span class="line">    String s4 = <span class="keyword">new</span> String(<span class="string">&quot;javaEE&quot;</span>);</span><br><span class="line"></span><br><span class="line">    System.out.println(s1 == s2);<span class="comment">//true</span></span><br><span class="line">    System.out.println(s1 == s3);<span class="comment">//false</span></span><br><span class="line">    System.out.println(s1 == s4);<span class="comment">//false</span></span><br><span class="line">    System.out.println(s3 == s4);<span class="comment">//false</span></span><br><span class="line"></span><br><span class="line">    System.out.println(<span class="string">&quot;***********************&quot;</span>);</span><br><span class="line">    Person p1 = <span class="keyword">new</span> Person(<span class="string">&quot;Tom&quot;</span>,<span class="number">12</span>);</span><br><span class="line">    Person p2 = <span class="keyword">new</span> Person(<span class="string">&quot;Tom&quot;</span>,<span class="number">12</span>);</span><br><span class="line"></span><br><span class="line">    System.out.println(p1.name.equals(p2.name));<span class="comment">//true</span></span><br><span class="line">    System.out.println(p1.name == p2.name);<span class="comment">//true</span></span><br><span class="line"></span><br><span class="line">    p1.name = <span class="string">&quot;Jerry&quot;</span>;</span><br><span class="line">    System.out.println(p2.name);<span class="comment">//Tom</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test3</span><span class="params">()</span></span>&#123;</span><br><span class="line">    String s1 = <span class="string">&quot;javaEE&quot;</span>;</span><br><span class="line">    String s2 = <span class="string">&quot;hadoop&quot;</span>;</span><br><span class="line"></span><br><span class="line">    String s3 = <span class="string">&quot;javaEEhadoop&quot;</span>;</span><br><span class="line">    String s4 = <span class="string">&quot;javaEE&quot;</span> + <span class="string">&quot;hadoop&quot;</span>;</span><br><span class="line">    String s5 = s1 + <span class="string">&quot;hadoop&quot;</span>;</span><br><span class="line">    String s6 = <span class="string">&quot;javaEE&quot;</span> + s2;</span><br><span class="line">    String s7 = s1 + s2;</span><br><span class="line"></span><br><span class="line">    System.out.println(s3 == s4);<span class="comment">//true</span></span><br><span class="line">    System.out.println(s3 == s5);<span class="comment">//false</span></span><br><span class="line">    System.out.println(s3 == s6);<span class="comment">//false</span></span><br><span class="line">    System.out.println(s3 == s7);<span class="comment">//false</span></span><br><span class="line">    System.out.println(s5 == s6);<span class="comment">//false</span></span><br><span class="line">    System.out.println(s5 == s7);<span class="comment">//false</span></span><br><span class="line">    System.out.println(s6 == s7);<span class="comment">//false</span></span><br><span class="line"></span><br><span class="line">    String s8 = s6.intern();<span class="comment">//返回值得到的s8使用的常量值中已经存在的“javaEEhadoop”</span></span><br><span class="line">    System.out.println(s3 == s8);<span class="comment">//true</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">    结论：</span></span><br><span class="line"><span class="comment">    1.常量与常量的拼接结果在常量池。且常量池中不会存在相同内容的常量。</span></span><br><span class="line"><span class="comment">    2.只要其中有一个是变量，结果就在堆中。</span></span><br><span class="line"><span class="comment">    3.如果拼接的结果调用intern()方法，返回值就在常量池中</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test4</span><span class="params">()</span></span>&#123;</span><br><span class="line">    String s1 = <span class="string">&quot;javaEEhadoop&quot;</span>;</span><br><span class="line">    String s2 = <span class="string">&quot;javaEE&quot;</span>;</span><br><span class="line">    String s3 = s2 + <span class="string">&quot;hadoop&quot;</span>;</span><br><span class="line">    System.out.println(s1 == s3);<span class="comment">//false</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">final</span> String s4 = <span class="string">&quot;javaEE&quot;</span>;<span class="comment">//s4:常量</span></span><br><span class="line">    String s5 = s4 + <span class="string">&quot;hadoop&quot;</span>;</span><br><span class="line">    System.out.println(s1 == s5);<span class="comment">//true</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></div></figure>
-<p>问：<code>String s = new String(&quot;abc&quot;);</code>方式创建对象，在内存中创建了几个对象？</p>
-<p>答：两个。一个是堆空间中<code>new</code>出来的结构，另一个是<code>char[]</code>对应的常量池中的数据<code>&quot;abc&quot;</code></p>
-
-        <h2 id="string使用陷阱"   >
-          <a href="#string使用陷阱" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#string使用陷阱"></a> String使用陷阱</h2>
-      
-<ul>
-<li><code>String s1 = &quot;a&quot;;</code>说明：在字符串常量池中创建了一个字面量为<code>&quot;a&quot;</code>的字符串。</li>
-<li><code>s1 = s1 + &quot;b&quot;;</code>说明：实际上原来的<code>&quot;a&quot;</code>字符串对象已经丢弃了，现在在堆空间中产生了一个字符串<code>s1+&quot;b&quot;</code>（也就是<code>&quot;ab&quot;</code>)。如果多次执行这些改变串内容的操作，会<strong>导致大量副本字符串对象存留在内存中，降低效率</strong>。如果这样的操作放到循环中，会极大影响程序的性能。</li>
-<li><code>String s2 = &quot;ab&quot;;</code>说明：直接在字符串常量池中创建一个字面量为<code>&quot;ab&quot;</code>的字符串。</li>
-<li><code>String s3 = &quot;a&quot; + &quot;b&quot;;</code>说明：s3指向字符串常量池中已经创建的<code>&quot;ab&quot;</code>的字符串。</li>
-<li><code>String s4 = s1.intern();</code>说明：堆空间的s1对象在调用<code>intern()</code>之后，会将常量池中已经存在的<code>&quot;ab&quot;</code>字符串赋值给s4。</li>
-</ul>
-<p><img src="/images/%E3%80%90Java%E3%80%91String/image-20210625105035027.png" alt="image-20210625105035027" /></p>
-<p>面试题：</p>
-<p><img src="/images/%E3%80%90Java%E3%80%91String/image-20210625105058682.png" alt="image-20210625105058682" /></p>
-<p>结果：输出 good and best。原因：</p>
-<ul>
-<li><code>ex.str</code>传入<code>change()</code>方法后，在栈中创建了一个局部变量<code>str</code>，其同样指向<code>ex.str</code>所指向的字符串常量&quot;good&quot;，此时<code>str = &quot;test ok&quot;</code>执行后，局部变量str所指向的字符串常量变为&quot;test ok&quot;，但<code>ex.str</code>的内容保持不变（仍然指向字符串常量&quot;good&quot;）；</li>
-<li><code>ex.ch</code>传入<code>change()</code>方法后，在栈中创建了局部变量<code>ch[]</code>，其同样指向<code>ex.ch</code>数组，但修改<code>ch[0]</code>会导致<code>ex.ch</code>的内容同样被修改。</li>
-</ul>
-<p>二者的区别在于：<code>String</code>类对象和<code>char</code>数组对象作为形参传入时都是引用类型，修改形参时原本对象也应该被修改，但<code>String</code>类的不可变性导致修改形参时在常量池中创建了新的字符串内容，因此原本对象内容没有改变，但<code>char</code>数组并无此特性，因此会被修改。</p>
-
-        <h2 id="string常用方法"   >
-          <a href="#string常用方法" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#string常用方法"></a> String常用方法</h2>
-      
-<ul>
-<li><code>int length()</code>：返回字符串的长度： return value.length</li>
-<li><code>char charAt(int index)</code>： 返回某索引处的字符return value[index]</li>
-<li><code>boolean isEmpty()</code>：判断是否是空字符串：return value.length == 0</li>
-<li><code>String toLowerCase()</code>：使用默认语言环境，将 String 中的所有字符转换为小写</li>
-<li><code>String toUpperCase()</code>：使用默认语言环境，将 String 中的所有字符转换为大写</li>
-<li><code>String trim()</code>：返回字符串的副本，忽略前导空白和尾部空白</li>
-<li><code>boolean equals(Object obj)</code>：比较字符串的内容是否相同</li>
-<li><code>boolean equalsIgnoreCase(String anotherString)</code>：与equals方法类似，忽略大小写</li>
-<li><code>String concat(String str)</code>：将指定字符串连接到此字符串的结尾。 等价于用“+”</li>
-<li><code>int compareTo(String anotherString)</code>：比较两个字符串的大小</li>
-<li><code>String substring(int beginIndex)</code>：返回一个新的字符串，它是此字符串的从 beginIndex开始截取到最后的一个子字符串。</li>
-<li><code>String substring(int beginIndex, int endIndex)</code> ：返回一个新字符串，它是此字符串从beginIndex开始截取到endIndex(不包含)的一个子字符串。</li>
-<li><code>boolean endsWith(String suffix)</code>：测试此字符串是否以指定的后缀结束</li>
-<li><code>boolean startsWith(String prefix)</code>：测试此字符串是否以指定的前缀开始</li>
-<li><code>boolean startsWith(String prefix, int toffset)</code>：测试此字符串从指定索引开始的子字符串是否以指定前缀开始</li>
-<li><code>boolean contains(CharSequence s)</code>：当且仅当此字符串包含指定的 char 值序列时，返回 true</li>
-</ul>
-
-        <h3 id="索引"   >
-          <a href="#索引" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#索引"></a> 索引</h3>
-      
-<ul>
-<li><code>int indexOf(String str)</code>：返回指定子字符串在此字符串中第一次出现处的索引</li>
-<li><code>int indexOf(String str, int fromIndex)</code>：返回指定子字符串在此字符串中第一次出现处的索引，从指定的索引开始</li>
-<li><code>int lastIndexOf(String str)</code>：返回指定子字符串在此字符串中最右边出现处的索引</li>
-<li><code>int lastIndexOf(String str, int fromIndex)</code>：返回指定子字符串在此字符串中最后一次出现处的索引，从指定的索引开始反向搜索</li>
-</ul>
-<p>注：<code>indexOf</code>和<code>lastIndexOf</code>方法如果未找到都是返回-1</p>
-
-        <h3 id="替换"   >
-          <a href="#替换" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#替换"></a> 替换</h3>
-      
-<ul>
-<li><code>String replace(char oldChar, char newChar)</code>：返回一个新的字符串，它是通过用 <code>newChar</code>替换此字符串中出现的所有 <code>oldChar</code>得到的。</li>
-<li><code>String replace(CharSequence target, CharSequence replacement)</code>：使用指定的字面值替换序列替换此字符串所有匹配字面值目标序列的子字符串。</li>
-<li><code>String replaceAll(String regex, String replacement)</code>：使用给定的 replacement 替换此字符串所有匹配给定的正则表达式的子字符串。</li>
-<li><code>String replaceFirst(String regex, String replacement)</code>：使用给定的 replacement 替换此字符串匹配给定的正则表达式的第一个子字符串。</li>
-</ul>
-
-        <h3 id="匹配"   >
-          <a href="#匹配" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#匹配"></a> 匹配</h3>
-      
-<ul>
-<li><code>boolean matches(String regex)</code>：告知此字符串是否匹配给定的正则表达式。</li>
-</ul>
-
-        <h3 id="切片"   >
-          <a href="#切片" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#切片"></a> 切片</h3>
-      
-<ul>
-<li><code>String[] split(String regex)</code>：根据给定正则表达式的匹配拆分此字符串。</li>
-<li><code>String[] split(String regex, int limit)</code>：根据匹配给定的正则表达式来拆分此字符串，最多不超过limit个，如果超过了，剩下的全部都放到最后一个元素中。</li>
-</ul>
-<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StringMethodTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    替换：</span></span><br><span class="line"><span class="comment">    String replace(char oldChar, char newChar)：返回一个新的字符串，它是通过用 newChar 替换此字符串中出现的所有 oldChar 得到的。</span></span><br><span class="line"><span class="comment">    String replace(CharSequence target, CharSequence replacement)：使用指定的字面值替换序列替换此字符串所有匹配字面值目标序列的子字符串。</span></span><br><span class="line"><span class="comment">    String replaceAll(String regex, String replacement)：使用给定的 replacement 替换此字符串所有匹配给定的正则表达式的子字符串。</span></span><br><span class="line"><span class="comment">    String replaceFirst(String regex, String replacement)：使用给定的 replacement 替换此字符串匹配给定的正则表达式的第一个子字符串。</span></span><br><span class="line"><span class="comment">    匹配:</span></span><br><span class="line"><span class="comment">    boolean matches(String regex)：告知此字符串是否匹配给定的正则表达式。</span></span><br><span class="line"><span class="comment">    切片：</span></span><br><span class="line"><span class="comment">    String[] split(String regex)：根据给定正则表达式的匹配拆分此字符串。</span></span><br><span class="line"><span class="comment">    String[] split(String regex, int limit)：根据匹配给定的正则表达式来拆分此字符串，最多不超过limit个，如果超过了，剩下的全部都放到最后一个元素中。</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test4</span><span class="params">()</span></span>&#123;</span><br><span class="line">        String str1 = <span class="string">&quot;北京教育北京&quot;</span>;</span><br><span class="line">        String str2 = str1.replace(<span class="string">&#x27;北&#x27;</span>, <span class="string">&#x27;东&#x27;</span>);</span><br><span class="line"></span><br><span class="line">        System.out.println(str1);</span><br><span class="line">        System.out.println(str2);</span><br><span class="line"></span><br><span class="line">        String str3 = str1.replace(<span class="string">&quot;北京&quot;</span>, <span class="string">&quot;上海&quot;</span>);</span><br><span class="line">        System.out.println(str3);</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;*************************&quot;</span>);</span><br><span class="line">        String str = <span class="string">&quot;12hello34world5java7891mysql456&quot;</span>;</span><br><span class="line">        <span class="comment">//把字符串中的数字替换成,，如果结果中开头和结尾有，的话去掉</span></span><br><span class="line">        String string = str.replaceAll(<span class="string">&quot;\\d+&quot;</span>, <span class="string">&quot;,&quot;</span>).replaceAll(<span class="string">&quot;^,|,$&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">        System.out.println(string);</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;*************************&quot;</span>);</span><br><span class="line">        str = <span class="string">&quot;12345&quot;</span>;</span><br><span class="line">        <span class="comment">//判断str字符串中是否全部有数字组成，即有1-n个数字组成</span></span><br><span class="line">        <span class="keyword">boolean</span> matches = str.matches(<span class="string">&quot;\\d+&quot;</span>);</span><br><span class="line">        System.out.println(matches);</span><br><span class="line">        String tel = <span class="string">&quot;0571-4534289&quot;</span>;</span><br><span class="line">        <span class="comment">//判断这是否是一个杭州的固定电话</span></span><br><span class="line">        <span class="keyword">boolean</span> result = tel.matches(<span class="string">&quot;0571-\\d&#123;7,8&#125;&quot;</span>);</span><br><span class="line">        System.out.println(result);</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;*************************&quot;</span>);</span><br><span class="line">        str = <span class="string">&quot;hello|world|java&quot;</span>;</span><br><span class="line">        String[] strs = str.split(<span class="string">&quot;\\|&quot;</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; strs.length; i++) &#123;</span><br><span class="line">            System.out.println(strs[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println();</span><br><span class="line">        str2 = <span class="string">&quot;hello.world.java&quot;</span>;</span><br><span class="line">        String[] strs2 = str2.split(<span class="string">&quot;\\.&quot;</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; strs2.length; i++) &#123;</span><br><span class="line">            System.out.println(strs2[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    boolean endsWith(String suffix)：测试此字符串是否以指定的后缀结束</span></span><br><span class="line"><span class="comment">    boolean startsWith(String prefix)：测试此字符串是否以指定的前缀开始</span></span><br><span class="line"><span class="comment">    boolean startsWith(String prefix, int toffset)：测试此字符串从指定索引开始的子字符串是否以指定前缀开始</span></span><br><span class="line"><span class="comment">    boolean contains(CharSequence s)：当且仅当此字符串包含指定的 char 值序列时，返回 true</span></span><br><span class="line"><span class="comment">    int indexOf(String str)：返回指定子字符串在此字符串中第一次出现处的索引</span></span><br><span class="line"><span class="comment">    int indexOf(String str, int fromIndex)：返回指定子字符串在此字符串中第一次出现处的索引，从指定的索引开始</span></span><br><span class="line"><span class="comment">    int lastIndexOf(String str)：返回指定子字符串在此字符串中最右边出现处的索引</span></span><br><span class="line"><span class="comment">    int lastIndexOf(String str, int fromIndex)：返回指定子字符串在此字符串中最后一次出现处的索引，从指定的索引开始反向搜索</span></span><br><span class="line"><span class="comment">    注：indexOf和lastIndexOf方法如果未找到都是返回-1</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test3</span><span class="params">()</span></span>&#123;</span><br><span class="line">        String str1 = <span class="string">&quot;hellowworld&quot;</span>;</span><br><span class="line">        <span class="keyword">boolean</span> b1 = str1.endsWith(<span class="string">&quot;rld&quot;</span>);</span><br><span class="line">        System.out.println(b1);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">boolean</span> b2 = str1.startsWith(<span class="string">&quot;He&quot;</span>);</span><br><span class="line">        System.out.println(b2);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">boolean</span> b3 = str1.startsWith(<span class="string">&quot;ll&quot;</span>,<span class="number">2</span>);</span><br><span class="line">        System.out.println(b3);</span><br><span class="line"></span><br><span class="line">        String str2 = <span class="string">&quot;wor&quot;</span>;</span><br><span class="line">        System.out.println(str1.contains(str2));</span><br><span class="line"></span><br><span class="line">        System.out.println(str1.indexOf(<span class="string">&quot;lol&quot;</span>));</span><br><span class="line"></span><br><span class="line">        System.out.println(str1.indexOf(<span class="string">&quot;lo&quot;</span>,<span class="number">5</span>));</span><br><span class="line"></span><br><span class="line">        String str3 = <span class="string">&quot;hellorworld&quot;</span>;</span><br><span class="line"></span><br><span class="line">        System.out.println(str3.lastIndexOf(<span class="string">&quot;or&quot;</span>));</span><br><span class="line">        System.out.println(str3.lastIndexOf(<span class="string">&quot;or&quot;</span>,<span class="number">6</span>));</span><br><span class="line"></span><br><span class="line">        <span class="comment">//什么情况下，indexOf(str)和lastIndexOf(str)返回值相同？</span></span><br><span class="line">        <span class="comment">//情况一：存在唯一的一个str。情况二：不存在str</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    int length()：返回字符串的长度： return value.length</span></span><br><span class="line"><span class="comment">    char charAt(int index)： 返回某索引处的字符return value[index]</span></span><br><span class="line"><span class="comment">    boolean isEmpty()：判断是否是空字符串：return value.length == 0</span></span><br><span class="line"><span class="comment">    String toLowerCase()：使用默认语言环境，将 String 中的所有字符转换为小写</span></span><br><span class="line"><span class="comment">    String toUpperCase()：使用默认语言环境，将 String 中的所有字符转换为大写</span></span><br><span class="line"><span class="comment">    String trim()：返回字符串的副本，忽略前导空白和尾部空白</span></span><br><span class="line"><span class="comment">    boolean equals(Object obj)：比较字符串的内容是否相同</span></span><br><span class="line"><span class="comment">    boolean equalsIgnoreCase(String anotherString)：与equals方法类似，忽略大小写</span></span><br><span class="line"><span class="comment">    String concat(String str)：将指定字符串连接到此字符串的结尾。 等价于用“+”</span></span><br><span class="line"><span class="comment">    int compareTo(String anotherString)：比较两个字符串的大小</span></span><br><span class="line"><span class="comment">    String substring(int beginIndex)：返回一个新的字符串，它是此字符串的从beginIndex开始截取到最后的一个子字符串。</span></span><br><span class="line"><span class="comment">    String substring(int beginIndex, int endIndex) ：返回一个新字符串，它是此字符串从beginIndex开始截取到endIndex(不包含)的一个子字符串。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test2</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        String s1 = <span class="string">&quot;HelloWorld&quot;</span>;</span><br><span class="line">        String s2 = <span class="string">&quot;helloworld&quot;</span>;</span><br><span class="line">        System.out.println(s1.equals(s2));</span><br><span class="line">        System.out.println(s1.equalsIgnoreCase(s2));</span><br><span class="line"></span><br><span class="line">        String s3 = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line">        String s4 = s3.concat(<span class="string">&quot;def&quot;</span>);</span><br><span class="line">        System.out.println(s4);</span><br><span class="line"></span><br><span class="line">        String s5 = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line">        String s6 = <span class="keyword">new</span> String(<span class="string">&quot;abe&quot;</span>);</span><br><span class="line">        System.out.println(s5.compareTo(s6));<span class="comment">//涉及到字符串排序</span></span><br><span class="line"></span><br><span class="line">        String s7 = <span class="string">&quot;北京尚硅谷教育&quot;</span>;</span><br><span class="line">        String s8 = s7.substring(<span class="number">2</span>);</span><br><span class="line">        System.out.println(s7);</span><br><span class="line">        System.out.println(s8);</span><br><span class="line"></span><br><span class="line">        String s9 = s7.substring(<span class="number">2</span>, <span class="number">5</span>);</span><br><span class="line">        System.out.println(s9);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test1</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        String s1 = <span class="string">&quot;HelloWorld&quot;</span>;</span><br><span class="line">        System.out.println(s1.length());</span><br><span class="line">        System.out.println(s1.charAt(<span class="number">0</span>));</span><br><span class="line">        System.out.println(s1.charAt(<span class="number">9</span>));</span><br><span class="line"><span class="comment">//        System.out.println(s1.charAt(10));</span></span><br><span class="line"><span class="comment">//        s1 = &quot;&quot;;</span></span><br><span class="line">        System.out.println(s1.isEmpty());</span><br><span class="line"></span><br><span class="line">        String s2 = s1.toLowerCase();</span><br><span class="line">        System.out.println(s1);<span class="comment">//s1不可变的，仍然为原来的字符串</span></span><br><span class="line">        System.out.println(s2);<span class="comment">//改成小写以后的字符串</span></span><br><span class="line"></span><br><span class="line">        String s3 = <span class="string">&quot;   he  llo   world   &quot;</span>;</span><br><span class="line">        String s4 = s3.trim();</span><br><span class="line">        System.out.println(<span class="string">&quot;-----&quot;</span> + s3 + <span class="string">&quot;-----&quot;</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;-----&quot;</span> + s4 + <span class="string">&quot;-----&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
-
-        <h2 id="string与其他数据类型转换"   >
-          <a href="#string与其他数据类型转换" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#string与其他数据类型转换"></a> String与其他数据类型转换</h2>
-      
-
-        <h3 id="string与基本数据类型转换"   >
-          <a href="#string与基本数据类型转换" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#string与基本数据类型转换"></a> String与基本数据类型转换</h3>
-      
-<ul>
-<li>字符串 ——&gt; 基本数据类型、包装类
-<ul>
-<li><code>Integer</code>包装类的<code>public static int parseInt(String s)</code>：可以将由“数字”字符组成的字符串转换为整型。</li>
-<li>类似地，使用<code>java.lang</code>包中的<code>Byte</code>、<code>Short</code>、<code>Long</code>、<code>Float</code>、<code>Double</code>类调相应的类方法可以将由“数字”字符组成的字符串，转化为相应的基本数据类型。</li>
-</ul>
-</li>
-<li>基本数据类型、包装类 ——&gt; 字符串
-<ul>
-<li>调用<code>String</code>类的<code>public static String valueOf(int n)</code>可将int型转换为字符串</li>
-<li><code>valueOf(byte b)</code>、<code>valueOf(long l)</code>、<code>valueOf(float f)</code>、<code>valueOf(double d)</code>、<code>valueOf(boolean b)</code>可由参数的相应类型到字符串的转换</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 字符串 ——&gt; 基本数据类型、包装类 </span></span><br><span class="line"><span class="keyword">int</span> num = Integer.parseInt(<span class="string">&quot;123&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 基本数据类型、包装类 ——&gt; 字符串 </span></span><br><span class="line">String str1 = String.valueOf(<span class="number">123</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试</span></span><br><span class="line">String str2 = num + <span class="string">&quot;&quot;</span>;</span><br><span class="line">System.out.println(str1 == str2); <span class="comment">//false 有String变量参与的运算都会new新的对象</span></span><br></pre></td></tr></table></div></figure>
-
-        <h3 id="string与字符数组char转换"   >
-          <a href="#string与字符数组char转换" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#string与字符数组char转换"></a> String与字符数组char[]转换</h3>
-      
-<ul>
-<li>字符数组<code>char[]</code> ——&gt; 字符串
-<ul>
-<li><code>String</code>类的构造器：<code>String(char[]) 和 String(char[]，int offset，int length)</code>分别用字符数组中的全部字符和部分字符创建字符串对象。</li>
-</ul>
-</li>
-<li>字符串 ——&gt; 字符数组<code>char[]</code>
-<ul>
-<li><code>public char[] toCharArray()</code>：将字符串中的全部字符存放在一个字符数组中的方法。</li>
-<li><code>public void getChars(int srcBegin, int srcEnd, char[] dst, int dstBegin)</code>：提供了将指定索引范围内的字符串存放到数组中的方法。</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 字符数组char[] ——&gt; 字符串</span></span><br><span class="line"><span class="keyword">char</span>[] arr = <span class="keyword">new</span> <span class="keyword">char</span>[]&#123;<span class="string">&#x27;h&#x27;</span>,<span class="string">&#x27;e&#x27;</span>,<span class="string">&#x27;l&#x27;</span>,<span class="string">&#x27;l&#x27;</span>,<span class="string">&#x27;o&#x27;</span>&#125;;</span><br><span class="line">String str1 = <span class="keyword">new</span> String(arr);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 字符串 ——&gt; 字符数组char[]</span></span><br><span class="line">String str2 = <span class="string">&quot;abc123&quot;</span>;  </span><br><span class="line"><span class="keyword">char</span>[] charArray = str1.toCharArray();</span><br></pre></td></tr></table></div></figure>
-
-        <h3 id="string与字节数组转换"   >
-          <a href="#string与字节数组转换" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#string与字节数组转换"></a> String与字节数组转换</h3>
-      
-<ul>
-<li>字节数组 ——&gt; 字符串
-<ul>
-<li><code>String(byte[])</code>：通过使用平台的默认字符集解码指定的 byte 数组，构造一个新的 <code>String</code>。</li>
-<li><code>String(byte[]，int offset，int length)</code>：用指定的字节数组的一部分， 即从数组起始位置offset开始取length个字节构造一个字符串对象。</li>
-</ul>
-</li>
-<li>字符串  ——&gt; 字节数组
-<ul>
-<li><code>public byte[] getBytes()</code> ：使用平台的默认字符集将此 <code>String</code>编码为 byte 序列，并将结果存储到一个新的 byte 数组中。</li>
-<li><code>public byte[] getBytes(String charsetName)</code> ：使用指定的字符集将此 <code>String</code>编码到 byte 序列，并将结果存储到新的 byte 数组。</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 字节数组 ——&gt; 字符串</span></span><br><span class="line">String str2 = <span class="keyword">new</span> String(bytes);<span class="comment">//使用默认的字符集，进行解码。</span></span><br><span class="line">System.out.println(str2);</span><br><span class="line"></span><br><span class="line">String str3 = <span class="keyword">new</span> String(gbks);</span><br><span class="line">System.out.println(str3);<span class="comment">//出现乱码。原因：编码集和解码集不一致！</span></span><br><span class="line"></span><br><span class="line">String str4 = <span class="keyword">new</span> String(gbks, <span class="string">&quot;gbk&quot;</span>);</span><br><span class="line">System.out.println(str4);<span class="comment">//没有出现乱码。原因：编码集和解码集一致！</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 字符串  ——&gt; 字节数组</span></span><br><span class="line">String str1 = <span class="string">&quot;abc123中国&quot;</span>;</span><br><span class="line"><span class="keyword">byte</span>[] bytes = str1.getBytes(); <span class="comment">//使用默认的字符集，进行编码。</span></span><br><span class="line">System.out.println(Arrays.toString(bytes));</span><br><span class="line"></span><br><span class="line"><span class="keyword">byte</span>[] gbks = str1.getBytes(<span class="string">&quot;gbk&quot;</span>);<span class="comment">//使用gbk字符集进行编码。</span></span><br><span class="line">System.out.println(Arrays.toString(gbks));</span><br><span class="line"></span><br></pre></td></tr></table></div></figure>
-
-        <h2 id="stringbuffer和stringbuilder"   >
-          <a href="#stringbuffer和stringbuilder" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#stringbuffer和stringbuilder"></a> StringBuffer和StringBuilder</h2>
-      
-
-        <h3 id="stringbuffer"   >
-          <a href="#stringbuffer" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#stringbuffer"></a> StringBuffer</h3>
-      
-<p><code>java.lang.StringBuffer</code>代表<strong>可变</strong>的字符序列，JDK1.0中声明，可以对字符串内容进行增删，此时<strong>不会产生新的对象</strong>。很多方法与<code>String</code>相同。作为参数传递时，方法内部可以改变值。</p>
-<p><img src="/images/%E3%80%90Java%E3%80%91String/image-20210625131148661.png" alt="image-20210625131148661" /></p>
-<p><code>StringBuffer</code>类不同于<code>String</code>，其对象必须使用构造器生成。有三个构造器：</p>
-<ul>
-<li><code>StringBuffer()</code>：初始容量为16的字符串缓冲区</li>
-<li><code>StringBuffer(int size)</code>：构造指定容量的字符串缓冲区</li>
-<li><code>StringBuffer(String str)</code>：将内容初始化为指定字符串内容</li>
-</ul>
-<p><img src="/images/%E3%80%90Java%E3%80%91String/image-20210625131436828.png" alt="image-20210625131436828" /></p>
-
-        <h3 id="stringbuffer的常用方法"   >
-          <a href="#stringbuffer的常用方法" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#stringbuffer的常用方法"></a> StringBuffer的常用方法</h3>
-      
-<ul>
-<li><code>StringBuffer append(xxx)</code>：提供了很多的append()方法，用于进行字符串拼接</li>
-<li><code>StringBuffer delete(int start,int end)</code>：删除指定位置的内容</li>
-<li><code>StringBuffer replace(int start, int end, String str)</code>：把[start,end)位置替换为str</li>
-<li><code>StringBuffer insert(int offset, xxx)</code>：在指定位置插入xxx</li>
-<li><code>StringBuffer reverse()</code> ：把当前字符序列逆转</li>
-<li><code>public int indexOf(String str)</code></li>
-<li><code>public String substring(int start,int end)</code>:返回一个从start开始到end索引结束的左闭右开区间的子字符串</li>
-<li><code>public int length()</code></li>
-<li><code>public char charAt(int n )</code></li>
-<li><code>public void setCharAt(int n ,char ch)</code></li>
-</ul>
-<p>当<code>append</code>和<code>insert</code>时，如果原来value数组长度不够，可扩容</p>
-<p>总结：</p>
-<ul>
-<li>增：<code>append(xxx)</code></li>
-<li>删：<code>delete(int start,int end)</code></li>
-<li>改：<code>setCharAt(int n ,char ch) / replace(int start, int end, String str)</code></li>
-<li>查：<code>charAt(int n )</code></li>
-<li>插：<code>insert(int offset, xxx)</code></li>
-<li>长度：<code>length()</code></li>
-<li>*遍历：<code>for() + charAt() / toString()</code></li>
-</ul>
-<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test2</span><span class="params">()</span></span>&#123;</span><br><span class="line">    StringBuffer s1 = <span class="keyword">new</span> StringBuffer(<span class="string">&quot;abc&quot;</span>);</span><br><span class="line">    s1.append(<span class="number">1</span>);</span><br><span class="line">    s1.append(<span class="string">&#x27;1&#x27;</span>);</span><br><span class="line">    System.out.println(s1);</span><br><span class="line">    <span class="comment">// s1.delete(2,4);</span></span><br><span class="line">    <span class="comment">//s1.replace(2,4,&quot;hello&quot;);</span></span><br><span class="line">    <span class="comment">//s1.insert(2,false);</span></span><br><span class="line">    <span class="comment">//s1.reverse();</span></span><br><span class="line">    String s2 = s1.substring(<span class="number">1</span>, <span class="number">3</span>);</span><br><span class="line">    System.out.println(s1);</span><br><span class="line">    System.out.println(s1.length());</span><br><span class="line">    System.out.println(s2);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
-
-        <h3 id="stringbuilder"   >
-          <a href="#stringbuilder" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#stringbuilder"></a> StringBuilder</h3>
-      
-<p><code>StringBuilder</code>和 <code>StringBuffer</code>非常类似，均代表<strong>可变</strong>的字符序列，而且提供相关功能的方法也一样。</p>
-
-        <h3 id="string-stringbuffer-stringbuilder三者的异同"   >
-          <a href="#string-stringbuffer-stringbuilder三者的异同" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#string-stringbuffer-stringbuilder三者的异同"></a> String、StringBuffer、StringBuilder三者的异同</h3>
-      
-<ul>
-<li><code>String</code>:<strong>不可变</strong>的字符序列；底层使用<strong>final</strong> char[]存储</li>
-<li><code>StringBuffer</code>:<strong>可变</strong>的字符序列；<strong>线程安全的，效率低</strong>；底层使用char[]存储</li>
-<li><code>StringBuilder</code>:<strong>可变</strong>的字符序列；jdk5.0新增的，<strong>线程不安全的，效率高</strong>；底层使用char[]存储</li>
-</ul>
-<p>对比String、StringBuffer、StringBuilder三者的效率：<strong>从高到低排列：StringBuilder &gt; StringBuffer &gt; String</strong></p>
-<p>注意：作为参数传递时，方法内部String不会改变其值，StringBuffer和StringBuilder会改变其值（因为其内的<code>char[] value</code>不是<code>final</code>的）。</p>
-<p><strong>源码分析：</strong></p>
-<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="keyword">new</span> String();<span class="comment">//char[] value = new char[0];</span></span><br><span class="line">String str1 = <span class="keyword">new</span> String(<span class="string">&quot;abc&quot;</span>);<span class="comment">//char[] value = new char[]&#123;&#x27;a&#x27;,&#x27;b&#x27;,&#x27;c&#x27;&#125;;</span></span><br><span class="line"></span><br><span class="line">StringBuffer sb1 = <span class="keyword">new</span> StringBuffer();<span class="comment">//char[] value = new char[16];底层创建了一个长度是16的数组。</span></span><br><span class="line">System.out.println(sb1.length());<span class="comment">//0</span></span><br><span class="line">sb1.append(<span class="string">&#x27;a&#x27;</span>);<span class="comment">//value[0] = &#x27;a&#x27;;</span></span><br><span class="line">sb1.append(<span class="string">&#x27;b&#x27;</span>);<span class="comment">//value[1] = &#x27;b&#x27;;</span></span><br><span class="line"></span><br><span class="line">StringBuffer sb2 = <span class="keyword">new</span> StringBuffer(<span class="string">&quot;abc&quot;</span>);<span class="comment">//char[] value = new char[&quot;abc&quot;.length() + 16];</span></span><br></pre></td></tr></table></div></figure>
-<ul>
-<li>问题1. <code>System.out.println(sb2.length());</code> 答：3</li>
-<li>问题2. 扩容问题：如果要添加的数据底层数组盛不下了，那就需要扩容底层的数组。默认情况下，扩容为原来容量的<strong>2倍 + 2</strong>，<strong>同时将原有数组中的元素复制到新的数组中</strong>。</li>
-</ul>
-<p>开发中建议使用：<code>StringBuffer(int capacity)</code> 或<code>StringBuilder(int capacity)</code>。提前将容量设置好，以免扩容时复制元素造成时间浪费。</p>
-</div></div></article></section><nav class="paginator"><div class="paginator-inner"><a class="extend prev" rel="prev" href="/page/6/"><i class="fas fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/8/"><i class="fas fa-angle-right"></i></a></div></nav></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><section class="sidebar-toc hide"></section><!-- ov = overview--><section class="sidebar-ov"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/author.png" alt="avatar"></div><p class="sidebar-ov-author__text">no code no life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/YUYUN-ZHAO" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="zyy1024462136" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a><a class="sidebar-ov-social-item" href="1024462136" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="mailto:im.yuyunzhao@gmail.com" target="_blank" rel="noopener" data-popover="social.Gmail" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">Gmail</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">79</div><div class="sidebar-ov-state-item__name">文章</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">29</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">29</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2021</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>yuyun zhao</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script>function initSearch() {
+<p><img src="/images/%E3%80%90Java%E3%80%91%E9%9B%86%E5%90%88/image-20210617161305507.png" alt="image-20210617161305507" /></p></div><div class="post-readmore"><a class="post-readmore__link" href="/2021/03/16/%E3%80%90Java%E3%80%91%E9%9B%86%E5%90%88/"><span class="post-readmore__text">阅读全文</span><span class="post-readmore__icon"><i class="fas fa-long-arrow-alt-right"></i></span></a></div></div></article></section><nav class="paginator"><div class="paginator-inner"><a class="extend prev" rel="prev" href="/page/6/"><i class="fas fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/8/"><i class="fas fa-angle-right"></i></a></div></nav></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><section class="sidebar-toc hide"></section><!-- ov = overview--><section class="sidebar-ov"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/author.png" alt="avatar"></div><p class="sidebar-ov-author__text">no code no life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/YUYUN-ZHAO" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="zyy1024462136" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a><a class="sidebar-ov-social-item" href="1024462136" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="mailto:im.yuyunzhao@gmail.com" target="_blank" rel="noopener" data-popover="social.Gmail" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">Gmail</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">80</div><div class="sidebar-ov-state-item__name">文章</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">30</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">30</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2021</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>yuyun zhao</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script>function initSearch() {
   var isXML = true;
   var search_path = 'search.xml';
 
