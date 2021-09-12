@@ -1,10 +1,15 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="Redis 简介        Logo  https:&#x2F;&#x2F;blog.csdn.net&#x2F;u011863024&#x2F;article&#x2F;details&#x2F;107476187">
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="Redis 简介         Redis官网 、Redis中文网  Redis：REmote DIctionary Server（远程字典服务器） 是完全开源免费的，用C语言编写的，遵守BSD协议，是一个高性能的（key&#x2F;value）分布式内存数据库，基于内存运行并支持持久化的NoSQL数据库，是当前最热门的NoSql数据库之一，也被人们称为数据结构服务器。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【Redis】Redis 基础">
 <meta property="og:url" content="http://yuyun-zhao.gitee.io/2021/09/09/%E3%80%90Redis%E3%80%91Redis/index.html">
 <meta property="og:site_name" content="yuyun zhao&#39;s blog">
-<meta property="og:description" content="Redis 简介        Logo  https:&#x2F;&#x2F;blog.csdn.net&#x2F;u011863024&#x2F;article&#x2F;details&#x2F;107476187">
+<meta property="og:description" content="Redis 简介         Redis官网 、Redis中文网  Redis：REmote DIctionary Server（远程字典服务器） 是完全开源免费的，用C语言编写的，遵守BSD协议，是一个高性能的（key&#x2F;value）分布式内存数据库，基于内存运行并支持持久化的NoSQL数据库，是当前最热门的NoSql数据库之一，也被人们称为数据结构服务器。">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912213742688.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912213906532.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912214047542.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912214645546.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912215152100.png">
 <meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210911230855564.png">
 <meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210911230754903.png">
 <meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210911231436324.png">
@@ -12,12 +17,33 @@
 <meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210911231758180.png">
 <meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210911231825494.png">
 <meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210911232231984.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912103134052.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912111523166.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912104201388.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912111553281.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912111619198.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912111730249.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/aHR0cHM6Ly9naXRlZS5jb20vamFsbGVua3dvbmcvTGVhcm5SZWRpcy9yYXcvbWFzdGVyL2ltYWdlLzIxLnBuZw">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912112446186.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912114736426.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/aHR0cHM6Ly9naXRlZS5jb20vamFsbGVua3dvbmcvTGVhcm5SZWRpcy9yYXcvbWFzdGVyL2ltYWdlLzIyLnBuZw">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912202032972.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912202226170.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912202406006.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912202423699.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912202607757.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912202630691.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912204058177.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912204652370.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912205253939.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912205706288.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912211245500.png">
 <meta property="article:published_time" content="2021-09-09T14:15:25.000Z">
-<meta property="article:modified_time" content="2021-09-11T15:23:14.483Z">
+<meta property="article:modified_time" content="2021-09-12T14:01:50.441Z">
 <meta property="article:author" content="yuyun zhao">
 <meta property="article:tag" content="Redis">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210911230855564.png"><title>【Redis】Redis 基础 | yuyun zhao's blog</title><link ref="canonical" href="http://yuyun-zhao.gitee.io/2021/09/09/%E3%80%90Redis%E3%80%91Redis/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+<meta name="twitter:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912213742688.png"><title>【Redis】Redis 基础 | yuyun zhao's blog</title><link ref="canonical" href="http://yuyun-zhao.gitee.io/2021/09/09/%E3%80%90Redis%E3%80%91Redis/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
 var CONFIG = {
   root: '/',
   algolia: undefined,
@@ -41,32 +67,66 @@ var CONFIG = {
   sourcePath: {"js":"js","css":"css","images":"images"},
 };
 
-window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【Redis】Redis 基础</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-09-09</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-09-11</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">568</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">3分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body">
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【Redis】Redis 基础</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-09-09</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-09-12</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">8.1k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">45分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body">
         <h2 id="redis-简介"   >
           <a href="#redis-简介" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#redis-简介"></a> Redis 简介</h2>
       
-<p>Logo</p>
 <blockquote>
-<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://blog.csdn.net/u011863024/article/details/107476187" >https://blog.csdn.net/u011863024/article/details/107476187</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://redis.io/" >Redis官网</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span> 、<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="http://www.redis.cn/" >Redis中文网</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
 </blockquote>
+<p><strong>Redis：REmote DIctionary Server（远程字典服务器）</strong> 是完全开源免费的，用C语言编写的，遵守BSD协议，是一个高性能的（key/value）分布式内存数据库，基于内存运行并支持持久化的NoSQL数据库，是当前最热门的NoSql数据库之一，也被人们称为数据结构服务器。</p>
+
+        <h3 id="redis-单线程模型"   >
+          <a href="#redis-单线程模型" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#redis-单线程模型"></a> Redis 单线程模型</h3>
+      
+<p>Redis 采用<strong>单线程模型</strong>来处理客户端的请求。对读写等事件的响应是通过对<code>epoll</code>函数的包装来做到的。Redis的实际处理速度完全依靠主进程的执行效率。</p>
+<blockquote>
+<p>Epoll是Linux内核为处理大批量文件描述符而作了改进的epoll，是Linux下多路复用IO接口select/poll的增强版本， 它能显著提高程序在大量并发连接中只有少量活跃的情况下的系统CPU利用率。</p>
+</blockquote>
+<p>Redis是<strong>单线程 + 多路IO复用技术</strong></p>
+<p>多路复用是指使用一个线程来检查多个文件描述符（Socket）的就绪状态，比如调用select和poll函数，传入多个文件描述符，如果有一个文件描述符就绪，则返回，否则阻塞直到超时。得到就绪状态后进行真正的操作可以在同一个线程里执行，也可以启动线程执行（比如使用线程池）</p>
+<p><strong>串行  vs  多线程+锁（memcached） vs  单线程 + 多路IO复用（Redis）</strong></p>
+<p>（与Memcache三点不同：支持多数据类型，支持持久化，单线程+多路IO复用）</p>
+
+        <h3 id="redis-特点"   >
+          <a href="#redis-特点" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#redis-特点"></a> Redis 特点</h3>
+      
+<p>Redis 与其他 key - value 缓存软件有以下三个特点：</p>
+<ul>
+<li>Redis支持数据的持久化，可以将内存中的数据保持在磁盘中，重启的时候可以再次加载进行使用</li>
+<li>Redis不仅仅支持简单的key-value类型的数据，同时还提供list，set，zset，hash等数据结构的存储</li>
+<li>Redis支持数据的备份，即master-slave模式的数据备份</li>
+</ul>
+<p>Redis 能够用来：</p>
+<ul>
+<li>内存存储和持久化：redis支持异步将内存中的数据写到硬盘上，同时不影响继续服务</li>
+<li>取最新N个数据的操作，如：可以将最新的10条评论的ID放在Redis的List集合里面</li>
+<li>模拟类似于HttpSession这种需要设定过期时间的功能</li>
+<li>发布、订阅消息系统</li>
+<li>定时器、计数器</li>
+</ul>
+<p>Redis 安装见 <span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://yuyun-zhao.github.io/documents/linux%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE.pdf" >Linux 开发环境配置文档</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
 <span id="more"></span>
 
         <h2 id="redis-五大数据类型"   >
           <a href="#redis-五大数据类型" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#redis-五大数据类型"></a> Redis 五大数据类型</h2>
       
+<blockquote>
+<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://blog.csdn.net/u011863024/article/details/107476187" >https://blog.csdn.net/u011863024/article/details/107476187</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+</blockquote>
 <ul>
 <li><strong>String</strong>（字符串）
 <ul>
-<li>String是redis最基本的类型，你可以理解成与Memcached一模一样的类型，一个key对应一个value。</li>
-<li>String类型是二进制安全的。意思是redis的String可以包含任何数据。比如jpg图片或者序列化的对象 。</li>
-<li>String类型是Redis最基本的数据类型，一个redis中字符串value最多可以是512M</li>
+<li>String是Redis最基本的类型，可以理解成与Memcached一模一样的类型，一个key对应一个value。</li>
+<li>String类型是<strong>二进制安全的</strong>。意思是Redis的String可以包含任何数据。比如jpg图片或者序列化的对象。</li>
+<li>String类型是Redis最基本的数据类型，一个Redis中字符串value最多可以是512M</li>
 </ul>
 </li>
 <li><strong>Hash</strong>（哈希，类似java里的Map）
 <ul>
-<li>Redis hash 是一个键值对集合。</li>
-<li>Redis hash是一个string类型的field和value的映射表，hash特别适合用于存储对象。<br />
-类似Java里面的Map&lt;String,Object&gt;</li>
+<li>Redis Hash 是一个键值对集合。</li>
+<li>Redis Hash是一个String类型的field和value的映射表，Hash特别适合用于存储对象。<br />
+类似Java里面的<code>Map&lt;String,Object&gt;</code></li>
 </ul>
 </li>
 <li><strong>List</strong>（列表）
@@ -77,22 +137,73 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 </li>
 <li><strong>Set</strong>（集合）
 <ul>
-<li>Redis的Set是string类型的无序集合。它是通过HashTable实现实现的</li>
+<li>Redis的Set是String类型的无序集合。它是通过<code>HashTable</code>实现实现的</li>
 </ul>
 </li>
 <li><strong>Zset</strong>（sorted set：有序集合）
 <ul>
 <li>Redis Zset 和 Set 一样也是String类型元素的集合，且不允许重复的成员。</li>
 <li>不同的是每个元素都会关联一个double类型的分数。</li>
-<li>redis正是通过分数来为集合中的成员进行从小到大的排序。Zset的成员是唯一的，但分数(score)却可以重复。</li>
+<li>Redis正是通过分数来为集合中的成员进行从小到大的排序。Zset的成员是唯一的，但分数（score）却可以重复。</li>
 </ul>
 </li>
 </ul>
-<p>redis常见数据类型操作命令：</p>
+<p>Redis 常见数据类型操作命令：</p>
 <ul>
 <li><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="http://redisdoc.com/" >Redis 命令参考</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></li>
 <li><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://redis.io/commands" >Redis 官网命令参考</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></li>
 </ul>
+
+        <h3 id="string"   >
+          <a href="#string" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#string"></a> String</h3>
+      
+<p>String的数据结构为简单动态字符串（Simple Dynamic String,缩写SDS）。是可以修改的字符串，内部结构实现上类似于Java的<code>ArrayList</code>，采用预分配冗余空间的方式来减少内存的频繁分配.</p>
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210912213742688.png" alt="image-20210912213742688" /></p>
+<p>如图中所示，内部为当前字符串实际分配的空间capacity一般要高于实际字符串长度len。当字符串长度小于1M时，扩容都是加倍现有的空间，如果超过1M，扩容时一次只会多扩1M的空间。需要注意的是字符串最大长度为512M。</p>
+
+        <h3 id="list"   >
+          <a href="#list" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#list"></a> List</h3>
+      
+<p>Redis 列表是简单的字符串列表，按照插入顺序排序。你可以添加一个元素到列表的头部（左边）或者尾部（右边）。它的底层实际是个<strong>双向链表</strong>，对两端的操作性能很高，通过索引下标的操作中间的节点性能会较差。</p>
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210912213906532.png" alt="image-20210912213906532" /></p>
+<p>List的数据结构为<strong>快速链表quickList</strong>。</p>
+<p>首先在列表元素较少的情况下会使用一块<strong>连续的内存</strong>存储，这个结构是<strong>ziplist</strong>，也即是压缩列表。它将所有的元素紧挨着一起存储，分配的是一块连续的内存。</p>
+<p>当数据量比较多的时候才会改成<strong>quicklist</strong>。因为普通的链表需要的附加指针空间太大，会比较浪费空间。比如这个列表里存的只是int类型的数据，结构上还需要两个额外的指针prev和next。</p>
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210912214047542.png" alt="image-20210912214047542" /></p>
+<p>Redis将链表和<strong>ziplist</strong>结合起来组成了<strong>quicklist</strong>。也就是将多个ziplist使用双向指针串起来使用。这样既满足了快速的插入删除性能，又不会出现太大的空间冗余。</p>
+
+        <h3 id="set"   >
+          <a href="#set" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#set"></a> Set</h3>
+      
+<p>Set对外提供的功能与List类似是一个列表的功能，特殊之处在于Set是可以<strong>自动排重</strong>的，当你需要存储一个列表数据，又不希望出现重复数据时，Set是一个很好的选择，并且Set提供了判断某个成员是否在一个Set集合内的重要接口，这个也是List所不能提供的。</p>
+<p>Redis的Set是String类型的<strong>无序集合</strong>。它底层其实是一个value为null的<strong>Hash</strong>表，所以添加/删除/查找的<strong>复杂度都是O(1)</strong>。一个算法，随着数据的增加，执行时间的长短，如果是O(1)，数据增加，查找数据的时间不变。</p>
+<p>Set数据结构是Dict字典，字典是用哈希表实现的。Java中<code>HashSet</code>的内部实现使用的是<code>HashMap</code>，只不过所有的value都指向同一个对象。<strong>Redis的Set结构也是一样，它的内部也使用Hash结构，所有的value都指向同一个内部值。</strong></p>
+
+        <h3 id="hash"   >
+          <a href="#hash" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#hash"></a> Hash</h3>
+      
+<p>Hash 是一个键值对集合。它是一个String类型的field和value的映射表，Hash特别适合用于存储对象。它类似Java里面的<code>Map&lt;String,Object&gt;</code>，存储方式：</p>
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210912214645546.png" alt="image-20210912214645546" /></p>
+<p>通过 key(用户ID) + field(属性标签) 就可以操作对应属性数据了，既不需要重复存储数据，也不会带来序列化和并发修改控制的问题。</p>
+<p>Hash类型对应的数据结构是两种：ziplist（压缩列表），hashtable（哈希表）。当field-value长度较短且个数较少时，使用ziplist，否则使用hashtable。</p>
+
+        <h3 id="zset"   >
+          <a href="#zset" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#zset"></a> Zset</h3>
+      
+<p>Redis有序集合Zset与普通集合Set非常相似，是一个没有重复元素的字符串集合。不同之处是有序集合的每个成员都关联了一个<strong>评分（score）</strong>，这个评分（score）被用来按照从最低分到最高分的方式排序集合中的成员。集合的成员是唯一的，但是评分可以是重复了 。</p>
+<p>因为元素是有序的，所以你也可以很快的根据评分（score）或者次序（position）来获取一个范围的元素。访问有序集合的中间元素也是非常快的，因此你能够使用有序集合作为一个没有重复成员的智能列表。</p>
+<p>一方面它等价于Java的数据结构<code>Map&lt;String, Double&gt;</code>，可以给每一个元素value赋予一个权重score，另一方面它又类似于TreeSet，内部的元素会按照权重score进行排序，可以得到每个元素的名次，还可以通过score的范围来获取元素的列表。</p>
+<p>Zset底层使用了两个数据结构</p>
+<ul>
+<li>Hash，Hash的作用就是关联元素value和权重score，保障元素value的唯一性，可以通过元素value找到相应的score值。</li>
+<li>跳跃表，跳跃表的目的在于给元素value排序，根据score的范围获取元素列表。</li>
+</ul>
+<p>跳跃表示例：</p>
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210912215152100.png" alt="image-20210912215152100" /></p>
+
+        <h2 id="redis-新数据类型"   >
+          <a href="#redis-新数据类型" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#redis-新数据类型"></a> Redis 新数据类型</h2>
+      
 
         <h2 id="redis-常用命令"   >
           <a href="#redis-常用命令" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#redis-常用命令"></a> Redis 常用命令</h2>
@@ -103,13 +214,13 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
       
 <p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210911230855564.png" alt="image-20210911230855564" /></p>
 
-        <h3 id="string"   >
-          <a href="#string" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#string"></a> String</h3>
+        <h3 id="string-2"   >
+          <a href="#string-2" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#string-2"></a> String</h3>
       
 <p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210911230754903.png" alt="image-20210911230754903" /></p>
 
-        <h3 id="list"   >
-          <a href="#list" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#list"></a> List</h3>
+        <h3 id="list-2"   >
+          <a href="#list-2" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#list-2"></a> List</h3>
       
 <p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210911231436324.png" alt="image-20210911231436324" /></p>
 <p>性能总结：</p>
@@ -121,18 +232,18 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <li>链表的操作无论是头和尾效率都极高，但假如是对中间元素进行操作，效率就很惨淡了。</li>
 </ul>
 
-        <h3 id="set"   >
-          <a href="#set" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#set"></a> Set</h3>
+        <h3 id="set-2"   >
+          <a href="#set-2" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#set-2"></a> Set</h3>
       
 <p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210911231420212.png" alt="image-20210911231420212" /></p>
 
-        <h3 id="hash"   >
-          <a href="#hash" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#hash"></a> Hash</h3>
+        <h3 id="hash-2"   >
+          <a href="#hash-2" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#hash-2"></a> Hash</h3>
       
 <p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210911231758180.png" alt="image-20210911231758180" /></p>
 
-        <h3 id="zset"   >
-          <a href="#zset" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#zset"></a> ZSet</h3>
+        <h3 id="zset-2"   >
+          <a href="#zset-2" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#zset-2"></a> ZSet</h3>
       
 <p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210911231825494.png" alt="image-20210911231825494" /></p>
 
@@ -148,26 +259,451 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
         <h3 id="参数说明"   >
           <a href="#参数说明" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#参数说明"></a> 参数说明</h3>
       
-<p>redis.conf 配置项说明如下：</p>
+<p><code>redis.conf</code> 配置项说明如下：</p>
 <p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210911232231984.png" alt="image-20210911232231984" /></p>
 
         <h2 id="redis-持久化"   >
           <a href="#redis-持久化" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#redis-持久化"></a> Redis 持久化</h2>
       
-<p>redis -&gt; Redis</p>
+<p>Redis 的两种持久化方式：</p>
+<ul>
+<li><strong>RDB（Redis DataBase）</strong>：备份数据集</li>
+<li><strong>AOF（Append Only File）</strong>：仅备份指令</li>
+</ul>
+
+        <h3 id="rdb"   >
+          <a href="#rdb" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#rdb"></a> RDB</h3>
+      
+<p>RDB（Redis DataBase）是指在指定的时间间隔内将内存中的<strong>数据集快照</strong>写入磁盘，也就是行话讲的<code>Snapshot</code>快照，它恢复时是将快照文件直接读到内存里。</p>
+<p>Redis会单独创建（fork）一个子进程来进行持久化，会先将数据写入到一个<strong>临时文件</strong>中，待持久化过程都结束了，再用这个临时文件替换上次持久化好的文件。 整个过程中，<strong>主进程是不进行任何IO操作的</strong>，这就确保了极高的性能。如果需要进行大规模数据的恢复，且对于数据恢复的完整性不是非常敏感，那RDB方式要比AOF方式更加的高效。RDB的缺点是最后一次持久化后的数据可能丢失。</p>
+<blockquote>
+<p>Fork的作用是复制一个与当前进程一样的进程。新进程的所有数据（变量、环境变量、程序计数器等） 数值都和原进程一致，但是是一个全新的进程，并<strong>作为原进程的子进程</strong></p>
+<p>在Linux程序中，fork() 会产生一个和父进程完全相同的子进程，但子进程在此后多会exec系统调用，出于效率考虑，Linux中引入了“<strong>写时复制技术</strong>”</p>
+<p><strong>一般情况父进程和子进程会共用同一段物理内存</strong>，只有进程空间的各段的内容要发生变化时，才会将父进程的内容复制一份给子进程。</p>
+</blockquote>
+<p>RDB持久化过程：</p>
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210912103134052.png" alt="image-20210912103134052" /></p>
+<p>RDB 默认保存的备份文件为 <code>dump.rdb</code> 文件（可以在配置文件中修改名称）。相关配置在 <code>redis.conf</code> 的 <code>### SNAPSHOTTING ###</code> 部分。<code>dump.rdb</code>文件的保存路径在配置文件的 <code>dir ./</code> 位置配置。</p>
+<p><strong>如何触发RDB快照</strong>：</p>
+<ul>
+<li>配置文件中默认的快照配置 <code>dbfilename dump.rdb</code></li>
+<li>命令 <code>save</code> 或者是 <code>bgsave</code>
+<ul>
+<li><code>save</code>：同步保存，阻塞其他所有操作</li>
+<li><code>bgsave</code>：Redis会在后台（Background）<strong>异步</strong>进行快照操作， 快照同时还可以响应客户端请求。可以通过 <code>lastsave</code> 命令获取最后一次成功执行快照的时间</li>
+</ul>
+</li>
+<li>执行 <code>flushall</code> 命令，也会产生 <code>dump.rdb</code> 文件，但里面是空的，无意义</li>
+</ul>
+<p><strong>如何恢复</strong>：</p>
+<ul>
+<li>将备份文件<code>dump.rdb</code>移动到 Redis 安装目录并启动服务即可</li>
+<li><code>CONFIG GET dir</code>获取备份文件保存的目录</li>
+</ul>
+<p><strong>如何停止</strong>：</p>
+<p>动态停止RDB保存规则的方法：<code>redis-cli config set save &quot;&quot;</code></p>
+
+        <h3 id="rdb-常见配置"   >
+          <a href="#rdb-常见配置" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#rdb-常见配置"></a> RDB 常见配置</h3>
+      
+<p><code>dump.rdb</code>文件的保存路径：</p>
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210912111523166.png" alt="image-20210912111523166" /></p>
+<p><strong>保存时机策略</strong>：</p>
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210912104201388.png" alt="image-20210912104201388" /></p>
+<p>默认保存时机策略是：1分钟内改了1万次，或5分钟内改了10次，或15分钟内改了1次。若想禁用保存，则可以不设置<code>save</code>指令或给<code>save</code>传入空字符串。</p>
+<p><strong>stop-writes-on-bgsave-error</strong>：</p>
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210912111553281.png" alt="image-20210912111553281" /></p>
+<p>当Redis无法写入磁盘的话，直接关掉Redis的写操作。推荐yes。</p>
+<p><strong>rdbcompression 压缩文件</strong>：</p>
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210912111619198.png" alt="image-20210912111619198" /></p>
+<p>对于存储到磁盘中的快照，可以设置是否进行压缩存储。如果是的话，redis会采用LZF算法进行压缩。如果你不想消耗CPU来进行压缩的话，可以设置为关闭此功能。推荐yes。</p>
+<p><strong>rdbchecksum 检查完整性</strong>：</p>
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210912111730249.png" alt="image-20210912111730249" /></p>
+<p>在存储快照后，还可以让redis使用CRC64算法来进行数据校验，但是这样做会增加大约10%的性能消耗，如果希望获取到最大的性能提升，可以关闭此功能。推荐yes。</p>
+
+        <h3 id="rdb-优势与劣势"   >
+          <a href="#rdb-优势与劣势" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#rdb-优势与劣势"></a> RDB 优势与劣势</h3>
+      
+<p><strong>优势</strong></p>
+<ul>
+<li>适合大规模的数据恢复</li>
+<li>对数据完整性和一致性要求不高</li>
+</ul>
+<p><strong>劣势</strong></p>
+<ul>
+<li>在一定间隔时间做一次备份，所以如果redis意外down掉的话，就会<strong>丢失最后一次快照后的所有修改</strong></li>
+<li>Fork的时候，内存中的数据被克隆了一份，<strong>大致2倍的膨胀性</strong>需要考虑</li>
+<li>虽然Redis在fork时使用了<strong>写时拷贝技术</strong>，但是如果数据庞大时还是比较消耗性能。</li>
+</ul>
+
+        <h3 id="rdb-小结"   >
+          <a href="#rdb-小结" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#rdb-小结"></a> RDB 小结</h3>
+      
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis/aHR0cHM6Ly9naXRlZS5jb20vamFsbGVua3dvbmcvTGVhcm5SZWRpcy9yYXcvbWFzdGVyL2ltYWdlLzIxLnBuZw" alt="img" /></p>
+<ul>
+<li>RDB是一个非常紧凑的文件。</li>
+<li>RDB在保存RDB文件时<strong>父进程唯一需要做的就是fork出一个子进程，接下来的工作全部由子进程来做，父进程不需要再做其他IO操作，所以RDB持久化方式可以最大化redis的性能</strong>。</li>
+<li>与AOF相比，在恢复大的数据集的时候，RDB方式会更快一一些。</li>
+<li>数据丢失风险大。</li>
+<li>RDB需要经常fork子进程来保存数据集到硬盘上，当数据集比较大的时候fork的过程是非常耗时的吗，可能会导致Redis在一些毫秒级不能回应客户端请求。</li>
+</ul>
+
+        <h3 id="aof"   >
+          <a href="#aof" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#aof"></a> AOF</h3>
+      
+<p>AOF（Append Only File）以<strong>日志的形式来记录每个写操作</strong>（增量保存），将Redis执行过的所有<strong>写指令记录下来（读操作不记录）</strong>， <strong>只许追加（append）文件但不可以改写文件</strong>，redis启动之初会读取该文件重新构建数据，换言之，redis 重启的话就根据日志文件的内容将写指令从前到后执行一次以完成数据的恢复工作。</p>
+<p><strong>AOF和RDB同时开启时，系统默认读取AOF的数据（数据不会存在丢失）</strong></p>
+
+        <h3 id="aof-持久化流程"   >
+          <a href="#aof-持久化流程" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#aof-持久化流程"></a> AOF 持久化流程</h3>
+      
+<ul>
+<li>客户端的请求写命令会被append追加到AOF缓冲区内；</li>
+<li>AOF缓冲区根据AOF <strong>持久化策略[always,everysec,no]</strong> 将操作sync同步到磁盘的AOF文件中；</li>
+<li>AOF文件大小超过重写策略或手动重写时，会对AOF文件<strong>rewrite</strong>重写，压缩AOF文件容量；</li>
+<li>Redis服务重启时，会重新load加载AOF文件中的写操作达到数据恢复的目的；</li>
+</ul>
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210912112446186.png" alt="image-20210912112446186" /></p>
+<p>RDB 默认保存的备份文件为 <code>appendonly.aof</code> 文件（可以在配置文件中修改名称）。相关配置在 <code>redis.conf</code> 的 <code>### APPEND ONLY MODE ###</code> 部分。AOF文件的保存路径，同RDB的路径一致。</p>
+<p><strong>AOF和RDB同时开启时，系统默认读取AOF的数据（数据不会存在丢失）</strong></p>
+<p>若 <code>appendonly.aof</code> 文件出现损坏，可以使用<code>Redis-check-aof --fix</code>命令进行修复。</p>
+
+        <h3 id="aof-同步频率设置"   >
+          <a href="#aof-同步频率设置" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#aof-同步频率设置"></a> AOF 同步频率设置</h3>
+      
+<ul>
+<li><strong>appendfsync always</strong>：始终同步，每次Redis的写入都会立刻记入日志；性能较差但数据完整性比较好</li>
+<li><strong>appendfsync everysec</strong>：<strong>每秒同步</strong>，每秒记入日志一次，<strong>如果宕机，本秒的数据可能丢失</strong>（RDB方式损失的时间可能更长）。</li>
+<li><strong>appendfsync no</strong>：Redis不主动进行同步，把同步时机交给操作系统。</li>
+</ul>
+
+        <h3 id="rewrite-重写压缩"   >
+          <a href="#rewrite-重写压缩" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#rewrite-重写压缩"></a> Rewrite 重写压缩</h3>
+      
+<p>AOF采用<strong>文件追加方式，文件会越来越大</strong>。为避免出现此种情况，新增了<strong>重写机制Rewrite</strong>：当AOF文件的大小超过所设定的阈值时，Redis就会启动AOF文件的内容压缩， 只保留可以恢复数据的<strong>最小指令集</strong>。可以使用命令 <code>bgrewriteaof</code>：在一个子进程中进行aof的重写，从而不阻塞主进程对其余命令的处理，同时解决了aof文件过大问题。</p>
+
+        <h4 id="rewrite-原理"   >
+          <a href="#rewrite-原理" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#rewrite-原理"></a> Rewrite 原理</h4>
+      
+<p>AOF文件持续增长而过大时，<strong>会fork出一条新进程来将文件重写（也是先写临时文件最后再rename）</strong>，<strong>redis4.0版本后的重写，实质上就是把 rdb 的快照，以二级制的形式附在新的aof头部，作为已有的历史数据，替换掉原来的流水账操作</strong>。</p>
+
+        <h4 id="rewrite-相关配置"   >
+          <a href="#rewrite-相关配置" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#rewrite-相关配置"></a> Rewrite 相关配置</h4>
+      
+<p><strong><code>no-appendfsync-on-rewrite</code></strong></p>
+<blockquote>
+<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://blog.csdn.net/jingkyks/article/details/46956905" >https://blog.csdn.net/jingkyks/article/details/46956905</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+</blockquote>
+<p>同时在执行<code>bgrewriteaof</code>操作和主进程写aof文件的操作，两者都会操作磁盘，而<code>bgrewriteaof</code>往往会涉及大量磁盘操作，这样就会造成主进程在写aof文件的时候出现阻塞的情形，现在<code>no-appendfsync-on-rewrite</code>参数出场了。</p>
+<blockquote>
+<p>如果该参数设置为no，是最安全的方式，不会丢失数据，但是要忍受阻塞的问题。如果设置为yes呢？这就相当于将appendfsync设置为no，这说明并没有执行磁盘操作，只是写入了缓冲区，因此这样并不会造成阻塞（因为没有竞争磁盘），但是如果这个时候redis挂掉，就会丢失数据。丢失多少数据呢？在linux的操作系统的默认设置下，最多会丢失30s的数据。</p>
+</blockquote>
+<ul>
+<li>如果 <code>no-appendfsync-on-rewrite=yes</code> ：正在重写时新增命令不再写入aof文件，而是写入缓存，等重写结束再同步到aof文件。这种模式下用户请求不会阻塞，但是在这段时间如果宕机会丢失这段时间的缓存数据。（降低数据安全性，提高性能）</li>
+<li>如果 <code>no-appendfsync-on-rewrite=no</code>：正在重写时新增命令会阻塞等待重写操作完成再同步到磁盘中，缺点是会发生阻塞。（数据安全，但是性能降低）</li>
+</ul>
+<p><strong>重写触发机制</strong>：</p>
+<p>重写虽然可以节约大量磁盘空间，减少恢复时间。但是每次重写还是有一定的负担的，因此设定Redis要满足一定条件才会进行重写。</p>
+<p>Redis会记录上次重写时的AOF大小，默认配置是当AOF文件大小是上次rewrite后大小的<strong>两倍</strong>且文件大于<strong>64M</strong>时触发。修改以下配置即可更改重写触发时机：</p>
+<ul>
+<li><code>auto-aof-rewrite-percentage</code>：设置重写的基准值，文件达到100%时开始重写（文件是原来重写后文件的2倍时触发）例如：文件达到70MB开始重写，降到50MB，下次什么时候开始重写？100MB</li>
+<li><code>auto-aof-rewrite-min-size</code>：设置重写的基准值，最小文件64MB。达到这个值开始重写，一般该值设置大一些 3~5GB。</li>
+</ul>
+
+        <h3 id="rewrite-流程"   >
+          <a href="#rewrite-流程" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#rewrite-流程"></a> Rewrite 流程</h3>
+      
+<ul>
+<li><code>bgrewriteaof</code>触发重写，判断是否当前有<code>bgsave</code>或<code>bgrewriteaof</code>在运行，如果有，则等待该命令结束后再继续执行。</li>
+<li><strong>主进程fork出子进程执行重写操作，保证主进程不会阻塞</strong>。</li>
+<li>子进程遍历Redis内存中数据到<strong>临时文件</strong>，<strong>客户端的写请求同时写入aof_buf缓冲区和aof_rewrite_buf重写缓冲区保证原AOF文件完整以及新AOF文件生成期间的新的数据修改动作不会丢失。</strong></li>
+<li>子进程写完新的AOF文件后，<strong>向主进程发信号，父进程更新统计信息</strong>。</li>
+<li>主进程把<code>aof_rewrite_buf</code>中的数据写入到新的AOF文件。</li>
+<li>使用新的AOF文件覆盖旧的AOF文件，完成AOF重写。</li>
+</ul>
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210912114736426.png" alt="image-20210912114736426" /></p>
+
+        <h3 id="aof-优势与劣势"   >
+          <a href="#aof-优势与劣势" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#aof-优势与劣势"></a> AOF 优势与劣势</h3>
+      
+<p><strong>优势</strong></p>
+<ul>
+<li>备份机制更稳健，<strong>丢失数据概率更低</strong>。</li>
+<li>可读的日志文本，通过操作AOF稳健，可以处理误操作。</li>
+</ul>
+<p><strong>劣势</strong></p>
+<ul>
+<li>相同数据集的数据而言aof文件占用磁盘空间要远大于rdb文件，恢复速度慢于rdb</li>
+<li>每次读写都同步的话，有一定的性能压力。</li>
+<li>AOF运行效率要慢于RDB，每秒同步策略效率较好，不同步效率和RDB相同</li>
+</ul>
+
+        <h3 id="aof-小结"   >
+          <a href="#aof-小结" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#aof-小结"></a> AOF 小结</h3>
+      
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis/aHR0cHM6Ly9naXRlZS5jb20vamFsbGVua3dvbmcvTGVhcm5SZWRpcy9yYXcvbWFzdGVyL2ltYWdlLzIyLnBuZw" alt="img" /></p>
+<ul>
+<li>AOF文件时一个只进行<strong>追加的日志文件</strong></li>
+<li>Redis可以在AOF文件体积变得过大时，<strong>自动地在后台对AOF进行重写</strong></li>
+<li>AOF文件有序地保存了对数据库执行的所有写入操作，这些写入操作以Redis协议的格式保存，因此AOF文件的内容非常容易被人读懂，对文件进行分析也很轻松</li>
+<li>对于相同的数据集来说，<strong>AOF文件的体积通常要大于RDB文件的体积</strong></li>
+<li>根据所使用的 fsync 策略，<strong>AOF的速度可能会慢于RDB</strong></li>
+</ul>
+
+        <h3 id="总结"   >
+          <a href="#总结" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#总结"></a> 总结</h3>
+      
+<p>官方推荐两个都启用。</p>
+<ul>
+<li>如果对数据不敏感，可以选单独用RDB。</li>
+<li>不建议单独用 AOF，因为可能会出现Bug。</li>
+<li>如果只是做纯内存缓存，可以都不用。</li>
+</ul>
+<p><strong>官方建议</strong>：</p>
+<ul>
+<li>RDB持久化方式能够在指定的时间间隔能对你的数据进行快照存储</li>
+<li>AOF持久化方式记录每次对服务器写的操作，当服务器重启的时候会重新执行这些命令来恢复原始的数据，AOF命令以redis协议追加保存每次写的操作到文件末尾.</li>
+<li>Redis还能对AOF文件进行后台重写，使得AOF文件的体积不至于过大</li>
+<li>只做缓存：如果你只希望你的数据在服务器运行的时候存在，你也可以不使用任何持久化方式.</li>
+</ul>
+<p>同时开启两种持久化方式：</p>
+<ul>
+<li>在这种情况下，当redis重启的时候会<strong>优先载入AOF文件来恢复原始的数据，因为在通常情况下AOF文件保存的数据集要比RDB文件保存的数据集要完整。</strong></li>
+<li>RDB的数据不实时，同时使用两者时服务器重启也只会找AOF文件。那要不要只使用AOF呢？ 建议不要，因为RDB更适合用于备份数据库（AOF在不断变化不好备份）， 快速重启，而且不会有AOF可能潜在的bug，留着作为一个万一的手段。</li>
+</ul>
+<p>性能建议：</p>
+<ul>
+<li>因为RDB文件只用作后备用途，建议只在 Slave上持久化RDB文件，而且只要15分钟备份一次就够了，只保留save 900 1这条规则。</li>
+<li>如果使用AOF，好处是在最恶劣情况下也只会丢失不超过两秒数据，启动脚本较简单只load自己的AOF文件就可以了。代价：一是带来了持续的IO，二是AOF Rewrite的最后将Rewrite过程中产生的新数据写到新文件造成的阻塞几乎是不可避免的。</li>
+<li>只要硬盘许可，应该尽量减少AOF Rewrite的频率，AOF重写的基础大小默认值64M太小了，可以设到5G以上。</li>
+<li>默认超过原大小100%大小时重写可以改到适当的数值。</li>
+</ul>
+
+        <h2 id="redis-事务"   >
+          <a href="#redis-事务" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#redis-事务"></a> Redis 事务</h2>
+      
+<blockquote>
+<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="http://www.redis.cn/topics/transactions.html" >Redis 事务官方文档</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+</blockquote>
+<p>Redis事务是一个单独的隔离操作：事务中的所有命令都会序列化、按顺序地执行。事务在执行的过程中，不会被其他客户端发送来的命令请求所打断。</p>
+<p>Redis事务的主要作用就是<strong>串联多个命令防止别的命令插队</strong>。</p>
+
+        <h3 id="事务常用命令"   >
+          <a href="#事务常用命令" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#事务常用命令"></a> 事务常用命令</h3>
+      
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210912202032972.png" alt="image-20210912202032972" /></p>
+<p><strong>Multi、Exec、Discard</strong></p>
+<p>从输入<code>Multi</code>命令开始（<strong>组队阶段</strong>），输入的命令都会依次进入<strong>命令队列</strong>中，<strong>但不会执行</strong>，直到输入<code>Exec</code>命令后进入<strong>执行阶段</strong>，Redis会将之前命令队列中的命令依次执行。组队的过程中可以通过<code>Discard</code>命令来放弃组队。</p>
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210912202226170.png" alt="image-20210912202226170" /></p>
+<ol>
+<li>当<strong>组队阶段</strong>中某个命令出现了报告错误，执行时整个的所有队列都会被取消。</li>
+</ol>
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210912202406006.png" alt="image-20210912202406006" /></p>
+<ol start="2">
+<li>当<strong>执行阶段</strong>某个命令报出了错误，则<strong>只有报错的命令不会被执行，而其他的命令都会执行</strong>，不会回滚。</li>
+</ol>
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210912202423699.png" alt="image-20210912202423699" /></p>
+
+        <h3 id="事务三阶段"   >
+          <a href="#事务三阶段" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#事务三阶段"></a> 事务三阶段</h3>
+      
+<ul>
+<li>开启：以<code>MULTI</code>开始一个事务</li>
+<li>入队：将多个命令入队到事务中，接到这些命令并不会立即执行，而是放到等待执行的事务队列里面</li>
+<li>执行：由<code>EXEC</code>命令触发事务</li>
+</ul>
+
+        <h3 id="watch"   >
+          <a href="#watch" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#watch"></a> WATCH</h3>
+      
+<p><code>WATCH</code>指令，类似乐观锁，事务提交时，如果Key的值已被别的客户端改变， 比如某个list已被别的客户端<code>push/pop</code>过了，整个事务队列都不会被执行。</p>
+<p>通过<code>WATCH</code>命令在事务执行之前监控了多个Keys，倘若在<code>WATCH</code>之后有任何Key的值发生了变化， <code>EXEC</code>命令执行的事务都将被放弃，同时返回<code>Nullmulti-bulk</code>应答以通知调用者事务执行失败</p>
+
+        <h3 id="悲观锁"   >
+          <a href="#悲观锁" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#悲观锁"></a> 悲观锁</h3>
+      
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210912202607757.png" alt="image-20210912202607757" /></p>
+<p><strong>悲观锁（Pessimistic Lock）</strong>，顾名思义，就是很悲观，每次去拿数据的时候都认为别人会修改，所以每次在拿数据的时候都会上锁，这样别人想拿这个数据就会block直到它拿到锁。<strong>传统的关系型数据库里边就用到了很多这种锁机制</strong>，比如<strong>行锁</strong>，<strong>表锁</strong>等，<strong>读锁</strong>，<strong>写锁</strong>等，都是在做操作之前先上锁。</p>
+
+        <h3 id="乐观锁"   >
+          <a href="#乐观锁" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#乐观锁"></a> 乐观锁</h3>
+      
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210912202630691.png" alt="image-20210912202630691" /></p>
+<p><strong>乐观锁（Optimistic Lock）</strong>，顾名思义，就是很乐观，每次去拿数据的时候都认为别人不会修改，所以不会上锁，但是在更新的时候会判断一下在此期间别人有没有去更新这个数据，可以使用<strong>版本号</strong>等机制。<strong>乐观锁适用于多读的应用类型，这样可以提高吞吐量</strong>。Redis就是利用这种check-and-set机制实现事务的。</p>
+<p>何谓数据版本？即为数据增加一个版本标识，在基于数据库表的版本解决方案中，一般是通过为数据库表增加一个 “version” 字段来实现。读取出数据时，将此版本号一同读出，之后更新时，对此版本号加一。</p>
+<p>此时，将提交数据的版本数据与数据库表对应记录的当前版本信息进行比对，<strong>如果提交的数据版本号大于数据库表当前版本号，则予以更新，否则认为是过期数据</strong>。</p>
+
+        <h3 id="redis-事务三特性"   >
+          <a href="#redis-事务三特性" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#redis-事务三特性"></a> Redis 事务三特性</h3>
+      
+<ul>
+<li><strong>单独的隔离操作</strong>：事务中的所有命令都会序列化、按顺序地执行。事务在执行的过程中，不会被其他客户端发送来的命令请求所打断</li>
+<li><strong>没有隔离级别的概念</strong>：队列中的命令没有提交之前都不会实际的被执行，因为事务提交前任何指令都不会被实际执行， 也就不存在“事务内的查询要看到事务里的更新，在事务外查询不能看到”这个让人万分头痛的问题</li>
+<li><strong>不保证原子性</strong>：Redis同一个事务中如果有一条命令执行失败，其后的命令仍然会被执行，没有回滚</li>
+</ul>
+
+        <h2 id="redis-主从复制"   >
+          <a href="#redis-主从复制" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#redis-主从复制"></a> Redis 主从复制</h2>
+      
+<p>主机数据更新后根据配置和策略， 自动同步到备机的master/slaver机制，<strong>Master以写为主，Slave以读为主</strong>。主从复制能够用来：</p>
+<ul>
+<li>读写分离，性能扩展</li>
+<li>容灾快速恢复</li>
+</ul>
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210912204058177.png" alt="image-20210912204058177" /></p>
+<p>每次与Master断开连接之后，都需要重新连接，除非配置进<code>redis.conf</code>文件（具体位置：<code>redis.conf</code>搜寻<code>#### REPLICATION ####</code>）。常用命令：</p>
+<ul>
+<li>从库配置命令：<code>slaveof 主库IP 主库端口</code>。</li>
+<li>查看当前主从配置：<code>info replication</code></li>
+</ul>
+<blockquote>
+<p>replication<br />
+英 [ˌreplɪ’keɪʃ(ə)n] 美 [ˌreplɪ’keɪʃ(ə)n]<br />
+n.<br />
+(绘画等的)复制;拷贝;重复(实验);(尤指对答辩的)回答</p>
+</blockquote>
+
+        <h3 id="常见问题"   >
+          <a href="#常见问题" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#常见问题"></a> 常见问题</h3>
+      
+<ul>
+<li>切入点问题？slave1、slave2是从头开始复制还是从切入点开始复制？比如从k4进来，那之前的123是否也可以复制？答：从头开始复制；123也可以复制</li>
+<li>从机是否可以写？set可否？答：从机不可写，不可set，主机可写</li>
+<li>主机shutdown后情况如何？从机是上位还是原地待命答：从机还是原地待命</li>
+<li>主机又回来了后，主机新增记录，从机还能否顺利复制？答：能</li>
+<li>其中一台从机down后情况如何？依照原有它能跟上大部队吗？答：不能跟上，每次与master断开之后，都需要重新连接，除非你配置进<code>redis.conf</code>文件（具体位置：<code>redis.conf</code>搜寻<code>#### REPLICATION ####</code>）</li>
+</ul>
+
+        <h3 id="薪火相传"   >
+          <a href="#薪火相传" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#薪火相传"></a> 薪火相传</h3>
+      
+<p>上一个slave可以是下一个slave的Master，slave同样可以接收其他 slaves的连接和同步请求，那么该slave作为了链条中下一个的master，可以有效减轻master的写压力，去中心化降低风险。风险是一旦某个slave宕机，后面的slave都没法备份。主机挂了，从机还是从机，无法写数据了。中途变更转向：会清除之前的数据，重新建立拷贝最新的。</p>
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210912204652370.png" alt="image-20210912204652370" /></p>
+
+        <h3 id="反客为主"   >
+          <a href="#反客为主" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#反客为主"></a> 反客为主</h3>
+      
+<p>当一个master宕机后，后面的slave可以立刻升为master，使当前数据库停止与其他数据库的同步，转成主数据库。其后面的slave不用做任何修改。</p>
+<p>使用命令：<code>SLAVEOF no one</code></p>
+
+        <h3 id="主从复制原理"   >
+          <a href="#主从复制原理" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#主从复制原理"></a> 主从复制原理</h3>
+      
+<p>slave启动成功连接到master后会发送一个<code>sync</code>命令。master接到命令启动后台的存盘进程，同时收集所有接收到的用于修改数据集命令，在后台进程执行完毕之后，master将传送整个<strong>RDB数据文件</strong>到slave，以完成一次完全同步。</p>
+<ul>
+<li><strong>全量复制</strong>：而slave服务在接收到数据库文件数据后，将其存盘并加载到内存中</li>
+<li><strong>增量复制</strong>：master继续将新的所有收集到的修改命令依次传给slave，完成同步</li>
+</ul>
+<p>只要是重新连接master，一次完全同步（全量复制）将被自动执行</p>
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210912205253939.png" alt="image-20210912205253939" /></p>
+
+        <h3 id="哨兵模式sentinel"   >
+          <a href="#哨兵模式sentinel" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#哨兵模式sentinel"></a> 哨兵模式（sentinel）</h3>
+      
+<p>哨兵模式是<strong>反客为主的自动版</strong>，能够后台监控主机是否故障，如果故障了根据<strong>投票数</strong>自动将从库转换为主库。一组sentinel能同时监控多个master，原master重启后会变为从机。</p>
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210912205706288.png" alt="image-20210912205706288" /></p>
+<p>哪个从机会被选举为主机呢？根据优先级别：<code>slave-priority</code> （在配置文件中配置<code>slave-priority</code>设置）。</p>
+
+        <h3 id="配置方法"   >
+          <a href="#配置方法" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#配置方法"></a> 配置方法</h3>
+      
+<ol>
+<li>新建<code>sentinel.conf</code>文件</li>
+<li>配置监控的master地址：<code>sentinel monitor mymaster 127.0.0.1 6379 1</code></li>
+</ol>
+<p>其中<code>mymaster</code>为监控对象起的服务器名称， 1 为至少有多少个哨兵同意迁移的数量。</p>
+<ol start="3">
+<li>启动哨兵：<code>redis-sentinel  ./sentinel.conf</code></li>
+</ol>
+
+        <h3 id="复制延时"   >
+          <a href="#复制延时" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#复制延时"></a> 复制延时</h3>
+      
+<p>由于所有的写操作都是先在master上操作，然后同步更新到slave上，所以从master同步到slave机器有一定的延迟，当系统很繁忙的时候，延迟问题会更加严重，slave机器数量的增加也会使这个问题更加严重。</p>
+
+        <h3 id="故障恢复"   >
+          <a href="#故障恢复" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#故障恢复"></a> 故障恢复</h3>
+      
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210912211245500.png" alt="image-20210912211245500" /></p>
+<ul>
+<li>优先级在<code>redis.conf</code>中默认：<code>slave-priority 100</code>，值越小优先级越高</li>
+<li>偏移量是指获得原主机数据最全的</li>
+<li>每个Redis实例启动后都会随机生成一个40位的<code>runid</code></li>
+</ul>
+
+        <h2 id="redis-集群"   >
+          <a href="#redis-集群" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#redis-集群"></a> Redis 集群</h2>
+      
+
+        <h3 id="问题引出"   >
+          <a href="#问题引出" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#问题引出"></a> 问题引出</h3>
+      
+<ul>
+<li>容量不够，redis如何进行扩容？</li>
+<li>并发写操作， redis如何分摊？</li>
+</ul>
+<p>另外，主从模式，薪火相传模式，主机宕机，导致ip地址发生变化，应用程序中配置需要修改对应的主机地址、端口等信息。</p>
+<p>之前通过代理主机来解决，但是redis3.0中提供了解决方案。就是无中心化集群配置。</p>
+
+        <h3 id="什么是集群"   >
+          <a href="#什么是集群" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#什么是集群"></a> 什么是集群</h3>
+      
+<p>Redis 集群实现了对Redis的<strong>水平扩容</strong>，即启动N个Redis节点，将整个数据库分布存储在这N个节点中，每个节点存储总数据的 1/N。</p>
+<p>Redis 集群通过分区（partition）来提供一定程度的可用性（availability）： 即使集群中有一部分节点失效或者无法进行通讯， 集群也可以继续处理命令请求。</p>
 </div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yuyun-zhao.gitee.io">yuyun zhao</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yuyun-zhao.gitee.io/2021/09/09/%E3%80%90Redis%E3%80%91Redis/">http://yuyun-zhao.gitee.io/2021/09/09/%E3%80%90Redis%E3%80%91Redis/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.gitee.io/tags/Redis/">Redis</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2021/09/10/%E3%80%90%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E3%80%91%E8%BF%9B%E7%A8%8B/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">【操作系统】进程</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2021/09/08/%E3%80%90SpringCloud%E3%80%91Seata/"><span class="paginator-prev__text">【Spring Cloud】Spring Cloud Alibaba Seata</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E7%AE%80%E4%BB%8B"><span class="toc-text">
-           Redis 简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E4%BA%94%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-text">
-           Redis 五大数据类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">
-           Redis 常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#key-%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-text">
-           Key 关键字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#string"><span class="toc-text">
+           Redis 简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#redis-%E5%8D%95%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="toc-text">
+           Redis 单线程模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis-%E7%89%B9%E7%82%B9"><span class="toc-text">
+           Redis 特点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E4%BA%94%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-text">
+           Redis 五大数据类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#string"><span class="toc-text">
            String</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#list"><span class="toc-text">
            List</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#set"><span class="toc-text">
            Set</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hash"><span class="toc-text">
            Hash</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zset"><span class="toc-text">
+           Zset</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E6%96%B0%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-text">
+           Redis 新数据类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">
+           Redis 常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#key-%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-text">
+           Key 关键字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#string-2"><span class="toc-text">
+           String</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#list-2"><span class="toc-text">
+           List</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#set-2"><span class="toc-text">
+           Set</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hash-2"><span class="toc-text">
+           Hash</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zset-2"><span class="toc-text">
            ZSet</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E4%BB%8B%E7%BB%8D"><span class="toc-text">
            Redis 配置文件介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E"><span class="toc-text">
            参数说明</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E6%8C%81%E4%B9%85%E5%8C%96"><span class="toc-text">
-           Redis 持久化</span></a></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/author.png" alt="avatar"></div><p class="sidebar-ov-author__text">no code no life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/YUYUN-ZHAO" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="zyy1024462136" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a><a class="sidebar-ov-social-item" href="1024462136" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="mailto:im.yuyunzhao@gmail.com" target="_blank" rel="noopener" data-popover="social.Gmail" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">Gmail</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">80</div><div class="sidebar-ov-state-item__name">文章</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">30</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">30</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2021</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>yuyun zhao</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script>function initSearch() {
+           Redis 持久化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#rdb"><span class="toc-text">
+           RDB</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rdb-%E5%B8%B8%E8%A7%81%E9%85%8D%E7%BD%AE"><span class="toc-text">
+           RDB 常见配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rdb-%E4%BC%98%E5%8A%BF%E4%B8%8E%E5%8A%A3%E5%8A%BF"><span class="toc-text">
+           RDB 优势与劣势</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rdb-%E5%B0%8F%E7%BB%93"><span class="toc-text">
+           RDB 小结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#aof"><span class="toc-text">
+           AOF</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#aof-%E6%8C%81%E4%B9%85%E5%8C%96%E6%B5%81%E7%A8%8B"><span class="toc-text">
+           AOF 持久化流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#aof-%E5%90%8C%E6%AD%A5%E9%A2%91%E7%8E%87%E8%AE%BE%E7%BD%AE"><span class="toc-text">
+           AOF 同步频率设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rewrite-%E9%87%8D%E5%86%99%E5%8E%8B%E7%BC%A9"><span class="toc-text">
+           Rewrite 重写压缩</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#rewrite-%E5%8E%9F%E7%90%86"><span class="toc-text">
+           Rewrite 原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#rewrite-%E7%9B%B8%E5%85%B3%E9%85%8D%E7%BD%AE"><span class="toc-text">
+           Rewrite 相关配置</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rewrite-%E6%B5%81%E7%A8%8B"><span class="toc-text">
+           Rewrite 流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#aof-%E4%BC%98%E5%8A%BF%E4%B8%8E%E5%8A%A3%E5%8A%BF"><span class="toc-text">
+           AOF 优势与劣势</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#aof-%E5%B0%8F%E7%BB%93"><span class="toc-text">
+           AOF 小结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">
+           总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E4%BA%8B%E5%8A%A1"><span class="toc-text">
+           Redis 事务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">
+           事务常用命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E4%B8%89%E9%98%B6%E6%AE%B5"><span class="toc-text">
+           事务三阶段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#watch"><span class="toc-text">
+           WATCH</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%82%B2%E8%A7%82%E9%94%81"><span class="toc-text">
+           悲观锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B9%90%E8%A7%82%E9%94%81"><span class="toc-text">
+           乐观锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis-%E4%BA%8B%E5%8A%A1%E4%B8%89%E7%89%B9%E6%80%A7"><span class="toc-text">
+           Redis 事务三特性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6"><span class="toc-text">
+           Redis 主从复制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="toc-text">
+           常见问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%96%AA%E7%81%AB%E7%9B%B8%E4%BC%A0"><span class="toc-text">
+           薪火相传</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8D%E5%AE%A2%E4%B8%BA%E4%B8%BB"><span class="toc-text">
+           反客为主</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86"><span class="toc-text">
+           主从复制原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%93%A8%E5%85%B5%E6%A8%A1%E5%BC%8Fsentinel"><span class="toc-text">
+           哨兵模式（sentinel）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%96%B9%E6%B3%95"><span class="toc-text">
+           配置方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%8D%E5%88%B6%E5%BB%B6%E6%97%B6"><span class="toc-text">
+           复制延时</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%85%E9%9A%9C%E6%81%A2%E5%A4%8D"><span class="toc-text">
+           故障恢复</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E9%9B%86%E7%BE%A4"><span class="toc-text">
+           Redis 集群</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%BC%95%E5%87%BA"><span class="toc-text">
+           问题引出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E9%9B%86%E7%BE%A4"><span class="toc-text">
+           什么是集群</span></a></li></ol></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/author.png" alt="avatar"></div><p class="sidebar-ov-author__text">no code no life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/YUYUN-ZHAO" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="zyy1024462136" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a><a class="sidebar-ov-social-item" href="1024462136" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="mailto:im.yuyunzhao@gmail.com" target="_blank" rel="noopener" data-popover="social.Gmail" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">Gmail</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">80</div><div class="sidebar-ov-state-item__name">文章</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">30</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">30</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2021</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>yuyun zhao</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script>function initSearch() {
   var isXML = true;
   var search_path = 'search.xml';
 
