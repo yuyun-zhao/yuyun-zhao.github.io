@@ -30,6 +30,8 @@
 <meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912112446186.png">
 <meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912114736426.png">
 <meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/aHR0cHM6Ly9naXRlZS5jb20vamFsbGVua3dvbmcvTGVhcm5SZWRpcy9yYXcvbWFzdGVyL2ltYWdlLzIyLnBuZw">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210913183818788.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210913183826952.png">
 <meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912202032972.png">
 <meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912202226170.png">
 <meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912202406006.png">
@@ -39,11 +41,16 @@
 <meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912204058177.png">
 <meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912204652370.png">
 <meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912205253939.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912205706288.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210913165922239.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210913164351029.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210913174004677.png">
 <meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912211245500.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210913173713479.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210913175731575.png">
 <meta property="article:published_time" content="2021-09-09T14:15:25.000Z">
-<meta property="article:modified_time" content="2021-09-13T05:17:28.149Z">
+<meta property="article:modified_time" content="2021-09-13T10:53:28.479Z">
 <meta property="article:author" content="yuyun zhao">
+<meta property="article:tag" content="中间件">
 <meta property="article:tag" content="Redis">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210913131720145.png"><title>【Redis】Redis 基础 | yuyun zhao's blog</title><link ref="canonical" href="http://yuyun-zhao.gitee.io/2021/09/09/%E3%80%90Redis%E3%80%91Redis/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
@@ -70,7 +77,7 @@ var CONFIG = {
   sourcePath: {"js":"js","css":"css","images":"images"},
 };
 
-window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【Redis】Redis 基础</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-09-09</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-09-13</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">8.9k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">50分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body"><p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210913131720145.png" alt="image-20210913131720145" /></p>
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【Redis】Redis 基础</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-09-09</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-09-13</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">14.3k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">88分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body"><p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210913131720145.png" alt="image-20210913131720145" /></p>
 
         <h2 id="redis-简介"   >
           <a href="#redis-简介" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#redis-简介"></a> Redis 简介</h2>
@@ -186,7 +193,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
         <h3 id="hash"   >
           <a href="#hash" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#hash"></a> Hash</h3>
       
-<p>Hash 是一个键值对集合。它是一个String类型的field和value的映射表，Hash特别适合用于存储对象。它类似Java里面的<code>Map&lt;String,Object&gt;</code>，存储方式：</p>
+<p>Hash 是一个键值对集合。它是一个String类型的field和value的映射表，Hash特别适合用于存储对象。它类似Java里面的<code>Map&lt;String,Map&lt;K,V&gt;&gt;</code>，存储方式：</p>
 <p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210912214645546.png" alt="image-20210912214645546" /></p>
 <p>通过 key(用户ID) + field(属性标签) 就可以操作对应属性数据了，既不需要重复存储数据，也不会带来序列化和并发修改控制的问题。</p>
 <p>Hash类型对应的数据结构是两种：ziplist（压缩列表），hashtable（哈希表）。当field-value长度较短且个数较少时，使用ziplist，否则使用hashtable。</p>
@@ -204,6 +211,143 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 </ul>
 <p>跳跃表示例：</p>
 <p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210912215152100.png" alt="image-20210912215152100" /></p>
+
+        <h3 id="实际应用场景"   >
+          <a href="#实际应用场景" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#实际应用场景"></a> 实际应用场景</h3>
+      
+
+        <h4 id="string-2"   >
+          <a href="#string-2" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#string-2"></a> String</h4>
+      
+<ul>
+<li>商品编号、订单号采用INCR命令生成</li>
+<li>是否喜欢的文章</li>
+</ul>
+
+        <h4 id="hash-2"   >
+          <a href="#hash-2" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#hash-2"></a> Hash</h4>
+      
+<ul>
+<li>新增商品 <code>hset shopcar:uid1024 334488 1</code></li>
+<li>新增商品 <code>hset shopcar:uid1024 334477 1</code></li>
+<li>增加商品数量 <code>hincrby shopcar:uid1024 334477 1</code></li>
+<li>商品总数 <code>hlen shopcar:uid1024</code></li>
+<li>全部选择 <code>hgetall shopcar:uid1024</code></li>
+</ul>
+
+        <h4 id="list-2"   >
+          <a href="#list-2" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#list-2"></a> List</h4>
+      
+<p>A和B发布了文章分别是11和22。</p>
+<ul>
+<li>我关注了A和B，只要他们发布了新文章，就会安装进我的List：<code>lpush likearticle:myid1122</code></li>
+<li>查看我自己的号订阅的全部文章，类似分页，下面0~10就是一次显示10条：<code>lrange likearticle:myid 0 10</code></li>
+</ul>
+
+        <h4 id="set-2"   >
+          <a href="#set-2" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#set-2"></a> Set</h4>
+      
+<ul>
+<li>微信抽奖小程序
+<ul>
+<li>用户ID，立即参与按钮
+<ul>
+<li><code>SADD key 用户ID</code></li>
+</ul>
+</li>
+<li>显示已经有多少人参与了、上图23208人参加
+<ul>
+<li><code>SCARD key</code></li>
+</ul>
+</li>
+<li>抽奖(从set中任意选取N个中奖人)
+<ul>
+<li><code>SRANDMEMBER key 2</code>（随机抽奖2个人，元素不删除）</li>
+<li><code>SPOP key 3</code>（随机抽奖3个人，元素会删除）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>微信朋友圈点赞
+<ul>
+<li>新增点赞
+<ul>
+<li><code>sadd pub:msglD 点赞用户ID1 点赞用户ID2</code></li>
+</ul>
+</li>
+<li>取消点赞
+<ul>
+<li><code>srem pub:msglD 点赞用户ID</code></li>
+</ul>
+</li>
+<li>展现所有点赞过的用户
+<ul>
+<li><code>SMEMBERS pub:msglD</code></li>
+</ul>
+</li>
+<li>点赞用户数统计，就是常见的点赞红色数字
+<ul>
+<li><code>scard pub:msgID</code></li>
+</ul>
+</li>
+<li>判断某个朋友是否对楼主点赞过
+<ul>
+<li><code>SISMEMBER pub:msglD用户ID</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>微博好友关注社交关系
+<ul>
+<li>共同关注：我去到局座张召忠的微博，马上获得我和局座共同关注的人
+<ul>
+<li><code>sadd s1 1 2 3 4 5</code></li>
+<li><code>sadd s2 3 4 5 6 7</code></li>
+<li><code>SINTER s1 s2</code></li>
+</ul>
+</li>
+<li>我关注的人也关注他(大家爱好相同)</li>
+</ul>
+</li>
+<li>QQ内推可能认识的人
+<ul>
+<li><code>sadd s1 1 2 3 4 5</code></li>
+<li><code>sadd s2 3 4 5 6 7</code></li>
+<li><code>SINTER s1 s2</code></li>
+<li><code>SDIFF s1 s2</code></li>
+<li><code>SDIFF s2 s1</code></li>
+</ul>
+</li>
+</ul>
+
+        <h4 id="zset-2"   >
+          <a href="#zset-2" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#zset-2"></a> Zset</h4>
+      
+<ul>
+<li>根据商品销售对商品进行排序显示
+<ul>
+<li>定义商品销售排行榜（sorted set集合），key为goods:sellsort，分数为商品销售数量。</li>
+<li>商品编号1001的销量是9，商品编号1002的销量是15 <code>- zadd goods:sellsort 9 1001 15 1002</code></li>
+<li>有一个客户又买了2件商品1001，商品编号1001销量加2 - <code>zincrby goods:sellsort 2 1001</code></li>
+<li>求商品销量前10名 - <code>ZRANGE goods:sellsort 0 10 withscores</code></li>
+</ul>
+</li>
+<li>抖音热搜
+<ul>
+<li>点击视频
+<ul>
+<li><code>ZINCRBY hotvcr:20200919 1 八佰</code></li>
+<li><code>ZINCRBY hotvcr:20200919 15 八佰 2 花木兰</code></li>
+</ul>
+</li>
+<li>展示当日排行前10条
+<ul>
+<li><code>ZREVRANGE hotvcr:20200919 0 9 withscores</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 
         <h2 id="redis-新数据类型"   >
           <a href="#redis-新数据类型" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#redis-新数据类型"></a> Redis 新数据类型</h2>
@@ -253,15 +397,35 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
       
 <p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210911230855564.png" alt="image-20210911230855564" /></p>
 
-        <h3 id="string-2"   >
-          <a href="#string-2" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#string-2"></a> String</h3>
+        <h3 id="string-3"   >
+          <a href="#string-3" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#string-3"></a> String</h3>
       
 <p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210911230754903.png" alt="image-20210911230754903" /></p>
+<p>常用命令：</p>
+<ul>
+<li><code>SET key value</code></li>
+<li><code>GET key</code></li>
+<li><code>MSET key value [key value…]</code>  同时设置多个键值</li>
+<li><code>MGET key [key…]</code> 同时获取多个键值</li>
+<li><code>INCR key</code> 递增数字 （可以不用预先设置key的数值。如果预先设置key但值不是数字，则会报错)</li>
+<li><code>INCRBY key increment</code> 增加指定的整数</li>
+<li><code>DECR key</code> 递减数值</li>
+<li><code>DECRBY key decrement</code> 减少指定的整数</li>
+<li><code>STRLEN key</code>  获取字符串长度</li>
+<li><code>SETNX key value</code>  分布式锁</li>
+</ul>
 
-        <h3 id="list-2"   >
-          <a href="#list-2" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#list-2"></a> List</h3>
+        <h3 id="list-3"   >
+          <a href="#list-3" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#list-3"></a> List</h3>
       
 <p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210911231436324.png" alt="image-20210911231436324" /></p>
+<p>常用命令：</p>
+<ul>
+<li><code>LPUSH key value [value …]</code>  向列表左边添加元素</li>
+<li><code>RPUSH key value [value …]</code>  向列表右边添加元素</li>
+<li><code>LRANGE key start stop</code>  查看列表</li>
+<li><code>LLEN key</code>  获取列表中元素的个数</li>
+</ul>
 <p>性能总结：</p>
 <ul>
 <li>它是一个字符串链表，left、right都可以插入添加；</li>
@@ -271,20 +435,79 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <li>链表的操作无论是头和尾效率都极高，但假如是对中间元素进行操作，效率就很惨淡了。</li>
 </ul>
 
-        <h3 id="set-2"   >
-          <a href="#set-2" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#set-2"></a> Set</h3>
+        <h3 id="set-3"   >
+          <a href="#set-3" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#set-3"></a> Set</h3>
       
 <p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210911231420212.png" alt="image-20210911231420212" /></p>
+<p>常用命令：</p>
+<ul>
+<li><code>SADD key member [member …]</code>  添加元素</li>
+<li><code>SREM key member [member …]</code>  删除元素</li>
+<li><code>SMEMBERS key</code>  获取集合中的所有元素</li>
+<li><code>SISMEMBER key member</code>  判断元素是否在集合中</li>
+<li><code>SCARD key</code>  获取集合中的元素个数</li>
+<li><code>SRANDMEMBER key [数字]</code>  从集合中随机弹出一个元素，元素不删除</li>
+<li><code>SPOP key[数字]</code>  从集合中随机弹出一个元素，出一个删一个</li>
+</ul>
+<p>集合运算：</p>
+<ul>
+<li>集合的差集运算A - B
+<ul>
+<li>属于A但不属于B的元素构成的集合</li>
+<li><code>SDIFF key [key …]</code></li>
+</ul>
+</li>
+<li>集合的交集运算A ∩ B
+<ul>
+<li>属于A同时也属于B的共同拥有的元素构成的集合</li>
+<li><code>SINTER key [key …]</code></li>
+</ul>
+</li>
+<li>集合的并集运算A U B
+<ul>
+<li>属于A或者属于B的元素合并后的集合</li>
+<li><code>SUNION key [key …]</code></li>
+</ul>
+</li>
+</ul>
 
-        <h3 id="hash-2"   >
-          <a href="#hash-2" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#hash-2"></a> Hash</h3>
+        <h3 id="hash-3"   >
+          <a href="#hash-3" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#hash-3"></a> Hash</h3>
       
 <p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210911231758180.png" alt="image-20210911231758180" /></p>
+<p>常用命令：</p>
+<ul>
+<li><code>HSET key field value</code>  一次设置一个字段值</li>
+<li><code>HGET key field</code>  一次获取一个字段值</li>
+<li><code>HMSET key field value [field value …]</code>  一次设置多个字段值</li>
+<li><code>HMGET key field [field …]</code>  一次获取多个字段值</li>
+<li><code>HGETALL key</code>  获取所有字段值</li>
+<li><code>HLEN key</code>  获取某个key内的全部数量</li>
+<li><code>HDEL key</code>  删除一个key</li>
+</ul>
 
-        <h3 id="zset-2"   >
-          <a href="#zset-2" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#zset-2"></a> ZSet</h3>
+        <h3 id="zset-3"   >
+          <a href="#zset-3" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#zset-3"></a> ZSet</h3>
       
 <p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210911231825494.png" alt="image-20210911231825494" /></p>
+<p>常用命令：</p>
+<ul>
+<li><code>ZADD key score member [score member …]</code>  添加元素</li>
+<li><code>ZRANGE key start stop [WITHSCORES]</code>  按照元素分数从小到大的顺序返回索引从start到stop之间的所有元素</li>
+<li><code>ZSCORE key member</code> 获取元素的分数</li>
+<li><code>ZREM key member [member …]</code>  删除元素</li>
+<li><code>ZRANGEBYSCORE key min max [WITHSCORES] [LIMIT offset count]</code> 获取指定分数范围的元素</li>
+<li><code>ZINCRBY key increment member</code>  增加某个元素的分数</li>
+<li><code>ZCARD key</code>  获取集合中元素的数量</li>
+<li><code>ZCOUNT key min max</code>  获得指定分数范围内的元素个数</li>
+<li><code>ZREMRANGEBYRANK key start stop</code> 按照排名范围删除元素</li>
+<li>获取元素的排名
+<ul>
+<li><code>ZRANK key member</code>  从小到大</li>
+<li><code>ZREVRANK key member</code>  从大到小</li>
+</ul>
+</li>
+</ul>
 
         <h2 id="redis-配置文件介绍"   >
           <a href="#redis-配置文件介绍" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#redis-配置文件介绍"></a> Redis 配置文件介绍</h2>
@@ -518,6 +741,15 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <li>默认超过原大小100%大小时重写可以改到适当的数值。</li>
 </ul>
 
+        <h2 id="redis-发布和订阅"   >
+          <a href="#redis-发布和订阅" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#redis-发布和订阅"></a> Redis 发布和订阅</h2>
+      
+<p>Redis 发布订阅 (pub/sub) 是一种消息通信模式：发送者 (pub) 发送消息，订阅者 (sub) 接收消息。Redis 客户端可以订阅任意数量的频道。</p>
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210913183818788.png" alt="image-20210913183818788" /></p>
+<p>当给这个频道发布消息后，消息就会发送给订阅的客户端</p>
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210913183826952.png" alt="image-20210913183826952" /></p>
+<p>Redis Sentinel 间通讯时使用了发布订阅功能。</p>
+
         <h2 id="redis-事务"   >
           <a href="#redis-事务" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#redis-事务"></a> Redis 事务</h2>
       
@@ -628,20 +860,48 @@ n.<br />
         <h3 id="主从复制原理"   >
           <a href="#主从复制原理" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#主从复制原理"></a> 主从复制原理</h3>
       
-<p>slave启动成功连接到master后会发送一个<code>sync</code>命令。master接到命令启动后台的存盘进程，同时收集所有接收到的用于修改数据集命令，在后台进程执行完毕之后，master将传送整个<strong>RDB数据文件</strong>到slave，以完成一次完全同步。</p>
+<p>slave启动成功连接到master后会发送一个<code>sync</code>命令。master接到命令启动后台的<strong>存盘进程</strong>，同时收集所有接收到的用于修改数据集命令，在后台进程执行完毕之后，master将传送整个<strong>RDB数据文件</strong>到slave，以完成一次完全同步。</p>
 <ul>
 <li><strong>全量复制</strong>：而slave服务在接收到数据库文件数据后，将其存盘并加载到内存中</li>
-<li><strong>增量复制</strong>：master继续将新的所有收集到的修改命令依次传给slave，完成同步</li>
+<li><strong>增量复制</strong>：master继续将<strong>新的</strong>所有收集到的修改命令依次传给slave（只传送新增的修改命令），完成同步</li>
 </ul>
-<p>只要是重新连接master，一次完全同步（全量复制）将被自动执行</p>
+<p>在Redis2.8版本后，主从断线后恢复的情况下实现增量复制。</p>
 <p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210912205253939.png" alt="image-20210912205253939" /></p>
 
-        <h3 id="哨兵模式sentinel"   >
-          <a href="#哨兵模式sentinel" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#哨兵模式sentinel"></a> 哨兵模式（sentinel）</h3>
+        <h2 id="redis-哨兵模式sentinel"   >
+          <a href="#redis-哨兵模式sentinel" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#redis-哨兵模式sentinel"></a> Redis 哨兵模式（sentinel）</h2>
       
-<p>哨兵模式是<strong>反客为主的自动版</strong>，能够后台监控主机是否故障，如果故障了根据<strong>投票数</strong>自动将从库转换为主库。一组sentinel能同时监控多个master，原master重启后会变为从机。</p>
-<p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210912205706288.png" alt="image-20210912205706288" /></p>
-<p>哪个从机会被选举为主机呢？根据优先级别：<code>slave-priority</code> （在配置文件中配置<code>slave-priority</code>设置）。</p>
+<blockquote>
+<p>更多细节见博客 <span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://www.huaweicloud.com/articles/f2e85fe106cd4b353928348513fecdab.html%E3%80%81https://www.cnblogs.com/kevingrace/p/9004460.html" >https://www.huaweicloud.com/articles/f2e85fe106cd4b353928348513fecdab.html、https://www.cnblogs.com/kevingrace/p/9004460.html</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+</blockquote>
+<p>哨兵模式是<strong>反客为主的自动版</strong>，能够在后台监控主机是否故障，如果故障了根据<strong>投票数</strong>自动将从库转换为主库。通常哨兵也配置多个，互相监控。一组sentinel能同时监控多个master，原master重启后会变为从机。哨兵与服务器间通过发布订阅获得消息。</p>
+<p>Redis 的 Sentinel 系统用于管理多个 Redis 服务器(instance) 该系统执行以下三个任务:</p>
+<ul>
+<li><strong>监控(Monitoring)</strong>：Sentinel 会不断地定期检查你的主服务器和从服务器是否运作正常。</li>
+<li><strong>提醒(Notification)</strong>：当被监控的某个 Redis 服务器出现问题时，Sentinel 可以通过 API 向管理员或者其他应用程序发送通知（例如发邮件）。</li>
+<li><strong>自动故障迁移(Automaticfailover)</strong>：当一个主服务器不能正常工作时， Sentinel 会开始一次自动故障迁移操作， 它会将失效主服务器的其中一个从服务器升级为新的主服务器， 并让失效主服务器的其他从服务器改为复制新的主服务器；通过发布与订阅功能， 将更新后的配置传播给所有其他 Sentinel ， 其他 Sentinel 对它们自己的配置进行更新。；<strong>当客户端试图连接失效的主服务器时， 集群也会向客户端返回新主服务器的地址</strong>， 使得集群可以使用新主服务器代替失效服务器。</li>
+</ul>
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210913165922239.png" alt="image-20210913165922239" /></p>
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210913164351029.png" alt="image-20210913164351029" /></p>
+<p>假设主服务器宕机，哨兵1先监测到这个结果，系统并不会立刻进行 <strong>failover（故障转移）</strong> 过程，仅仅是哨兵1主观地认为其不可用，此现象称为<strong>主观下线</strong>。当其后的哨兵也检测到主服务器不可用，并且数量达到一定值时（该数量在配置文件中配置，见下文），那么哨兵之间将进行一次投票，选出某一个哨兵发出 failover 指令，根据优先级/偏移量选出新的主机，所有从机都设置该服务器为主服务器，这个过程被称为<strong>客观下线</strong>。</p>
+<p><strong>主观下线</strong>：所谓主观下线，就是<strong>单个</strong>sentinel认为某个服务下线（有可能是接收不到订阅，之间的网络不通等等原因）。</p>
+<p>sentinel会以每秒一次的频率向所有与其建立了命令连接的实例（master，从服务，其他sentinel）发ping命令，通过判断ping回复是有效回复，还是无效回复来判断实例时候在线（对该sentinel来说是“主观在线”）。</p>
+<p>sentinel配置文件中的<code>down-after-milliseconds</code>设置了判断主观下线的时间长度，如果实例在<code>down-after-milliseconds</code>毫秒内，返回的都是无效回复，那么sentinel会认为该实例已（主观）下线，修改其flags状态为<code>SRI_S_DOWN</code>。如果多个sentinel监视一个服务，有可能存在多个sentinel的<code>down-after-milliseconds</code>配置不同，这个在实际生产中要注意。</p>
+<p><strong>客观下线</strong>：当主观下线的节点是主节点时，此时该哨兵3节点会通过指令<code>sentinel is-masterdown-by-addr</code>寻求其它哨兵节点对主节点的判断，如果其他的哨兵也认为主节点主观线下了，则当认为主观下线的票数超过了<code>quorum</code>（选举）个数，此时哨兵节点则认为该主节点确实有问题，这样就客观下线了，大部分哨兵节点都同意下线操作，也就说是客观下线。</p>
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210913174004677.png" alt="image-20210913174004677" /></p>
+<p>哨兵至少需要3个实例，来保证自己的健壮性。哨兵+redis主从的部署架构，是不会保证数据零丢失的，只能保证redis集群的高可用性。对于哨兵+redis主从这种复杂的部署架构，尽量在测试环境和生产环境，都进行充分的测试和演练。</p>
+
+        <h3 id="自动故障转移机制"   >
+          <a href="#自动故障转移机制" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#自动故障转移机制"></a> 自动故障转移机制</h3>
+      
+<p>哪个从机会被选举为主机呢？首先判断每个slave与master断开连接的次数：如果一个slave与master失去联系超过10次，并且每次都超过了配置的最大失联时间(<code>down-after-milliseconds</code>)，如果sentinel在进行failover时发现slave失联，那么这个slave就会被sentinel认为不适合用来做新master的。</p>
+<p>符合上述条件的slave才会被列入master候选人列表，并根据以下顺序来进行排序：</p>
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210912211245500.png" alt="image-20210912211245500" /></p>
+<ul>
+<li>根据优先级别：<code>slave-priority</code> （在配置文件中配置<code>slave-priority</code>设置）。优先级默认：<code>slave-priority 100</code>，值越小优先级越高（如果一个redis的slave优先级配置为0，那么它将永远不会被选为master。但是它依然会从master哪里复制数据。）</li>
+<li>偏移量是指与原主机数据相比相差最少的，即同步率最高的（根据复制的下标数比较谁的次数多）</li>
+<li>每个Redis实例启动后都会随机生成一个40位的<code>runid</code></li>
+</ul>
 
         <h3 id="配置方法"   >
           <a href="#配置方法" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#配置方法"></a> 配置方法</h3>
@@ -650,7 +910,7 @@ n.<br />
 <li>新建<code>sentinel.conf</code>文件</li>
 <li>配置监控的master地址：<code>sentinel monitor mymaster 127.0.0.1 6379 1</code></li>
 </ol>
-<p>其中<code>mymaster</code>为监控对象起的服务器名称， 1 为至少有多少个哨兵同意迁移的数量。</p>
+<p>其中<code>mymaster</code>为监控对象起的服务器名称， 1 为至少有多少个哨兵同意迁移的数量（可以同时配置多个哨兵一起监控，此处配置的1代表至少1个哨兵觉得主服务器宕机才可以进行重新选举）。</p>
 <ol start="3">
 <li>启动哨兵：<code>redis-sentinel  ./sentinel.conf</code></li>
 </ol>
@@ -660,15 +920,60 @@ n.<br />
       
 <p>由于所有的写操作都是先在master上操作，然后同步更新到slave上，所以从master同步到slave机器有一定的延迟，当系统很繁忙的时候，延迟问题会更加严重，slave机器数量的增加也会使这个问题更加严重。</p>
 
-        <h3 id="故障恢复"   >
-          <a href="#故障恢复" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#故障恢复"></a> 故障恢复</h3>
+        <h3 id="哨兵-leader-选举算法"   >
+          <a href="#哨兵-leader-选举算法" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#哨兵-leader-选举算法"></a> 哨兵 leader 选举算法</h3>
       
-<p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210912211245500.png" alt="image-20210912211245500" /></p>
+<p>如果主节点被判定为<strong>客观下线</strong>之后，就要选取一个哨兵节点来完成后面的故障转移工作，选举出一个leader的流程如下：</p>
 <ul>
-<li>优先级在<code>redis.conf</code>中默认：<code>slave-priority 100</code>，值越小优先级越高</li>
-<li>偏移量是指获得原主机数据最全的</li>
-<li>每个Redis实例启动后都会随机生成一个40位的<code>runid</code></li>
+<li>每个在线的哨兵节点都可以成为领导者，当它确认（比如哨兵3）主节点下线时，会向其它哨兵发<code>is-master-down-by-addr</code>命令，征求判断并要求将自己设置为领导者，由领导者处理故障转移；</li>
+<li>当其它哨兵收到此命令时，可以同意或者拒绝它成为领导者；</li>
+<li>如果哨兵3发现自己在选举的票数大于等于<code>num(sentinels)/2+1</code>时，将成为领导者，如果没有超过，继续选举…</li>
 </ul>
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210913173713479.png" alt="image-20210913173713479" /></p>
+
+        <h3 id="redis-哨兵主备切换的数据丢失问题"   >
+          <a href="#redis-哨兵主备切换的数据丢失问题" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#redis-哨兵主备切换的数据丢失问题"></a> Redis 哨兵主备切换的数据丢失问题</h3>
+      
+<p>共有两种数据丢失场景：</p>
+
+        <h4 id="1-异步复制时间过长"   >
+          <a href="#1-异步复制时间过长" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#1-异步复制时间过长"></a> 1. 异步复制时间过长</h4>
+      
+<p>因为master-&gt;slave的复制是<strong>异步的</strong>，所以可能有部分数据还没复制到slave，master就宕机了（此时异步复制时间过长），这些数据就丢失了。</p>
+
+        <h4 id="2-脑裂"   >
+          <a href="#2-脑裂" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#2-脑裂"></a> 2. 脑裂</h4>
+      
+<p>脑裂，也就是说，某个master所在机器突然脱离了正常的网络，跟其他slave机器不能连接，但是实际上master还运行着，这个时候，<strong>集群中就会出现两个master</strong>。</p>
+<p>此时虽然某个slave被切换成了master，但是可能client还没来得及切换到新的master，还继续写向旧master数据可能就会丢失。因此master在恢复的时候，会被作为一个slave挂到新的master上，自己的数据会被清空，从新的master复制数据，导致刚才客户端传来的数据丢失。</p>
+
+        <h4 id="解决异步复制和脑裂导致的数据丢失"   >
+          <a href="#解决异步复制和脑裂导致的数据丢失" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#解决异步复制和脑裂导致的数据丢失"></a> 解决异步复制和脑裂导致的数据丢失</h4>
+      
+<p>设置数据复制和同步的延迟时间，<strong>当slave与master间的数据复制同步时间超过了延迟时间，就拒绝客户端的写请求</strong>：</p>
+<figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">min-slaves-to-write 1   # 最少一个slave和master进行数据复制同步时超过延迟时间 </span><br><span class="line">min-slaves-max-lag 10   # 延迟时间10s</span><br></pre></td></tr></table></div></figure>
+<blockquote>
+<p>lag：落后，即延迟了10s</p>
+</blockquote>
+<p>该配置要求至少有1个slave进行数据复制和同步的延迟不能超过10秒。如果一旦某个slave和master进行数据复制和同步的<strong>延迟超过了10秒钟</strong>，那么这个时候，master就<strong>不会再接收任何请求了</strong>（即，若slave和master数据同步时间太长，master就别再写数据了，让客户端等待稍后再写）。</p>
+
+        <h4 id="1-减少异步复制的数据丢失"   >
+          <a href="#1-减少异步复制的数据丢失" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#1-减少异步复制的数据丢失"></a> 1. 减少异步复制的数据丢失</h4>
+      
+<p>有了<code>min-slaves-max-lag</code>这个配置，就可以确保说，一旦slave复制数据和ack延时太长，就认为可能master宕机后损失的数据太多了，那么就<strong>拒绝写请求</strong>（让客户端稍后再写），这样可以把master宕机时由于部分数据未同步到slave导致的数据丢失降低的可控范围内。</p>
+
+        <h4 id="2-减少脑裂的数据丢失"   >
+          <a href="#2-减少脑裂的数据丢失" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#2-减少脑裂的数据丢失"></a> 2. 减少脑裂的数据丢失</h4>
+      
+<p>如果一个master出现了脑裂，跟其他slave丢了连接，那么上面两个配置可以确保说，如果不能继续给指定数量的slave发送数据，而且slave超过10秒没有给自己ack消息，那么就直接拒绝客户端的写请求（让客户端稍后再写）。</p>
+<p>这样脑裂后的<strong>旧master就不会接受client的新数据</strong>，也就避免了数据丢失。上面的配置就确保了，如果跟任何一个slave丢了连接，在10秒后发现没有slave给自己ack，那么就拒绝新的写请求。因此在脑裂场景下，最多就丢失10秒的数据。</p>
+
+        <h3 id="总结-2"   >
+          <a href="#总结-2" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#总结-2"></a> 总结</h3>
+      
+<p>哨兵架构，几乎可以做到了我们的要实现的<strong>高可用</strong>，但是哨兵的选举还是<strong>需要时间的</strong>，而且<strong>中间会阻塞客户端的请求</strong>，假如我们的选举消耗了1秒（实际可能几秒，高则几十秒），就在这1秒的时候来了客户端的请求，那个请求也是不可用的，并且我们的读写的节点实际还是单节点的，怎么办? 使用 Redis集群架构：</p>
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210913175731575.png" alt="image-20210913175731575" /></p>
+<p>Redis的集群其实就是一个个小的主从结合在一起（官方建议小于1000个小主从），变成了我们的Redis集群，每个小主从也就是我们的Redis数据分片。</p>
 
         <h2 id="redis-集群"   >
           <a href="#redis-集群" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#redis-集群"></a> Redis 集群</h2>
@@ -689,7 +994,76 @@ n.<br />
       
 <p>Redis 集群实现了对Redis的<strong>水平扩容</strong>，即启动N个Redis节点，将整个数据库分布存储在这N个节点中，每个节点存储总数据的 1/N。</p>
 <p>Redis 集群通过分区（partition）来提供一定程度的可用性（availability）： 即使集群中有一部分节点失效或者无法进行通讯， 集群也可以继续处理命令请求。</p>
-</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yuyun-zhao.gitee.io">yuyun zhao</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yuyun-zhao.gitee.io/2021/09/09/%E3%80%90Redis%E3%80%91Redis/">http://yuyun-zhao.gitee.io/2021/09/09/%E3%80%90Redis%E3%80%91Redis/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.gitee.io/tags/Redis/">Redis</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2021/09/10/%E3%80%90%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E3%80%91%E8%BF%9B%E7%A8%8B/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">【操作系统】进程</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2021/09/08/%E3%80%90Redis%E3%80%91NoSQL%E4%BB%8B%E7%BB%8D/"><span class="paginator-prev__text">【Redis】NoSQL 介绍</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E7%AE%80%E4%BB%8B"><span class="toc-text">
+
+        <h2 id="jedis-使用"   >
+          <a href="#jedis-使用" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#jedis-使用"></a> Jedis 使用</h2>
+      
+<p>导入 Maven 依赖：</p>
+<figure class="highlight xml"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>redis.clients<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jedis<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.2.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="jedis-常用-api"   >
+          <a href="#jedis-常用-api" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#jedis-常用-api"></a> Jedis 常用 API</h3>
+      
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Iterator;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"><span class="keyword">import</span> java.util.Set;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> redis.clients.jedis.Jedis;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestAPI</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        Jedis jedis = <span class="keyword">new</span> Jedis(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">6379</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// key</span></span><br><span class="line">        Set&lt;String&gt; keys = jedis.keys(<span class="string">&quot;*&quot;</span>);</span><br><span class="line">        <span class="keyword">for</span> (Iterator iterator = keys.iterator(); iterator.hasNext();) &#123;</span><br><span class="line">            String key = (String) iterator.next();</span><br><span class="line">            System.out.println(key);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">&quot;jedis.exists====&gt;&quot;</span> + jedis.exists(<span class="string">&quot;k2&quot;</span>));</span><br><span class="line">        System.out.println(jedis.ttl(<span class="string">&quot;k1&quot;</span>));</span><br><span class="line"></span><br><span class="line">        <span class="comment">// String</span></span><br><span class="line">        <span class="comment">// jedis.append(&quot;k1&quot;,&quot;myreids&quot;);</span></span><br><span class="line">        System.out.println(jedis.get(<span class="string">&quot;k1&quot;</span>));</span><br><span class="line">        jedis.set(<span class="string">&quot;k4&quot;</span>, <span class="string">&quot;k4_redis&quot;</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;----------------------------------------&quot;</span>);</span><br><span class="line">        jedis.mset(<span class="string">&quot;str1&quot;</span>, <span class="string">&quot;v1&quot;</span>, <span class="string">&quot;str2&quot;</span>, <span class="string">&quot;v2&quot;</span>, <span class="string">&quot;str3&quot;</span>, <span class="string">&quot;v3&quot;</span>);</span><br><span class="line">        System.out.println(jedis.mget(<span class="string">&quot;str1&quot;</span>, <span class="string">&quot;str2&quot;</span>, <span class="string">&quot;str3&quot;</span>));</span><br><span class="line"></span><br><span class="line">        <span class="comment">// list</span></span><br><span class="line">        System.out.println(<span class="string">&quot;----------------------------------------&quot;</span>);</span><br><span class="line">        <span class="comment">// jedis.lpush(&quot;mylist&quot;,&quot;v1&quot;,&quot;v2&quot;,&quot;v3&quot;,&quot;v4&quot;,&quot;v5&quot;);</span></span><br><span class="line">        List&lt;String&gt; list = jedis.lrange(<span class="string">&quot;mylist&quot;</span>, <span class="number">0</span>, -<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">for</span> (String element : list) &#123;</span><br><span class="line">            System.out.println(element);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// set</span></span><br><span class="line">        jedis.sadd(<span class="string">&quot;orders&quot;</span>, <span class="string">&quot;jd001&quot;</span>);</span><br><span class="line">        jedis.sadd(<span class="string">&quot;orders&quot;</span>, <span class="string">&quot;jd002&quot;</span>);</span><br><span class="line">        jedis.sadd(<span class="string">&quot;orders&quot;</span>, <span class="string">&quot;jd003&quot;</span>);</span><br><span class="line">        Set&lt;String&gt; set1 = jedis.smembers(<span class="string">&quot;orders&quot;</span>);</span><br><span class="line">        <span class="keyword">for</span> (Iterator iterator = set1.iterator(); iterator.hasNext();) &#123;</span><br><span class="line">            String string = (String) iterator.next();</span><br><span class="line">            System.out.println(string);</span><br><span class="line">        &#125;</span><br><span class="line">        jedis.srem(<span class="string">&quot;orders&quot;</span>, <span class="string">&quot;jd002&quot;</span>);</span><br><span class="line">        System.out.println(jedis.smembers(<span class="string">&quot;orders&quot;</span>).size());</span><br><span class="line"></span><br><span class="line">        <span class="comment">// hash</span></span><br><span class="line">        jedis.hset(<span class="string">&quot;hash1&quot;</span>, <span class="string">&quot;userName&quot;</span>, <span class="string">&quot;lisi&quot;</span>);</span><br><span class="line">        System.out.println(jedis.hget(<span class="string">&quot;hash1&quot;</span>, <span class="string">&quot;userName&quot;</span>));</span><br><span class="line">        Map&lt;String, String&gt; map = <span class="keyword">new</span> HashMap&lt;String, String&gt;();</span><br><span class="line">        map.put(<span class="string">&quot;telphone&quot;</span>, <span class="string">&quot;13811814763&quot;</span>);</span><br><span class="line">        map.put(<span class="string">&quot;address&quot;</span>, <span class="string">&quot;atguigu&quot;</span>);</span><br><span class="line">        map.put(<span class="string">&quot;email&quot;</span>, <span class="string">&quot;abc@163.com&quot;</span>);</span><br><span class="line">        jedis.hmset(<span class="string">&quot;hash2&quot;</span>, map);</span><br><span class="line">        List&lt;String&gt; result = jedis.hmget(<span class="string">&quot;hash2&quot;</span>, <span class="string">&quot;telphone&quot;</span>, <span class="string">&quot;email&quot;</span>);</span><br><span class="line">        <span class="keyword">for</span> (String element : result) &#123;</span><br><span class="line">            System.out.println(element);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// zset</span></span><br><span class="line">        jedis.zadd(<span class="string">&quot;zset01&quot;</span>, <span class="number">60d</span>, <span class="string">&quot;v1&quot;</span>);</span><br><span class="line">        jedis.zadd(<span class="string">&quot;zset01&quot;</span>, <span class="number">70d</span>, <span class="string">&quot;v2&quot;</span>);</span><br><span class="line">        jedis.zadd(<span class="string">&quot;zset01&quot;</span>, <span class="number">80d</span>, <span class="string">&quot;v3&quot;</span>);</span><br><span class="line">        jedis.zadd(<span class="string">&quot;zset01&quot;</span>, <span class="number">90d</span>, <span class="string">&quot;v4&quot;</span>);</span><br><span class="line"></span><br><span class="line">        Set&lt;String&gt; s1 = jedis.zrange(<span class="string">&quot;zset01&quot;</span>, <span class="number">0</span>, -<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">for</span> (Iterator iterator = s1.iterator(); iterator.hasNext();) &#123;</span><br><span class="line">            String string = (String) iterator.next();</span><br><span class="line">            System.out.println(string);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="jedis-事务"   >
+          <a href="#jedis-事务" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#jedis-事务"></a> Jedis 事务</h3>
+      
+<p>未加锁事务：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis.clients.jedis.Jedis;</span><br><span class="line"><span class="keyword">import</span> redis.clients.jedis.Response;</span><br><span class="line"><span class="keyword">import</span> redis.clients.jedis.Transaction;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test03</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		Jedis jedis = <span class="keyword">new</span> Jedis(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">6379</span>);</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 监控key，如果该动了事务就被放弃</span></span><br><span class="line">		<span class="comment">/*</span></span><br><span class="line"><span class="comment">		 * 3 jedis.watch(&quot;serialNum&quot;); jedis.set(&quot;serialNum&quot;,&quot;s#####################&quot;);</span></span><br><span class="line"><span class="comment">		 * jedis.unwatch();</span></span><br><span class="line"><span class="comment">		 */</span></span><br><span class="line">		Transaction transaction = jedis.multi();<span class="comment">// 被当作一个命令进行执行</span></span><br><span class="line">		Response&lt;String&gt; response = transaction.get(<span class="string">&quot;serialNum&quot;</span>);</span><br><span class="line">		transaction.set(<span class="string">&quot;serialNum&quot;</span>, <span class="string">&quot;s002&quot;</span>);</span><br><span class="line">		response = transaction.get(<span class="string">&quot;serialNum&quot;</span>);</span><br><span class="line">		transaction.lpush(<span class="string">&quot;list3&quot;</span>, <span class="string">&quot;a&quot;</span>);</span><br><span class="line">		transaction.lpush(<span class="string">&quot;list3&quot;</span>, <span class="string">&quot;b&quot;</span>);</span><br><span class="line">		transaction.lpush(<span class="string">&quot;list3&quot;</span>, <span class="string">&quot;c&quot;</span>);</span><br><span class="line"></span><br><span class="line">		transaction.exec();</span><br><span class="line">		<span class="comment">// 2 transaction.discard();</span></span><br><span class="line">		System.out.println(<span class="string">&quot;serialNum***********&quot;</span> + response.get());</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>加锁时事务（<code>jedis.watch(&quot;xxx&quot;)</code>）：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis.clients.jedis.Jedis;</span><br><span class="line"><span class="keyword">import</span> redis.clients.jedis.Transaction;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestTX</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">transMethod</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        Jedis jedis = <span class="keyword">new</span> Jedis(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">6379</span>);</span><br><span class="line">        <span class="keyword">int</span> balance;<span class="comment">// 可用余额</span></span><br><span class="line">        <span class="keyword">int</span> debt;<span class="comment">// 欠额</span></span><br><span class="line">        <span class="keyword">int</span> amtToSubtract = <span class="number">10</span>;<span class="comment">// 实刷额度</span></span><br><span class="line"></span><br><span class="line">        jedis.watch(<span class="string">&quot;balance&quot;</span>);</span><br><span class="line">        <span class="comment">// jedis.set(&quot;balance&quot;,&quot;5&quot;);//此句不该出现，模拟其他程序已经修改了该条目</span></span><br><span class="line">        Thread.sleep(<span class="number">7000</span>);</span><br><span class="line">        balance = Integer.parseInt(jedis.get(<span class="string">&quot;balance&quot;</span>));</span><br><span class="line">        <span class="keyword">if</span> (balance &lt; amtToSubtract) &#123;</span><br><span class="line">            jedis.unwatch();</span><br><span class="line">            System.out.println(<span class="string">&quot;modify&quot;</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;***********transaction&quot;</span>);</span><br><span class="line">            Transaction transaction = jedis.multi();</span><br><span class="line">            transaction.decrBy(<span class="string">&quot;balance&quot;</span>, amtToSubtract);</span><br><span class="line">            transaction.incrBy(<span class="string">&quot;debt&quot;</span>, amtToSubtract);</span><br><span class="line">            transaction.exec();</span><br><span class="line">            balance = Integer.parseInt(jedis.get(<span class="string">&quot;balance&quot;</span>));</span><br><span class="line">            debt = Integer.parseInt(jedis.get(<span class="string">&quot;debt&quot;</span>));</span><br><span class="line"></span><br><span class="line">            System.out.println(<span class="string">&quot;*******&quot;</span> + balance);</span><br><span class="line">            System.out.println(<span class="string">&quot;*******&quot;</span> + debt);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 通俗点讲，watch命令就是标记一个键，如果标记了一个键， 在提交事务前如果该键被别人修改过，那事务就会失败，这种情况通常可以在程序中 重新再尝试一次。</span></span><br><span class="line"><span class="comment">	 * 首先标记了键balance，然后检查余额是否足够，不足就取消标记，并不做扣减； 足够的话，就启动事务进行更新操作，</span></span><br><span class="line"><span class="comment">	 * 如果在此期间键balance被其它人修改， 那在提交事务（执行exec）时就会报错， 程序中通常可以捕获这类错误再重新执行一次，直到成功。</span></span><br><span class="line"><span class="comment">	 * </span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@throws</span> InterruptedException</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        TestTX test = <span class="keyword">new</span> TestTX();</span><br><span class="line">        <span class="keyword">boolean</span> retValue = test.transMethod();</span><br><span class="line">        System.out.println(<span class="string">&quot;main retValue-------: &quot;</span> + retValue);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="jedis-主从复制"   >
+          <a href="#jedis-主从复制" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#jedis-主从复制"></a> Jedis 主从复制</h3>
+      
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> redis.clients.jedis.Jedis;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestMS</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		Jedis jedis_M = <span class="keyword">new</span> Jedis(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">6379</span>);</span><br><span class="line">		Jedis jedis_S = <span class="keyword">new</span> Jedis(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">6380</span>);</span><br><span class="line"></span><br><span class="line">		jedis_S.slaveof(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">6379</span>);</span><br><span class="line">		jedis_M.set(<span class="string">&quot;class&quot;</span>, <span class="string">&quot;1122V2&quot;</span>);</span><br><span class="line"></span><br><span class="line">		String result = jedis_S.get(<span class="string">&quot;class&quot;</span>);<span class="comment">//可能有延迟，需再次启动才能使用</span></span><br><span class="line">		System.out.println(result);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="jedispool"   >
+          <a href="#jedispool" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#jedispool"></a> JedisPool</h3>
+      
+<ol>
+<li>获取Jedis实例需要从JedisPool中获取</li>
+<li>用完Jedis实例需要返还给JedisPool</li>
+<li>如果Jedis在使用过程中出错，则也需要还给JedisPool</li>
+</ol>
+<p>饿汉模式下的JedisPool单例创建：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis.clients.jedis.Jedis;</span><br><span class="line"><span class="keyword">import</span> redis.clients.jedis.JedisPool;</span><br><span class="line"><span class="keyword">import</span> redis.clients.jedis.JedisPoolConfig;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JedisPoolUtil</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">volatile</span> JedisPool jedisPool = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">JedisPoolUtil</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> JedisPool <span class="title">getJedisPoolInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">null</span> == jedisPool) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (JedisPoolUtil.class) &#123;</span><br><span class="line">                <span class="keyword">if</span> (<span class="keyword">null</span> == jedisPool) &#123;</span><br><span class="line">                    JedisPoolConfig poolConfig = <span class="keyword">new</span> JedisPoolConfig();</span><br><span class="line">                    poolConfig.setMaxActive(<span class="number">1000</span>);</span><br><span class="line">                    poolConfig.setMaxIdle(<span class="number">32</span>);</span><br><span class="line">                    poolConfig.setMaxWait(<span class="number">100</span> * <span class="number">1000</span>);</span><br><span class="line">                    poolConfig.setTestOnBorrow(<span class="keyword">true</span>);</span><br><span class="line"></span><br><span class="line">                    jedisPool = <span class="keyword">new</span> JedisPool(poolConfig, <span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">6379</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> jedisPool;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">release</span><span class="params">(JedisPool jedisPool, Jedis jedis)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">null</span> != jedis) &#123;</span><br><span class="line">            jedisPool.returnResourceObject(jedis);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>测试：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis.clients.jedis.Jedis;</span><br><span class="line"><span class="keyword">import</span> redis.clients.jedis.JedisPool;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestPool</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        JedisPool jedisPool = JedisPoolUtil.getJedisPoolInstance();</span><br><span class="line">        JedisPool jedisPool2 = JedisPoolUtil.getJedisPoolInstance();</span><br><span class="line"></span><br><span class="line">        System.out.println(jedisPool == jedisPool2);</span><br><span class="line"></span><br><span class="line">        Jedis jedis = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            jedis = jedisPool.getResource();</span><br><span class="line">            jedis.set(<span class="string">&quot;aa&quot;</span>, <span class="string">&quot;bb&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            JedisPoolUtil.release(jedisPool, jedis);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="jedispool-配置总结"   >
+          <a href="#jedispool-配置总结" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#jedispool-配置总结"></a> JedisPool 配置总结</h3>
+      
+<p>JedisPool的配置参数大部分是由<strong>JedisPoolConfig</strong>的对应项来赋值的。</p>
+<ul>
+<li><strong>maxActive</strong>：控制一个pool可分配多少个jedis实例，通过pool.getResource()来获取；如果赋值为-1，则表示不限制；如果pool已经分配了maxActive个jedis实例，则此时pool的状态为exhausted。</li>
+<li><strong>maxIdle</strong>：控制一个pool最多有多少个状态为idle(空闲)的jedis实例；</li>
+<li><strong>whenExhaustedAction</strong>：表示当pool中的jedis实例都被allocated完时，pool要采取的操作；默认有三种。
+<ul>
+<li><code>WHEN_EXHAUSTED_FAIL</code> --&gt; 表示无jedis实例时，直接抛出NoSuchElementException；</li>
+<li><code>WHEN_EXHAUSTED_BLOCK</code> --&gt; 则表示阻塞住，或者达到maxWait时抛出JedisConnectionException；</li>
+<li><code>WHEN_EXHAUSTED_GROW</code> --&gt; 则表示新建一个jedis实例，也就说设置的maxActive无用；</li>
+</ul>
+</li>
+<li><strong>maxWait</strong>：表示当borrow一个jedis实例时，最大的等待时间，如果超过等待时间，则直接抛JedisConnectionException；</li>
+<li><strong>testOnBorrow</strong>：获得一个jedis实例的时候是否检查连接可用性（ping()）；如果为true，则得到的jedis实例均是可用的；</li>
+<li><strong>testOnReturn</strong>：return 一个jedis实例给pool时，是否检查连接可用性（ping()）；</li>
+<li><strong>testWhileIdle</strong>：如果为true，表示有一个idle object evitor线程对idle object进行扫描，如果validate失败，此object会被从pool中drop掉；这一项只有在timeBetweenEvictionRunsMillis大于0时才有意义；</li>
+<li><strong>timeBetweenEvictionRunsMillis</strong>：表示idle object evitor两次扫描之间要sleep的毫秒数；</li>
+<li><strong>numTestsPerEvictionRun</strong>：表示idle object evitor每次扫描的最多的对象数；</li>
+<li><strong>minEvictableIdleTimeMillis</strong>：表示一个对象至少停留在idle状态的最短时间，然后才能被idle object evitor扫描并驱逐；这一项只有在timeBetweenEvictionRunsMillis大于0时才有意义；</li>
+<li><strong>softMinEvictableIdleTimeMillis</strong>：在minEvictableIdleTimeMillis基础上，加入了至少minIdle个对象已经在pool里面了。如果为-1，evicted不会根据idle time驱逐任何对象。如果minEvictableIdleTimeMillis&gt;0，则此项设置无意义，且只有在timeBetweenEvictionRunsMillis大于0时才有意义；</li>
+<li><strong>lifo</strong>：borrowObject返回对象时，是采用DEFAULT_LIFO（last in first out，即类似cache的最频繁使用队列），如果为False，则表示FIFO队列；</li>
+</ul>
+<p>其中JedisPoolConfig对一些参数的默认设置如下：</p>
+<ul>
+<li>testWhileIdle=true</li>
+<li>minEvictableIdleTimeMills=60000</li>
+<li>timeBetweenEvictionRunsMillis=30000</li>
+<li>numTestsPerEvictionRun=-1</li>
+</ul>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yuyun-zhao.gitee.io">yuyun zhao</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yuyun-zhao.gitee.io/2021/09/09/%E3%80%90Redis%E3%80%91Redis/">http://yuyun-zhao.gitee.io/2021/09/09/%E3%80%90Redis%E3%80%91Redis/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.gitee.io/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.gitee.io/tags/Redis/">Redis</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2021/09/10/%E3%80%90%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E3%80%91%E8%BF%9B%E7%A8%8B/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">【操作系统】进程</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2021/09/08/%E3%80%90Redis%E3%80%91NoSQL%E4%BB%8B%E7%BB%8D/"><span class="paginator-prev__text">【Redis】NoSQL 介绍</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E7%AE%80%E4%BB%8B"><span class="toc-text">
            Redis 简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#redis-%E5%8D%95%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="toc-text">
            Redis 单线程模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis-%E7%89%B9%E7%82%B9"><span class="toc-text">
            Redis 特点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E4%BA%94%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-text">
@@ -698,17 +1072,23 @@ n.<br />
            List</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#set"><span class="toc-text">
            Set</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hash"><span class="toc-text">
            Hash</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zset"><span class="toc-text">
-           Zset</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E6%96%B0%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-text">
+           Zset</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">
+           实际应用场景</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#string-2"><span class="toc-text">
+           String</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#hash-2"><span class="toc-text">
+           Hash</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#list-2"><span class="toc-text">
+           List</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#set-2"><span class="toc-text">
+           Set</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#zset-2"><span class="toc-text">
+           Zset</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E6%96%B0%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-text">
            Redis 新数据类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#bitmaps"><span class="toc-text">
            Bitmaps</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hyperloglog"><span class="toc-text">
            HyperLogLog</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#geospatial"><span class="toc-text">
            Geospatial</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">
            Redis 常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#key-%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-text">
-           Key 关键字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#string-2"><span class="toc-text">
-           String</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#list-2"><span class="toc-text">
-           List</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#set-2"><span class="toc-text">
-           Set</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hash-2"><span class="toc-text">
-           Hash</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zset-2"><span class="toc-text">
+           Key 关键字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#string-3"><span class="toc-text">
+           String</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#list-3"><span class="toc-text">
+           List</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#set-3"><span class="toc-text">
+           Set</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hash-3"><span class="toc-text">
+           Hash</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zset-3"><span class="toc-text">
            ZSet</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E4%BB%8B%E7%BB%8D"><span class="toc-text">
            Redis 配置文件介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E"><span class="toc-text">
            参数说明</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E6%8C%81%E4%B9%85%E5%8C%96"><span class="toc-text">
@@ -726,7 +1106,8 @@ n.<br />
            Rewrite 流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#aof-%E4%BC%98%E5%8A%BF%E4%B8%8E%E5%8A%A3%E5%8A%BF"><span class="toc-text">
            AOF 优势与劣势</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#aof-%E5%B0%8F%E7%BB%93"><span class="toc-text">
            AOF 小结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">
-           总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E4%BA%8B%E5%8A%A1"><span class="toc-text">
+           总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E5%8F%91%E5%B8%83%E5%92%8C%E8%AE%A2%E9%98%85"><span class="toc-text">
+           Redis 发布和订阅</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E4%BA%8B%E5%8A%A1"><span class="toc-text">
            Redis 事务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">
            事务常用命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E4%B8%89%E9%98%B6%E6%AE%B5"><span class="toc-text">
            事务三阶段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#watch"><span class="toc-text">
@@ -738,14 +1119,28 @@ n.<br />
            常见问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%96%AA%E7%81%AB%E7%9B%B8%E4%BC%A0"><span class="toc-text">
            薪火相传</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8D%E5%AE%A2%E4%B8%BA%E4%B8%BB"><span class="toc-text">
            反客为主</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86"><span class="toc-text">
-           主从复制原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%93%A8%E5%85%B5%E6%A8%A1%E5%BC%8Fsentinel"><span class="toc-text">
-           哨兵模式（sentinel）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%96%B9%E6%B3%95"><span class="toc-text">
+           主从复制原理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E5%93%A8%E5%85%B5%E6%A8%A1%E5%BC%8Fsentinel"><span class="toc-text">
+           Redis 哨兵模式（sentinel）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E5%8A%A8%E6%95%85%E9%9A%9C%E8%BD%AC%E7%A7%BB%E6%9C%BA%E5%88%B6"><span class="toc-text">
+           自动故障转移机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%96%B9%E6%B3%95"><span class="toc-text">
            配置方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%8D%E5%88%B6%E5%BB%B6%E6%97%B6"><span class="toc-text">
-           复制延时</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%85%E9%9A%9C%E6%81%A2%E5%A4%8D"><span class="toc-text">
-           故障恢复</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E9%9B%86%E7%BE%A4"><span class="toc-text">
+           复制延时</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%93%A8%E5%85%B5-leader-%E9%80%89%E4%B8%BE%E7%AE%97%E6%B3%95"><span class="toc-text">
+           哨兵 leader 选举算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis-%E5%93%A8%E5%85%B5%E4%B8%BB%E5%A4%87%E5%88%87%E6%8D%A2%E7%9A%84%E6%95%B0%E6%8D%AE%E4%B8%A2%E5%A4%B1%E9%97%AE%E9%A2%98"><span class="toc-text">
+           Redis 哨兵主备切换的数据丢失问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%BC%82%E6%AD%A5%E5%A4%8D%E5%88%B6%E6%97%B6%E9%97%B4%E8%BF%87%E9%95%BF"><span class="toc-text">
+           1. 异步复制时间过长</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E8%84%91%E8%A3%82"><span class="toc-text">
+           2. 脑裂</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E5%BC%82%E6%AD%A5%E5%A4%8D%E5%88%B6%E5%92%8C%E8%84%91%E8%A3%82%E5%AF%BC%E8%87%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E4%B8%A2%E5%A4%B1"><span class="toc-text">
+           解决异步复制和脑裂导致的数据丢失</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%87%8F%E5%B0%91%E5%BC%82%E6%AD%A5%E5%A4%8D%E5%88%B6%E7%9A%84%E6%95%B0%E6%8D%AE%E4%B8%A2%E5%A4%B1"><span class="toc-text">
+           1. 减少异步复制的数据丢失</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%87%8F%E5%B0%91%E8%84%91%E8%A3%82%E7%9A%84%E6%95%B0%E6%8D%AE%E4%B8%A2%E5%A4%B1"><span class="toc-text">
+           2. 减少脑裂的数据丢失</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93-2"><span class="toc-text">
+           总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E9%9B%86%E7%BE%A4"><span class="toc-text">
            Redis 集群</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%BC%95%E5%87%BA"><span class="toc-text">
            问题引出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E9%9B%86%E7%BE%A4"><span class="toc-text">
-           什么是集群</span></a></li></ol></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/author.png" alt="avatar"></div><p class="sidebar-ov-author__text">no code no life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/YUYUN-ZHAO" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="zyy1024462136" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a><a class="sidebar-ov-social-item" href="1024462136" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="mailto:im.yuyunzhao@gmail.com" target="_blank" rel="noopener" data-popover="social.Gmail" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">Gmail</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">81</div><div class="sidebar-ov-state-item__name">文章</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">30</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">30</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2021</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>yuyun zhao</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script>function initSearch() {
+           什么是集群</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#jedis-%E4%BD%BF%E7%94%A8"><span class="toc-text">
+           Jedis 使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#jedis-%E5%B8%B8%E7%94%A8-api"><span class="toc-text">
+           Jedis 常用 API</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#jedis-%E4%BA%8B%E5%8A%A1"><span class="toc-text">
+           Jedis 事务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#jedis-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6"><span class="toc-text">
+           Jedis 主从复制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#jedispool"><span class="toc-text">
+           JedisPool</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#jedispool-%E9%85%8D%E7%BD%AE%E6%80%BB%E7%BB%93"><span class="toc-text">
+           JedisPool 配置总结</span></a></li></ol></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/author.png" alt="avatar"></div><p class="sidebar-ov-author__text">no code no life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/YUYUN-ZHAO" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="zyy1024462136" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a><a class="sidebar-ov-social-item" href="1024462136" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="mailto:im.yuyunzhao@gmail.com" target="_blank" rel="noopener" data-popover="social.Gmail" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">Gmail</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">83</div><div class="sidebar-ov-state-item__name">文章</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">30</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">30</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2021</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>yuyun zhao</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script>function initSearch() {
   var isXML = true;
   var search_path = 'search.xml';
 
