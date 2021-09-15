@@ -1,0 +1,588 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="分布式锁简介        随着业务发展的需要，原单体单机部署的系统被演化成分布式集群系统后，由于分布式系统多线程、多进程并且分布在不同机器上，这将使原单机部署情况下的并发控制锁策略失效，单纯的Java API并不能提供分布式锁的能力。为了解决这个问题就需要一种跨JVM的互斥机制来控制共享资源的访问，这就是分布式锁要解决的问题。 分布式锁主流的实现方案：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Redis】Redis 分布式锁">
+<meta property="og:url" content="http://yuyun-zhao.gitee.io/2021/09/15/%E3%80%90Redis%E3%80%91Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/index.html">
+<meta property="og:site_name" content="yuyun zhao&#39;s blog">
+<meta property="og:description" content="分布式锁简介        随着业务发展的需要，原单体单机部署的系统被演化成分布式集群系统后，由于分布式系统多线程、多进程并且分布在不同机器上，这将使原单机部署情况下的并发控制锁策略失效，单纯的Java API并不能提供分布式锁的能力。为了解决这个问题就需要一种跨JVM的互斥机制来控制共享资源的访问，这就是分布式锁要解决的问题。 分布式锁主流的实现方案：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-20210913131720145.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-20210915191119081.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/8491f7f7a87dcc888d60141f6d662e1b.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-20210915192157172.png">
+<meta property="article:published_time" content="2021-09-15T01:25:11.000Z">
+<meta property="article:modified_time" content="2021-09-15T11:42:08.427Z">
+<meta property="article:author" content="yuyun zhao">
+<meta property="article:tag" content="分布式">
+<meta property="article:tag" content="Redis">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-20210913131720145.png"><title>【Redis】Redis 分布式锁 | yuyun zhao's blog</title><link ref="canonical" href="http://yuyun-zhao.gitee.io/2021/09/15/%E3%80%90Redis%E3%80%91Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":true},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"carbon","highlight":"light","wordWrap":false},
+  reward: false,
+  fancybox: true,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: {"avoidBanner":false},
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"复制","copySuccess":"复制成功","copyError":"复制失败"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【Redis】Redis 分布式锁</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-09-15</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-09-15</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">4k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">27分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body"><p><img src="/images/%E3%80%90Redis%E3%80%91Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-20210913131720145.png" alt="image-20210913131720145" /></p>
+
+        <h2 id="分布式锁简介"   >
+          <a href="#分布式锁简介" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#分布式锁简介"></a> 分布式锁简介</h2>
+      
+<p>随着业务发展的需要，原单体单机部署的系统被演化成分布式集群系统后，由于分布式系统多线程、多进程并且分布在不同机器上，这将使原单机部署情况下的并发控制锁策略失效，单纯的Java API并不能提供分布式锁的能力。为了解决这个问题就需要一种跨JVM的互斥机制来控制共享资源的访问，这就是分布式锁要解决的问题。</p>
+<p>分布式锁主流的实现方案：</p>
+<ul>
+<li>基于数据库实现分布式锁</li>
+<li>基于缓存（Redis等，将key存储在缓存中）</li>
+<li>基于 ZooKeeper（将key存储在ZooKeeper中）</li>
+</ul>
+<p>每一种分布式锁解决方案都有各自的优缺点：</p>
+<ul>
+<li>高性能：Redis（AP），但其无法保证主从机器上的缓存数据是一致的，可能主机刚保存了某个锁，还未同步给从机，自己就宕机了。在哨兵机制选举出了另一台主机后，其内并不存在该锁，故此前加的分布式锁失效，但其能保证高性能，而不像ZooKeeper一样主从同步时服务无法访问。</li>
+<li>可靠性：ZooKeeper（CP），能够保证数据的一致性，主机收到的加锁消息会在同步给所有从机后再一起添加到缓存中，此时即可以保证分布式锁数据高度一致，但是缺点是同步期间服务无法访问，性能降低。</li>
+</ul>
+<p>本文将介绍基于Redis的分布式锁实现方式。</p>
+<span id="more"></span>
+
+        <h2 id="阶段一未加锁时"   >
+          <a href="#阶段一未加锁时" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#阶段一未加锁时"></a> 阶段一：未加锁时</h2>
+      
+<p>在未加锁时，不论是单机应用还是分布式应用，都会出现超卖问题，原因：</p>
+<ul>
+<li>某个线程先进行get判断，发现库存有剩余，就准备执行减库存操作。</li>
+<li>而在其减库存操作完成之前，另一个线程进行了get判断，也发现库存有剩余，此时该线程也会执行减库存操作，从而造成同一个商品被消费两次。</li>
+</ul>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="keyword">private</span> StringRedisTemplate stringRedisTemplate;</span><br><span class="line"></span><br><span class="line"><span class="meta">@GetMapping(&quot;/buy_goods&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">buy_Goods</span><span class="params">()</span></span>&#123;</span><br><span class="line">    String result = stringRedisTemplate.opsForValue().get(<span class="string">&quot;goods:001&quot;</span>);<span class="comment">// get key ==== 看看库存的数量够不够</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> goodsNumber = result == <span class="keyword">null</span> ? <span class="number">0</span> : Integer.parseInt(result);</span><br><span class="line">    <span class="keyword">if</span>(goodsNumber &gt; <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">int</span> realNumber = goodsNumber - <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        stringRedisTemplate.opsForValue().set(<span class="string">&quot;goods:001&quot;</span>, String.valueOf(realNumber));</span><br><span class="line">        System.out.println(<span class="string">&quot;成功买到商品，库存还剩下: &quot;</span>+ realNumber + <span class="string">&quot; 件&quot;</span> + <span class="string">&quot;\t服务提供端口&quot;</span> + serverPort);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;成功买到商品，库存还剩下:&quot;</span> + realNumber + <span class="string">&quot; 件&quot;</span> + <span class="string">&quot;\t服务提供端口&quot;</span> + serverPort;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;商品已经售完/活动结束/调用超时,欢迎下次光临&quot;</span> + <span class="string">&quot;\t服务提供端口&quot;</span> + serverPort);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;商品已经售完/活动结束/调用超时,欢迎下次光临&quot;</span> + <span class="string">&quot;\t服务提供端口&quot;</span> + serverPort;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h2 id="版本二单机版锁"   >
+          <a href="#版本二单机版锁" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#版本二单机版锁"></a> 版本二：单机版锁</h2>
+      
+<p>使用 <code>synchronized</code> 关键字或 JUC 的 <code>ReentraLock</code> 类可实现单机版锁：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">X</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ReentrantLock lock = <span class="keyword">new</span> ReentrantLock();</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">m</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        lock.lock();  <span class="comment">// block until condition holds // 不见不散</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// ... method body</span></span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            lock.unlock()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">m2</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(lock.tryLock(timeout, unit))&#123; <span class="comment">// 过时不候</span></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="comment">// ... method body</span></span><br><span class="line">            &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                lock.unlock()</span><br><span class="line">            &#125;   </span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="comment">// perform alternative actions</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>但其对分布式应用的超卖问题仍无法解决。</p>
+
+        <h2 id="版本三-分布式锁-setnx"   >
+          <a href="#版本三-分布式锁-setnx" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#版本三-分布式锁-setnx"></a> 版本三： 分布式锁 SETNX</h2>
+      
+<p>使用 Redis 提供的 SET 命令添加分布式锁：</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SET sku:1:info “OK” NX PX 10000</span><br></pre></td></tr></table></div></figure>
+<p>参数解读：</p>
+<ul>
+<li><code>EX second</code> ：设置键的过期时间为 second 秒。 <code>SET key value EX second</code> 效果等同于 <code>SETEX key second value</code></li>
+<li><code>PX millisecond</code> ：设置键的过期时间为 millisecond 毫秒。 <code>SET key value PX millisecond</code> 效果等同于 <code>PSETEX key millisecond value</code></li>
+<li><code>NX</code> ：只在键不存在时，才对键进行设置操作。 <code>SET key value NX</code> 效果等同于 <code>SETNX key value</code></li>
+<li><code>XX</code> ：只在键已经存在时，才对键进行设置操作</li>
+</ul>
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-20210915191119081.png" alt="image-20210915191119081" /></p>
+<p>Java 代码：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String REDIS_LOCK = <span class="string">&quot;redis_lock&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="keyword">private</span> StringRedisTemplate stringRedisTemplate;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">m</span><span class="params">()</span></span>&#123;</span><br><span class="line">    String value = UUID.randomUUID().toString() + Thread.currentThread().getName();</span><br><span class="line"></span><br><span class="line">    Boolean flag = stringRedisTemplate.opsForValue()</span><br><span class="line">        .setIfAbsent(REDIS_LOCK, value);</span><br><span class="line">    <span class="keyword">if</span>(!flag) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;抢锁失败&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 业务逻辑...</span></span><br><span class="line">    stringRedisTemplate.delete(REDIS_LOCK);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>其仍然存在的问题：</p>
+<ul>
+<li>出现异常时，可能无法释放锁，必须要在代码层面 <strong>finally</strong> 释放锁。</li>
+<li>部署了微服务jar包的机器挂了，代码层面根本没有走到finally这块，没办法保证解锁，这个key没有被删除，需要加入一个<strong>过期时间</strong>限定key。</li>
+</ul>
+
+        <h2 id="版本四设置超时时间"   >
+          <a href="#版本四设置超时时间" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#版本四设置超时时间"></a> 版本四：设置超时时间</h2>
+      
+<p>使用 SET 命令时指定过期时间，同时<strong>保证加锁和设置超时时间是原子性的</strong>：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String REDIS_LOCK = <span class="string">&quot;redis_lock&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="keyword">private</span> StringRedisTemplate stringRedisTemplate;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">m</span><span class="params">()</span></span>&#123;</span><br><span class="line">    String value = UUID.randomUUID().toString() + Thread.currentThread().getName();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 原子性操作，保证加锁和设置超时时间是原子性的</span></span><br><span class="line">        Boolean flag = stringRedisTemplate.opsForValue()</span><br><span class="line">            .setIfAbsent(REDIS_LOCK, value, <span class="number">10L</span>, TimeUnit.SECONDS);</span><br><span class="line">        <span class="keyword">if</span>(!flag) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;抢锁失败&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//业务逻辑...</span></span><br><span class="line">    &#125; <span class="keyword">finally</span>&#123;</span><br><span class="line">        stringRedisTemplate.delete(REDIS_LOCK);   </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p><strong>另一个新问题</strong>：误删别人的锁。</p>
+<p>可能第一个线程执行时间过长，在其删除自己上的锁之前，锁就已经过期了。此时再来一个线程上了锁，而第一个线程执行完业务后会删掉第二个线程上的锁：</p>
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/8491f7f7a87dcc888d60141f6d662e1b.png" alt="img" /></p>
+<p>解决方法：给锁添加UUID，保证每个线程只能删除自己创建的锁。</p>
+
+        <h2 id="版本五添加-uuid-防止误删除"   >
+          <a href="#版本五添加-uuid-防止误删除" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#版本五添加-uuid-防止误删除"></a> 版本五：添加 UUID 防止误删除</h2>
+      
+<p>给每个线程创建独一无二的UUID，将其作为锁的value，防止误删。</p>
+<p><img src="/images/%E3%80%90Redis%E3%80%91Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-20210915192157172.png" alt="image-20210915192157172" /></p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String REDIS_LOCK = <span class="string">&quot;redis_lock&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="keyword">private</span> StringRedisTemplate stringRedisTemplate;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">m</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">// 每个线程创建独一无二的UUID，防止误删</span></span><br><span class="line">    String value = UUID.randomUUID().toString() + Thread.currentThread().getName();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>&#123;</span><br><span class="line">        Boolean flag = stringRedisTemplate.opsForValue()</span><br><span class="line">            .setIfAbsent(REDIS_LOCK, value, <span class="number">10L</span>, TimeUnit.SECONDS);</span><br><span class="line">        <span class="keyword">if</span>(!flag) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;抢锁失败&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 业务逻辑...       </span></span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="comment">// 判断UUID和自己相等才能删（仍存在问题：判断和删除的操作不是原子性的）</span></span><br><span class="line">        <span class="keyword">if</span>(stringRedisTemplate.opsForValue().get(REDIS_LOCK).equals(value)) &#123;</span><br><span class="line">            stringRedisTemplate.delete(REDIS_LOCK);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>新的问题：finally 块里判断UUID是否和自己相等的代码和删除锁的代码不是原子性的，可能出现情况：</p>
+<ul>
+<li>第一个线程在其加的锁即将结束前，查询到了该锁的value，并返回与自己本地存的UUID判断是否相等（对应上述 if 判断里的代码）</li>
+<li>而第一个线程刚查询完，还没返回和自己本地存的UUID判断前，该锁过期了；</li>
+<li>此时第二个线程创建了他自己的锁，其UUID显然与第一个线程本地存的UUID不同；</li>
+<li>第一个线程此时再删除锁时，就会把第二个线程创建的锁删掉，仍然没解决误删除的问题</li>
+</ul>
+<p>解决此问题的方法为：</p>
+<ul>
+<li><strong>使用LUA脚本将判断与删除的操作变成原子性的。</strong></li>
+<li>使用 Redis 的事务机制，监视加的锁。</li>
+</ul>
+
+        <h3 id="版本六lua-脚本保证删除原子性"   >
+          <a href="#版本六lua-脚本保证删除原子性" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#版本六lua-脚本保证删除原子性"></a> 版本六：LUA 脚本保证删除原子性</h3>
+      
+ <figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis.clients.jedis.JedisPool;</span><br><span class="line"><span class="keyword">import</span> redis.clients.jedis.JedisPoolConfig;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RedisUtils</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> JedisPool jedisPool;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">static</span> &#123;</span><br><span class="line">		JedisPoolConfig jpc = <span class="keyword">new</span> JedisPoolConfig();</span><br><span class="line">		jpc.setMaxTotal(<span class="number">20</span>);</span><br><span class="line">		jpc.setMaxIdle(<span class="number">10</span>);</span><br><span class="line">		jedisPool = <span class="keyword">new</span> JedisPool(jpc);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> JedisPool <span class="title">getJedis</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(jedisPool == <span class="keyword">null</span>)</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException(<span class="string">&quot;JedisPool is not OK.&quot;</span>);</span><br><span class="line">		<span class="keyword">return</span> jedisPool;</span><br><span class="line">	&#125;	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String REDIS_LOCK = <span class="string">&quot;redis_lock&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="keyword">private</span> StringRedisTemplate stringRedisTemplate;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">m</span><span class="params">()</span></span>&#123;</span><br><span class="line">    String value = UUID.randomUUID().toString() + Thread.currentThread().getName();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>&#123;</span><br><span class="line">        Boolean flag = stringRedisTemplate.opsForValue()</span><br><span class="line">            .setIfAbsent(REDIS_LOCK, value, <span class="number">10L</span>, TimeUnit.SECONDS);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(!flag) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;抢锁失败&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 业务逻辑...       </span></span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        Jedis jedis = RedisUtils.getJedis();</span><br><span class="line"></span><br><span class="line">        String script = <span class="string">&quot;if redis.call(&#x27;get&#x27;, KEYS[1]) == ARGV[1] &quot;</span></span><br><span class="line">            + <span class="string">&quot;then &quot;</span></span><br><span class="line">            + <span class="string">&quot;    return redis.call(&#x27;del&#x27;, KEYS[1]) &quot;</span></span><br><span class="line">            + <span class="string">&quot;else &quot;</span></span><br><span class="line">            + <span class="string">&quot;    return 0 &quot;</span></span><br><span class="line">            + <span class="string">&quot;end&quot;</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Object o = jedis.eval(script, Collections.singletonList(REDIS_LOCK),<span class="comment">// </span></span><br><span class="line">                                  Collections.singletonList(value));</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span>(<span class="string">&quot;1&quot;</span>.equals(o.toString())) &#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;---del redis lock ok.&quot;</span>);</span><br><span class="line">            &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;---del redis lock error.&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">if</span>(jedis != <span class="keyword">null</span>) </span><br><span class="line">                jedis.close();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>同时使用事务解决原子性的方式：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String REDIS_LOCK = <span class="string">&quot;redis_lock&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="keyword">private</span> StringRedisTemplate stringRedisTemplate;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">m</span><span class="params">()</span></span>&#123;</span><br><span class="line">    String value = UUID.randomUUID().toString() + Thread.currentThread().getName();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>&#123;</span><br><span class="line">        Boolean flag = stringRedisTemplate.opsForValue()</span><br><span class="line">            .setIfAbsent(REDIS_LOCK, value, <span class="number">10L</span>, TimeUnit.SECONDS);</span><br><span class="line">        <span class="keyword">if</span>(!flag) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;抢锁失败&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 业务逻辑...</span></span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">            stringRedisTemplate.watch(REDIS_LOCK);</span><br><span class="line">            <span class="keyword">if</span>(stringRedisTemplate.opsForValue().get(REDIS_LOCK).equalsIgnoreCase(value))&#123;</span><br><span class="line">                stringRedisTemplate.setEnableTransactionSupport(<span class="keyword">true</span>);</span><br><span class="line">                stringRedisTemplate.multi();</span><br><span class="line">                stringRedisTemplate.delete(REDIS_LOCK);</span><br><span class="line">                List&lt;Object&gt; list = stringRedisTemplate.exec();</span><br><span class="line">                <span class="keyword">if</span> (list == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            stringRedisTemplate.unwatch();</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>仍然存在的问题：我们自己设置的过期时间可能会在业务代码执行完毕前到期，不能做到自动续期，解决方法：使用 <strong>Redisson</strong> 中的 <strong>Reentrant Lock</strong>，利用其看门狗机制实现过期时间自动续期。</p>
+
+        <h2 id="redisson"   >
+          <a href="#redisson" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#redisson"></a> Redisson</h2>
+      
+<blockquote>
+<p>官方文档：<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://github.com/redisson/redisson/wiki/%E7%9B%AE%E5%BD%95" >https://github.com/redisson/redisson/wiki/目录</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+</blockquote>
+<p>Redisson是一个在 Redis 的基础上实现的 Java 驻内存数据网格（In-Memory Data Grid），提供了分布式和可扩展的 Java 数据结构。其特点：</p>
+<ul>
+<li>基于 Netty 实现，采用非阻塞 IO，性能高</li>
+<li>支持异步请求</li>
+<li>支持连接池、pipeline、LUA Scripting、Redis Sentinel、Redis Cluster 不支持事务，官方建议以 LUA Scripting 代替事务</li>
+<li>主从、哨兵、集群都支持。Spring 也可以配置和注入 RedissonClient。</li>
+<li>实现分布式锁：在 Redisson 里面提供了更加简单的分布式锁的实现。</li>
+</ul>
+
+        <h3 id="导入依赖"   >
+          <a href="#导入依赖" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#导入依赖"></a> 导入依赖</h3>
+      
+<figure class="highlight xml"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- redisson --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.redisson<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>redisson<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.12.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 与 spring boot 整合 --&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- redisson-spring-boot-starter --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.redisson<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>redisson-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.12.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="程序化配置"   >
+          <a href="#程序化配置" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#程序化配置"></a> 程序化配置</h3>
+      
+<p>Redisson程序化的配置方法是通过构建<code>Config</code>对象实例来实现的，使用<code>Config</code>对象创建出<strong>RedissonClient</strong>对象，后续所有对Redisson的使用都借助于<strong>RedissonClient</strong>对象。</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Application</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 集群模式</span></span><br><span class="line">    <span class="meta">@Bean(destroyMethod=&quot;shutdown&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> RedissonClient <span class="title">redisson</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        Config config = <span class="keyword">new</span> Config();</span><br><span class="line">        config.useClusterServers()</span><br><span class="line">            .addNodeAddress(<span class="string">&quot;redis://127.0.0.1:7004&quot;</span>, <span class="string">&quot;redis://127.0.0.1:7001&quot;</span>); <span class="comment">// 可以用&quot;rediss://&quot;来启用SSL连接</span></span><br><span class="line">        <span class="keyword">return</span> Redisson.create(config);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 单节点模式</span></span><br><span class="line">    <span class="meta">@Bean(destroyMethod=&quot;shutdown&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> RedissonClient <span class="title">redisson</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        Config config = <span class="keyword">new</span> Config();</span><br><span class="line">        config.useSingleServer().setAddress(<span class="string">&quot;redis://myredisserver:6379&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> Redisson.create(config);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>后续将使用<strong>RedissonClient</strong>进行各种操作。</p>
+
+        <h3 id="可重入锁reentrant-lock"   >
+          <a href="#可重入锁reentrant-lock" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#可重入锁reentrant-lock"></a> 可重入锁（Reentrant Lock）</h3>
+      
+<p>基于Redis的Redisson分布式可重入锁<a target="_blank" rel="noopener" href="http://static.javadoc.io/org.redisson/redisson/3.10.0/org/redisson/api/RLock.html"><code>RLock</code></a> 。其实现了<code>java.util.concurrent.locks.Lock</code>接口。同时还提供了<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="http://static.javadoc.io/org.redisson/redisson/3.10.0/org/redisson/api/RLockAsync.html" >异步（Async）</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>、<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="http://static.javadoc.io/org.redisson/redisson/3.10.0/org/redisson/api/RLockReactive.html" >反射式（Reactive）</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>和<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="http://static.javadoc.io/org.redisson/redisson/3.10.0/org/redisson/api/RLockRx.html" >RxJava2标准</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>的接口。</p>
+<p>该类可实现分布式锁的效果，原理为：在Redis缓存创建了一把锁，其他线程再想获取锁时就得阻塞等待该锁从Redis缓存中删除（底层有一个<code>while(true)</code>循环不断尝试获取锁）。</p>
+<p>方式一：不手动指定过期时间，使用<strong>看门狗默认的过期时间+自动续期策略</strong>：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// redisson 是上文中注入到容器中的 RedissonClient 对象</span></span><br><span class="line">RLock lock = redisson.getLock(<span class="string">&quot;myLock&quot;</span>);  <span class="comment">// 设置锁名</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 加锁，若其他线程发现该锁已经被锁上，则阻塞式等待其他线程解锁后才继续运行</span></span><br><span class="line">lock.lock();</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">// 业务...</span></span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    <span class="comment">// 解锁</span></span><br><span class="line">    lock.unlock();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 严谨的写法：</span></span><br><span class="line">    <span class="keyword">if</span> (lock.isLocked() &amp;&amp; lock.isHeldByCurrentThread()) &#123;</span><br><span class="line">        lock.unlock();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></div></figure>
+<p>流程：</p>
+<ul>
+<li>当前线程在执行 <code>lock()</code> 后，将在Redis缓存中创建一个锁（<strong>Hash</strong>结构），其key值为<code>&quot;myLock&quot;</code>，其内存储了<code>key = uuid:线程号, value = 1</code>，代表当前线程对象拥有了该锁；</li>
+<li>此时其他线程再调用<code>lock()</code> 时将发现Redis缓存中已经存在了<code>&quot;myLock&quot;</code>锁，因此会<strong>阻塞等待</strong>（<code>while(true)</code>循环判断锁是否还在）；</li>
+<li>等待当前线程调用 <code>unlock()</code> 后，该<code>&quot;myLock&quot;</code>锁将从Redis缓存中移除，此时其他线程才可以结束阻塞，创建另一把锁，即再在Redis缓存中创建一个<code>&quot;myLock&quot;</code> 。</li>
+</ul>
+<p>上述方式的细节：</p>
+<ul>
+<li>锁的<strong>自动续期</strong>：如果业务超长，运行期间自动会给锁续期到30s，不用担心业务时间长，锁自动过期被删掉。</li>
+<li>加锁的业务只要<strong>运行完成</strong>，就不会给当前锁续期，即使不手动解锁，锁也默认也会在30s后自动删除。</li>
+</ul>
+<p>方式二：<strong>手动</strong>设置超时时间：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lock.lock(<span class="number">10</span>, TimeUnit.SECONDS);</span><br></pre></td></tr></table></div></figure>
+<p>上述代码设置10s后自动解锁（不会自动续期），这个时间一定要大于业务的执行时间，否则锁过期后再<code>unlock()</code>，解锁的就是别的线程加的锁，此时就会报错uuid不匹配。</p>
+<p><strong>自动续期原理</strong>：</p>
+<ul>
+<li>如果我们给锁指定了超时时间，就给Redis发送LUA脚本进行占锁且设置超时时间的操作（保证z占锁和设置超时时间的原子性）</li>
+<li>如果我们未指定锁的超时时间，就设置超时时间为<strong>LockWatchdogTimeout</strong>（看门狗）的默认时间30s。如果占锁成功，就会返回一个 <code>RFuture&lt;Long&gt;</code> 对象，异步监听一个<strong>定时任务</strong>（用于给锁重新设置超时时间，新的超时时间就是看门狗的默认时间30s），之后每隔10s（三分之一的看门狗默认时间）就会将超时时间续期到30s</li>
+</ul>
+<p><strong>最佳实战</strong>：使用 <code>lock.lock(30, TimeUnit.SECONDS);</code> 方式，将超时时间设置的大一些，手动解锁。这样的好处是省掉了频繁续期的操作。</p>
+<p>方式三：<strong>尝试加锁</strong>，等待一定时间还未拿到锁就放弃加锁。</p>
+<p><code>lock()</code> 方法会阻塞等待直到获取到锁。若不想阻塞等待，可以使用<code>tryLock()</code> 方法，其会阻塞等待一定时间后停止等待，即放弃尝试加锁：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 尝试加锁，最多等待100秒，上锁以后10秒自动解锁</span></span><br><span class="line"><span class="keyword">boolean</span> res = lock.tryLock(<span class="number">100</span>, <span class="number">10</span>, TimeUnit.SECONDS);</span><br><span class="line"><span class="keyword">if</span> (res) &#123;</span><br><span class="line">   <span class="keyword">try</span> &#123;</span><br><span class="line">     ...</span><br><span class="line">   &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">       lock.unlock();</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="读写锁"   >
+          <a href="#读写锁" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#读写锁"></a> 读写锁</h3>
+      
+<p>读写锁<strong>RReadWriteLock</strong>用于保证一定能读取到最新数据，用法是：在<strong>改数据时加写锁</strong>，在<strong>读数据时加读锁</strong>。修改数据期间：</p>
+<ul>
+<li>写锁是一个<strong>排他锁</strong>（互斥锁）</li>
+<li>读锁是一个<strong>共享锁</strong>。</li>
+</ul>
+<p>写锁如果没有释放，读锁就得一直阻塞等待。</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">RReadWriteLock lock = redisson.getReadWriteLock(<span class="string">&quot;rw-lock&quot;</span>);</span><br></pre></td></tr></table></div></figure>
+<p>改数据时加写锁：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">RLock rlock = lock.writeLock();</span><br><span class="line">rLock.lock();</span><br><span class="line"></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">rlock.unlock();</span><br></pre></td></tr></table></div></figure>
+<p>读数据时加读锁：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">RLock rlock = lock.readLock();</span><br><span class="line">rLock.lock();</span><br><span class="line"></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">rlock.unlock();</span><br></pre></td></tr></table></div></figure>
+<p>某个线程开启写锁时，其他线程的读锁就会阻塞等待，写锁当然也会阻塞等待。</p>
+<p>四种不同情况下的锁：</p>
+<ul>
+<li><strong>读 + 读</strong>：相当于无锁，并发读。只会分别在Redis中记录当前的读锁，会同时添加锁成功，不会阻塞</li>
+<li><strong>写 + 读</strong>：读锁阻塞等待写锁释放才能读</li>
+<li><strong>写 + 写</strong>：后来的写锁阻塞等待前一个写锁释放才能写</li>
+<li><strong>读 + 写</strong>：后来的写锁阻塞等待其他读锁释放才能写（防止前一个线程还没读到数据就被后来的线程修改了）</li>
+</ul>
+<p><strong>总结：只要有写锁的存在，无论是先写还是后写，都必须阻塞等待。</strong></p>
+
+        <h3 id="信号量"   >
+          <a href="#信号量" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#信号量"></a> 信号量</h3>
+      
+<p>信号量机制可以用来做分布式<strong>限流</strong>。</p>
+<p>情景：先在Redis中创建一个<code>key: &quot;park&quot;, value=3</code>，代表当前共有三个车位（三个信号）。之后客户端多次获取信号，直到Redis中<code>&quot;park&quot;</code>的信号量为0，代表没有多余的信号给客户端了。此后再想来获取信号的客户端就会阻塞等待其他客户端释放信号，才能继续获取到信号。</p>
+<p>获取一个信号：获取一个值，占一个车位</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">RSemaphore park = redisson.getSemaphore(<span class="string">&quot;park&quot;</span>);</span><br><span class="line">park.acquire();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 不阻塞等待，没有信号就放弃获取信号</span></span><br><span class="line"><span class="keyword">boolean</span> b = park.tryAcquire();</span><br><span class="line"><span class="keyword">if</span> (b) &#123;</span><br><span class="line">    <span class="comment">// 执行业务</span></span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;error&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>释放一个信号：释放一个车位</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">RSemaphore park = redisson.getSemaphore(<span class="string">&quot;park&quot;</span>);</span><br><span class="line">park.release();</span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="闭锁"   >
+          <a href="#闭锁" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#闭锁"></a> 闭锁</h3>
+      
+<p>基于Redisson的分布式闭锁（<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="http://static.javadoc.io/org.redisson/redisson/3.10.0/org/redisson/api/RCountDownLatch.html" >CountDownLatch</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>）。Java对象<code>RCountDownLatch</code>采用了与<code>java.util.concurrent.CountDownLatch</code>相似的接口和用法。</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">RCountDownLatch latch = redisson.getCountDownLatch(<span class="string">&quot;anyCountDownLatch&quot;</span>);</span><br><span class="line">latch.trySetCount(<span class="number">5</span>); </span><br><span class="line">latch.await(); <span class="comment">// 阻塞等待5个数都减掉</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 在其他线程或其他JVM里</span></span><br><span class="line">RCountDownLatch latch = redisson.getCountDownLatch(<span class="string">&quot;anyCountDownLatch&quot;</span>);</span><br><span class="line">latch.countDown(); <span class="comment">// 计数减一</span></span><br><span class="line"></span><br></pre></td></tr></table></div></figure>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yuyun-zhao.gitee.io">yuyun zhao</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yuyun-zhao.gitee.io/2021/09/15/%E3%80%90Redis%E3%80%91Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/">http://yuyun-zhao.gitee.io/2021/09/15/%E3%80%90Redis%E3%80%91Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.gitee.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.gitee.io/tags/Redis/">Redis</a></span></div><nav class="post-paginator paginator"><div class="paginator-next"><a class="paginator-next__link" href="/2021/09/14/%E3%80%90JUC%E3%80%91JUC/"><span class="paginator-prev__text">【JUC】JUC</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E7%AE%80%E4%BB%8B"><span class="toc-text">
+           分布式锁简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%98%B6%E6%AE%B5%E4%B8%80%E6%9C%AA%E5%8A%A0%E9%94%81%E6%97%B6"><span class="toc-text">
+           阶段一：未加锁时</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%88%E6%9C%AC%E4%BA%8C%E5%8D%95%E6%9C%BA%E7%89%88%E9%94%81"><span class="toc-text">
+           版本二：单机版锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%88%E6%9C%AC%E4%B8%89-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81-setnx"><span class="toc-text">
+           版本三： 分布式锁 SETNX</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%88%E6%9C%AC%E5%9B%9B%E8%AE%BE%E7%BD%AE%E8%B6%85%E6%97%B6%E6%97%B6%E9%97%B4"><span class="toc-text">
+           版本四：设置超时时间</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%88%E6%9C%AC%E4%BA%94%E6%B7%BB%E5%8A%A0-uuid-%E9%98%B2%E6%AD%A2%E8%AF%AF%E5%88%A0%E9%99%A4"><span class="toc-text">
+           版本五：添加 UUID 防止误删除</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%88%E6%9C%AC%E5%85%ADlua-%E8%84%9A%E6%9C%AC%E4%BF%9D%E8%AF%81%E5%88%A0%E9%99%A4%E5%8E%9F%E5%AD%90%E6%80%A7"><span class="toc-text">
+           版本六：LUA 脚本保证删除原子性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redisson"><span class="toc-text">
+           Redisson</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%BC%E5%85%A5%E4%BE%9D%E8%B5%96"><span class="toc-text">
+           导入依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A8%8B%E5%BA%8F%E5%8C%96%E9%85%8D%E7%BD%AE"><span class="toc-text">
+           程序化配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81reentrant-lock"><span class="toc-text">
+           可重入锁（Reentrant Lock）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%BB%E5%86%99%E9%94%81"><span class="toc-text">
+           读写锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E5%8F%B7%E9%87%8F"><span class="toc-text">
+           信号量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AD%E9%94%81"><span class="toc-text">
+           闭锁</span></a></li></ol></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/author.png" alt="avatar"></div><p class="sidebar-ov-author__text">no code no life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/YUYUN-ZHAO" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="zyy1024462136" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a><a class="sidebar-ov-social-item" href="1024462136" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="mailto:im.yuyunzhao@gmail.com" target="_blank" rel="noopener" data-popover="social.Gmail" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">Gmail</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">87</div><div class="sidebar-ov-state-item__name">文章</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">32</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">32</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2021</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>yuyun zhao</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script>function initSearch() {
+  var isXML = true;
+  var search_path = 'search.xml';
+
+  if (!search_path) {
+    search_path = 'search.xml';
+  } else if (/json$/i.test(search_path)) {
+    isXML = false;
+  }
+
+  var path = '/' + search_path;
+  $.ajax({
+    url: path,
+    dataType: isXML ? 'xml' : 'json',
+    async: true,
+    success: function (res) {
+      var datas = isXML ? $('entry', res).map(function () {
+        // 将 XML 转为 JSON
+        return {
+          title: $('title', this).text(),
+          content: $('content', this).text(),
+          url: $('url', this).text()
+        };
+      }).get() : res;
+      var $input = $('.search-input input');
+      var $result = $('.search-results');
+      // 搜索对象（标题、内容）的权重，影响显示顺序
+      var WEIGHT = { title: 100, content: 1 };
+      var searchPost = function () {
+        var searchText = $input.val().toLowerCase().trim();
+        // 根据空白字符分隔关键字
+        var keywords = searchText.split(/[\s]+/);
+        // 搜索结果
+        var matchPosts = [];
+
+        // 有多个关键字时，将原文字整个保存下来
+        if (keywords.length > 1) {
+          keywords.push(searchText);
+        }
+        // 防止未输入字符时搜索
+        if (searchText.length > 0) {
+          datas.forEach(function (data) {
+            var isMatch  = false;
+            // 没有标题的文章使用预设的 i18n 变量代替
+            var title = (data.title && data.title.trim()) || '[ 文章无标题 ]';
+            var titleLower = title && title.toLowerCase();
+            // 删除 HTML 标签 和 所有空白字符
+            var content = data.content && data.content.replace(/<[^>]+>/g, '');
+            var contentLower = content && content.toLowerCase();
+            // 删除重复的 /
+            var postURL = data.url && decodeURI(data.url).replace(/\/{2,}/g, '/');
+            // 标题中匹配到的关键词
+            var titleHitSlice = [];
+            // 内容中匹配到的关键词
+            var contentHitSlice = [];
+
+            keywords.forEach(function (keyword) {
+              /**
+              * 获取匹配的关键词的索引
+              * @param {String} keyword 要匹配的关键字
+              * @param {String} text 原文字
+              * @param {Boolean} caseSensitive 是否区分大小写
+              * @param {Number} weight 匹配对象的权重。权重大的优先显示
+              * @return {Array}
+              */
+              function getIndexByword (word, text, caseSensitive, weight) {
+                if (!word || !text) {
+                  return [];
+                };
+
+                var startIndex = 0; // 每次匹配的开始索引
+                var index = -1;     // 匹配到的索引值
+                var result = [];    // 匹配结果
+
+                if (!caseSensitive) {
+                  word = word.toLowerCase();
+                  text = text.toLowerCase();
+                }
+
+                while((index = text.indexOf(word, startIndex)) !== -1) {
+                  var hasMatch = false;
+                  // 索引位置相同的关键词，保留长度较长的
+                  titleHitSlice.forEach(function (hit) {
+                    if (hit.index === index && hit.word.length < word.length) {
+                      hit.word = word;
+                      hasMatch = true;
+                    }
+                  });
+                  startIndex = index + word.length;
+                  !hasMatch && result.push({ index: index, word: word, weight: weight });
+                }
+                return result;
+              }
+              titleHitSlice = titleHitSlice.concat(getIndexByword(keyword, titleLower, false, WEIGHT.title));
+              contentHitSlice = contentHitSlice.concat(getIndexByword(keyword, contentLower, false, WEIGHT.content));
+            });
+
+            var hitTitle = titleHitSlice.length;
+            var hitContent = contentHitSlice.length;
+
+            if (hitTitle > 0 || hitContent > 0) {
+              isMatch = true;
+            }
+            if (isMatch) {
+              ;[titleHitSlice, contentHitSlice].forEach(function (hit) {
+                // 按照匹配文字的索引的递增顺序排序
+                hit.sort(function (left, right) {
+                  return left.index - right.index;
+                });
+              });
+              /**
+              * 给文本中匹配到的关键词添加标记，从而进行高亮显示
+              * @param {String} text 原文本
+              * @param {Array} hitSlice 匹配项的索引信息
+              * @param {Number} start 开始索引
+              * @param {Number} end 结束索引
+              * @return {String}
+              */
+              function highlightKeyword (text, hitSlice, start, end) {
+                if (!text || !hitSlice || !hitSlice.length) {
+                  return;
+                }
+
+                var result = '';
+                var startIndex = start;
+                var endIndex = end;
+                hitSlice.forEach(function (hit) {
+                  if (hit.index < startIndex) {
+                    return;
+                  }
+
+                  var hitWordEnd = hit.index + hit.word.length;
+                  result += text.slice(startIndex, hit.index);
+                  result += '<b>' + text.slice(hit.index, hitWordEnd) + '</b>';
+                  startIndex = hitWordEnd;
+                });
+                result += text.slice(startIndex, endIndex);
+                return result;
+              }
+
+              var postData = {};
+              // 文章总的搜索权重
+              var postWeight = titleHitSlice.length * WEIGHT.title + contentHitSlice.length * WEIGHT.content;
+              // 标记匹配关键词后的标题
+              var postTitle = highlightKeyword(title, titleHitSlice, 0, title.length) || title;
+              // 标记匹配关键词后的内容
+              var postContent;
+              // 显示内容的长度
+              var SHOW_WORD_LENGTH = 200;
+              // 命中关键词前的字符显示长度
+              var SHOW_WORD_FRONT_LENGTH = 20;
+              var SHOW_WORD_END_LENGTH = SHOW_WORD_LENGTH - SHOW_WORD_FRONT_LENGTH;
+
+              // 截取匹配的第一个字符，前后共 200 个字符来显示
+              if (contentHitSlice.length > 0) {
+                var firstIndex = contentHitSlice[0].index;
+                var start = firstIndex > SHOW_WORD_FRONT_LENGTH ? firstIndex - SHOW_WORD_FRONT_LENGTH : 0;
+                var end = firstIndex + SHOW_WORD_END_LENGTH;
+                postContent = highlightKeyword(content, contentHitSlice, start, end);
+              } else { // 未匹配到内容，直接截取前 200 个字符来显示
+                postContent = content.slice(0, SHOW_WORD_LENGTH);
+              }
+              postData.title = postTitle;
+              postData.content = postContent;
+              postData.url = postURL;
+              postData.weight = postWeight;
+              matchPosts.push(postData);
+            }
+          });
+        }
+
+        var resultInnerHtml = '';
+        if (matchPosts.length) {
+          // 按权重递增的顺序排序，使权重大的优先显示
+          matchPosts.sort(function (left, right) {
+            return right.weight - left.weight;
+          });
+          resultInnerHtml += '<ul>';
+          matchPosts.forEach(function (post) {
+            resultInnerHtml += '<li><a class="search-results-title" href="' + post.url + '">';
+            resultInnerHtml += post.title;
+            resultInnerHtml += '</a><div class="search-results-content">';
+            resultInnerHtml += post.content;
+            resultInnerHtml += '</div></li>';
+          });
+          resultInnerHtml += '</ul>';
+        } else {
+          resultInnerHtml += '<div class="search-results-none"><i class="far fa-meh"></i></div>';
+        }
+        $result.html(resultInnerHtml);
+      };
+      $input.on('input', searchPost);
+      $input.on('keyup', function (e) {
+        if (e.keyCode === Stun.utils.codeToKeyCode('Enter')) {
+          searchPost();
+        }
+      });
+    }
+  });
+}
+
+function closeSearch () {
+  $('body').css({ overflow: 'auto' });
+  $('.search-popup').css({ display: 'none' });
+  $('.search-mask').css({ display: 'none' });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+  Stun.utils.pjaxReloadLocalSearch = function () {
+    $('.header-nav-search').on('click', function (e) {
+      e.stopPropagation();
+      $('body').css('overflow', 'hidden');
+      $('.search-popup')
+        .velocity('stop')
+        .velocity('transition.expandIn', {
+          duration: 300,
+          complete: function () {
+            $('.search-popup input').focus();
+          }
+        });
+      $('.search-mask')
+        .velocity('stop')
+        .velocity('transition.fadeIn', {
+          duration: 300
+        });
+
+      initSearch();
+    });
+    $('.search-mask, .search-close').on('click', function () {
+      closeSearch();
+    });
+    $(document).on('keydown', function (e) {
+      // Escape <=> 27
+      if (e.keyCode === Stun.utils.codeToKeyCode('Escape')) {
+        closeSearch();
+      }
+    });
+  };
+
+  Stun.utils.pjaxReloadLocalSearch();
+}, false);
+
+function safeOpenUrl(url) {
+  var newTab = window.open();
+  newTab.opener = null;
+  newTab.location = url;
+}
+
+function extSearch(engine) {
+  var engines = {
+    google: 'https://www.google.com/search?q=',
+    bing: 'https://cn.bing.com/search?q=',
+    baidu: 'https://www.baidu.com/s?ie=UTF-8&wd=',
+  };
+  var host = window.location.host;
+  var query = $('.search-input input').val().toLowerCase().trim();
+  var uri = engines[engine] + query + ' site:' + host;
+
+  if (query) {
+    safeOpenUrl(uri);
+  } else {
+    Stun.utils.popAlert('warning', '请输入字符');
+  }
+}
+
+var assistSearchList = window.CONFIG.assistSearch;
+
+if (Array.isArray(assistSearchList)) {
+  assistSearchList.forEach(function (name) {
+    document.querySelector('.search-btns-item--' + name).addEventListener('click', function () {
+      extSearch(name);
+    }, false);
+  });
+}</script><script src="https://cdn.jsdelivr.net/npm/pjax@latest/pjax.min.js"></script><script>window.addEventListener('DOMContentLoaded', function () {
+  var pjax = new Pjax({"selectors":["head title","#main",".pjax-reload"],"history":true,"scrollTo":false,"scrollRestoration":false,"cacheBust":false,"debug":false,"currentUrlFullReload":false,"timeout":0});
+  // 加载进度条的计时器
+  var loadingTimer = null;
+
+  // 重置页面 Y 方向上的滚动偏移量
+  document.addEventListener('pjax:send', function () {
+    $('.header-nav-menu').removeClass('show');
+    if (CONFIG.pjax && CONFIG.pjax.avoidBanner) {
+      $('html').velocity('scroll', {
+        duration: 500,
+        offset: $('#header').height(),
+        easing: 'easeInOutCubic'
+      });
+    }
+
+    var loadingBarWidth = 20;
+    var MAX_LOADING_WIDTH = 95;
+
+    $('.loading-bar').addClass('loading');
+    $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    clearInterval(loadingTimer);
+    loadingTimer = setInterval(function () {
+      loadingBarWidth += 3;
+      if (loadingBarWidth > MAX_LOADING_WIDTH) {
+        loadingBarWidth = MAX_LOADING_WIDTH;
+      }
+      $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    }, 500);
+  }, false);
+
+  window.addEventListener('pjax:complete', function () {
+    clearInterval(loadingTimer);
+    $('.loading-bar__progress').css('width', '100%');
+    $('.loading-bar').removeClass('loading');
+    setTimeout(function () {
+      $('.loading-bar__progress').css('width', '0');
+    }, 400);
+    $('link[rel=prefetch], script[data-pjax-rm]').each(function () {
+      $(this).remove();
+    });
+    $('script[data-pjax], #pjax-reload script').each(function () {
+      $(this).parent().append($(this).remove());
+    });
+
+    if (Stun.utils.pjaxReloadBoot) {
+      Stun.utils.pjaxReloadBoot();
+    }
+    if (Stun.utils.pjaxReloadScroll) {
+      Stun.utils.pjaxReloadScroll();
+    }
+    if (Stun.utils.pjaxReloadSidebar) {
+      Stun.utils.pjaxReloadSidebar();
+    }
+    if (false) {
+      if (Stun.utils.pjaxReloadHeader) {
+        Stun.utils.pjaxReloadHeader();
+      }
+      if (Stun.utils.pjaxReloadScrollIcon) {
+        Stun.utils.pjaxReloadScrollIcon();
+      }
+      if (Stun.utils.pjaxReloadLocalSearch) {
+        Stun.utils.pjaxReloadLocalSearch();
+      }
+    }
+  }, false);
+}, false);</script><div id="pjax-reload"><link href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" rel="stylesheet" type="text/css"><link href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/copy-tex.css" rel="stylesheet" type="text/css"><script src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/copy-tex.min.js"></script><script src="https://cdn.jsdelivr.net/gh/sukkaw/busuanzi@latest/bsz.pure.mini.js" async></script></div><script src="/js/utils.js?v=2.6.2"></script><script src="/js/stun-boot.js?v=2.6.2"></script><script src="/js/scroll.js?v=2.6.2"></script><script src="/js/header.js?v=2.6.2"></script><script src="/js/sidebar.js?v=2.6.2"></script><script type="application/json" src="/search.xml"></script></body></html>
