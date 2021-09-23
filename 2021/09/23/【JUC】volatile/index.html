@@ -1,0 +1,519 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="JMM        JMM（Java内存模型：Java Memory Model，简称JMM）本身是一种抽象的概念并不真实存在，它描述的是一组规则或规范，通过这组规范定义了程序中各个变量（包括实例字段，静态字段和构成数组对象的元素）的访问方式。JMM不是Java内存布局，不是所谓的栈、堆、方法区。 JMM关于同步的规定：  线程解锁前，必须把共享变量的值刷新回主内存 线程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【JUC】volatile">
+<meta property="og:url" content="http://yuyun-zhao.gitee.io/2021/09/23/%E3%80%90JUC%E3%80%91volatile/index.html">
+<meta property="og:site_name" content="yuyun zhao&#39;s blog">
+<meta property="og:description" content="JMM        JMM（Java内存模型：Java Memory Model，简称JMM）本身是一种抽象的概念并不真实存在，它描述的是一组规则或规范，通过这组规范定义了程序中各个变量（包括实例字段，静态字段和构成数组对象的元素）的访问方式。JMM不是Java内存布局，不是所谓的栈、堆、方法区。 JMM关于同步的规定：  线程解锁前，必须把共享变量的值刷新回主内存 线程">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90JUC%E3%80%91volatile/086f17f778d19c9be53c65117aaacd87.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90JUC%E3%80%91volatile/bd9649a5795e503000a1fe89e57665a7.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90JUC%E3%80%91volatile/d7626eb368ec93d80ed98478dd579401.png">
+<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90JUC%E3%80%91volatile/c351d47587cbdf0ba57028ec8b894114.png">
+<meta property="article:published_time" content="2021-09-23T08:38:03.000Z">
+<meta property="article:modified_time" content="2021-09-23T09:09:42.625Z">
+<meta property="article:author" content="yuyun zhao">
+<meta property="article:tag" content="JUC">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90JUC%E3%80%91volatile/086f17f778d19c9be53c65117aaacd87.png"><title>【JUC】volatile | yuyun zhao's blog</title><link ref="canonical" href="http://yuyun-zhao.gitee.io/2021/09/23/%E3%80%90JUC%E3%80%91volatile/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":true},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"carbon","highlight":"light","wordWrap":false},
+  reward: false,
+  fancybox: true,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: {"avoidBanner":false},
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"复制","copySuccess":"复制成功","copyError":"复制失败"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【JUC】volatile</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-09-23</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-09-23</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">3.3k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">21分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body">
+        <h2 id="jmm"   >
+          <a href="#jmm" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#jmm"></a> JMM</h2>
+      
+<p>JMM（Java内存模型：Java Memory Model，简称JMM）本身是一种抽象的概念并不真实存在，它描述的是一组规则或规范，通过这组规范定义了程序中各个变量（包括实例字段，静态字段和构成数组对象的元素）的访问方式。JMM不是Java<strong>内存布局</strong>，不是所谓的栈、堆、方法区。</p>
+<p>JMM关于同步的规定：</p>
+<ol>
+<li>线程解锁前，必须把共享变量的值刷新回主内存</li>
+<li>线程加锁前，必须读取主内存的最新值到自己的工作内存</li>
+<li>加锁解锁是同一把锁</li>
+</ol>
+<p>由于JVM运行程序的实体是线程，而每个线程创建时JVM都会为其创建一个工作内存（有些地方称为栈空间），工作内存是每个线程的私有数据区域，而Java内存模型中规定所有变量都存储在主内存，主内存是共享内存区域，所有线程都可以访问，<strong>但线程对变量的操作（读取赋值等）必须在工作内存中进行，首先要将变量从主内存拷贝的自己的工作内存空间，然后对变量进行操作，操作完成后再将变量写回主内存</strong>，不能直接操作主内存中的变量，各个线程中的工作内存中存储着主内存中的<strong>变量副本拷贝</strong>，因此不同的线程间无法访问对方的工作内存，线程间的通信（传值）必须通过主内存来完成，其简要访问过程如下图：</p>
+<p><img src="/images/%E3%80%90JUC%E3%80%91volatile/086f17f778d19c9be53c65117aaacd87.png" alt="img" /></p>
+<p>每个Java线程都有自己的<strong>工作内存</strong>。操作数据，首先从主内存中读，得到一份拷贝，操作完毕后再写回到主内存。</p>
+<p>JMM可能带来<strong>可见性</strong>、<strong>原子性</strong>和<strong>有序性</strong>问题。所谓可见性，就是某个线程对主内存内容的更改，应该<strong>立刻通知到其它线程</strong>。原子性是指一个操作是不可分割的，不能执行到一半，就不执行了。所谓有序性，就是<strong>指令是有序的，不会被重排</strong>。</p>
+
+        <h2 id="volatile"   >
+          <a href="#volatile" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#volatile"></a> volatile</h2>
+      
+<p>volatile是JVM提供的<strong>轻量级的同步机制</strong>（<code>synchronized</code>锁是<strong>重量级的同步机制</strong>）。</p>
+<p>其特点：</p>
+<ul>
+<li>保证可见性</li>
+<li>不保证原子性</li>
+<li>禁止指令重排（保证有序性）</li>
+</ul>
+<span id="more"></span>
+
+        <h3 id="可见性"   >
+          <a href="#可见性" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#可见性"></a> 可见性</h3>
+      
+<p>各个线程对主内存中共享变量的操作都是各个线程各自拷贝到自己的工作内存进行操作后再写回到主内存中的。</p>
+<p>这就可能存在一个线程AAA修改了共享变量X的值但还未写回主内存时，另外一个线程BBB又对主内存中同一个共享变量X进行操作，但此时A线程工作内存中共享变量X对线程B来说并不可见，这种工作内存与主内存同步延迟现象就造成了可见性问题。</p>
+<p>示例代码：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.concurrent.TimeUnit;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 假设是主物理内存</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyData</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//volatile int number = 0;</span></span><br><span class="line">    <span class="keyword">int</span> number = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addTo60</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.number = <span class="number">60</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 验证volatile的可见性</span></span><br><span class="line"><span class="comment"> * 1. 假设int number = 0， number变量之前没有添加volatile关键字修饰</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">VolatileDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args [])</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 资源类</span></span><br><span class="line">        MyData myData = <span class="keyword">new</span> MyData();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// AAA线程 实现了Runnable接口的，lambda表达式</span></span><br><span class="line">        <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line"></span><br><span class="line">            System.out.println(Thread.currentThread().getName() + <span class="string">&quot;\t come in&quot;</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 线程睡眠3秒，假设在进行运算</span></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                TimeUnit.SECONDS.sleep(<span class="number">3</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 修改number的值</span></span><br><span class="line">            myData.addTo60();</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 输出修改后的值</span></span><br><span class="line">            System.out.println(Thread.currentThread().getName() + <span class="string">&quot;\t update number value:&quot;</span> + myData.number);</span><br><span class="line"></span><br><span class="line">        &#125;, <span class="string">&quot;AAA&quot;</span>).start();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// main线程就一直在这里等待循环，直到number的值不等于零</span></span><br><span class="line">        <span class="keyword">while</span>(myData.number == <span class="number">0</span>) &#123;&#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 按道理这个值是不可能打印出来的，因为主线程运行的时候，number的值为0，所以一直在循环</span></span><br><span class="line">        <span class="comment">// 如果能输出这句话，说明AAA线程在睡眠3秒后，更新的number的值，重新写入到主内存，并被main线程感知到了</span></span><br><span class="line">        System.out.println(Thread.currentThread().getName() + <span class="string">&quot;\t mission is over&quot;</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>由于没有<code>volatile</code>修饰<code>MyData</code>类的成员变量<code>number</code>，<code>main</code>线程将会卡在<code>while(myData.number == 0) &#123;&#125;</code>，不能正常结束。</p>
+<p>若想正确结束，需要使用<code>volatile</code>修饰<code>MyData</code>类的成员变量<code>number</code>。</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">volatile</span> <span class="keyword">int</span> number = <span class="number">0</span>;</span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="原子性"   >
+          <a href="#原子性" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#原子性"></a> 原子性</h3>
+      
+<p>volatile不保证原子性。</p>
+<p>原子性：不可分割，完整性，也即某个线程正在做某个具体业务时，中间不可以被加塞或者被分割。需要整体完整要么同时成功，要么同时失败。</p>
+<p>volatile不保证原子性案例演示：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyData2</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * volatile 修饰的关键字，是为了增加 主线程和线程之间的可见性，只要有一个线程修改了内存中的值，其它线程也能马上感知</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">volatile</span> <span class="keyword">int</span> number = <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addPlusPlus</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        number++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">VolatileAtomicityDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        MyData2 myData = <span class="keyword">new</span> MyData2();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建10个线程，线程里面进行1000次循环</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">20</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">                <span class="comment">// 里面</span></span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">1000</span>; j++) &#123;</span><br><span class="line">                    myData.addPlusPlus();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;, String.valueOf(i)).start();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 需要等待上面20个线程都计算完成后，在用main线程取得最终的结果值</span></span><br><span class="line">        <span class="comment">// 这里判断线程数是否大于2，为什么是2？因为默认是有两个线程的，一个main线程，一个gc线程</span></span><br><span class="line">        <span class="keyword">while</span>(Thread.activeCount() &gt; <span class="number">2</span>) &#123;</span><br><span class="line">            <span class="comment">// yield表示不执行</span></span><br><span class="line">            Thread.yield();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 查看最终的值</span></span><br><span class="line">        <span class="comment">// 假设volatile保证原子性，那么输出的值应该为：  20 * 1000 = 20000</span></span><br><span class="line">        System.out.println(Thread.currentThread().getName() + <span class="string">&quot;\t finally number value: &quot;</span> + myData.number);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>最后的结果总是小于20000。</p>
+
+        <h4 id="原因分析"   >
+          <a href="#原因分析" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#原因分析"></a> 原因分析</h4>
+      
+<p><code>number++</code>在多线程下是非线程安全的。<code>number++</code>的操作，会形成3条指令：</p>
+<figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">getfield    &#x2F;&#x2F;读</span><br><span class="line">iconst_1	&#x2F;&#x2F;++常量1</span><br><span class="line">iadd		&#x2F;&#x2F;加操作</span><br><span class="line">putfield	&#x2F;&#x2F;写操作</span><br></pre></td></tr></table></div></figure>
+<p>假设有3个线程，分别执行<code>number++</code>，都先从主内存中拿到最开始的值，<code>number=0</code>，然后三个线程分别进行操作。假设线程0执行完毕，<code>number=1</code>，也立刻通知到了其它线程，但是此时线程1、2已经拿到了<code>number=0</code>，切换回1、2线程后不会再去从主内存中获取一次<code>number</code>的值了，所以结果是线程1、2将<code>number</code>变成1覆盖了线程3的赋值。</p>
+<p>解决的方式就是：</p>
+<ol>
+<li>对<code>addPlusPlus()</code>方法加<code>synchronized</code>锁，但它是<strong>重量级的同步机制</strong>，并发效率较低。</li>
+<li>使用<code>java.util.concurrent.AtomicInteger</code>类，其可以保证原子性。</li>
+</ol>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">atomicDemo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;原子性测试&quot;</span>);</span><br><span class="line">    MyData myData=<span class="keyword">new</span> MyData();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">20</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt;<span class="number">1000</span> ; j++) &#123;</span><br><span class="line">                myData.addPlusPlus();</span><br><span class="line">                myData.addAtomic();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,String.valueOf(i)).start();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span> (Thread.activeCount()&gt;<span class="number">2</span>)&#123;</span><br><span class="line">        Thread.yield();</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(Thread.currentThread().getName()+<span class="string">&quot;\t int type finally number value: &quot;</span>+myData.number);</span><br><span class="line">    System.out.println(Thread.currentThread().getName()+<span class="string">&quot;\t AtomicInteger type finally number value: &quot;</span>+myData.atomicInteger);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>结果：</p>
+<figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">原子性测试</span><br><span class="line">main	 int type finally number value: 17542</span><br><span class="line">main	 AtomicInteger type finally number value: 20000</span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="有序性"   >
+          <a href="#有序性" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#有序性"></a> 有序性</h3>
+      
+<p>volatile可以保证<strong>有序性</strong>，也就是防止<strong>指令重排序</strong>。</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ResortSeqDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> a=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">boolean</span> flag=<span class="keyword">false</span>;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    多线程下flag=true可能先执行，还没走到a=1就被挂起。</span></span><br><span class="line"><span class="comment">    其它线程进入method02的判断，修改a的值=5，而不是6。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method01</span><span class="params">()</span></span>&#123;</span><br><span class="line">        a=<span class="number">1</span>;</span><br><span class="line">        flag=<span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method02</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (flag)&#123;</span><br><span class="line">            a+=<span class="number">5</span>;</span><br><span class="line">            System.out.println(<span class="string">&quot;*****retValue: &quot;</span>+a);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>volatile可以保证<strong>有序性</strong>，也就是防止<strong>指令重排序</strong>。所谓指令重排序，就是出于<strong>优化考虑</strong>，CPU执行指令的顺序跟程序员自己编写的顺序不一致。就好比一份试卷，题号是老师规定的，是程序员规定的，但是考生（CPU）可以先做选择，也可以先做填空。</p>
+<figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">int x &#x3D; 11; &#x2F;&#x2F;语句1</span><br><span class="line">int y &#x3D; 12; &#x2F;&#x2F;语句2</span><br><span class="line">x &#x3D; x + 5;  &#x2F;&#x2F;语句3</span><br><span class="line">y &#x3D; x * x;  &#x2F;&#x2F;语句4</span><br></pre></td></tr></table></div></figure>
+<p>以上例子，可能出现的执行顺序有1234、2134、1342，这三个都没有问题，最终结果都是x = 16，y=256。但是如果是4开头，就有问题了，y=0。这个时候就<strong>不需要</strong>指令重排序。</p>
+<p>volatile底层是用CPU的<strong>内存屏障</strong>（Memory Barrier）指令来实现的，有两个作用，一个是保证特定操作的顺序性，二是保证变量的可见性。在指令之间插入一条Memory Barrier指令，告诉编译器和CPU，在Memory Barrier指令之间的指令不能被重排序。</p>
+
+        <h2 id="volatile-指令重排序"   >
+          <a href="#volatile-指令重排序" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#volatile-指令重排序"></a> volatile 指令重排序</h2>
+      
+<p>计算机在执行程序时，<strong>为了提高性能</strong>，编译器和处理器的常常会对指令做重排，一般分以下3种：</p>
+<p><img src="/images/%E3%80%90JUC%E3%80%91volatile/bd9649a5795e503000a1fe89e57665a7.png" alt="img" /></p>
+<ul>
+<li>单线程环境里面能够确保程序最终执行结果和代码顺序执行的结果一致（因为即使重排序也不会影响执行逻辑）。处理器在进行重排序时必须要考虑指令之间的<strong>数据依赖性</strong></li>
+<li>但多线程环境中线程交替执行，由于编译器优化重排的存在，两个线程中使用的变量能否保证一致性是无法确定的，结果无法预测。例如两条指令顺序颠倒后被不同线程并发访问就可能出现问题。</li>
+</ul>
+
+        <h3 id="理论"   >
+          <a href="#理论" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#理论"></a> 理论</h3>
+      
+<p>内存屏障(Memory Barrier）又称内存栅栏，是一个CPU指令，它的作用有两个:</p>
+<ol>
+<li>保证特定操作的执行顺序，</li>
+<li>保证某些变量的内存可见性（利用该特性实现volatile的内存可见性）。</li>
+</ol>
+<p>由于编译器和处理器都能执行指令重排优化。如果在指令间插入一条Memory Barrier则会告诉编译器和CPU，不管什么指令都不能和这条Memory Barrier指令重排序，也就是说通过<strong>插入内存屏障禁止在内存屏障前后的指令执行重排序优化</strong>。内存屏障另外一个作用是强制刷出各种CPU的缓存数据，因此任何CPU上的线程都能读取到这些数据的最新版本。</p>
+<p>对volatile变量进行写操作时，会在写操作后加入一条store屏障指令，将工作内存中的共享变量值刷新回到主内存。</p>
+<p><img src="/images/%E3%80%90JUC%E3%80%91volatile/d7626eb368ec93d80ed98478dd579401.png" alt="img" /></p>
+<p>对volatile变量进行读操作时，会在读操作前加入一条load屏障指令，从主内存中读取共享变量。</p>
+<p><img src="/images/%E3%80%90JUC%E3%80%91volatile/c351d47587cbdf0ba57028ec8b894114.png" alt="img" /></p>
+<p><strong>线性安全性获得保证</strong></p>
+<ul>
+<li>工作内存与主内存同步延迟现象导致的<strong>可见性</strong>问题 - 可以使用synchronized或volatile关键字解决，它们都可以使一个线程修改后的变量立即对其他线程可见。</li>
+<li>对于指令重排导致的<strong>可见性</strong>问题和<strong>有序性</strong>问题 - 可以利用volatile关键字解决，因为volatile的另外一个作用就是禁止重排序优化。</li>
+</ul>
+
+        <h2 id="单例模式使用-volatile"   >
+          <a href="#单例模式使用-volatile" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#单例模式使用-volatile"></a> 单例模式使用 volatile</h2>
+      
+<p>不使用 volatile 时的懒汉式单例模式：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bank</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Bank</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Bank instance = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Bank <span class="title">getInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//方式一：效率稍差</span></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        synchronized (Bank.class) &#123;</span></span><br><span class="line"><span class="comment">            if(instance == null)&#123;</span></span><br><span class="line"><span class="comment">                instance = new Bank();</span></span><br><span class="line"><span class="comment">            &#125;</span></span><br><span class="line"><span class="comment">            return instance;</span></span><br><span class="line"><span class="comment">        &#125;*/</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">//方式二：效率更高，如果实例对象已经非空，说明已经造好了对象，不需要再进入同步代码块内</span></span><br><span class="line">        <span class="comment">//DCL（Double Check Lock 双端检锁机制）</span></span><br><span class="line">        <span class="keyword">if</span>(instance == <span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (Bank.class) &#123;</span><br><span class="line">                <span class="keyword">if</span>(instance == <span class="keyword">null</span>)&#123;</span><br><span class="line">                    instance = <span class="keyword">new</span> Bank();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="可能存在的问题"   >
+          <a href="#可能存在的问题" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#可能存在的问题"></a> 可能存在的问题</h3>
+      
+<p>注意，双端检锁机制不一定线程安全，原因是指令重排序的存在，加入<code>volatile</code>可以禁止指令重排序。指令重排序只会保证串行语义的执行的一致性（单线程），并不会关心多线程间的语义一致性。</p>
+<p>代码中 <code>instance = new Bank()</code> 语句实际的执行顺序为：</p>
+<ol>
+<li><code>memory = allocate()</code>：为对象开辟一块内存空间</li>
+<li><code>instance(memory)</code>：初始化该对象，为其成员属性赋值</li>
+<li><code>instance = memory</code>：设置<code>instance</code>指向刚才分配的内存地址，此时 <code>instance != null</code></li>
+</ol>
+<p>正常顺序是1 -&gt; 3 -&gt; 2。但由于指令重排序，可能某个线程在new对象的时候，重新排序后是1 -&gt; 3 -&gt; 2。即先给该对象引用赋了地址，但还未为该变量进行初始化（还未实例化对象）。</p>
+<p>这就导致了可能该对象还未初始化时，另一个线程就抢到CPU执行权并判断 <code>if(instance == null)</code>，此时发现<code>instance</code>的值已经不为空了（因为已经开辟并分配了地址），其将被直接返回，那么获取到的对象就是<code>null</code>值了。</p>
+<blockquote>
+<p>该情况不会导致重复new对象，只是有可能返回null值。</p>
+</blockquote>
+<p>解决方案：</p>
+<ol>
+<li>采用方式一，在整个方法上加锁。缺点是并发效率低</li>
+<li>为<code>instance</code>对象添加<code>volatile</code>关键字，禁止指令重排序。</li>
+</ol>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bank</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Bank</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> Bank instance = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Bank <span class="title">getInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">// DCL（Double Check Lock 双端检锁机制）</span></span><br><span class="line">        <span class="keyword">if</span>(instance == <span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (Bank.class) &#123;</span><br><span class="line">                <span class="keyword">if</span>(instance == <span class="keyword">null</span>)&#123;</span><br><span class="line">                    instance = <span class="keyword">new</span> Bank();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yuyun-zhao.gitee.io">yuyun zhao</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yuyun-zhao.gitee.io/2021/09/23/%E3%80%90JUC%E3%80%91volatile/">http://yuyun-zhao.gitee.io/2021/09/23/%E3%80%90JUC%E3%80%91volatile/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.gitee.io/tags/JUC/">JUC</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2021/09/23/%E3%80%90JVM%E3%80%91JVM%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">【JVM】JVM 虚拟机栈</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2021/09/22/%E3%80%90JVM%E3%80%91JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/"><span class="paginator-prev__text">【JVM】JVM 运行时数据区</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#jmm"><span class="toc-text">
+           JMM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#volatile"><span class="toc-text">
+           volatile</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E8%A7%81%E6%80%A7"><span class="toc-text">
+           可见性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E5%AD%90%E6%80%A7"><span class="toc-text">
+           原子性</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8E%9F%E5%9B%A0%E5%88%86%E6%9E%90"><span class="toc-text">
+           原因分析</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%89%E5%BA%8F%E6%80%A7"><span class="toc-text">
+           有序性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#volatile-%E6%8C%87%E4%BB%A4%E9%87%8D%E6%8E%92%E5%BA%8F"><span class="toc-text">
+           volatile 指令重排序</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%90%86%E8%AE%BA"><span class="toc-text">
+           理论</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E4%BD%BF%E7%94%A8-volatile"><span class="toc-text">
+           单例模式使用 volatile</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E8%83%BD%E5%AD%98%E5%9C%A8%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-text">
+           可能存在的问题</span></a></li></ol></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/author.png" alt="avatar"></div><p class="sidebar-ov-author__text">no code no life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/YUYUN-ZHAO" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="zyy1024462136" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a><a class="sidebar-ov-social-item" href="1024462136" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="mailto:im.yuyunzhao@gmail.com" target="_blank" rel="noopener" data-popover="social.Gmail" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">Gmail</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">92</div><div class="sidebar-ov-state-item__name">文章</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">33</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">33</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2021</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>yuyun zhao</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script>function initSearch() {
+  var isXML = true;
+  var search_path = 'search.xml';
+
+  if (!search_path) {
+    search_path = 'search.xml';
+  } else if (/json$/i.test(search_path)) {
+    isXML = false;
+  }
+
+  var path = '/' + search_path;
+  $.ajax({
+    url: path,
+    dataType: isXML ? 'xml' : 'json',
+    async: true,
+    success: function (res) {
+      var datas = isXML ? $('entry', res).map(function () {
+        // 将 XML 转为 JSON
+        return {
+          title: $('title', this).text(),
+          content: $('content', this).text(),
+          url: $('url', this).text()
+        };
+      }).get() : res;
+      var $input = $('.search-input input');
+      var $result = $('.search-results');
+      // 搜索对象（标题、内容）的权重，影响显示顺序
+      var WEIGHT = { title: 100, content: 1 };
+      var searchPost = function () {
+        var searchText = $input.val().toLowerCase().trim();
+        // 根据空白字符分隔关键字
+        var keywords = searchText.split(/[\s]+/);
+        // 搜索结果
+        var matchPosts = [];
+
+        // 有多个关键字时，将原文字整个保存下来
+        if (keywords.length > 1) {
+          keywords.push(searchText);
+        }
+        // 防止未输入字符时搜索
+        if (searchText.length > 0) {
+          datas.forEach(function (data) {
+            var isMatch  = false;
+            // 没有标题的文章使用预设的 i18n 变量代替
+            var title = (data.title && data.title.trim()) || '[ 文章无标题 ]';
+            var titleLower = title && title.toLowerCase();
+            // 删除 HTML 标签 和 所有空白字符
+            var content = data.content && data.content.replace(/<[^>]+>/g, '');
+            var contentLower = content && content.toLowerCase();
+            // 删除重复的 /
+            var postURL = data.url && decodeURI(data.url).replace(/\/{2,}/g, '/');
+            // 标题中匹配到的关键词
+            var titleHitSlice = [];
+            // 内容中匹配到的关键词
+            var contentHitSlice = [];
+
+            keywords.forEach(function (keyword) {
+              /**
+              * 获取匹配的关键词的索引
+              * @param {String} keyword 要匹配的关键字
+              * @param {String} text 原文字
+              * @param {Boolean} caseSensitive 是否区分大小写
+              * @param {Number} weight 匹配对象的权重。权重大的优先显示
+              * @return {Array}
+              */
+              function getIndexByword (word, text, caseSensitive, weight) {
+                if (!word || !text) {
+                  return [];
+                };
+
+                var startIndex = 0; // 每次匹配的开始索引
+                var index = -1;     // 匹配到的索引值
+                var result = [];    // 匹配结果
+
+                if (!caseSensitive) {
+                  word = word.toLowerCase();
+                  text = text.toLowerCase();
+                }
+
+                while((index = text.indexOf(word, startIndex)) !== -1) {
+                  var hasMatch = false;
+                  // 索引位置相同的关键词，保留长度较长的
+                  titleHitSlice.forEach(function (hit) {
+                    if (hit.index === index && hit.word.length < word.length) {
+                      hit.word = word;
+                      hasMatch = true;
+                    }
+                  });
+                  startIndex = index + word.length;
+                  !hasMatch && result.push({ index: index, word: word, weight: weight });
+                }
+                return result;
+              }
+              titleHitSlice = titleHitSlice.concat(getIndexByword(keyword, titleLower, false, WEIGHT.title));
+              contentHitSlice = contentHitSlice.concat(getIndexByword(keyword, contentLower, false, WEIGHT.content));
+            });
+
+            var hitTitle = titleHitSlice.length;
+            var hitContent = contentHitSlice.length;
+
+            if (hitTitle > 0 || hitContent > 0) {
+              isMatch = true;
+            }
+            if (isMatch) {
+              ;[titleHitSlice, contentHitSlice].forEach(function (hit) {
+                // 按照匹配文字的索引的递增顺序排序
+                hit.sort(function (left, right) {
+                  return left.index - right.index;
+                });
+              });
+              /**
+              * 给文本中匹配到的关键词添加标记，从而进行高亮显示
+              * @param {String} text 原文本
+              * @param {Array} hitSlice 匹配项的索引信息
+              * @param {Number} start 开始索引
+              * @param {Number} end 结束索引
+              * @return {String}
+              */
+              function highlightKeyword (text, hitSlice, start, end) {
+                if (!text || !hitSlice || !hitSlice.length) {
+                  return;
+                }
+
+                var result = '';
+                var startIndex = start;
+                var endIndex = end;
+                hitSlice.forEach(function (hit) {
+                  if (hit.index < startIndex) {
+                    return;
+                  }
+
+                  var hitWordEnd = hit.index + hit.word.length;
+                  result += text.slice(startIndex, hit.index);
+                  result += '<b>' + text.slice(hit.index, hitWordEnd) + '</b>';
+                  startIndex = hitWordEnd;
+                });
+                result += text.slice(startIndex, endIndex);
+                return result;
+              }
+
+              var postData = {};
+              // 文章总的搜索权重
+              var postWeight = titleHitSlice.length * WEIGHT.title + contentHitSlice.length * WEIGHT.content;
+              // 标记匹配关键词后的标题
+              var postTitle = highlightKeyword(title, titleHitSlice, 0, title.length) || title;
+              // 标记匹配关键词后的内容
+              var postContent;
+              // 显示内容的长度
+              var SHOW_WORD_LENGTH = 200;
+              // 命中关键词前的字符显示长度
+              var SHOW_WORD_FRONT_LENGTH = 20;
+              var SHOW_WORD_END_LENGTH = SHOW_WORD_LENGTH - SHOW_WORD_FRONT_LENGTH;
+
+              // 截取匹配的第一个字符，前后共 200 个字符来显示
+              if (contentHitSlice.length > 0) {
+                var firstIndex = contentHitSlice[0].index;
+                var start = firstIndex > SHOW_WORD_FRONT_LENGTH ? firstIndex - SHOW_WORD_FRONT_LENGTH : 0;
+                var end = firstIndex + SHOW_WORD_END_LENGTH;
+                postContent = highlightKeyword(content, contentHitSlice, start, end);
+              } else { // 未匹配到内容，直接截取前 200 个字符来显示
+                postContent = content.slice(0, SHOW_WORD_LENGTH);
+              }
+              postData.title = postTitle;
+              postData.content = postContent;
+              postData.url = postURL;
+              postData.weight = postWeight;
+              matchPosts.push(postData);
+            }
+          });
+        }
+
+        var resultInnerHtml = '';
+        if (matchPosts.length) {
+          // 按权重递增的顺序排序，使权重大的优先显示
+          matchPosts.sort(function (left, right) {
+            return right.weight - left.weight;
+          });
+          resultInnerHtml += '<ul>';
+          matchPosts.forEach(function (post) {
+            resultInnerHtml += '<li><a class="search-results-title" href="' + post.url + '">';
+            resultInnerHtml += post.title;
+            resultInnerHtml += '</a><div class="search-results-content">';
+            resultInnerHtml += post.content;
+            resultInnerHtml += '</div></li>';
+          });
+          resultInnerHtml += '</ul>';
+        } else {
+          resultInnerHtml += '<div class="search-results-none"><i class="far fa-meh"></i></div>';
+        }
+        $result.html(resultInnerHtml);
+      };
+      $input.on('input', searchPost);
+      $input.on('keyup', function (e) {
+        if (e.keyCode === Stun.utils.codeToKeyCode('Enter')) {
+          searchPost();
+        }
+      });
+    }
+  });
+}
+
+function closeSearch () {
+  $('body').css({ overflow: 'auto' });
+  $('.search-popup').css({ display: 'none' });
+  $('.search-mask').css({ display: 'none' });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+  Stun.utils.pjaxReloadLocalSearch = function () {
+    $('.header-nav-search').on('click', function (e) {
+      e.stopPropagation();
+      $('body').css('overflow', 'hidden');
+      $('.search-popup')
+        .velocity('stop')
+        .velocity('transition.expandIn', {
+          duration: 300,
+          complete: function () {
+            $('.search-popup input').focus();
+          }
+        });
+      $('.search-mask')
+        .velocity('stop')
+        .velocity('transition.fadeIn', {
+          duration: 300
+        });
+
+      initSearch();
+    });
+    $('.search-mask, .search-close').on('click', function () {
+      closeSearch();
+    });
+    $(document).on('keydown', function (e) {
+      // Escape <=> 27
+      if (e.keyCode === Stun.utils.codeToKeyCode('Escape')) {
+        closeSearch();
+      }
+    });
+  };
+
+  Stun.utils.pjaxReloadLocalSearch();
+}, false);
+
+function safeOpenUrl(url) {
+  var newTab = window.open();
+  newTab.opener = null;
+  newTab.location = url;
+}
+
+function extSearch(engine) {
+  var engines = {
+    google: 'https://www.google.com/search?q=',
+    bing: 'https://cn.bing.com/search?q=',
+    baidu: 'https://www.baidu.com/s?ie=UTF-8&wd=',
+  };
+  var host = window.location.host;
+  var query = $('.search-input input').val().toLowerCase().trim();
+  var uri = engines[engine] + query + ' site:' + host;
+
+  if (query) {
+    safeOpenUrl(uri);
+  } else {
+    Stun.utils.popAlert('warning', '请输入字符');
+  }
+}
+
+var assistSearchList = window.CONFIG.assistSearch;
+
+if (Array.isArray(assistSearchList)) {
+  assistSearchList.forEach(function (name) {
+    document.querySelector('.search-btns-item--' + name).addEventListener('click', function () {
+      extSearch(name);
+    }, false);
+  });
+}</script><script src="https://cdn.jsdelivr.net/npm/pjax@latest/pjax.min.js"></script><script>window.addEventListener('DOMContentLoaded', function () {
+  var pjax = new Pjax({"selectors":["head title","#main",".pjax-reload"],"history":true,"scrollTo":false,"scrollRestoration":false,"cacheBust":false,"debug":false,"currentUrlFullReload":false,"timeout":0});
+  // 加载进度条的计时器
+  var loadingTimer = null;
+
+  // 重置页面 Y 方向上的滚动偏移量
+  document.addEventListener('pjax:send', function () {
+    $('.header-nav-menu').removeClass('show');
+    if (CONFIG.pjax && CONFIG.pjax.avoidBanner) {
+      $('html').velocity('scroll', {
+        duration: 500,
+        offset: $('#header').height(),
+        easing: 'easeInOutCubic'
+      });
+    }
+
+    var loadingBarWidth = 20;
+    var MAX_LOADING_WIDTH = 95;
+
+    $('.loading-bar').addClass('loading');
+    $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    clearInterval(loadingTimer);
+    loadingTimer = setInterval(function () {
+      loadingBarWidth += 3;
+      if (loadingBarWidth > MAX_LOADING_WIDTH) {
+        loadingBarWidth = MAX_LOADING_WIDTH;
+      }
+      $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    }, 500);
+  }, false);
+
+  window.addEventListener('pjax:complete', function () {
+    clearInterval(loadingTimer);
+    $('.loading-bar__progress').css('width', '100%');
+    $('.loading-bar').removeClass('loading');
+    setTimeout(function () {
+      $('.loading-bar__progress').css('width', '0');
+    }, 400);
+    $('link[rel=prefetch], script[data-pjax-rm]').each(function () {
+      $(this).remove();
+    });
+    $('script[data-pjax], #pjax-reload script').each(function () {
+      $(this).parent().append($(this).remove());
+    });
+
+    if (Stun.utils.pjaxReloadBoot) {
+      Stun.utils.pjaxReloadBoot();
+    }
+    if (Stun.utils.pjaxReloadScroll) {
+      Stun.utils.pjaxReloadScroll();
+    }
+    if (Stun.utils.pjaxReloadSidebar) {
+      Stun.utils.pjaxReloadSidebar();
+    }
+    if (false) {
+      if (Stun.utils.pjaxReloadHeader) {
+        Stun.utils.pjaxReloadHeader();
+      }
+      if (Stun.utils.pjaxReloadScrollIcon) {
+        Stun.utils.pjaxReloadScrollIcon();
+      }
+      if (Stun.utils.pjaxReloadLocalSearch) {
+        Stun.utils.pjaxReloadLocalSearch();
+      }
+    }
+  }, false);
+}, false);</script><div id="pjax-reload"><link href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" rel="stylesheet" type="text/css"><link href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/copy-tex.css" rel="stylesheet" type="text/css"><script src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/copy-tex.min.js"></script><script src="https://cdn.jsdelivr.net/gh/sukkaw/busuanzi@latest/bsz.pure.mini.js" async></script></div><script src="/js/utils.js?v=2.6.2"></script><script src="/js/stun-boot.js?v=2.6.2"></script><script src="/js/scroll.js?v=2.6.2"></script><script src="/js/header.js?v=2.6.2"></script><script src="/js/sidebar.js?v=2.6.2"></script><script type="application/json" src="/search.xml"></script></body></html>
