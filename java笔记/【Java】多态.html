@@ -1,19 +1,19 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="多态         类的静态方法：多态时不受影响，父类指针指向子类时，会调用父类的静态方法； 类的普通方法：多态时受影响，父类指针指向子类时，会调用子类的静态方法；  继承时，加@Override注解；静态方法不会发生继承； 对象能执行哪些方法，取决于对象左边的类型，和右边关系不大 父类类型的引用变量指向右边的子类类型时，该变量可以调用父类有的方法（该方">
 <meta property="og:type" content="website">
 <meta property="og:title" content="【Java】多态">
-<meta property="og:url" content="http://yuyun-zhao.gitee.io/java%E7%AC%94%E8%AE%B0/%E3%80%90Java%E3%80%91%E5%A4%9A%E6%80%81.html">
+<meta property="og:url" content="http://yuyun-zhao.github.io/java%E7%AC%94%E8%AE%B0/%E3%80%90Java%E3%80%91%E5%A4%9A%E6%80%81.html">
 <meta property="og:site_name" content="yuyun zhao&#39;s blog">
 <meta property="og:description" content="多态         类的静态方法：多态时不受影响，父类指针指向子类时，会调用父类的静态方法； 类的普通方法：多态时受影响，父类指针指向子类时，会调用子类的静态方法；  继承时，加@Override注解；静态方法不会发生继承； 对象能执行哪些方法，取决于对象左边的类型，和右边关系不大 父类类型的引用变量指向右边的子类类型时，该变量可以调用父类有的方法（该方">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/java%E7%AC%94%E8%AE%B0/Java-%E5%A4%9A%E6%80%81.assets/image-20210327224903670.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/java%E7%AC%94%E8%AE%B0/Java-%E5%A4%9A%E6%80%81.assets/image-20210328100440286.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/java%E7%AC%94%E8%AE%B0/Java-%E5%A4%9A%E6%80%81.assets/image-20210328101143567.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/java%E7%AC%94%E8%AE%B0/Java-%E5%A4%9A%E6%80%81.assets/image-20210327224903670.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/java%E7%AC%94%E8%AE%B0/Java-%E5%A4%9A%E6%80%81.assets/image-20210328100440286.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/java%E7%AC%94%E8%AE%B0/Java-%E5%A4%9A%E6%80%81.assets/image-20210328101143567.png">
 <meta property="article:published_time" content="2021-03-10T13:56:36.000Z">
 <meta property="article:modified_time" content="2021-07-13T03:10:07.064Z">
 <meta property="article:author" content="yuyun zhao">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yuyun-zhao.gitee.io/java%E7%AC%94%E8%AE%B0/Java-%E5%A4%9A%E6%80%81.assets/image-20210327224903670.png"><title>【Java】多态 | yuyun zhao's blog</title><link ref="canonical" href="http://yuyun-zhao.gitee.io/java%E7%AC%94%E8%AE%B0/%E3%80%90Java%E3%80%91%E5%A4%9A%E6%80%81.html"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+<meta name="twitter:image" content="http://yuyun-zhao.github.io/java%E7%AC%94%E8%AE%B0/Java-%E5%A4%9A%E6%80%81.assets/image-20210327224903670.png"><title>【Java】多态 | yuyun zhao's blog</title><link ref="canonical" href="http://yuyun-zhao.github.io/java%E7%AC%94%E8%AE%B0/%E3%80%90Java%E3%80%91%E5%A4%9A%E6%80%81.html"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
 var CONFIG = {
   root: '/',
   algolia: undefined,

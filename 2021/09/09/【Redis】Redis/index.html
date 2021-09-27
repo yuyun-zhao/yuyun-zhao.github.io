@@ -1,66 +1,66 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="Redis 简介         Redis官网 、Redis中文网  Redis：REmote DIctionary Server（远程字典服务器） 是完全开源免费的，用C语言编写的，遵守BSD协议，是一个高性能的（key&#x2F;value）分布式内存数据库，基于内存运行并支持持久化的NoSQL数据库，是当前最热门的NoSql数据库之一，也被人们称为数据结构">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【Redis】Redis 基础">
-<meta property="og:url" content="http://yuyun-zhao.gitee.io/2021/09/09/%E3%80%90Redis%E3%80%91Redis/index.html">
+<meta property="og:url" content="http://yuyun-zhao.github.io/2021/09/09/%E3%80%90Redis%E3%80%91Redis/index.html">
 <meta property="og:site_name" content="yuyun zhao&#39;s blog">
 <meta property="og:description" content="Redis 简介         Redis官网 、Redis中文网  Redis：REmote DIctionary Server（远程字典服务器） 是完全开源免费的，用C语言编写的，遵守BSD协议，是一个高性能的（key&#x2F;value）分布式内存数据库，基于内存运行并支持持久化的NoSQL数据库，是当前最热门的NoSql数据库之一，也被人们称为数据结构">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210913131720145.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912213742688.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912213906532.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912214047542.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912214645546.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912215152100.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210913122404598.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210913122513817.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210911230855564.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210911230754903.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210911231436324.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210911231420212.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210911231758180.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210911231825494.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210911232231984.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912103134052.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912111523166.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912104201388.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912111553281.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912111619198.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912111730249.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/aHR0cHM6Ly9naXRlZS5jb20vamFsbGVua3dvbmcvTGVhcm5SZWRpcy9yYXcvbWFzdGVyL2ltYWdlLzIxLnBuZw">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912112446186.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912114736426.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/aHR0cHM6Ly9naXRlZS5jb20vamFsbGVua3dvbmcvTGVhcm5SZWRpcy9yYXcvbWFzdGVyL2ltYWdlLzIyLnBuZw">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210913183818788.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210913183826952.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912202032972.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912202226170.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912202406006.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912202423699.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912202607757.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912202630691.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912204058177.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912204652370.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912205253939.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210913165922239.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210913164351029.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210913174004677.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912211245500.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210913173713479.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210913175731575.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210915195625155.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210915195120417.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210915195317930.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210915195323682.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210914170043586.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210914174222618.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210914175544276.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210913131720145.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912213742688.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912213906532.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912214047542.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912214645546.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912215152100.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210913122404598.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210913122513817.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210911230855564.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210911230754903.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210911231436324.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210911231420212.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210911231758180.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210911231825494.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210911232231984.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912103134052.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912111523166.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912104201388.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912111553281.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912111619198.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912111730249.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/aHR0cHM6Ly9naXRlZS5jb20vamFsbGVua3dvbmcvTGVhcm5SZWRpcy9yYXcvbWFzdGVyL2ltYWdlLzIxLnBuZw">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912112446186.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912114736426.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/aHR0cHM6Ly9naXRlZS5jb20vamFsbGVua3dvbmcvTGVhcm5SZWRpcy9yYXcvbWFzdGVyL2ltYWdlLzIyLnBuZw">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210913183818788.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210913183826952.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912202032972.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912202226170.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912202406006.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912202423699.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912202607757.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912202630691.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912204058177.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912204652370.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912205253939.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210913165922239.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210913164351029.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210913174004677.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210912211245500.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210913173713479.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210913175731575.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210915195625155.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210915195120417.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210915195317930.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210915195323682.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210914170043586.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210914174222618.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210914175544276.png">
 <meta property="article:published_time" content="2021-09-09T14:15:25.000Z">
 <meta property="article:modified_time" content="2021-09-17T07:11:01.553Z">
 <meta property="article:author" content="yuyun zhao">
-<meta property="article:tag" content="中间件">
 <meta property="article:tag" content="Redis">
+<meta property="article:tag" content="中间件">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210913131720145.png"><title>【Redis】Redis 基础 | yuyun zhao's blog</title><link ref="canonical" href="http://yuyun-zhao.gitee.io/2021/09/09/%E3%80%90Redis%E3%80%91Redis/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+<meta name="twitter:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Redis%E3%80%91Redis/image-20210913131720145.png"><title>【Redis】Redis 基础 | yuyun zhao's blog</title><link ref="canonical" href="http://yuyun-zhao.github.io/2021/09/09/%E3%80%90Redis%E3%80%91Redis/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
 var CONFIG = {
   root: '/',
   algolia: undefined,
@@ -123,7 +123,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <li>发布、订阅消息系统</li>
 <li>定时器、计数器</li>
 </ul>
-<p>Redis 安装见 <span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://yuyun-zhao.github.io/documents/linux%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE.pdf" >Linux 开发环境配置文档</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+<p>Redis 安装见 <a href="https://yuyun-zhao.github.io/documents/linux%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE.pdf">Linux 开发环境配置文档</a></p>
 <span id="more"></span>
 
         <h2 id="redis-五大数据类型"   >
@@ -373,7 +373,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 </ul>
 <p><img src="/images/%E3%80%90Redis%E3%80%91Redis/image-20210913122513817.png" alt="image-20210913122513817" /></p>
 <p>Bitmaps可用于统计网站的活跃用户数量，占用内存远小于Set。</p>
-<p>Bitmaps常用命令见 <span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://yuyun-zhao.github.io/documents/Redis6.pdf" >Redis6 文档</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>。</p>
+<p>Bitmaps常用命令见 <a href="https://yuyun-zhao.github.io/documents/Redis6.pdf">Redis6 文档</a>。</p>
 
         <h3 id="hyperloglog"   >
           <a href="#hyperloglog" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#hyperloglog"></a> HyperLogLog</h3>
@@ -387,13 +387,13 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <p>Redis HyperLogLog 是用来做<strong>基数统计</strong>的算法，HyperLogLog 的优点是，在输入元素的数量或者体积非常非常大时，计算基数所需的空间总是固定的、并且是很小的。</p>
 <p>在 Redis 里面，每个 HyperLogLog 键只需要花费 12 KB 内存，就可以计算接近 2^64 个不同元素的基数。这和计算基数时，元素越多耗费内存就越多的集合形成鲜明对比。但是，因为 HyperLogLog 只会根据输入元素来计算基数，而不会储存输入元素本身，所以 HyperLogLog 不能像集合那样，返回输入的各个元素。</p>
 <p>什么是基数？比如数据集 {1, 3, 5, 7, 5, 7, 8}， 那么这个数据集的基数集为 {1, 3, 5 ,7, 8}, 基数(不重复元素)为5。 基数估计就是在误差可接受的范围内，快速计算基数。</p>
-<p>HyperLogLog常用命令见 <span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://yuyun-zhao.github.io/documents/Redis6.pdf" >Redis6 文档</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>。</p>
+<p>HyperLogLog常用命令见 <a href="https://yuyun-zhao.github.io/documents/Redis6.pdf">Redis6 文档</a>。</p>
 
         <h3 id="geospatial"   >
           <a href="#geospatial" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#geospatial"></a> Geospatial</h3>
       
 <p>Redis 3.2 中增加了对GEO类型的支持。GEO，Geographic，地理信息的缩写。该类型，就是元素的2维坐标，在地图上就是经纬度。Redis基于该类型，提供了经纬度设置，查询，范围查询，距离查询，经纬度Hash等常见操作。</p>
-<p>Geospatial常用命令见 <span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://yuyun-zhao.github.io/documents/Redis6.pdf" >Redis6 文档</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>。</p>
+<p>Geospatial常用命令见 <a href="https://yuyun-zhao.github.io/documents/Redis6.pdf">Redis6 文档</a>。</p>
 
         <h2 id="redis-常用命令"   >
           <a href="#redis-常用命令" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#redis-常用命令"></a> Redis 常用命令</h2>
@@ -813,7 +813,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <p><strong>乐观锁（Optimistic Lock）</strong>，顾名思义，就是很乐观，每次去拿数据的时候都认为别人不会修改，所以不会上锁，但是在更新的时候会判断一下在此期间别人有没有去更新这个数据，可以使用<strong>版本号</strong>等机制。<strong>乐观锁适用于多读的应用类型，这样可以提高吞吐量</strong>。Redis就是利用这种check-and-set机制实现事务的。</p>
 <p>何谓数据版本？即为数据增加一个版本标识，在基于数据库表的版本解决方案中，一般是通过为数据库表增加一个 “version” 字段来实现。读取出数据时，将此版本号一同读出，之后更新时，对此版本号加一。</p>
 <p>此时，将提交数据的版本数据与数据库表对应记录的当前版本信息进行比对，<strong>如果提交的数据版本号大于数据库表当前版本号，则予以更新，否则认为是过期数据</strong>。</p>
-<p>使用 <strong>WATCH 乐观锁 + LUA脚本</strong> 可以解决<strong>超卖</strong>问题和<strong>库存遗留</strong>问题。详细代码见见 <span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://yuyun-zhao.github.io/documents/Redis6.pdf" >Redis6 文档</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>。</p>
+<p>使用 <strong>WATCH 乐观锁 + LUA脚本</strong> 可以解决<strong>超卖</strong>问题和<strong>库存遗留</strong>问题。详细代码见见 <a href="https://yuyun-zhao.github.io/documents/Redis6.pdf">Redis6 文档</a>。</p>
 
         <h3 id="redis-事务三特性"   >
           <a href="#redis-事务三特性" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#redis-事务三特性"></a> Redis 事务三特性</h3>
@@ -1020,7 +1020,7 @@ n.<br />
 <li><strong>Redis Sentinel 着眼于高可用</strong>，在 master 宕机时会自动将 slave 提升为 master ，继续提供服务。</li>
 <li><strong>Redis Cluster 着眼于扩展性</strong>，在单个 Redis 内存不足时，使用 Cluster 进行分片存储。</li>
 </ul>
-<p>Redis 集群配置方法见 <span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://yuyun-zhao.github.io/documents/Redis6.pdf" >Redis6 文档</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>。</p>
+<p>Redis 集群配置方法见 <a href="https://yuyun-zhao.github.io/documents/Redis6.pdf">Redis6 文档</a>。</p>
 
         <h3 id="slots-哈希槽"   >
           <a href="#slots-哈希槽" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#slots-哈希槽"></a> slots 哈希槽</h3>
@@ -1123,7 +1123,7 @@ n.<br />
 <p><strong>2. 实时调整</strong></p>
 <p>现场监控哪些数据热门，实时调整key的过期时长</p>
 <p><strong>3. 使用分布式锁</strong></p>
-<p>使用分布式锁，保证对于每个key同时只有一个线程去查询后端服务，其他线程没有获得分布式锁的权限，因此只需要等待即可，不会再访问数据库。这种方式将高并发的压力转移到了分布式锁，因此对分布式锁的考验很大。Redis 分布式锁使用方法见文章<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://yuyun-zhao.github.io/2021/09/15/%E3%80%90Redis%E3%80%91Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" >【Redis】Redis 分布式锁</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+<p>使用分布式锁，保证对于每个key同时只有一个线程去查询后端服务，其他线程没有获得分布式锁的权限，因此只需要等待即可，不会再访问数据库。这种方式将高并发的压力转移到了分布式锁，因此对分布式锁的考验很大。Redis 分布式锁使用方法见文章<a href="https://yuyun-zhao.github.io/2021/09/15/%E3%80%90Redis%E3%80%91Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/">【Redis】Redis 分布式锁</a></p>
 <p>在缓存失效的时候（判断拿出来的值为空），不是立即去访问数据库，而是先使用缓存工具的某些带成功操作返回值的操作（比如Redis的SETNX）去set一个mutex key。</p>
 <ul>
 <li>当操作返回成功时，再进行访问数据库的操作，并回设缓存，最后删除mutex key；</li>
@@ -1151,7 +1151,7 @@ n.<br />
         <h3 id="分布式锁"   >
           <a href="#分布式锁" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#分布式锁"></a> 分布式锁</h3>
       
-<p>Redis 分布式锁使用方法见文章<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://yuyun-zhao.github.io/2021/09/15/%E3%80%90Redis%E3%80%91Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" >【Redis】Redis 分布式锁</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+<p>Redis 分布式锁使用方法见文章<a href="https://yuyun-zhao.github.io/2021/09/15/%E3%80%90Redis%E3%80%91Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/">【Redis】Redis 分布式锁</a></p>
 
         <h2 id="jedis-使用"   >
           <a href="#jedis-使用" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#jedis-使用"></a> Jedis 使用</h2>
@@ -1225,7 +1225,7 @@ n.<br />
         <h2 id="redis-60-新功能"   >
           <a href="#redis-60-新功能" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#redis-60-新功能"></a> Redis 6.0 新功能</h2>
       
-</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yuyun-zhao.gitee.io">yuyun zhao</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yuyun-zhao.gitee.io/2021/09/09/%E3%80%90Redis%E3%80%91Redis/">http://yuyun-zhao.gitee.io/2021/09/09/%E3%80%90Redis%E3%80%91Redis/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.gitee.io/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.gitee.io/tags/Redis/">Redis</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2021/09/10/%E3%80%90%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E3%80%91%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">【操作系统】进程管理</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2021/09/08/%E3%80%90Redis%E3%80%91NoSQL%E4%BB%8B%E7%BB%8D/"><span class="paginator-prev__text">【Redis】NoSQL 介绍</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E7%AE%80%E4%BB%8B"><span class="toc-text">
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yuyun-zhao.github.io">yuyun zhao</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yuyun-zhao.github.io/2021/09/09/%E3%80%90Redis%E3%80%91Redis/">http://yuyun-zhao.github.io/2021/09/09/%E3%80%90Redis%E3%80%91Redis/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.github.io/tags/Redis/">Redis</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.github.io/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2021/09/10/%E3%80%90%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E3%80%91%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">【操作系统】进程管理</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2021/09/08/%E3%80%90Redis%E3%80%91NoSQL%E4%BB%8B%E7%BB%8D/"><span class="paginator-prev__text">【Redis】NoSQL 介绍</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E7%AE%80%E4%BB%8B"><span class="toc-text">
            Redis 简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#redis-%E5%8D%95%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="toc-text">
            Redis 单线程模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis-%E7%89%B9%E7%82%B9"><span class="toc-text">
            Redis 特点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-%E4%BA%94%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-text">

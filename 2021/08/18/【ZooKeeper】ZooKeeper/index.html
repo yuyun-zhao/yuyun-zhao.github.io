@@ -1,52 +1,52 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="ZooKeeper 简介        ZooKeeper 是一个开源的分布式的，为分布式框架提供协调服务的Apache项目。ZooKeeper安装见Linux 开发环境配置文档   本文档参考尚硅谷ZooKeeper教程：https:&#x2F;&#x2F;www.bilibili.com&#x2F;video&#x2F;BV1to4y1C7gw?p&#x3D;2">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【ZooKeeper】ZooKeeper">
-<meta property="og:url" content="http://yuyun-zhao.gitee.io/2021/08/18/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/index.html">
+<meta property="og:url" content="http://yuyun-zhao.github.io/2021/08/18/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/index.html">
 <meta property="og:site_name" content="yuyun zhao&#39;s blog">
 <meta property="og:description" content="ZooKeeper 简介        ZooKeeper 是一个开源的分布式的，为分布式框架提供协调服务的Apache项目。ZooKeeper安装见Linux 开发环境配置文档   本文档参考尚硅谷ZooKeeper教程：https:&#x2F;&#x2F;www.bilibili.com&#x2F;video&#x2F;BV1to4y1C7gw?p&#x3D;2">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/1200px-Apache_ZooKeeper_logo.svg.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824153402010.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824154028992.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824153726239.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824153921084.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824153938000.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824154010757.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824154028992.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824154140428.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824171128237.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824154209202.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824154403538.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824160926660.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824154555708.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824154624360.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824163406289.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824163357554.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824164337198.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824170129496.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824170151117.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824170206961.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824170235036.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824170251898.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824170313230.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824170331885.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824170416176.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824170947242.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824171017628.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824171113705.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824171128237.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824171159816.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824171447010.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824171524730.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824171532346.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824171547184.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824171608595.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824171754085.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824171809053.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824171829473.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824171851563.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824171904655.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824171925106.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/1200px-Apache_ZooKeeper_logo.svg.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824153402010.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824154028992.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824153726239.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824153921084.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824153938000.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824154010757.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824154028992.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824154140428.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824171128237.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824154209202.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824154403538.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824160926660.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824154555708.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824154624360.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824163406289.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824163357554.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824164337198.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824170129496.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824170151117.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824170206961.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824170235036.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824170251898.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824170313230.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824170331885.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824170416176.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824170947242.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824171017628.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824171113705.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824171128237.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824171159816.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824171447010.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824171524730.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824171532346.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824171547184.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824171608595.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824171754085.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824171809053.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824171829473.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824171851563.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824171904655.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824171925106.png">
 <meta property="article:published_time" content="2021-08-18T06:54:30.000Z">
 <meta property="article:modified_time" content="2021-09-18T08:31:52.983Z">
 <meta property="article:author" content="yuyun zhao">
@@ -54,7 +54,7 @@
 <meta property="article:tag" content="ZooKeeper">
 <meta property="article:tag" content="中间件">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/1200px-Apache_ZooKeeper_logo.svg.png"><title>【ZooKeeper】ZooKeeper | yuyun zhao's blog</title><link ref="canonical" href="http://yuyun-zhao.gitee.io/2021/08/18/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+<meta name="twitter:image" content="http://yuyun-zhao.github.io/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/1200px-Apache_ZooKeeper_logo.svg.png"><title>【ZooKeeper】ZooKeeper | yuyun zhao's blog</title><link ref="canonical" href="http://yuyun-zhao.github.io/2021/08/18/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
 var CONFIG = {
   root: '/',
   algolia: undefined,
@@ -83,7 +83,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
         <h2 id="zookeeper-简介"   >
           <a href="#zookeeper-简介" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#zookeeper-简介"></a> ZooKeeper 简介</h2>
       
-<p>ZooKeeper 是一个开源的分布式的，为分布式框架提供协调服务的Apache项目。ZooKeeper安装见<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://yuyun-zhao.github.io/documents/linux%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE.pdf" >Linux 开发环境配置文档</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+<p>ZooKeeper 是一个开源的分布式的，为分布式框架提供协调服务的Apache项目。ZooKeeper安装见<a href="https://yuyun-zhao.github.io/documents/linux%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE.pdf">Linux 开发环境配置文档</a></p>
 <p><img src="/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824153402010.png" alt="image-20210824153402010" /></p>
 <blockquote>
 <p>本文档参考尚硅谷ZooKeeper教程：<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1to4y1C7gw?p=2" >https://www.bilibili.com/video/BV1to4y1C7gw?p=2</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
@@ -173,7 +173,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
         <h2 id="zookeeper-安装"   >
           <a href="#zookeeper-安装" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#zookeeper-安装"></a> ZooKeeper 安装</h2>
       
-<p>ZooKeeper本地安装见<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://yuyun-zhao.github.io/documents/linux%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE.pdf" >Linux 开发环境配置文档</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+<p>ZooKeeper本地安装见<a href="https://yuyun-zhao.github.io/documents/linux%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE.pdf">Linux 开发环境配置文档</a></p>
 
         <h3 id="操作-zookeeper"   >
           <a href="#操作-zookeeper" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#操作-zookeeper"></a> 操作 ZooKeeper</h3>
@@ -581,7 +581,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
           <a href="#客户端初始化源码解析" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#客户端初始化源码解析"></a> 客户端初始化源码解析</h3>
       
 <p><img src="/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824171925106.png" alt="image-20210824171925106" /></p>
-</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yuyun-zhao.gitee.io">yuyun zhao</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yuyun-zhao.gitee.io/2021/08/18/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/">http://yuyun-zhao.gitee.io/2021/08/18/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.gitee.io/tags/Linux/">Linux</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.gitee.io/tags/ZooKeeper/">ZooKeeper</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.gitee.io/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2021/08/20/%E3%80%90Linux%E3%80%91Linux-Mac%E9%85%8D%E7%BD%AEZSH-Oh-My-ZSH/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">【Linux】Linux/Mac 配置 zsh + oh-my-zsh</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2021/08/17/%E3%80%90JavaWeb%E3%80%91Web%E4%B8%AD%E8%AE%BF%E9%97%AE%E8%B5%84%E6%BA%90%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/"><span class="paginator-prev__text">【JavaWeb】Web中访问资源路径问题汇总</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#zookeeper-%E7%AE%80%E4%BB%8B"><span class="toc-text">
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yuyun-zhao.github.io">yuyun zhao</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yuyun-zhao.github.io/2021/08/18/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/">http://yuyun-zhao.github.io/2021/08/18/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.github.io/tags/Linux/">Linux</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.github.io/tags/ZooKeeper/">ZooKeeper</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.github.io/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2021/08/20/%E3%80%90Linux%E3%80%91Linux-Mac%E9%85%8D%E7%BD%AEZSH-Oh-My-ZSH/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">【Linux】Linux/Mac 配置 zsh + oh-my-zsh</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2021/08/17/%E3%80%90JavaWeb%E3%80%91Web%E4%B8%AD%E8%AE%BF%E9%97%AE%E8%B5%84%E6%BA%90%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/"><span class="paginator-prev__text">【JavaWeb】Web中访问资源路径问题汇总</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#zookeeper-%E7%AE%80%E4%BB%8B"><span class="toc-text">
            ZooKeeper 简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#zookeeper-%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6"><span class="toc-text">
            ZooKeeper 工作机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zookeeper-%E7%89%B9%E7%82%B9"><span class="toc-text">
            ZooKeeper 特点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zookeeper-%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">

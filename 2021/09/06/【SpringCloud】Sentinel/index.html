@@ -1,44 +1,44 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="Sentinel 简介         官方Github、官方文档  随着微服务的流行，服务和服务之间的稳定性变得越来越重要。Sentinel 以流量为切入点，从流量控制、熔断降级、系统负载保护等多个维度保护服务的稳定性。Sentinel 具有以下特征：  丰富的应用场景：Sentinel 承接了阿里巴巴近 10 年的双十一大促流量的核心场景，例如秒杀（即突发流量控制在系统">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【Spring Cloud】Spring Cloud Alibaba Sentinel">
-<meta property="og:url" content="http://yuyun-zhao.gitee.io/2021/09/06/%E3%80%90SpringCloud%E3%80%91Sentinel/index.html">
+<meta property="og:url" content="http://yuyun-zhao.github.io/2021/09/06/%E3%80%90SpringCloud%E3%80%91Sentinel/index.html">
 <meta property="og:site_name" content="yuyun zhao&#39;s blog">
 <meta property="og:description" content="Sentinel 简介         官方Github、官方文档  随着微服务的流行，服务和服务之间的稳定性变得越来越重要。Sentinel 以流量为切入点，从流量控制、熔断降级、系统负载保护等多个维度保护服务的稳定性。Sentinel 具有以下特征：  丰富的应用场景：Sentinel 承接了阿里巴巴近 10 年的双十一大促流量的核心场景，例如秒杀（即突发流量控制在系统">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/e4efa9c3547366ae4f747ad4007f6447.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/image-20210907152331967.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/image-20210907110649244.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/image-20210907110723331.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/image-20210907114315762.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/image-20210907114210623.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/ede9b7e029c54840e3b40b69c4f371b5.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/image-20210907114251384.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/image-20210907114341372.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/79f93ab9f5dc11b05bbed9b793ef7c20.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/c89a2124391676992c8fabffdaf1a07c.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/image-20210907140018504.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/image-20210907140935899.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/image-20210907114410767.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/dcf85d4362c017e543173c76b7dcc2a8.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/image-20210907114444429.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/b8f35b00fffd79ef68e8f744403b92f3.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/image-20210907114507169.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/d92c6a9ae5ed514b52ddf43fdf0d5f0e.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/image-20210907114521979.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/image-20210907141330007.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/image-20210907141239233.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/image-20210907114601124.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/16d2ddeff96b7cb68a064b6ec05bde25.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/image-20210907132824865.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/image-20210907133334167.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/2401a6b2df715ee64f647da2f31e1eeb.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/c854e986254c09d0a7866811ec1e0cb4.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/e4efa9c3547366ae4f747ad4007f6447.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/image-20210907152331967.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/image-20210907110649244.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/image-20210907110723331.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/image-20210907114315762.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/image-20210907114210623.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/ede9b7e029c54840e3b40b69c4f371b5.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/image-20210907114251384.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/image-20210907114341372.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/79f93ab9f5dc11b05bbed9b793ef7c20.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/c89a2124391676992c8fabffdaf1a07c.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/image-20210907140018504.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/image-20210907140935899.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/image-20210907114410767.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/dcf85d4362c017e543173c76b7dcc2a8.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/image-20210907114444429.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/b8f35b00fffd79ef68e8f744403b92f3.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/image-20210907114507169.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/d92c6a9ae5ed514b52ddf43fdf0d5f0e.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/image-20210907114521979.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/image-20210907141330007.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/image-20210907141239233.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/image-20210907114601124.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/16d2ddeff96b7cb68a064b6ec05bde25.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/image-20210907132824865.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/image-20210907133334167.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/2401a6b2df715ee64f647da2f31e1eeb.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/c854e986254c09d0a7866811ec1e0cb4.png">
 <meta property="article:published_time" content="2021-09-06T11:07:49.000Z">
 <meta property="article:modified_time" content="2021-09-07T10:11:44.106Z">
 <meta property="article:author" content="yuyun zhao">
 <meta property="article:tag" content="Spring Cloud">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/e4efa9c3547366ae4f747ad4007f6447.png"><title>【Spring Cloud】Spring Cloud Alibaba Sentinel | yuyun zhao's blog</title><link ref="canonical" href="http://yuyun-zhao.gitee.io/2021/09/06/%E3%80%90SpringCloud%E3%80%91Sentinel/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+<meta name="twitter:image" content="http://yuyun-zhao.github.io/images/%E3%80%90SpringCloud%E3%80%91Sentinel/e4efa9c3547366ae4f747ad4007f6447.png"><title>【Spring Cloud】Spring Cloud Alibaba Sentinel | yuyun zhao's blog</title><link ref="canonical" href="http://yuyun-zhao.github.io/2021/09/06/%E3%80%90SpringCloud%E3%80%91Sentinel/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
 var CONFIG = {
   root: '/',
   algolia: undefined,
@@ -81,7 +81,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <span id="more"></span>
 <p>Hystrix 与 Sentinel 比较：</p>
 <ul>
-<li>Hystrix（<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://yuyun-zhao.github.io/2021/08/30/%E3%80%90SpringCloud%E3%80%91Hystrix/" >【Spring Cloud】Hystrix</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>）
+<li>Hystrix（<a href="https://yuyun-zhao.github.io/2021/08/30/%E3%80%90SpringCloud%E3%80%91Hystrix/">【Spring Cloud】Hystrix</a>）
 <ol>
 <li>需要我们程序员自己手工搭建监控平台</li>
 <li>没有一套web界面可以给我们进行更加细粒度化得配置流控、速率控制、服务熔断、服务降级</li>
@@ -141,7 +141,7 @@ n. 哨兵</p>
           <a href="#sentinel-实时监控" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#sentinel-实时监控"></a> Sentinel 实时监控</h2>
       
 <ol>
-<li>启动Nacos服务中心（见文章<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://yuyun-zhao.github.io/2021/09/05/%E3%80%90SpringCloud%E3%80%91Nacos/#spring-cloud-alibaba-%E7%AE%80%E4%BB%8B" >【Spring Cloud】Spring Cloud Alibaba Nacos</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>）</li>
+<li>启动Nacos服务中心（见文章<a href="https://yuyun-zhao.github.io/2021/09/05/%E3%80%90SpringCloud%E3%80%91Nacos/#spring-cloud-alibaba-%E7%AE%80%E4%BB%8B">【Spring Cloud】Spring Cloud Alibaba Nacos</a>）</li>
 <li>新建Module：<code>cloudalibaba-sentinel-service8401</code></li>
 <li>导入Maven依赖：</li>
 </ol>
@@ -272,7 +272,7 @@ n. 哨兵</p>
           <a href="#熔断降级概述" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#熔断降级概述"></a> 熔断降级概述</h3>
       
 <blockquote>
-<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://yuyun-zhao.github.io/2021/08/30/%E3%80%90SpringCloud%E3%80%91Hystrix/" >【Spring Cloud】Hystrix</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+<p><a href="https://yuyun-zhao.github.io/2021/08/30/%E3%80%90SpringCloud%E3%80%91Hystrix/">【Spring Cloud】Hystrix</a></p>
 </blockquote>
 <p>除了流量控制以外，对调用链路中不稳定的资源进行熔断降级也是保障高可用的重要措施之一。一个服务常常会调用别的模块，可能是另外的一个远程服务、数据库，或者第三方 API 等。例如，支付的时候，可能需要远程调用银联提供的 API；查询某个商品的价格，可能需要进行数据库查询。然而，这个被依赖服务的稳定性是不能保证的。如果依赖的服务出现了不稳定的情况，请求的响应时间变长，那么调用服务的方法的响应时间也会变长，线程会产生堆积，最终可能耗尽业务自身的线程池，服务本身也变得不可用。</p>
 <p>现代微服务架构都是分布式的，由非常多的服务组成。不同服务之间相互调用，组成复杂的调用链路。以上的问题在链路调用中会产生放大的效果。复杂链路上的某一环不稳定，就可能会层层级联，最终导致整个链路都不可用。因此我们需要对不稳定的弱依赖服务调用进行熔断降级，暂时切断不稳定调用，避免局部不稳定因素导致整体的雪崩。<strong>熔断降级作为保护自身的手段，通常在客户端（调用端）进行配置。</strong></p>
@@ -299,7 +299,7 @@ n. 哨兵</p>
 </ul>
 <p>Sentinel 熔断降级会在调用链路中某个资源出现不稳定状态时（例如调用超时或异常比例升高)，对这个资源的调用进行限制，让请求快速失败，避免影响到其它的资源而导致级联错误。</p>
 <p>当资源被降级后，在接下来的降级时间窗口之内，对该资源的调用都自动熔断（默认行为是抛出 <code>DegradeException</code>）。</p>
-<p>1.7.0版本的 Sentinel 的断路器是没有类似Hystrix半开状态的(Sentinei 1.8.0 已有半开状态)。半开的状态系统自动去检测是否请求有异常，没有异常就关闭断路器恢复使用，有异常则继续打开断路器不可用。断路器的介绍见<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://yuyun-zhao.github.io/2021/08/30/%E3%80%90SpringCloud%E3%80%91Hystrix/" >【Spring Cloud】Hystrix</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>。</p>
+<p>1.7.0版本的 Sentinel 的断路器是没有类似Hystrix半开状态的(Sentinei 1.8.0 已有半开状态)。半开的状态系统自动去检测是否请求有异常，没有异常就关闭断路器恢复使用，有异常则继续打开断路器不可用。断路器的介绍见<a href="https://yuyun-zhao.github.io/2021/08/30/%E3%80%90SpringCloud%E3%80%91Hystrix/">【Spring Cloud】Hystrix</a>。</p>
 
         <h3 id="sentinel-降级策略-rt"   >
           <a href="#sentinel-降级策略-rt" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#sentinel-降级策略-rt"></a> Sentinel 降级策略 - RT</h3>
@@ -508,7 +508,7 @@ n. 哨兵</p>
         <h2 id="sentinel-整合-openfeign"   >
           <a href="#sentinel-整合-openfeign" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#sentinel-整合-openfeign"></a> Sentinel 整合 OpenFeign</h2>
       
-<p>注意：Sentinel 整合 OpenFeign 的使用方法类似于 Hystrix 整合 OpenFeign（见文章<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://yuyun-zhao.github.io/2021/08/30/%E3%80%90SpringCloud%E3%80%91Hystrix/#%E9%80%9A%E9%85%8D%E6%9C%8D%E5%8A%A1%E9%99%8D%E7%BA%A7-feignfallback" >【Spring Cloud】Hystrix</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>），区别在于配置文件中 feign 开启的是 sentinel 的降级处理</p>
+<p>注意：Sentinel 整合 OpenFeign 的使用方法类似于 Hystrix 整合 OpenFeign（见文章<a href="https://yuyun-zhao.github.io/2021/08/30/%E3%80%90SpringCloud%E3%80%91Hystrix/#%E9%80%9A%E9%85%8D%E6%9C%8D%E5%8A%A1%E9%99%8D%E7%BA%A7-feignfallback">【Spring Cloud】Hystrix</a>），区别在于配置文件中 feign 开启的是 sentinel 的降级处理</p>
 <ol>
 <li>导入Maven依赖：</li>
 </ol>
@@ -571,7 +571,7 @@ n. 哨兵</p>
 <li>关闭8401再看sentinel，发现流控规则没有了</li>
 <li>重新启动8401再看sentinel，多次访问 <span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="http://localhost:8401/rateLimit/byUrl" >http://localhost:8401/rateLimit/byUrl</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span> 后发现配置重新出现，说明规则配置持久化成功</li>
 </ol>
-</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yuyun-zhao.gitee.io">yuyun zhao</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yuyun-zhao.gitee.io/2021/09/06/%E3%80%90SpringCloud%E3%80%91Sentinel/">http://yuyun-zhao.gitee.io/2021/09/06/%E3%80%90SpringCloud%E3%80%91Sentinel/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.gitee.io/tags/Spring-Cloud/">Spring Cloud</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2021/09/07/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">【分布式】分布式事务理论</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2021/09/05/%E3%80%90SpringCloud%E3%80%91Nacos/"><span class="paginator-prev__text">【Spring Cloud】Spring Cloud Alibaba Nacos</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#sentinel-%E7%AE%80%E4%BB%8B"><span class="toc-text">
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yuyun-zhao.github.io">yuyun zhao</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yuyun-zhao.github.io/2021/09/06/%E3%80%90SpringCloud%E3%80%91Sentinel/">http://yuyun-zhao.github.io/2021/09/06/%E3%80%90SpringCloud%E3%80%91Sentinel/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.github.io/tags/Spring-Cloud/">Spring Cloud</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2021/09/07/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">【分布式】分布式事务理论</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2021/09/05/%E3%80%90SpringCloud%E3%80%91Nacos/"><span class="paginator-prev__text">【Spring Cloud】Spring Cloud Alibaba Nacos</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#sentinel-%E7%AE%80%E4%BB%8B"><span class="toc-text">
            Sentinel 简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E7%86%94%E6%96%AD%E6%A1%86%E6%9E%B6%E5%AF%B9%E6%AF%94"><span class="toc-text">
            服务熔断框架对比</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sentinel-%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85%E8%BF%90%E8%A1%8C"><span class="toc-text">
            Sentinel 下载安装运行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sentinel-%E5%AE%9E%E6%97%B6%E7%9B%91%E6%8E%A7"><span class="toc-text">

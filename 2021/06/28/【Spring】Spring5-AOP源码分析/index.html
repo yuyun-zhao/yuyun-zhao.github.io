@@ -1,88 +1,88 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="AOP原理        本质原理：为每个需要被增强的组件（带有切入点的组件）创建一个代理对象，在需要执行切入点方法时，调用代理对象的相应方法，并在其中按顺序切入通知方法。 AOP使用 @EnableAspectJAutoProxy注解通过@Import的方式向容器中添加一个AnnotationAwareAspectJAutoProxyCreator组件，该组件本质上是一个">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【Spring】Spring5 AOP 源码分析">
-<meta property="og:url" content="http://yuyun-zhao.gitee.io/2021/06/28/%E3%80%90Spring%E3%80%91Spring5-AOP%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/index.html">
+<meta property="og:url" content="http://yuyun-zhao.github.io/2021/06/28/%E3%80%90Spring%E3%80%91Spring5-AOP%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/index.html">
 <meta property="og:site_name" content="yuyun zhao&#39;s blog">
 <meta property="og:description" content="AOP原理        本质原理：为每个需要被增强的组件（带有切入点的组件）创建一个代理对象，在需要执行切入点方法时，调用代理对象的相应方法，并在其中按顺序切入通知方法。 AOP使用 @EnableAspectJAutoProxy注解通过@Import的方式向容器中添加一个AnnotationAwareAspectJAutoProxyCreator组件，该组件本质上是一个">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630165506770.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630190714343.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630192408003.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630193143177.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210704161324229.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630220411754.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703131501253.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630203107349.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630203127243.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630203203476.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630203357418.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630202829082.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630192408003.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630204433781.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630213254910.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630204659073.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630204914536.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210629163559536.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630214340913.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630213635404.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630220411754.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210704164952614.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630204929418.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630204914536.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630221118378.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701153743299.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701163050223.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701163108692.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701161459941.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701161016809.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701163847923.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701162202790.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701180818426.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701181816332.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701182427290.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701182344197.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701171303958.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703101045896.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210704191747391.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703104658589.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703104753304.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703131501253.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210704200120914.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703132909220.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703153159704.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703154315455.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703153617812.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703163430269.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703163932927.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703164925461.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703191531684.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703193456012.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703191904882.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703192130240.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703192455597.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703193611280.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703164633170.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703224011722.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210704115329357.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703234254881.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210704102922612.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210704114113510.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210704114640043.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210704120009098.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210704120832349.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210704114113510.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210704122728211.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630203127243.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210704212659373.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210704212412161.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210704212905374.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701181816332.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703101045896.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703131501253.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5-AOP%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/image-20210701180818426.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703163932927.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703164633170.png">
-<meta property="og:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703224011722.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630165506770.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630190714343.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630192408003.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630193143177.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210704161324229.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630220411754.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703131501253.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630203107349.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630203127243.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630203203476.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630203357418.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630202829082.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630192408003.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630204433781.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630213254910.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630204659073.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630204914536.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210629163559536.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630214340913.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630213635404.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630220411754.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210704164952614.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630204929418.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630204914536.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630221118378.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701153743299.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701163050223.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701163108692.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701161459941.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701161016809.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701163847923.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701162202790.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701180818426.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701181816332.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701182427290.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701182344197.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701171303958.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703101045896.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210704191747391.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703104658589.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703104753304.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703131501253.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210704200120914.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703132909220.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703153159704.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703154315455.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703153617812.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703163430269.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703163932927.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703164925461.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703191531684.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703193456012.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703191904882.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703192130240.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703192455597.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703193611280.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703164633170.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703224011722.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210704115329357.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703234254881.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210704102922612.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210704114113510.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210704114640043.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210704120009098.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210704120832349.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210704114113510.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210704122728211.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630203127243.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210704212659373.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210704212412161.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210704212905374.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210701181816332.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703101045896.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703131501253.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5-AOP%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/image-20210701180818426.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703163932927.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703164633170.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210703224011722.png">
 <meta property="article:published_time" content="2021-06-28T12:07:47.000Z">
 <meta property="article:modified_time" content="2021-08-25T02:33:14.029Z">
 <meta property="article:author" content="yuyun zhao">
@@ -90,7 +90,7 @@
 <meta property="article:tag" content="SSM">
 <meta property="article:tag" content="源码分析">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yuyun-zhao.gitee.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630165506770.png"><title>【Spring】Spring5 AOP 源码分析 | yuyun zhao's blog</title><link ref="canonical" href="http://yuyun-zhao.gitee.io/2021/06/28/%E3%80%90Spring%E3%80%91Spring5-AOP%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+<meta name="twitter:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring5%E6%BA%90%E7%A0%81/image-20210630165506770.png"><title>【Spring】Spring5 AOP 源码分析 | yuyun zhao's blog</title><link ref="canonical" href="http://yuyun-zhao.github.io/2021/06/28/%E3%80%90Spring%E3%80%91Spring5-AOP%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
 var CONFIG = {
   root: '/',
   algolia: undefined,
@@ -507,7 +507,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <p>4、执行效果：前置通知 -&gt; 目标方法 -&gt; 正常返回通知或异常返回通知   -&gt; 后置通知</p>
 <p><strong>代理对象</strong>执行<strong>普通方法</strong>（不带有切入点的目标方法）时， <mark><strong>CglibAopProxy.intercept()</strong></mark> 进行拦截后，因找不到该方法匹配的增强器（因为普通方法没有被切入增强），拦截器链为null，则直接执行代理对象的普通方法。</p>
 <p>没有被增强的普通对象不被拦截。</p>
-</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yuyun-zhao.gitee.io">yuyun zhao</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yuyun-zhao.gitee.io/2021/06/28/%E3%80%90Spring%E3%80%91Spring5-AOP%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">http://yuyun-zhao.gitee.io/2021/06/28/%E3%80%90Spring%E3%80%91Spring5-AOP%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.gitee.io/tags/Spring/">Spring</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.gitee.io/tags/SSM/">SSM</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.gitee.io/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">源码分析</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2021/06/28/%E3%80%90Memo%E3%80%91%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">【Memo】常见问题汇总</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2021/06/28/%E3%80%90Spring%E3%80%91Spring5-%E6%BA%90%E7%A0%81%E4%B8%AD%E5%B8%B8%E7%94%A8%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/"><span class="paginator-prev__text">【Spring】Spring5 源码中常用接口的底层原理</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#aop%E5%8E%9F%E7%90%86"><span class="toc-text">
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yuyun-zhao.github.io">yuyun zhao</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yuyun-zhao.github.io/2021/06/28/%E3%80%90Spring%E3%80%91Spring5-AOP%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">http://yuyun-zhao.github.io/2021/06/28/%E3%80%90Spring%E3%80%91Spring5-AOP%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.github.io/tags/Spring/">Spring</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.github.io/tags/SSM/">SSM</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.github.io/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">源码分析</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2021/06/28/%E3%80%90Memo%E3%80%91%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">【Memo】常见问题汇总</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2021/06/28/%E3%80%90Spring%E3%80%91Spring5-%E6%BA%90%E7%A0%81%E4%B8%AD%E5%B8%B8%E7%94%A8%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/"><span class="paginator-prev__text">【Spring】Spring5 源码中常用接口的底层原理</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#aop%E5%8E%9F%E7%90%86"><span class="toc-text">
            AOP原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#aop%E7%AE%80%E6%98%93%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="toc-text">
            AOP简易执行流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#enableaspectjautoproxy"><span class="toc-text">
            @EnableAspectJAutoProxy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#importaspectjautoproxyregistrarclass"><span class="toc-text">

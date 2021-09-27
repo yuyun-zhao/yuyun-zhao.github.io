@@ -1,10 +1,10 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F32.png?v=2.6.2" type="image/png" sizes="32x32"><meta property="og:type" content="website">
 <meta property="og:title" content="yuyun zhao&#39;s blog">
-<meta property="og:url" content="http://yuyun-zhao.gitee.io/page/7/index.html">
+<meta property="og:url" content="http://yuyun-zhao.github.io/page/7/index.html">
 <meta property="og:site_name" content="yuyun zhao&#39;s blog">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:author" content="yuyun zhao">
-<meta name="twitter:card" content="summary"><title>yuyun zhao's blog</title><link ref="canonical" href="http://yuyun-zhao.gitee.io/page/7/index.html"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+<meta name="twitter:card" content="summary"><title>yuyun zhao's blog</title><link ref="canonical" href="http://yuyun-zhao.github.io/page/7/index.html"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
 var CONFIG = {
   root: '/',
   algolia: undefined,
@@ -39,7 +39,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <li><strong>声明式事务</strong>（只用声明一下注解就可以）是建立在AOP之上的。其本质是对方法前后进行拦截，然后在目标方法开始之前创建或者加入一个事务，在执行完目标方法之后根据执行情况提交或者回滚事务。声明式事务最大的优点就是不需要通过编程的方式管理事务，这样就不需要在业务逻辑代码中掺杂事务管理的代码，只需在配置文件中做相关的事务规则声明(或通过基于<code>@Transactional</code>注解的方式)，便可以将事务规则应用到业务逻辑中。</li>
 </ul>
 <p>显然声明式事务管理要优于编程式事务管理，这正是Spring倡导的非侵入式的开发方式。声明式事务管理使业务代码不受污染，一个普通的POJO对象，只要加上注解就可以获得完全的事务支持。和编程式事务相比，声明式事务唯一不足地方是，它的最细粒度只能作用到方法级别，无法做到像编程式事务那样可以作用到代码块级别。但是即便有这样的需求，也存在很多变通的方法，比如，可以将需要进行事务管理的代码块独立为方法等等。</p>
-<p>Spring事务原理与AOP原理十分相似，其详细的源码分析见<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://yuyun-zhao.github.io/2021/07/05/%E3%80%90Spring%E3%80%91Spring5-%E4%BA%8B%E5%8A%A1%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" >【Spring】Spring5 事务源码分析</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>。</p>
+<p>Spring事务原理与AOP原理十分相似，其详细的源码分析见<a href="https://yuyun-zhao.github.io/2021/07/05/%E3%80%90Spring%E3%80%91Spring5-%E4%BA%8B%E5%8A%A1%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">【Spring】Spring5 事务源码分析</a>。</p>
 
         <h2 id="声明式事务基于注解方式"   >
           <a href="#声明式事务基于注解方式" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#声明式事务基于注解方式"></a> 声明式事务——基于注解方式</h2>
@@ -169,7 +169,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
           <a href="#编程式事务" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#编程式事务"></a> 编程式事务</h2>
       
 <p>编程式事务指需要手动调用事务管理器包裹业务代码进行提交回滚。其需要使用<code>TransactionTemplate</code>或者直接使用底层的<code>PlatformTransactionManager</code>。对于编程式事务管理，Spring推荐使用<code>TransactionTemplate</code>。</p>
-<p>Spring事务与JDBC事务的关系：上中下三个框分别代表基于AOP的声明式事务、编程式事务、JDBC事务。其中基于AOP的声明式事务原理见文章<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://yuyun-zhao.github.io/2021/07/05/%E3%80%90Spring%E3%80%91Spring5-%E4%BA%8B%E5%8A%A1%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" >【Spring】Spring5 事务源码分析</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>。</p>
+<p>Spring事务与JDBC事务的关系：上中下三个框分别代表基于AOP的声明式事务、编程式事务、JDBC事务。其中基于AOP的声明式事务原理见文章<a href="https://yuyun-zhao.github.io/2021/07/05/%E3%80%90Spring%E3%80%91Spring5-%E4%BA%8B%E5%8A%A1%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">【Spring】Spring5 事务源码分析</a>。</p>
 <p>编程式事务中的两个重要类：</p>
 <ul>
 <li><strong>TransactionManager</strong>：事务管理器，用于控制事务的提交和回滚</li>
@@ -190,14 +190,14 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <li><strong>ProxyTransactionManagementConfiguration</strong>：用于注册<strong>事务增强器</strong>，该增强器内设置有事务拦截器，将在代理对象执行目标方法时进行拦截，并调用其<code>invoke()</code>方法，<strong>由事务管理器控制事务的提交与回滚</strong>。</li>
 </ul>
 <p>Spring事务原理与AOP原理十分相似，都包含有<strong>后置处理器</strong>和<strong>拦截器</strong>思想，在组件创建后包装出代理对象、在代理对象执行目标方法时进行拦截，使用事务管理器控制事务的提交与回滚。</p>
-<p>详细的源码分析见文章<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://yuyun-zhao.github.io/2021/07/05/%E3%80%90Spring%E3%80%91Spring5-%E4%BA%8B%E5%8A%A1%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" >【Spring】Spring5 事务源码分析</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>。</p>
+<p>详细的源码分析见文章<a href="https://yuyun-zhao.github.io/2021/07/05/%E3%80%90Spring%E3%80%91Spring5-%E4%BA%8B%E5%8A%A1%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">【Spring】Spring5 事务源码分析</a>。</p>
 </div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2021/05/29/%E3%80%90Spring%E3%80%91Spring5-AOP/">【Spring】Spring5 AOP</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-05-29</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-08-17</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">3.5k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">26分</span></span></div></header><div class="post-body"><div class="post-excerpt"><p><img src="/images/%E3%80%90Spring%E3%80%91Spring-AOP/kuangstudyf90849ac-8a55-459f-846b-6382d38d6a4d.png" alt="img" /></p>
 
         <h2 id="aop-基本概念"   >
           <a href="#aop-基本概念" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#aop-基本概念"></a> AOP 基本概念</h2>
       
 <p>AOP（Aspect Oriented Programming）意为：面向切面编程，通过预编译方式和运行期动态代理实现程序功能的统一维护的一种技术。AOP是OOP的延续，是软件开发中的一个热点，也是Spring框架中的一个重要内容，是函数式编程的一种衍生范型。利用AOP可以对业务逻辑的各个部分进行隔离，从而使得业务逻辑各部分之间的耦合度降低，提高程序的可重用性，同时提高了开发的效率。</p>
-<p>Spring AOP的源码分析见<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://yuyun-zhao.github.io/2021/06/28/%E3%80%90Spring%E3%80%91Spring5-AOP%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" >【Spring】Spring5 AOP源码分析</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>。</p>
+<p>Spring AOP的源码分析见<a href="https://yuyun-zhao.github.io/2021/06/28/%E3%80%90Spring%E3%80%91Spring5-AOP%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">【Spring】Spring5 AOP源码分析</a>。</p>
 <p><img src="/images/%E3%80%90Spring%E3%80%91Spring-AOP/kuangstudyfffec70f-ce10-4ca2-a71b-dbc535b0e07c-1625811781519.png" alt="img" /></p>
 <ul>
 <li>
