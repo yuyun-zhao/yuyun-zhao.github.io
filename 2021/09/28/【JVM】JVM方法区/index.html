@@ -1,0 +1,871 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="栈、堆、方法区的交互关系        内存区域划分：  对象的访问定位：   Person：类信息（类型信息、方法信息、属性信息等）存放在元空间，也可以说方法区 person：类的实例对象名存放在Java栈的局部变量表中 new Person()：类的实例对象数据存放在Java堆中">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【JVM】JVM 方法区">
+<meta property="og:url" content="http://yuyun-zhao.github.io/2021/09/28/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/index.html">
+<meta property="og:site_name" content="yuyun zhao&#39;s blog">
+<meta property="og:description" content="栈、堆、方法区的交互关系        内存区域划分：  对象的访问定位：   Person：类信息（类型信息、方法信息、属性信息等）存放在元空间，也可以说方法区 person：类的实例对象名存放在Java栈的局部变量表中 new Person()：类的实例对象数据存放在Java堆中">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708094507624.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708094747667.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708095853544.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708102919149.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708103055914.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708211541300.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708211609911.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708211637952.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708215025527.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708215218078.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20210929165800059.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708161856504.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708171151384.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708172357052.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708204750374.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708204953552.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708205029376.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708205221737.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708205413721.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708205708057.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708205909176.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708210540696.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708111756800.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708220303243.png">
+<meta property="article:published_time" content="2021-09-28T07:13:03.000Z">
+<meta property="article:modified_time" content="2021-09-29T10:23:25.435Z">
+<meta property="article:author" content="yuyun zhao">
+<meta property="article:tag" content="JVM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708094507624.png"><title>【JVM】JVM 方法区 | yuyun zhao's blog</title><link ref="canonical" href="http://yuyun-zhao.github.io/2021/09/28/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":true},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"carbon","highlight":"light","wordWrap":false},
+  reward: false,
+  fancybox: true,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: {"avoidBanner":false},
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"复制","copySuccess":"复制成功","copyError":"复制失败"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【JVM】JVM 方法区</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-09-28</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-09-29</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">8.8k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">62分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body">
+        <h2 id="栈-堆-方法区的交互关系"   >
+          <a href="#栈-堆-方法区的交互关系" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#栈-堆-方法区的交互关系"></a> 栈、堆、方法区的交互关系</h2>
+      
+<p>内存区域划分：</p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708094507624.png" alt="image-20200708094507624" /></p>
+<p>对象的访问定位：</p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708094747667.png" alt="image-20200708094747667" /></p>
+<ul>
+<li><code>Person</code>：<strong>类信息</strong>（类型信息、方法信息、属性信息等）存放在元空间，也可以说方法区</li>
+<li><code>person</code>：类的实例<strong>对象名</strong>存放在Java栈的局部变量表中</li>
+<li><code>new Person()</code>：类的实例<strong>对象数据</strong>存放在Java堆中</li>
+</ul>
+<span id="more"></span>
+
+        <h2 id="方法区的理解"   >
+          <a href="#方法区的理解" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#方法区的理解"></a> 方法区的理解</h2>
+      
+<blockquote>
+<p>《Java虚拟机规范》中明确说明：“尽管所有的方法区在逻辑上是属于堆的一部分，但一些简单的实现可能不会选择去进行垃圾收集或者进行压缩。”</p>
+</blockquote>
+<p>但对于HotSpot JVM而言，方法区还有一个别名叫做<strong>Non-Heap</strong>（非堆），目的就是要和堆分开。所以，方法区可以看作是一块<strong>独立于Java堆</strong>的内存空间。</p>
+<p><strong>方法区和元空间的区别：</strong></p>
+<ul>
+<li>方法区是<strong>Java虚拟机规范</strong>里定义的抽象名词</li>
+<li>元空间则是一些JVM厂商根据规范对方法区进行<strong>具体实现</strong>时起的名称</li>
+</ul>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708095853544.png" alt="image-20200708095853544" /></p>
+<p>方法区主要存放的是 <code>Class</code>（类的信息），而堆中主要存放的是<strong>实例化的对象数据</strong></p>
+<ul>
+<li>方法区（Method Area）与Java堆一样，是各个线程<strong>共享的</strong>内存区域。</li>
+<li>方法区在JVM启动的时候被创建，并且它的实际的物理内存空间中和Java堆区一样都可以<strong>是不连续的</strong>。</li>
+<li>方法区的大小，跟堆空间一样，<strong>可以选择固定大小或者可扩展</strong>。</li>
+<li>方法区的大小决定了系统可以保存多少个类，如果系统<strong>定义了太多的类，导致方法区溢出</strong>，虚拟机同样会抛出内存溢出错误：<code>java.lang.OutofMemoryError:PermGen space</code> 或者<code>java.lang.OutOfMemoryError:Metaspace</code>
+<ul>
+<li>加载大量的第三方的jar包</li>
+<li>Tomcat部署的工程过多（30~50个）</li>
+<li>大量动态的生成反射类</li>
+</ul>
+</li>
+<li>关闭JVM就会释放这个区域的内存。</li>
+</ul>
+
+        <h2 id="方法区的演进"   >
+          <a href="#方法区的演进" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#方法区的演进"></a> 方法区的演进</h2>
+      
+<ul>
+<li>JDK 1.7 及以前，习惯上把方法区称为<strong>永久代</strong>，永久代内的数据还是存在虚拟机内存</li>
+<li>JDK 1.8 后，使用<strong>元空间取代了永久代</strong>，并且元空间存放在<strong>堆外内存</strong>（本地内存）中</li>
+</ul>
+<p>元空间和永久代之间最大的区别在于：<strong>元空间并不在虚拟机中，而是使用本地内存</strong></p>
+<blockquote>
+<p>从元空间开始数据存放在本地内存中</p>
+</blockquote>
+<p>本质上，方法区和永久代并不等价。仅是对hotspot而言的，其他许多厂商的JVM没有永久代的概念。《Java虚拟机规范》对如何实现方法区，不做统一要求。例如：BEAJRockit / IBM J9 中不存在永久代的概念。</p>
+<blockquote>
+<p>现在来看，当年使用永久代，不是好的idea。导致Java程序更容易oom（超过<code>-XX:MaxPermsize</code>上限）</p>
+</blockquote>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708102919149.png" alt="image-20200708102919149" /></p>
+<p>而到了JDK 1.8，终于完全废弃了永久代的概念，改用与JRockit、J9一样在本地内存中实现的元空间（Metaspace）来代替</p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708103055914.png" alt="image-20200708103055914" /></p>
+<p><strong>方法区和元空间的区别：</strong></p>
+<ul>
+<li>方法区是<strong>Java虚拟机规范</strong>里定义的抽象名词</li>
+<li>元空间则是一些JVM厂商根据规范对方法区进行<strong>具体实现</strong>时起的名称</li>
+</ul>
+<p>元空间的本质和永久代类似，<strong>都是对JVM规范中方法区的实现</strong>。不过元空间与永久代最大的区别在于：<strong>元空间不在虚拟机设置的内存中，而是使用本地内存</strong>。永久代、元空间二者并不只是名字变了，内部结构也调整了。根据《Java虚拟机规范》的规定，如果方法区无法满足新的内存分配需求时，将抛出OOM异常。</p>
+
+        <h3 id="方法区的更多演进细节"   >
+          <a href="#方法区的更多演进细节" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#方法区的更多演进细节"></a> 方法区的更多演进细节</h3>
+      
+<p>首先明确：<strong>只有Hotspot才有永久代</strong>。BEA JRockit、IBMJ9等来说，是不存在永久代的概念的。原则上如何实现方法区属于虚拟机实现细节，不受《Java虚拟机规范》管束，并不要求统一。</p>
+<p>Hotspot中方法区的变化：</p>
+<ul>
+<li>JDK 1.6 及以前：有永久代，<strong>静态变量存储在永久代上</strong></li>
+<li>JDK 1.7：有永久代，但已经逐步 “去永久代”，<strong>字符串常量池和静态变量移，保存在堆中</strong></li>
+<li>JDK 1.8：<strong>无永久代</strong>，类型信息，字段，方法，常量保存在<strong>本地内存</strong>的元空间，但<strong>字符串常量池、静态变量仍然在堆中</strong></li>
+</ul>
+<p>JDK 1.7 是一个<strong>过度版本</strong>，逐渐从永久代转变为元空间，并且字符串常量池、静态变量逐渐保存在堆中。</p>
+<p>JDK 1.6 的时候：</p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708211541300.png" alt="image-20200708211541300" /></p>
+<p>JDK 1.7 的时候：</p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708211609911.png" alt="image-20200708211609911" /></p>
+<p>JDK 1.8 的时候，元空间大小只受<strong>物理内存</strong>影响：</p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708211637952.png" alt="image-20200708211637952" /></p>
+
+        <h3 id="stringtable-为什么要调整位置"   >
+          <a href="#stringtable-为什么要调整位置" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#stringtable-为什么要调整位置"></a> StringTable 为什么要调整位置</h3>
+      
+<blockquote>
+<p>因为之前存放在永久代里只有Full GC才会回收，效率太低。放到堆里回收效率高</p>
+</blockquote>
+<p>JDK 7中将<code>StringTable</code>放到了<strong>堆空间</strong>中。因为永久代的回收效率很低，在Full GC的时候才会触发。而Full GC是老年代的空间不足、永久代不足时才会触发。</p>
+<p>这就导致<code>StringTable</code>回收效率不高。而我们开发中会有大量的字符串被创建，回收效率低，导致永久代内存不足。放到堆里，能及时回收内存。</p>
+
+        <h3 id="静态变量存放在那里"   >
+          <a href="#静态变量存放在那里" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#静态变量存放在那里"></a> 静态变量存放在那里？</h3>
+      
+<ul>
+<li>对象实体数据始终存放在堆空间</li>
+<li>对象的引用变量名在JDK6，JDK7，JDK8存放位置中有所变化</li>
+</ul>
+
+        <h4 id="对象实体在哪里放着"   >
+          <a href="#对象实体在哪里放着" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#对象实体在哪里放着"></a> 对象实体在哪里放着？</h4>
+      
+<p>静态引用对应的对象<strong>实体数据</strong>始终都存在堆空间（new出来的对象实体数据）</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 结论：</span></span><br><span class="line"><span class="comment"> * 1、静态引用对应的对象实体(也就是这个new byte[1024 * 1024 * 100])始终都存在堆空间，</span></span><br><span class="line"><span class="comment"> * 2、只是那个变量(相当于下面的arr变量名)在JDK6,JDK7,JDK8存放位置中有所变化</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * jdk7：</span></span><br><span class="line"><span class="comment"> * -Xms200m -Xmx200m -XX:PermSize=300m -XX:MaxPermSize=300m -XX:+PrintGCDetails</span></span><br><span class="line"><span class="comment"> * jdk 8：</span></span><br><span class="line"><span class="comment"> * -Xms200m -Xmx200m -XX:MetaspaceSize=300m -XX:MaxMetaspaceSize=300m -XX:+PrintGCDetails</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StaticFieldTest</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">byte</span>[] arr = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span> * <span class="number">1024</span> * <span class="number">100</span>];<span class="comment">//100MB</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        System.out.println(StaticFieldTest.arr);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>静态引用对应的对象实体（也就是这个<code>new byte[1024 * 1024 * 100]</code>）<strong>始终都存在堆空间</strong>，只是那个变量（相当于下面的arr变量名）在JDK6，JDK7，JDK8存放位置中有所变化。</p>
+
+        <h4 id="变量名存放在哪里"   >
+          <a href="#变量名存放在哪里" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#变量名存放在哪里"></a> 变量（名）存放在哪里？</h4>
+      
+<p>这个问题需要用JHSDB工具来进行分析，这个工具是JDK9开始自带的，在<code>bin</code>目录下可以找到</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.atguigu.java1;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 《深入理解Java虚拟机》中的案例：</span></span><br><span class="line"><span class="comment"> * staticObj、instanceObj、localObj存放在哪里？</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StaticObjTest</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">        <span class="keyword">static</span> ObjectHolder staticObj = <span class="keyword">new</span> ObjectHolder();</span><br><span class="line">        ObjectHolder instanceObj = <span class="keyword">new</span> ObjectHolder();</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">foo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            ObjectHolder localObj = <span class="keyword">new</span> ObjectHolder();</span><br><span class="line">            System.out.println(<span class="string">&quot;done&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">ObjectHolder</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Test test = <span class="keyword">new</span> StaticObjTest.Test();</span><br><span class="line">        test.foo();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>三者的存放位置：</p>
+<ul>
+<li><code>staticobj</code>：静态属性，随着<code>Test</code>的类型信息存放在<strong>方法区</strong></li>
+<li><code>instanceobj</code>：类的普通属性，随着<code>Test</code>的对象实例存放在<strong>堆区</strong></li>
+<li><code>localobject</code>：局部变量，是存放在<code>foo()</code>方法栈帧的<strong>局部变量表</strong>中。</li>
+</ul>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708215025527.png" alt="image-20200708215025527" /></p>
+<p>测试发现：三个对象的实体数据在内存中的地址都落在Eden区范围内，所以结论：只要是对象实例必然会在Java堆中分配。</p>
+<p>接着，找到了一个引用该<code>staticobj</code>对象的地方，是在一个<code>java.lang.Class</code>的实例里，并且给出了这个实例的地址，通过Inspector查看该对象实例，可以清楚看到这确实是一个<code>java.lang.Class</code>类型的对象实例，里面有一个名为<code>staticobj</code>的实例字段：</p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708215218078.png" alt="image-20200708215218078" /></p>
+<blockquote>
+<p>从《Java虚拟机规范》所定义的概念模型来看，所有Class相关的信息都应该存放在方法区之中，但方法区该如何实现，《Java虚拟机规范》并未做出规定，这就成了一件允许不同虚拟机自己灵活把握的事情。</p>
+</blockquote>
+<p>JDK7及其以后版本的HotSpot虚拟机选择把静态变量与类型在Java语言一端的映射Class对象存放在一起，<strong>存储于Java堆之中</strong>，从我们的实验中也明确验证了这一点</p>
+
+        <h2 id="方法区的内部结构"   >
+          <a href="#方法区的内部结构" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#方法区的内部结构"></a> 方法区的内部结构</h2>
+      
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20210929165800059.png" alt="image-20210929165800059" /></p>
+<blockquote>
+<p><strong>字符串常量池在JDK 8中被存放在堆区</strong></p>
+</blockquote>
+<p>《深入理解Java虚拟机》书中对方法区（Method Area）存储内容描述如下：它用于存储已被虚拟机加载的类型信息、常量、静态变量、即时编译器编译后的代码缓存等。</p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708161856504.png" alt="image-20200708161856504" /></p>
+
+        <h3 id="类型信息"   >
+          <a href="#类型信息" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#类型信息"></a> 类型信息</h3>
+      
+<p>对每个加载的类型（类class、接口interface、枚举enum、注解annotation），JVM必须在方法区中存储以下类型信息：</p>
+<ul>
+<li>这个类型的完整有效名称（全名=包名.类名）</li>
+<li>这个类型直接父类的完整有效名（对于interface或是<code>java.lang.Object</code>，都没有父类）</li>
+<li>这个类型的修饰符（public，abstract，final的某个子集）</li>
+<li>这个类型直接接口的一个有序列表</li>
+</ul>
+
+        <h3 id="域field信息"   >
+          <a href="#域field信息" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#域field信息"></a> 域（Field）信息</h3>
+      
+<blockquote>
+<p>也就是我们常说的类的成员变量，域信息是比较官方的称呼</p>
+</blockquote>
+<p>JVM必须在方法区中保存类型的所有域的相关信息以及域的声明顺序。</p>
+<p>域的相关信息包括：域名称、域类型、域修饰符（public，private，protected，static，final，volatile，transient的某个子集）</p>
+
+        <h3 id="方法method信息"   >
+          <a href="#方法method信息" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#方法method信息"></a> 方法（Method）信息</h3>
+      
+<p>JVM必须保存所有方法的以下信息，同域信息一样包括声明顺序：</p>
+<ul>
+<li>方法名称</li>
+<li>方法的返回类型（或void）</li>
+<li>方法参数的数量和类型（按顺序）</li>
+<li>方法的修饰符（public，private，protected，static，final，synchronized，native，abstract的一个子集）</li>
+<li>方法的字节码（bytecodes）、操作数栈、局部变量表及大小（abstract和native方法除外）</li>
+<li>异常表（abstract和native方法除外）</li>
+</ul>
+<blockquote>
+<p>每个异常处理的开始位置、结束位置、代码处理在程序计数器中的偏移地址、被捕获的异常类的常量池索引</p>
+</blockquote>
+
+        <h3 id="示例"   >
+          <a href="#示例" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#示例"></a> 示例</h3>
+      
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">**</span><br><span class="line"> * 测试方法区的内部构成</span><br><span class="line"> */</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MethodInnerStrucTest</span> <span class="keyword">extends</span> <span class="title">Object</span> <span class="keyword">implements</span> <span class="title">Comparable</span>&lt;<span class="title">String</span>&gt;,<span class="title">Serializable</span> </span>&#123;</span><br><span class="line">    <span class="comment">//属性</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> num = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> String str = <span class="string">&quot;测试方法的内部结构&quot;</span>;</span><br><span class="line">    <span class="comment">//构造器</span></span><br><span class="line">    <span class="comment">//方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test1</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> count = <span class="number">20</span>;</span><br><span class="line">        System.out.println(<span class="string">&quot;count = &quot;</span> + count);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">test2</span><span class="params">(<span class="keyword">int</span> cal)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> result = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">int</span> value = <span class="number">30</span>;</span><br><span class="line">            result = value / cal;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compareTo</span><span class="params">(String o)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>反编译字节码文件，并输出值文本文件中，便于查看。参数 <code>-p</code> 确保能查看 private 权限类型的字段或方法：</p>
+<figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">javap -v -p MethodInnerStrucTest.class &gt; test.txt</span><br></pre></td></tr></table></div></figure>
+<figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br></pre></td><td class="code"><pre><span class="line">Classfile &#x2F;F:&#x2F;IDEAWorkSpaceSourceCode&#x2F;JVMDemo&#x2F;out&#x2F;production&#x2F;chapter09&#x2F;com&#x2F;atguigu&#x2F;java&#x2F;MethodInnerStrucTest.class</span><br><span class="line">  Last modified 2020-11-13; size 1626 bytes</span><br><span class="line">  MD5 checksum 0d0fcb54854d4ce183063df985141ad0</span><br><span class="line">  Compiled from &quot;MethodInnerStrucTest.java&quot;</span><br><span class="line">&#x2F;&#x2F;类型信息      </span><br><span class="line">public class com.atguigu.java.MethodInnerStrucTest extends java.lang.Object implements java.lang.Comparable&lt;java.lang.String&gt;, java.io.Serializable</span><br><span class="line">  minor version: 0</span><br><span class="line">  major version: 52</span><br><span class="line">  flags: ACC_PUBLIC, ACC_SUPER</span><br><span class="line">Constant pool:</span><br><span class="line">   #1 &#x3D; Methodref          #18.#52        &#x2F;&#x2F; java&#x2F;lang&#x2F;Object.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">   #2 &#x3D; Fieldref           #17.#53        &#x2F;&#x2F; com&#x2F;atguigu&#x2F;java&#x2F;MethodInnerStrucTest.num:I</span><br><span class="line">   #3 &#x3D; Fieldref           #54.#55        &#x2F;&#x2F; java&#x2F;lang&#x2F;System.out:Ljava&#x2F;io&#x2F;PrintStream;</span><br><span class="line">   #4 &#x3D; Class              #56            &#x2F;&#x2F; java&#x2F;lang&#x2F;StringBuilder</span><br><span class="line">   #5 &#x3D; Methodref          #4.#52         &#x2F;&#x2F; java&#x2F;lang&#x2F;StringBuilder.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">   #6 &#x3D; String             #57            &#x2F;&#x2F; count &#x3D;</span><br><span class="line">   #7 &#x3D; Methodref          #4.#58         &#x2F;&#x2F; java&#x2F;lang&#x2F;StringBuilder.append:(Ljava&#x2F;lang&#x2F;String;)Ljava&#x2F;lang&#x2F;StringBuilder;</span><br><span class="line">   #8 &#x3D; Methodref          #4.#59         &#x2F;&#x2F; java&#x2F;lang&#x2F;StringBuilder.append:(I)Ljava&#x2F;lang&#x2F;StringBuilder;</span><br><span class="line">   #9 &#x3D; Methodref          #4.#60         &#x2F;&#x2F; java&#x2F;lang&#x2F;StringBuilder.toString:()Ljava&#x2F;lang&#x2F;String;</span><br><span class="line">  #10 &#x3D; Methodref          #61.#62        &#x2F;&#x2F; java&#x2F;io&#x2F;PrintStream.println:(Ljava&#x2F;lang&#x2F;String;)V</span><br><span class="line">  #11 &#x3D; Class              #63            &#x2F;&#x2F; java&#x2F;lang&#x2F;Exception</span><br><span class="line">  #12 &#x3D; Methodref          #11.#64        &#x2F;&#x2F; java&#x2F;lang&#x2F;Exception.printStackTrace:()V</span><br><span class="line">  #13 &#x3D; Class              #65            &#x2F;&#x2F; java&#x2F;lang&#x2F;String</span><br><span class="line">  #14 &#x3D; Methodref          #17.#66        &#x2F;&#x2F; com&#x2F;atguigu&#x2F;java&#x2F;MethodInnerStrucTest.compareTo:(Ljava&#x2F;lang&#x2F;String;)I</span><br><span class="line">  #15 &#x3D; String             #67            &#x2F;&#x2F; 测试方法的内部结构</span><br><span class="line">  #16 &#x3D; Fieldref           #17.#68        &#x2F;&#x2F; com&#x2F;atguigu&#x2F;java&#x2F;MethodInnerStrucTest.str:Ljava&#x2F;lang&#x2F;String;</span><br><span class="line">  #17 &#x3D; Class              #69            &#x2F;&#x2F; com&#x2F;atguigu&#x2F;java&#x2F;MethodInnerStrucTest</span><br><span class="line">  #18 &#x3D; Class              #70            &#x2F;&#x2F; java&#x2F;lang&#x2F;Object</span><br><span class="line">  #19 &#x3D; Class              #71            &#x2F;&#x2F; java&#x2F;lang&#x2F;Comparable</span><br><span class="line">  #20 &#x3D; Class              #72            &#x2F;&#x2F; java&#x2F;io&#x2F;Serializable</span><br><span class="line">  #21 &#x3D; Utf8               num</span><br><span class="line">  #22 &#x3D; Utf8               I</span><br><span class="line">  #23 &#x3D; Utf8               str</span><br><span class="line">  #24 &#x3D; Utf8               Ljava&#x2F;lang&#x2F;String;</span><br><span class="line">  #25 &#x3D; Utf8               &lt;init&gt;</span><br><span class="line">  #26 &#x3D; Utf8               ()V</span><br><span class="line">  #27 &#x3D; Utf8               Code</span><br><span class="line">  #28 &#x3D; Utf8               LineNumberTable</span><br><span class="line">  #29 &#x3D; Utf8               LocalVariableTable</span><br><span class="line">  #30 &#x3D; Utf8               this</span><br><span class="line">  #31 &#x3D; Utf8               Lcom&#x2F;atguigu&#x2F;java&#x2F;MethodInnerStrucTest;</span><br><span class="line">  #32 &#x3D; Utf8               test1</span><br><span class="line">  #33 &#x3D; Utf8               count</span><br><span class="line">  #34 &#x3D; Utf8               test2</span><br><span class="line">  #35 &#x3D; Utf8               (I)I</span><br><span class="line">  #36 &#x3D; Utf8               value</span><br><span class="line">  #37 &#x3D; Utf8               e</span><br><span class="line">  #38 &#x3D; Utf8               Ljava&#x2F;lang&#x2F;Exception;</span><br><span class="line">  #39 &#x3D; Utf8               cal</span><br><span class="line">  #40 &#x3D; Utf8               result</span><br><span class="line">  #41 &#x3D; Utf8               StackMapTable</span><br><span class="line">  #42 &#x3D; Class              #63            &#x2F;&#x2F; java&#x2F;lang&#x2F;Exception</span><br><span class="line">  #43 &#x3D; Utf8               compareTo</span><br><span class="line">  #44 &#x3D; Utf8               (Ljava&#x2F;lang&#x2F;String;)I</span><br><span class="line">  #45 &#x3D; Utf8               o</span><br><span class="line">  #46 &#x3D; Utf8               (Ljava&#x2F;lang&#x2F;Object;)I</span><br><span class="line">  #47 &#x3D; Utf8               &lt;clinit&gt;</span><br><span class="line">  #48 &#x3D; Utf8               Signature</span><br><span class="line">  #49 &#x3D; Utf8               Ljava&#x2F;lang&#x2F;Object;Ljava&#x2F;lang&#x2F;Comparable&lt;Ljava&#x2F;lang&#x2F;String;&gt;;Ljava&#x2F;io&#x2F;Serializable;</span><br><span class="line">  #50 &#x3D; Utf8               SourceFile</span><br><span class="line">  #51 &#x3D; Utf8               MethodInnerStrucTest.java</span><br><span class="line">  #52 &#x3D; NameAndType        #25:#26        &#x2F;&#x2F; &quot;&lt;init&gt;&quot;:()V</span><br><span class="line">  #53 &#x3D; NameAndType        #21:#22        &#x2F;&#x2F; num:I</span><br><span class="line">  #54 &#x3D; Class              #73            &#x2F;&#x2F; java&#x2F;lang&#x2F;System</span><br><span class="line">  #55 &#x3D; NameAndType        #74:#75        &#x2F;&#x2F; out:Ljava&#x2F;io&#x2F;PrintStream;</span><br><span class="line">  #56 &#x3D; Utf8               java&#x2F;lang&#x2F;StringBuilder</span><br><span class="line">  #57 &#x3D; Utf8               count &#x3D;</span><br><span class="line">  #58 &#x3D; NameAndType        #76:#77        &#x2F;&#x2F; append:(Ljava&#x2F;lang&#x2F;String;)Ljava&#x2F;lang&#x2F;StringBuilder;</span><br><span class="line">  #59 &#x3D; NameAndType        #76:#78        &#x2F;&#x2F; append:(I)Ljava&#x2F;lang&#x2F;StringBuilder;</span><br><span class="line">  #60 &#x3D; NameAndType        #79:#80        &#x2F;&#x2F; toString:()Ljava&#x2F;lang&#x2F;String;</span><br><span class="line">  #61 &#x3D; Class              #81            &#x2F;&#x2F; java&#x2F;io&#x2F;PrintStream</span><br><span class="line">  #62 &#x3D; NameAndType        #82:#83        &#x2F;&#x2F; println:(Ljava&#x2F;lang&#x2F;String;)V</span><br><span class="line">  #63 &#x3D; Utf8               java&#x2F;lang&#x2F;Exception</span><br><span class="line">  #64 &#x3D; NameAndType        #84:#26        &#x2F;&#x2F; printStackTrace:()V</span><br><span class="line">  #65 &#x3D; Utf8               java&#x2F;lang&#x2F;String</span><br><span class="line">  #66 &#x3D; NameAndType        #43:#44        &#x2F;&#x2F; compareTo:(Ljava&#x2F;lang&#x2F;String;)I</span><br><span class="line">  #67 &#x3D; Utf8               测试方法的内部结构</span><br><span class="line">  #68 &#x3D; NameAndType        #23:#24        &#x2F;&#x2F; str:Ljava&#x2F;lang&#x2F;String;</span><br><span class="line">  #69 &#x3D; Utf8               com&#x2F;atguigu&#x2F;java&#x2F;MethodInnerStrucTest</span><br><span class="line">  #70 &#x3D; Utf8               java&#x2F;lang&#x2F;Object</span><br><span class="line">  #71 &#x3D; Utf8               java&#x2F;lang&#x2F;Comparable</span><br><span class="line">  #72 &#x3D; Utf8               java&#x2F;io&#x2F;Serializable</span><br><span class="line">  #73 &#x3D; Utf8               java&#x2F;lang&#x2F;System</span><br><span class="line">  #74 &#x3D; Utf8               out</span><br><span class="line">  #75 &#x3D; Utf8               Ljava&#x2F;io&#x2F;PrintStream;</span><br><span class="line">  #76 &#x3D; Utf8               append</span><br><span class="line">  #77 &#x3D; Utf8               (Ljava&#x2F;lang&#x2F;String;)Ljava&#x2F;lang&#x2F;StringBuilder;</span><br><span class="line">  #78 &#x3D; Utf8               (I)Ljava&#x2F;lang&#x2F;StringBuilder;</span><br><span class="line">  #79 &#x3D; Utf8               toString</span><br><span class="line">  #80 &#x3D; Utf8               ()Ljava&#x2F;lang&#x2F;String;</span><br><span class="line">  #81 &#x3D; Utf8               java&#x2F;io&#x2F;PrintStream</span><br><span class="line">  #82 &#x3D; Utf8               println</span><br><span class="line">  #83 &#x3D; Utf8               (Ljava&#x2F;lang&#x2F;String;)V</span><br><span class="line">  #84 &#x3D; Utf8               printStackTrace</span><br><span class="line">&#123;</span><br><span class="line">&#x2F;&#x2F;域信息</span><br><span class="line">  public int num;</span><br><span class="line">    descriptor: I</span><br><span class="line">    flags: ACC_PUBLIC</span><br><span class="line"></span><br><span class="line">  private static java.lang.String str;</span><br><span class="line">    descriptor: Ljava&#x2F;lang&#x2F;String;</span><br><span class="line">    flags: ACC_PRIVATE, ACC_STATIC</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F;方法信息</span><br><span class="line">  public com.atguigu.java.MethodInnerStrucTest();</span><br><span class="line">    descriptor: ()V</span><br><span class="line">    flags: ACC_PUBLIC</span><br><span class="line">    Code:</span><br><span class="line">      stack&#x3D;2, locals&#x3D;1, args_size&#x3D;1</span><br><span class="line">         0: aload_0</span><br><span class="line">         1: invokespecial #1                  &#x2F;&#x2F; Method java&#x2F;lang&#x2F;Object.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">         4: aload_0</span><br><span class="line">         5: bipush        10</span><br><span class="line">         7: putfield      #2                  &#x2F;&#x2F; Field num:I</span><br><span class="line">        10: return</span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line 10: 0</span><br><span class="line">        line 12: 4</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            0      11     0  this   Lcom&#x2F;atguigu&#x2F;java&#x2F;MethodInnerStrucTest;</span><br><span class="line"></span><br><span class="line">  public void test1();</span><br><span class="line">    descriptor: ()V</span><br><span class="line">    flags: ACC_PUBLIC</span><br><span class="line">    Code:</span><br><span class="line">      stack&#x3D;3, locals&#x3D;2, args_size&#x3D;1</span><br><span class="line">         0: bipush        20</span><br><span class="line">         2: istore_1</span><br><span class="line">         3: getstatic     #3                  &#x2F;&#x2F; Field java&#x2F;lang&#x2F;System.out:Ljava&#x2F;io&#x2F;PrintStream;</span><br><span class="line">         6: new           #4                  &#x2F;&#x2F; class java&#x2F;lang&#x2F;StringBuilder</span><br><span class="line">         9: dup</span><br><span class="line">        10: invokespecial #5                  &#x2F;&#x2F; Method java&#x2F;lang&#x2F;StringBuilder.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">        13: ldc           #6                  &#x2F;&#x2F; String count &#x3D;</span><br><span class="line">        15: invokevirtual #7                  &#x2F;&#x2F; Method java&#x2F;lang&#x2F;StringBuilder.append:(Ljava&#x2F;lang&#x2F;String;)Ljava&#x2F;lang&#x2F;StringBuilder;</span><br><span class="line">        18: iload_1</span><br><span class="line">        19: invokevirtual #8                  &#x2F;&#x2F; Method java&#x2F;lang&#x2F;StringBuilder.append:(I)Ljava&#x2F;lang&#x2F;StringBuilder;</span><br><span class="line">        22: invokevirtual #9                  &#x2F;&#x2F; Method java&#x2F;lang&#x2F;StringBuilder.toString:()Ljava&#x2F;lang&#x2F;String;</span><br><span class="line">        25: invokevirtual #10                 &#x2F;&#x2F; Method java&#x2F;io&#x2F;PrintStream.println:(Ljava&#x2F;lang&#x2F;String;)V</span><br><span class="line">        28: return</span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line 17: 0</span><br><span class="line">        line 18: 3</span><br><span class="line">        line 19: 28</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            0      29     0  this   Lcom&#x2F;atguigu&#x2F;java&#x2F;MethodInnerStrucTest;</span><br><span class="line">            3      26     1 count   I</span><br><span class="line"></span><br><span class="line">  public static int test2(int);</span><br><span class="line">    descriptor: (I)I</span><br><span class="line">    flags: ACC_PUBLIC, ACC_STATIC</span><br><span class="line">    Code:</span><br><span class="line">      stack&#x3D;2, locals&#x3D;3, args_size&#x3D;1</span><br><span class="line">         0: iconst_0</span><br><span class="line">         1: istore_1</span><br><span class="line">         2: bipush        30</span><br><span class="line">         4: istore_2</span><br><span class="line">         5: iload_2</span><br><span class="line">         6: iload_0</span><br><span class="line">         7: idiv</span><br><span class="line">         8: istore_1</span><br><span class="line">         9: goto          17</span><br><span class="line">        12: astore_2</span><br><span class="line">        13: aload_2</span><br><span class="line">        14: invokevirtual #12                 &#x2F;&#x2F; Method java&#x2F;lang&#x2F;Exception.printStackTrace:()V</span><br><span class="line">        17: iload_1</span><br><span class="line">        18: ireturn</span><br><span class="line">      Exception table:</span><br><span class="line">         from    to  target type</span><br><span class="line">             2     9    12   Class java&#x2F;lang&#x2F;Exception</span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line 21: 0</span><br><span class="line">        line 23: 2</span><br><span class="line">        line 24: 5</span><br><span class="line">        line 27: 9</span><br><span class="line">        line 25: 12</span><br><span class="line">        line 26: 13</span><br><span class="line">        line 28: 17</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            5       4     2 value   I</span><br><span class="line">           13       4     2     e   Ljava&#x2F;lang&#x2F;Exception;</span><br><span class="line">            0      19     0   cal   I</span><br><span class="line">            2      17     1 result   I</span><br><span class="line">      StackMapTable: number_of_entries &#x3D; 2</span><br><span class="line">        frame_type &#x3D; 255 &#x2F;* full_frame *&#x2F;</span><br><span class="line">          offset_delta &#x3D; 12</span><br><span class="line">          locals &#x3D; [ int, int ]</span><br><span class="line">          stack &#x3D; [ class java&#x2F;lang&#x2F;Exception ]</span><br><span class="line">        frame_type &#x3D; 4 &#x2F;* same *&#x2F;</span><br><span class="line"></span><br><span class="line">  public int compareTo(java.lang.String);</span><br><span class="line">    descriptor: (Ljava&#x2F;lang&#x2F;String;)I</span><br><span class="line">    flags: ACC_PUBLIC</span><br><span class="line">    Code:</span><br><span class="line">      stack&#x3D;1, locals&#x3D;2, args_size&#x3D;2</span><br><span class="line">         0: iconst_0</span><br><span class="line">         1: ireturn</span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line 33: 0</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            0       2     0  this   Lcom&#x2F;atguigu&#x2F;java&#x2F;MethodInnerStrucTest;</span><br><span class="line">            0       2     1     o   Ljava&#x2F;lang&#x2F;String;</span><br><span class="line"></span><br><span class="line">  public int compareTo(java.lang.Object);</span><br><span class="line">    descriptor: (Ljava&#x2F;lang&#x2F;Object;)I</span><br><span class="line">    flags: ACC_PUBLIC, ACC_BRIDGE, ACC_SYNTHETIC</span><br><span class="line">    Code:</span><br><span class="line">      stack&#x3D;2, locals&#x3D;2, args_size&#x3D;2</span><br><span class="line">         0: aload_0</span><br><span class="line">         1: aload_1</span><br><span class="line">         2: checkcast     #13                 &#x2F;&#x2F; class java&#x2F;lang&#x2F;String</span><br><span class="line">         5: invokevirtual #14                 &#x2F;&#x2F; Method compareTo:(Ljava&#x2F;lang&#x2F;String;)I</span><br><span class="line">         8: ireturn</span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line 10: 0</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            0       9     0  this   Lcom&#x2F;atguigu&#x2F;java&#x2F;MethodInnerStrucTest;</span><br><span class="line"></span><br><span class="line">  static &#123;&#125;;</span><br><span class="line">    descriptor: ()V</span><br><span class="line">    flags: ACC_STATIC</span><br><span class="line">    Code:</span><br><span class="line">      stack&#x3D;1, locals&#x3D;0, args_size&#x3D;0</span><br><span class="line">         0: ldc           #15                 &#x2F;&#x2F; String 测试方法的内部结构</span><br><span class="line">         2: putstatic     #16                 &#x2F;&#x2F; Field str:Ljava&#x2F;lang&#x2F;String;</span><br><span class="line">         5: return</span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line 13: 0</span><br><span class="line">&#125;</span><br><span class="line">Signature: #49                          &#x2F;&#x2F; Ljava&#x2F;lang&#x2F;Object;Ljava&#x2F;lang&#x2F;Comparable&lt;Ljava&#x2F;lang&#x2F;String;&gt;;Ljava&#x2F;io&#x2F;Serializable;</span><br><span class="line">SourceFile: &quot;MethodInnerStrucTest.java&quot;</span><br></pre></td></tr></table></div></figure>
+<p>分析上面字节码的内容：</p>
+<p><strong>类型信息</strong></p>
+<p>在运行时方法区中，类信息中记录了哪个加载器加载了该类，同时类加载器也记录了它加载了哪些类</p>
+<figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 类型信息      </span><br><span class="line">public class com.atguigu.java.MethodInnerStrucTest extends java.lang.Object implements java.lang.Comparable&lt;java.lang.String&gt;, java.io.Serializable</span><br></pre></td></tr></table></div></figure>
+<p><strong>域信息</strong></p>
+<ol>
+<li><code>descriptor</code>：表示字段类型为 Integer</li>
+<li><code>flags: ACC_PUBLIC</code>：表示字段权限修饰符为 public</li>
+</ol>
+<figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 域信息</span><br><span class="line">  public int num;</span><br><span class="line">    descriptor: I</span><br><span class="line">    flags: ACC_PUBLIC</span><br><span class="line"></span><br><span class="line">  private static java.lang.String str;</span><br><span class="line">    descriptor: Ljava&#x2F;lang&#x2F;String;</span><br><span class="line">    flags: ACC_PRIVATE, ACC_STATIC</span><br></pre></td></tr></table></div></figure>
+<p><strong>方法信息</strong></p>
+<ol>
+<li><code>descriptor: ()V</code> 表示方法返回值类型为 void</li>
+<li><code>flags: ACC_PUBLIC</code> 表示方法权限修饰符为 public</li>
+<li><code>stack=3</code> 表示操作数栈深度为 3</li>
+<li><code>locals=2</code> 表示局部变量个数为 2 个（实力方法包含 this）</li>
+<li><code>test1()</code> 方法虽然没有参数，但是其 <code>args_size=1</code> ，这时因为将 this 作为了参数</li>
+</ol>
+<figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">public void test1();</span><br><span class="line">    descriptor: ()V</span><br><span class="line">    flags: ACC_PUBLIC</span><br><span class="line">    Code:</span><br><span class="line">      stack&#x3D;3, locals&#x3D;2, args_size&#x3D;1</span><br><span class="line">         0: bipush        20</span><br><span class="line">         2: istore_1</span><br><span class="line">         3: getstatic     #3                  &#x2F;&#x2F; Field java&#x2F;lang&#x2F;System.out:Ljava&#x2F;io&#x2F;PrintStream;</span><br><span class="line">         6: new           #4                  &#x2F;&#x2F; class java&#x2F;lang&#x2F;StringBuilder</span><br><span class="line">         9: dup</span><br><span class="line">        10: invokespecial #5                  &#x2F;&#x2F; Method java&#x2F;lang&#x2F;StringBuilder.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">        13: ldc           #6                  &#x2F;&#x2F; String count &#x3D;</span><br><span class="line">        15: invokevirtual #7                  &#x2F;&#x2F; Method java&#x2F;lang&#x2F;StringBuilder.append:(Ljava&#x2F;lang&#x2F;String;)Ljava&#x2F;lang&#x2F;StringBuilder;</span><br><span class="line">        18: iload_1</span><br><span class="line">        19: invokevirtual #8                  &#x2F;&#x2F; Method java&#x2F;lang&#x2F;StringBuilder.append:(I)Ljava&#x2F;lang&#x2F;StringBuilder;</span><br><span class="line">        22: invokevirtual #9                  &#x2F;&#x2F; Method java&#x2F;lang&#x2F;StringBuilder.toString:()Ljava&#x2F;lang&#x2F;String;</span><br><span class="line">        25: invokevirtual #10                 &#x2F;&#x2F; Method java&#x2F;io&#x2F;PrintStream.println:(Ljava&#x2F;lang&#x2F;String;)V</span><br><span class="line">        28: return</span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line 17: 0</span><br><span class="line">        line 18: 3</span><br><span class="line">        line 19: 28</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            0      29     0  this   Lcom&#x2F;atguigu&#x2F;java&#x2F;MethodInnerStrucTest;</span><br><span class="line">            3      26     1 count   I</span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="non-final-的类变量"   >
+          <a href="#non-final-的类变量" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#non-final-的类变量"></a> non-final 的类变量</h3>
+      
+<p>类的静态成员变量和类关联在一起，随着类的加载而加载，他们成为类数据在逻辑上的一部分变量。其被类的所有实例共享，即使没有类实例时，你也可以访问它。</p>
+<p><strong>举例</strong></p>
+<ol>
+<li>如下代码所示，即使我们把<code>order</code>设置为<code>null</code>，也不会出现空指针异常</li>
+<li>这更加表明了 <code>static</code> 类型的字段和方法随着类的加载而加载，并不属于特定的类实例</li>
+</ol>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * non-final的类变量</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MethodAreaTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Order order = <span class="keyword">new</span> Order();</span><br><span class="line">        order.hello();</span><br><span class="line">        System.out.println(order.count);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Order</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> count = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> number = <span class="number">2</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">hello</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;hello!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="全局常量-static-final"   >
+          <a href="#全局常量-static-final" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#全局常量-static-final"></a> 全局常量 <code>static final</code></h3>
+      
+<p>全局常量就是使用 <code>static final</code> 进行修饰。<strong>每个全局常量在编译的时候就会被分配了</strong>。</p>
+<p>查看上面代码，这部分的字节码指令</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Order</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> count = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> number = <span class="number">2</span>;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>字节码文件：</p>
+<figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public static int count;</span><br><span class="line">    descriptor: I</span><br><span class="line">    flags: ACC_PUBLIC, ACC_STATIC</span><br><span class="line"></span><br><span class="line">  public static final int number;</span><br><span class="line">    descriptor: I</span><br><span class="line">    flags: ACC_PUBLIC, ACC_STATIC, ACC_FINAL</span><br><span class="line">    ConstantValue: int 2</span><br></pre></td></tr></table></div></figure>
+<p>可以发现 <code>staitc</code> 和 <code>final</code> 同时修饰的 <code>number</code> 的值在编译上的时候已经写死在字节码文件中了。</p>
+
+        <h3 id="运行时常量池-vs-常量池"   >
+          <a href="#运行时常量池-vs-常量池" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#运行时常量池-vs-常量池"></a> 运行时常量池 VS 常量池</h3>
+      
+<p>运行时常量池，就是运行时的常量池</p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708171151384.png" alt="image-20200708171151384" /></p>
+<ul>
+<li>方法区内部包含了运行时常量池</li>
+<li>字节码文件内部包含了常量池</li>
+<li>要弄清楚方法区，需要理解清楚ClassFile，因为加载类的信息都在方法区。</li>
+<li>要弄清楚方法区的运行时常量池，需要理解清楚ClassFile中的常量池。</li>
+</ul>
+
+        <h3 id="常量池"   >
+          <a href="#常量池" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#常量池"></a> 常量池</h3>
+      
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708172357052.png" alt="image-20200708172357052" /></p>
+<p>一个有效的字节码文件中除了包含类的版本信息、字段、方法以及接口等描述符信息外，还包含一项信息就是常量池表（Constant Pool Table），包括各种字面量和对类型、域和方法的符号引用</p>
+
+        <h4 id="为什么需要常量池"   >
+          <a href="#为什么需要常量池" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#为什么需要常量池"></a> 为什么需要常量池</h4>
+      
+<p>一个java源文件中的类、接口，编译后产生一个字节码文件。而Java中的字节码需要数据支持，通常这种数据会很大以至于不能直接存到字节码里，换另一种方式，可以存到常量池，这个字节码包含了指向常量池的引用。在动态链接的时候会用到运行时常量池，之前有介绍。</p>
+<p>比如：如下的代码：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleClass</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>虽然上述代码只有194字节，但是里面却使用了<code>String</code>、<code>System</code>、<code>PrintStream</code>及<code>Object</code>等结构。这里的代码量其实很少了，如果代码多的话，引用的结构将会更多，这里就需要用到常量池了。</p>
+
+        <h4 id="常量池中有什么"   >
+          <a href="#常量池中有什么" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#常量池中有什么"></a> 常量池中有什么</h4>
+      
+<ul>
+<li>数量值</li>
+<li>字符串值</li>
+<li>类引用</li>
+<li>字段引用</li>
+<li>方法引用</li>
+</ul>
+<p>例如下面这段代码</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MethodAreaTest2</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">        Object obj = <span class="keyword">new</span> Object();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>将会被翻译成如下字节码</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">new <span class="comment">#2  </span></span><br><span class="line">dup</span><br><span class="line">invokespecial</span><br></pre></td></tr></table></div></figure>
+<p>其中带#的就是引用了常量池里的符号。</p>
+
+        <h4 id="小结"   >
+          <a href="#小结" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#小结"></a> 小结</h4>
+      
+<p>常量池、可以看做是一张表，虚拟机指令根据这张常量表找到要执行的类名、方法名、参数类型、字面量等类型</p>
+
+        <h3 id="运行时常量池"   >
+          <a href="#运行时常量池" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#运行时常量池"></a> 运行时常量池</h3>
+      
+<p>运行时常量池（Runtime Constant Pool）是方法区的一部分。</p>
+<p>常量池表（Constant Pool Table）是Class文件的一部分，用于存放编译期生成的各种<strong>字面量</strong>与<strong>符号引用</strong>，<strong>这部分内容将在类加载后存放到方法区的运行时常量池中</strong>。在加载类和接口到虚拟机后，就会创建对应的运行时常量池。</p>
+<p>JVM为每个已加载的类型（类或接口）都维护一个常量池。池中的数据项像数组项一样，是通过索引访问的。</p>
+<p>运行时常量池中包含多种不同的常量，包括编译期就已经明确的数值字面量，也包括到运行期解析后才能够获得的方法或者字段引用。此时不再是常量池中的符号地址了，在Linking阶段的Resolve阶段价格符号引用转换为真实地址。</p>
+<p>运行时常量池，相对于Class文件常量池的另一重要特征是：<strong>具备动态性</strong>。运行时常量池类似于传统编程语言中的符号表（symboltable），但是它所包含的数据却比符号表要更加丰富一些。</p>
+<p>当创建类或接口的运行时常量池时，如果构造运行时常量池所需的内存空间超过了方法区所能提供的最大值，则JVM会抛outofMemoryError异常。</p>
+
+        <h2 id="方法区使用举例"   >
+          <a href="#方法区使用举例" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#方法区使用举例"></a> 方法区使用举例</h2>
+      
+<p>如下代码</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MethodAreaDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> x = <span class="number">500</span>;</span><br><span class="line">        <span class="keyword">int</span> y = <span class="number">100</span>;</span><br><span class="line">        <span class="keyword">int</span> a = x / y;</span><br><span class="line">        <span class="keyword">int</span> b = <span class="number">50</span>;</span><br><span class="line">        System.out.println(a+b);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>字节码执行过程展示</p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708204750374.png" alt="image-20200708204750374" /></p>
+<p>首先现将操作数500放入到操作数栈中</p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708204953552.png" alt="image-20200708204953552" /></p>
+<p>然后存储到局部变量表中</p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708205029376.png" alt="image-20200708205029376" /></p>
+<p>然后重复一次，把100放入局部变量表中，最后再将变量表中的500 和 100 取出，进行操作</p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708205221737.png" alt="image-20200708205221737" /></p>
+<p>将500 和 100 进行一个除法运算，在把结果入栈</p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708205413721.png" alt="image-20200708205413721" /></p>
+<p>在最后就是输出流，需要调用运行时常量池的常量</p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708205708057.png" alt="image-20200708205708057" /></p>
+<p>最后调用<code>invokevirtual</code>（虚方法调用），然后返回</p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708205909176.png" alt="image-20200708205909176" /></p>
+<p>返回时</p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708210540696.png" alt="image-20200708210540696" /></p>
+<p><strong>符号引用 –&gt; 直接引用</strong></p>
+<ol>
+<li>上面代码调用 <code>System.out.println()</code> 方法时，首先需要看看 <code>System</code> 类有没有加载，再看看 <code>PrintStream</code> 类有没有加载</li>
+<li>如果没有加载，则执行加载。在类加载的<strong>Resolve解析阶段</strong>时，将常量池中的符号引用（字面量）转换为运行时常量池的直接引用（真正的地址值）</li>
+</ol>
+<blockquote>
+<p>程序计数器始终计算的都是<strong>当前代码</strong>运行的位置，目的是为了方便记录 方法调用后能够正常返回，或者是进行了CPU切换后，也能回来到原来的代码进行执行。</p>
+</blockquote>
+
+        <h2 id="设置方法区大小与-oom"   >
+          <a href="#设置方法区大小与-oom" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#设置方法区大小与-oom"></a> 设置方法区大小与 OOM</h2>
+      
+<p>方法区的大小<strong>不必是固定的</strong>，JVM可以根据应用的需要动态调整。</p>
+
+        <h3 id="jdk-7-及以前"   >
+          <a href="#jdk-7-及以前" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#jdk-7-及以前"></a> JDK 7 及以前</h3>
+      
+<ul>
+<li>通过<code>-XX:Permsize</code>来设置永久代<strong>初始</strong>分配空间。默认值是20.75M</li>
+<li>通过<code>-XX:MaxPermsize</code>来设定永久代<strong>最大</strong>可分配空间。32位机器默认是64M，64位机器模式是82M</li>
+<li>当JVM加载的类信息容量超过了这个值，会报异常<code>OutofMemoryError:PermGen space</code></li>
+</ul>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708111756800.png" alt="image-20200708111756800" /></p>
+
+        <h3 id="jdk-8-以后"   >
+          <a href="#jdk-8-以后" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#jdk-8-以后"></a> JDK 8 以后</h3>
+      
+<p>元数据区大小可以使用参数 <code>-XX:MetaspaceSize</code> 和 -<code>XX:MaxMetaspaceSize</code> 指定。默认值依赖于平台。Windows下，<code>-XX:MetaspaceSize</code>是21M，<code>-XX:MaxMetaspaceSize</code>的值是-1代表没有限制。</p>
+<p>与永久代不同，如果不指定大小，默认情况下，虚拟机会耗尽所有的可用系统内存。如果元数据区发生溢出，虚拟机一样会抛出异常<code>OutOfMemoryError:Metaspace</code></p>
+<p><code>-XX:MetaspaceSize：</code>设置初始的元空间大小。对于一个64位的服务器端JVM来说，其默认的<code>-XX:MetaspaceSize</code>值为21MB。这就是初始的高水位线，一旦触及这个水位线，Full GC将会被触发并卸载没用的类（即这些类对应的类加载器不再存活）然后这个高水位线将会重置。新的高水位线的值取决于GC后释放了多少元空间。如果释放的空间不足，那么在不超过<code>MaxMetaspaceSize</code>时，适当提高该值。如果释放空间过多，则适当降低该值。</p>
+<p>如果初始化的高水位线设置过低，上述高水位线调整情况会发生很多次。通过垃圾回收器的日志可以观察到Full GC多次调用。为了避免频繁地GC，建议将<code>-XX:MetaspaceSize</code>设置为一个<strong>相对较高的值</strong>。</p>
+
+        <h3 id="如何解决这些-oom"   >
+          <a href="#如何解决这些-oom" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#如何解决这些-oom"></a> 如何解决这些 OOM</h3>
+      
+<p>要解决OOM异常或Heap space的异常，一般的手段是首先通过<strong>内存映像分析工具</strong>（如Eclipse Memory Analyzer）对dump出来的堆转储快照进行分析，重点是确认内存中的对象是否是必要的，也就是要先分清楚到底是出现了<strong>内存泄漏</strong>（Memory Leak）还是<strong>内存溢出</strong>（Memory Overflow）</p>
+<blockquote>
+<p><strong>内存泄漏</strong>就是有大量的引用指向某些对象，但是这些对象以后不会使用了，但是因为它们还和GC ROOT有关联，所以导致以后这些对象也不会被回收，这就是内存泄漏的问题</p>
+</blockquote>
+<p>如果是内存泄漏，可进一步通过工具查看泄漏对象到GC Roots的引用链。于是就能找到泄漏对象是通过怎样的路径与GCRoots相关联并导致垃圾收集器无法自动回收它们的。掌握了泄漏对象的类型信息，以及GCRoots引用链的信息，就可以比较准确地定位出泄漏代码的位置。</p>
+<p>如果不存在内存泄漏，换句话说就是内存中的对象确实都还必须存活着，那就应当检查虚拟机的堆参数（-Xmx与-Xms），与机器物理内存对比看是否还可以调大，从代码上检查是否存在某些对象生命周期过长、持有状态时间过长的情况，尝试减少程序运行期的内存消耗。</p>
+
+        <h2 id="为什么永久代要被元空间替代"   >
+          <a href="#为什么永久代要被元空间替代" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#为什么永久代要被元空间替代"></a> 为什么永久代要被元空间替代？</h2>
+      
+<p>是JRockit和HotSpot融合后的结果，因为JRockit没有永久代，所以他们不需要配置永久代</p>
+<p>随着Java8的到来，HotSpot VM中再也见不到永久代了。但是这并不意味着类的元数据信息也消失了。这些数据被移到了一个<strong>与堆不相连的本地内存</strong>区域，这个区域叫做<strong>元空间</strong>（Metaspace）。</p>
+<p>由于类的元数据分配在本地内存中，元空间的最大可分配空间就是系统可用内存空间，这项改动是很有必要的，原因有：</p>
+<ul>
+<li>为永久代设置空间<strong>大小是很难确定的</strong></li>
+<li>对永久代进行<strong>调优是很困难的</strong>（主要是为了降低Full GC）</li>
+</ul>
+
+        <h4 id="永久代设置空间大小很难确定"   >
+          <a href="#永久代设置空间大小很难确定" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#永久代设置空间大小很难确定"></a> 永久代设置空间大小很难确定</h4>
+      
+<p>在某些场景下，如果动态加载类过多，容易产生永久代Perm区的OOM。比如某个实际Web工<br />
+程中，因为功能点比较多，在运行过程中，要不断动态加载很多类，经常出现致命错误：</p>
+<figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Exception in thread‘dubbo client x.x connector&#39;java.lang.OutOfMemoryError:PermGen space</span><br></pre></td></tr></table></div></figure>
+<p>而元空间和永久代之间最大的区别在于：<strong>元空间并不在虚拟机中，而是使用本地内存</strong>。因此，默认情况下，元空间的大小仅受本地内存限制。</p>
+
+        <h4 id="永久代调优比较困难"   >
+          <a href="#永久代调优比较困难" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#永久代调优比较困难"></a> 永久代调优比较困难</h4>
+      
+<p>有些人认为方法区（如HotSpot虚拟机中的元空间或者永久代）是没有垃圾收集行为的，其实不然。《Java虚拟机规范》对方法区的约束是非常宽松的，<strong>提到过可以不要求虚拟机在方法区中实现垃圾收集</strong>。事实上也确实有未实现或未能完整实现方法区类型卸载的收集器存在（如JDK11时期的ZGC收集器就不支持类卸载）。</p>
+<p>一般来说这个区域的回收效果比较难令人满意，尤其是类型的卸载，条件相当苛刻。但是这部分区域的回收有时又确实是必要的（GC较麻烦但也有必要）。以前sun公司的Bug列表中，曾出现过的若干个严重的Bug就是由于低版本的HotSpot虚拟机对此区域未完全回收而导致内存泄漏。</p>
+<p>方法区的垃圾收集主要回收两部分内容：<strong>常量池中废弃的常量和不再使用的类型</strong>。但是类型的回收非常苛刻。</p>
+
+        <h2 id="方法区的垃圾回收"   >
+          <a href="#方法区的垃圾回收" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#方法区的垃圾回收"></a> 方法区的垃圾回收</h2>
+      
+<blockquote>
+<p>面试题：方法区也有垃圾回收吗？有，分两种：<strong>常量池中废弃的常量和不再使用的类</strong>。类的回收条件非常苛刻，因为要等待其加载器也被回收等。</p>
+</blockquote>
+<p>有些人认为方法区（如Hotspot虚拟机中的元空间或者永久代）是没有垃圾收集行为的，其实不然。《Java虚拟机规范》对方法区的约束是非常宽松的，提到过可以不要求虚拟机在方法区中实现垃圾收集。事实上也确实有未实现或未能完整实现方法区<strong>类型卸载</strong>的收集器存在（如JDK 11时期的ZGC收集器就不支持类卸载）。</p>
+<p>一般来说这个区域的回收效果比较难令人满意，尤其是类型的卸载，<strong>条件相当苛刻</strong>。但是这部分区域的回收有时又确实是必要的。以前sun公司的Bug列表中，曾出现过的若干个严重的Bug就是由于低版本的HotSpot虚拟机对此区域未完全回收而导致内存泄漏。</p>
+<p>方法区的垃圾收集主要回收两部分内容：<strong>常量池中废弃的常量和不再使用的类</strong>。</p>
+
+        <h3 id="常量的回收"   >
+          <a href="#常量的回收" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#常量的回收"></a> 常量的回收</h3>
+      
+<p>先来说说方法区内常量池之中主要存放的两大类常量：<strong>字面量</strong>和<strong>符号引用</strong>。字面量比较接近Java语言层次的常量概念，如文本字符串、被声明为<code>final</code>的常量值等。而符号引用则属于编译原理方面的概念，包括下面三类常量：</p>
+<ul>
+<li>类和接口的全限定名</li>
+<li>字段的名称和描述符</li>
+<li>方法的名称和描述符</li>
+</ul>
+<p>HotSpot虚拟机对常量池的回收策略是<strong>很明确的</strong>，**只要常量池中的常量没有被任何地方引用，就可以被回收。**回收废弃常量与回收Java堆中的对象非常类似。</p>
+
+        <h3 id="类的回收"   >
+          <a href="#类的回收" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#类的回收"></a> 类的回收</h3>
+      
+<p>关于常量的回收比较简单，重点是类的回收，也称作<strong>类卸载</strong></p>
+<p>判定一个常量是否“废弃”还是相对简单，而要判定一个类型是否属于“不再被使用的类”的条件就<strong>比较苛刻了</strong>。需要同时满足下面三个条件：</p>
+<ul>
+<li><strong>该类所有的实例都已经被回收</strong>，也就是Java堆中不存在该类及其任何派生子类的实例。</li>
+<li>加载该类的<strong>类加载器已经被回收</strong>，这个条件除非是经过精心设计的可替换类加载器的场景，如OSGi、JSP的重加载等，否则<strong>通常是很难达成的</strong>。</li>
+<li>该类对应的<code>java.lang.Class</code>对象<strong>没有在任何地方被引用</strong>，无法在任何地方通过反射访问该类的方法。</li>
+</ul>
+<p>Java虚拟机被允许对满足上述三个条件的无用类进行回收，这里说的仅仅是“被允许”，而并不是和对象一样，没有引用了就必然会回收。关于是否要对类型进行回收，HotSpot虚拟机提供了<code>-Xnoclassgc</code>参数进行控制，还可以使用<code>-verbose:class</code> 以及 <code>-XX：+TraceClass-Loading</code>、<code>-XX：+TraceClassUnLoading</code>查看类加载和卸载信息</p>
+<p>在大量使用反射、动态代理、CGLib等字节码框架，动态生成JSP以及OSGi这类频繁自定义类加载器的场景中，通常都需要Java虚拟机具备类型卸载的能力，以保证不会对方法区造成过大的内存压力。</p>
+
+        <h2 id="运行时数据区总结"   >
+          <a href="#运行时数据区总结" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#运行时数据区总结"></a> 运行时数据区总结</h2>
+      
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708220303243.png" alt="image-20200708220303243" /></p>
+
+        <h3 id="常见面试题"   >
+          <a href="#常见面试题" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#常见面试题"></a> 常见面试题</h3>
+      
+<p>百度<br />
+三面：说一下JVM内存模型吧，有哪些区？分别干什么的？</p>
+<p>蚂蚁金服：<br />
+Java8的内存分代改进<br />
+JVM内存分哪几个区，每个区的作用是什么？<br />
+一面：JVM内存分布/内存结构？栈和堆的区别？堆的结构？为什么两个survivor区？<br />
+二面：Eden和survior的比例分配</p>
+<p>小米：<br />
+jvm内存分区，为什么要有新生代和老年代</p>
+<p>字节跳动：<br />
+二面：Java的内存分区<br />
+二面：讲讲vm运行时数据库区<br />
+什么时候对象会进入老年代？</p>
+<p>京东：<br />
+JVM的内存结构，Eden和Survivor比例。<br />
+JVM内存为什么要分成新生代，老年代，持久代。新生代中为什么要分为Eden和survivor。</p>
+<p>天猫：<br />
+一面：Jvm内存模型以及分区，需要详细到每个区放什么。<br />
+一面：JVM的内存模型，Java8做了什么改</p>
+<p>拼多多：<br />
+JVM内存分哪几个区，每个区的作用是什么？</p>
+<p>美团：<br />
+java内存分配<br />
+jvm的永久代中会发生垃圾回收吗？<br />
+一面：jvm内存分区，为什么要有新生代和老年代？</p>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yuyun-zhao.github.io">yuyun zhao</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yuyun-zhao.github.io/2021/09/28/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/">http://yuyun-zhao.github.io/2021/09/28/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.github.io/tags/JVM/">JVM</a></span></div><nav class="post-paginator paginator"><div class="paginator-next"><a class="paginator-next__link" href="/2021/09/25/%E3%80%90JVM%E3%80%91JVM%E5%A0%86/"><span class="paginator-prev__text">【JVM】JVM 堆</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%88-%E5%A0%86-%E6%96%B9%E6%B3%95%E5%8C%BA%E7%9A%84%E4%BA%A4%E4%BA%92%E5%85%B3%E7%B3%BB"><span class="toc-text">
+           栈、堆、方法区的交互关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E5%8C%BA%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-text">
+           方法区的理解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E5%8C%BA%E7%9A%84%E6%BC%94%E8%BF%9B"><span class="toc-text">
+           方法区的演进</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E5%8C%BA%E7%9A%84%E6%9B%B4%E5%A4%9A%E6%BC%94%E8%BF%9B%E7%BB%86%E8%8A%82"><span class="toc-text">
+           方法区的更多演进细节</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#stringtable-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E8%B0%83%E6%95%B4%E4%BD%8D%E7%BD%AE"><span class="toc-text">
+           StringTable 为什么要调整位置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%99%E6%80%81%E5%8F%98%E9%87%8F%E5%AD%98%E6%94%BE%E5%9C%A8%E9%82%A3%E9%87%8C"><span class="toc-text">
+           静态变量存放在那里？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E5%AE%9E%E4%BD%93%E5%9C%A8%E5%93%AA%E9%87%8C%E6%94%BE%E7%9D%80"><span class="toc-text">
+           对象实体在哪里放着？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%98%E9%87%8F%E5%90%8D%E5%AD%98%E6%94%BE%E5%9C%A8%E5%93%AA%E9%87%8C"><span class="toc-text">
+           变量（名）存放在哪里？</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E5%8C%BA%E7%9A%84%E5%86%85%E9%83%A8%E7%BB%93%E6%9E%84"><span class="toc-text">
+           方法区的内部结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E5%9E%8B%E4%BF%A1%E6%81%AF"><span class="toc-text">
+           类型信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%9Ffield%E4%BF%A1%E6%81%AF"><span class="toc-text">
+           域（Field）信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95method%E4%BF%A1%E6%81%AF"><span class="toc-text">
+           方法（Method）信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B"><span class="toc-text">
+           示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#non-final-%E7%9A%84%E7%B1%BB%E5%8F%98%E9%87%8F"><span class="toc-text">
+           non-final 的类变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%A8%E5%B1%80%E5%B8%B8%E9%87%8F-static-final"><span class="toc-text">
+           全局常量 static final</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E6%97%B6%E5%B8%B8%E9%87%8F%E6%B1%A0-vs-%E5%B8%B8%E9%87%8F%E6%B1%A0"><span class="toc-text">
+           运行时常量池 VS 常量池</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E9%87%8F%E6%B1%A0"><span class="toc-text">
+           常量池</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%B8%B8%E9%87%8F%E6%B1%A0"><span class="toc-text">
+           为什么需要常量池</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E9%87%8F%E6%B1%A0%E4%B8%AD%E6%9C%89%E4%BB%80%E4%B9%88"><span class="toc-text">
+           常量池中有什么</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-text">
+           小结</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E6%97%B6%E5%B8%B8%E9%87%8F%E6%B1%A0"><span class="toc-text">
+           运行时常量池</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E5%8C%BA%E4%BD%BF%E7%94%A8%E4%B8%BE%E4%BE%8B"><span class="toc-text">
+           方法区使用举例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E6%96%B9%E6%B3%95%E5%8C%BA%E5%A4%A7%E5%B0%8F%E4%B8%8E-oom"><span class="toc-text">
+           设置方法区大小与 OOM</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#jdk-7-%E5%8F%8A%E4%BB%A5%E5%89%8D"><span class="toc-text">
+           JDK 7 及以前</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#jdk-8-%E4%BB%A5%E5%90%8E"><span class="toc-text">
+           JDK 8 以后</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E8%BF%99%E4%BA%9B-oom"><span class="toc-text">
+           如何解决这些 OOM</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%B0%B8%E4%B9%85%E4%BB%A3%E8%A6%81%E8%A2%AB%E5%85%83%E7%A9%BA%E9%97%B4%E6%9B%BF%E4%BB%A3"><span class="toc-text">
+           为什么永久代要被元空间替代？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B0%B8%E4%B9%85%E4%BB%A3%E8%AE%BE%E7%BD%AE%E7%A9%BA%E9%97%B4%E5%A4%A7%E5%B0%8F%E5%BE%88%E9%9A%BE%E7%A1%AE%E5%AE%9A"><span class="toc-text">
+           永久代设置空间大小很难确定</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B0%B8%E4%B9%85%E4%BB%A3%E8%B0%83%E4%BC%98%E6%AF%94%E8%BE%83%E5%9B%B0%E9%9A%BE"><span class="toc-text">
+           永久代调优比较困难</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E5%8C%BA%E7%9A%84%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6"><span class="toc-text">
+           方法区的垃圾回收</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E9%87%8F%E7%9A%84%E5%9B%9E%E6%94%B6"><span class="toc-text">
+           常量的回收</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E7%9A%84%E5%9B%9E%E6%94%B6"><span class="toc-text">
+           类的回收</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E6%80%BB%E7%BB%93"><span class="toc-text">
+           运行时数据区总结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%A2%98"><span class="toc-text">
+           常见面试题</span></a></li></ol></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/author.png" alt="avatar"></div><p class="sidebar-ov-author__text">no code no life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/YUYUN-ZHAO" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="zyy1024462136" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a><a class="sidebar-ov-social-item" href="1024462136" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="mailto:im.yuyunzhao@gmail.com" target="_blank" rel="noopener" data-popover="social.Gmail" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">Gmail</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">94</div><div class="sidebar-ov-state-item__name">文章</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">33</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">33</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2021</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>yuyun zhao</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script>function initSearch() {
+  var isXML = true;
+  var search_path = 'search.xml';
+
+  if (!search_path) {
+    search_path = 'search.xml';
+  } else if (/json$/i.test(search_path)) {
+    isXML = false;
+  }
+
+  var path = '/' + search_path;
+  $.ajax({
+    url: path,
+    dataType: isXML ? 'xml' : 'json',
+    async: true,
+    success: function (res) {
+      var datas = isXML ? $('entry', res).map(function () {
+        // 将 XML 转为 JSON
+        return {
+          title: $('title', this).text(),
+          content: $('content', this).text(),
+          url: $('url', this).text()
+        };
+      }).get() : res;
+      var $input = $('.search-input input');
+      var $result = $('.search-results');
+      // 搜索对象（标题、内容）的权重，影响显示顺序
+      var WEIGHT = { title: 100, content: 1 };
+      var searchPost = function () {
+        var searchText = $input.val().toLowerCase().trim();
+        // 根据空白字符分隔关键字
+        var keywords = searchText.split(/[\s]+/);
+        // 搜索结果
+        var matchPosts = [];
+
+        // 有多个关键字时，将原文字整个保存下来
+        if (keywords.length > 1) {
+          keywords.push(searchText);
+        }
+        // 防止未输入字符时搜索
+        if (searchText.length > 0) {
+          datas.forEach(function (data) {
+            var isMatch  = false;
+            // 没有标题的文章使用预设的 i18n 变量代替
+            var title = (data.title && data.title.trim()) || '[ 文章无标题 ]';
+            var titleLower = title && title.toLowerCase();
+            // 删除 HTML 标签 和 所有空白字符
+            var content = data.content && data.content.replace(/<[^>]+>/g, '');
+            var contentLower = content && content.toLowerCase();
+            // 删除重复的 /
+            var postURL = data.url && decodeURI(data.url).replace(/\/{2,}/g, '/');
+            // 标题中匹配到的关键词
+            var titleHitSlice = [];
+            // 内容中匹配到的关键词
+            var contentHitSlice = [];
+
+            keywords.forEach(function (keyword) {
+              /**
+              * 获取匹配的关键词的索引
+              * @param {String} keyword 要匹配的关键字
+              * @param {String} text 原文字
+              * @param {Boolean} caseSensitive 是否区分大小写
+              * @param {Number} weight 匹配对象的权重。权重大的优先显示
+              * @return {Array}
+              */
+              function getIndexByword (word, text, caseSensitive, weight) {
+                if (!word || !text) {
+                  return [];
+                };
+
+                var startIndex = 0; // 每次匹配的开始索引
+                var index = -1;     // 匹配到的索引值
+                var result = [];    // 匹配结果
+
+                if (!caseSensitive) {
+                  word = word.toLowerCase();
+                  text = text.toLowerCase();
+                }
+
+                while((index = text.indexOf(word, startIndex)) !== -1) {
+                  var hasMatch = false;
+                  // 索引位置相同的关键词，保留长度较长的
+                  titleHitSlice.forEach(function (hit) {
+                    if (hit.index === index && hit.word.length < word.length) {
+                      hit.word = word;
+                      hasMatch = true;
+                    }
+                  });
+                  startIndex = index + word.length;
+                  !hasMatch && result.push({ index: index, word: word, weight: weight });
+                }
+                return result;
+              }
+              titleHitSlice = titleHitSlice.concat(getIndexByword(keyword, titleLower, false, WEIGHT.title));
+              contentHitSlice = contentHitSlice.concat(getIndexByword(keyword, contentLower, false, WEIGHT.content));
+            });
+
+            var hitTitle = titleHitSlice.length;
+            var hitContent = contentHitSlice.length;
+
+            if (hitTitle > 0 || hitContent > 0) {
+              isMatch = true;
+            }
+            if (isMatch) {
+              ;[titleHitSlice, contentHitSlice].forEach(function (hit) {
+                // 按照匹配文字的索引的递增顺序排序
+                hit.sort(function (left, right) {
+                  return left.index - right.index;
+                });
+              });
+              /**
+              * 给文本中匹配到的关键词添加标记，从而进行高亮显示
+              * @param {String} text 原文本
+              * @param {Array} hitSlice 匹配项的索引信息
+              * @param {Number} start 开始索引
+              * @param {Number} end 结束索引
+              * @return {String}
+              */
+              function highlightKeyword (text, hitSlice, start, end) {
+                if (!text || !hitSlice || !hitSlice.length) {
+                  return;
+                }
+
+                var result = '';
+                var startIndex = start;
+                var endIndex = end;
+                hitSlice.forEach(function (hit) {
+                  if (hit.index < startIndex) {
+                    return;
+                  }
+
+                  var hitWordEnd = hit.index + hit.word.length;
+                  result += text.slice(startIndex, hit.index);
+                  result += '<b>' + text.slice(hit.index, hitWordEnd) + '</b>';
+                  startIndex = hitWordEnd;
+                });
+                result += text.slice(startIndex, endIndex);
+                return result;
+              }
+
+              var postData = {};
+              // 文章总的搜索权重
+              var postWeight = titleHitSlice.length * WEIGHT.title + contentHitSlice.length * WEIGHT.content;
+              // 标记匹配关键词后的标题
+              var postTitle = highlightKeyword(title, titleHitSlice, 0, title.length) || title;
+              // 标记匹配关键词后的内容
+              var postContent;
+              // 显示内容的长度
+              var SHOW_WORD_LENGTH = 200;
+              // 命中关键词前的字符显示长度
+              var SHOW_WORD_FRONT_LENGTH = 20;
+              var SHOW_WORD_END_LENGTH = SHOW_WORD_LENGTH - SHOW_WORD_FRONT_LENGTH;
+
+              // 截取匹配的第一个字符，前后共 200 个字符来显示
+              if (contentHitSlice.length > 0) {
+                var firstIndex = contentHitSlice[0].index;
+                var start = firstIndex > SHOW_WORD_FRONT_LENGTH ? firstIndex - SHOW_WORD_FRONT_LENGTH : 0;
+                var end = firstIndex + SHOW_WORD_END_LENGTH;
+                postContent = highlightKeyword(content, contentHitSlice, start, end);
+              } else { // 未匹配到内容，直接截取前 200 个字符来显示
+                postContent = content.slice(0, SHOW_WORD_LENGTH);
+              }
+              postData.title = postTitle;
+              postData.content = postContent;
+              postData.url = postURL;
+              postData.weight = postWeight;
+              matchPosts.push(postData);
+            }
+          });
+        }
+
+        var resultInnerHtml = '';
+        if (matchPosts.length) {
+          // 按权重递增的顺序排序，使权重大的优先显示
+          matchPosts.sort(function (left, right) {
+            return right.weight - left.weight;
+          });
+          resultInnerHtml += '<ul>';
+          matchPosts.forEach(function (post) {
+            resultInnerHtml += '<li><a class="search-results-title" href="' + post.url + '">';
+            resultInnerHtml += post.title;
+            resultInnerHtml += '</a><div class="search-results-content">';
+            resultInnerHtml += post.content;
+            resultInnerHtml += '</div></li>';
+          });
+          resultInnerHtml += '</ul>';
+        } else {
+          resultInnerHtml += '<div class="search-results-none"><i class="far fa-meh"></i></div>';
+        }
+        $result.html(resultInnerHtml);
+      };
+      $input.on('input', searchPost);
+      $input.on('keyup', function (e) {
+        if (e.keyCode === Stun.utils.codeToKeyCode('Enter')) {
+          searchPost();
+        }
+      });
+    }
+  });
+}
+
+function closeSearch () {
+  $('body').css({ overflow: 'auto' });
+  $('.search-popup').css({ display: 'none' });
+  $('.search-mask').css({ display: 'none' });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+  Stun.utils.pjaxReloadLocalSearch = function () {
+    $('.header-nav-search').on('click', function (e) {
+      e.stopPropagation();
+      $('body').css('overflow', 'hidden');
+      $('.search-popup')
+        .velocity('stop')
+        .velocity('transition.expandIn', {
+          duration: 300,
+          complete: function () {
+            $('.search-popup input').focus();
+          }
+        });
+      $('.search-mask')
+        .velocity('stop')
+        .velocity('transition.fadeIn', {
+          duration: 300
+        });
+
+      initSearch();
+    });
+    $('.search-mask, .search-close').on('click', function () {
+      closeSearch();
+    });
+    $(document).on('keydown', function (e) {
+      // Escape <=> 27
+      if (e.keyCode === Stun.utils.codeToKeyCode('Escape')) {
+        closeSearch();
+      }
+    });
+  };
+
+  Stun.utils.pjaxReloadLocalSearch();
+}, false);
+
+function safeOpenUrl(url) {
+  var newTab = window.open();
+  newTab.opener = null;
+  newTab.location = url;
+}
+
+function extSearch(engine) {
+  var engines = {
+    google: 'https://www.google.com/search?q=',
+    bing: 'https://cn.bing.com/search?q=',
+    baidu: 'https://www.baidu.com/s?ie=UTF-8&wd=',
+  };
+  var host = window.location.host;
+  var query = $('.search-input input').val().toLowerCase().trim();
+  var uri = engines[engine] + query + ' site:' + host;
+
+  if (query) {
+    safeOpenUrl(uri);
+  } else {
+    Stun.utils.popAlert('warning', '请输入字符');
+  }
+}
+
+var assistSearchList = window.CONFIG.assistSearch;
+
+if (Array.isArray(assistSearchList)) {
+  assistSearchList.forEach(function (name) {
+    document.querySelector('.search-btns-item--' + name).addEventListener('click', function () {
+      extSearch(name);
+    }, false);
+  });
+}</script><script src="https://cdn.jsdelivr.net/npm/pjax@latest/pjax.min.js"></script><script>window.addEventListener('DOMContentLoaded', function () {
+  var pjax = new Pjax({"selectors":["head title","#main",".pjax-reload"],"history":true,"scrollTo":false,"scrollRestoration":false,"cacheBust":false,"debug":false,"currentUrlFullReload":false,"timeout":0});
+  // 加载进度条的计时器
+  var loadingTimer = null;
+
+  // 重置页面 Y 方向上的滚动偏移量
+  document.addEventListener('pjax:send', function () {
+    $('.header-nav-menu').removeClass('show');
+    if (CONFIG.pjax && CONFIG.pjax.avoidBanner) {
+      $('html').velocity('scroll', {
+        duration: 500,
+        offset: $('#header').height(),
+        easing: 'easeInOutCubic'
+      });
+    }
+
+    var loadingBarWidth = 20;
+    var MAX_LOADING_WIDTH = 95;
+
+    $('.loading-bar').addClass('loading');
+    $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    clearInterval(loadingTimer);
+    loadingTimer = setInterval(function () {
+      loadingBarWidth += 3;
+      if (loadingBarWidth > MAX_LOADING_WIDTH) {
+        loadingBarWidth = MAX_LOADING_WIDTH;
+      }
+      $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    }, 500);
+  }, false);
+
+  window.addEventListener('pjax:complete', function () {
+    clearInterval(loadingTimer);
+    $('.loading-bar__progress').css('width', '100%');
+    $('.loading-bar').removeClass('loading');
+    setTimeout(function () {
+      $('.loading-bar__progress').css('width', '0');
+    }, 400);
+    $('link[rel=prefetch], script[data-pjax-rm]').each(function () {
+      $(this).remove();
+    });
+    $('script[data-pjax], #pjax-reload script').each(function () {
+      $(this).parent().append($(this).remove());
+    });
+
+    if (Stun.utils.pjaxReloadBoot) {
+      Stun.utils.pjaxReloadBoot();
+    }
+    if (Stun.utils.pjaxReloadScroll) {
+      Stun.utils.pjaxReloadScroll();
+    }
+    if (Stun.utils.pjaxReloadSidebar) {
+      Stun.utils.pjaxReloadSidebar();
+    }
+    if (false) {
+      if (Stun.utils.pjaxReloadHeader) {
+        Stun.utils.pjaxReloadHeader();
+      }
+      if (Stun.utils.pjaxReloadScrollIcon) {
+        Stun.utils.pjaxReloadScrollIcon();
+      }
+      if (Stun.utils.pjaxReloadLocalSearch) {
+        Stun.utils.pjaxReloadLocalSearch();
+      }
+    }
+  }, false);
+}, false);</script><div id="pjax-reload"><link href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" rel="stylesheet" type="text/css"><link href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/copy-tex.css" rel="stylesheet" type="text/css"><script src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/copy-tex.min.js"></script><script src="https://cdn.jsdelivr.net/gh/sukkaw/busuanzi@latest/bsz.pure.mini.js" async></script></div><script src="/js/utils.js?v=2.6.2"></script><script src="/js/stun-boot.js?v=2.6.2"></script><script src="/js/scroll.js?v=2.6.2"></script><script src="/js/header.js?v=2.6.2"></script><script src="/js/sidebar.js?v=2.6.2"></script><script type="application/json" src="/search.xml"></script></body></html>
