@@ -1,0 +1,613 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="对象实例化                             面试题         对象在JVM中是怎么存储的？ 对象头信息里面有哪些东西？ Java对象头有什么？                        对象创建方式         new：最常见的方式、单例类中调用getInstance()的静态类方法，XxxFactory的静态方法 Class的newI">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【JVM】JVM 对象实例化过程">
+<meta property="og:url" content="http://yuyun-zhao.github.io/2021/10/01/%E3%80%90JVM%E3%80%91JVM%E5%AF%B9%E8%B1%A1%E5%AE%9E%E4%BE%8B%E5%8C%96%E8%BF%87%E7%A8%8B/index.html">
+<meta property="og:site_name" content="yuyun zhao&#39;s blog">
+<meta property="og:description" content="对象实例化                             面试题         对象在JVM中是怎么存储的？ 对象头信息里面有哪些东西？ Java对象头有什么？                        对象创建方式         new：最常见的方式、单例类中调用getInstance()的静态类方法，XxxFactory的静态方法 Class的newI">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AF%B9%E8%B1%A1%E5%AE%9E%E4%BE%8B%E5%8C%96%E8%BF%87%E7%A8%8B/image-20200709095356247.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AF%B9%E8%B1%A1%E5%AE%9E%E4%BE%8B%E5%8C%96%E8%BF%87%E7%A8%8B/image-20200709151033237.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AF%B9%E8%B1%A1%E5%AE%9E%E4%BE%8B%E5%8C%96%E8%BF%87%E7%A8%8B/image-20200709152801713.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AF%B9%E8%B1%A1%E5%AE%9E%E4%BE%8B%E5%8C%96%E8%BF%87%E7%A8%8B/image-20200709152801713.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AF%B9%E8%B1%A1%E5%AE%9E%E4%BE%8B%E5%8C%96%E8%BF%87%E7%A8%8B/image-20200709164149920.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AF%B9%E8%B1%A1%E5%AE%9E%E4%BE%8B%E5%8C%96%E8%BF%87%E7%A8%8B/image-20200709164342002.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AF%B9%E8%B1%A1%E5%AE%9E%E4%BE%8B%E5%8C%96%E8%BF%87%E7%A8%8B/image-20200709164350466.png">
+<meta property="article:published_time" content="2021-10-01T02:26:10.000Z">
+<meta property="article:modified_time" content="2021-10-08T02:32:38.022Z">
+<meta property="article:author" content="yuyun zhao">
+<meta property="article:tag" content="JVM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AF%B9%E8%B1%A1%E5%AE%9E%E4%BE%8B%E5%8C%96%E8%BF%87%E7%A8%8B/image-20200709095356247.png"><title>【JVM】JVM 对象实例化过程 | yuyun zhao's blog</title><link ref="canonical" href="http://yuyun-zhao.github.io/2021/10/01/%E3%80%90JVM%E3%80%91JVM%E5%AF%B9%E8%B1%A1%E5%AE%9E%E4%BE%8B%E5%8C%96%E8%BF%87%E7%A8%8B/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":true},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"carbon","highlight":"light","wordWrap":false},
+  reward: false,
+  fancybox: true,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: {"avoidBanner":false},
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"复制","copySuccess":"复制成功","copyError":"复制失败"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【JVM】JVM 对象实例化过程</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-10-01</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-10-08</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">2.4k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">13分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body">
+        <h2 id="对象实例化"   >
+          <a href="#对象实例化" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#对象实例化"></a> 对象实例化</h2>
+      
+
+        <h3 id="面试题"   >
+          <a href="#面试题" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#面试题"></a> 面试题</h3>
+      
+<ul>
+<li>对象在JVM中是怎么存储的？</li>
+<li><strong>对象头</strong>信息里面有哪些东西？</li>
+<li>Java对象头有什么？</li>
+</ul>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AF%B9%E8%B1%A1%E5%AE%9E%E4%BE%8B%E5%8C%96%E8%BF%87%E7%A8%8B/image-20200709095356247.png" alt="image-20200709095356247" /></p>
+
+        <h2 id="对象创建方式"   >
+          <a href="#对象创建方式" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#对象创建方式"></a> 对象创建方式</h2>
+      
+<ul>
+<li>new：最常见的方式、单例类中调用<code>getInstance()</code>的静态类方法，<code>XxxFactory</code>的静态方法</li>
+<li>Class的<code>newInstance()</code>方法：在JDK 9 里面被标记为过时的方法，因为只能调用空参构造器</li>
+<li>Constructor的<code>newInstance(xxx)</code>：<strong>反射</strong>的方式，可以调用空参的，或者带参的构造器</li>
+<li>使用<code>clone()</code>：不调用任何的构造器，要求当前的类需要实现<code>Cloneable</code>接口中的clone接口</li>
+<li>使用<strong>序列化</strong>：序列化一般用于<code>Socket</code>的网络传输</li>
+<li>第三方库 <code>Objenesis</code></li>
+</ul>
+
+        <h2 id="创建对象的步骤"   >
+          <a href="#创建对象的步骤" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#创建对象的步骤"></a> 创建对象的步骤</h2>
+      
+
+        <h3 id="对象实例化的过程"   >
+          <a href="#对象实例化的过程" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#对象实例化的过程"></a> 对象实例化的过程</h3>
+      
+<ul>
+<li>加载类元信息</li>
+<li>为对象分配内存</li>
+<li>处理并发问题</li>
+<li>属性的默认初始化（零值初始化）</li>
+<li>设置对象头信息</li>
+<li><code>init()</code> 方法：属性的显示初始化、代码块中初始化、构造器中初始化</li>
+</ul>
+
+        <h3 id="为对象属性赋值的顺序"   >
+          <a href="#为对象属性赋值的顺序" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#为对象属性赋值的顺序"></a> 为对象属性赋值的顺序</h3>
+      
+<p>给对象的属性赋值的操作：</p>
+<ul>
+<li>属性的默认初始化</li>
+<li>属性的显式初始化 / 代码块中初始化（执行顺序取决于代码中的编写顺序）</li>
+<li>构造器中初始化</li>
+</ul>
+<span id="more"></span>
+<blockquote>
+<p>从字节码角度看对象的实例化过程</p>
+</blockquote>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 测试对象实例化的过程</span></span><br><span class="line"><span class="comment"> *  ① 加载类元信息 - ② 为对象分配内存 - ③ 处理并发问题  - ④ 属性的默认初始化（零值初始化）</span></span><br><span class="line"><span class="comment"> *  - ⑤ 设置对象头的信息 - ⑥ 属性的显式初始化、代码块中初始化、构造器中初始化</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *  给对象的属性赋值的操作：</span></span><br><span class="line"><span class="comment"> *  ① 属性的默认初始化 - ② 显式初始化 / ③ 代码块中初始化 - ④ 构造器中初始化</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Customer</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> id = <span class="number">1001</span>;</span><br><span class="line">    String name;</span><br><span class="line">    Account acct;</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line">        name = <span class="string">&quot;匿名客户&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Customer</span><span class="params">()</span></span>&#123;</span><br><span class="line">        acct = <span class="keyword">new</span> Account();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Account</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p><strong>Customer 类 init() 方法的字节码</strong></p>
+<figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"> 0 aload_0</span><br><span class="line"> 1 invokespecial #1 &lt;java&#x2F;lang&#x2F;Object.&lt;init&gt;&gt;</span><br><span class="line"> 4 aload_0</span><br><span class="line"> 5 sipush 1001</span><br><span class="line"> 8 putfield #2 &lt;com&#x2F;atguigu&#x2F;java&#x2F;Customer.id&gt;</span><br><span class="line">11 aload_0</span><br><span class="line">12 ldc #3 &lt;匿名客户&gt;</span><br><span class="line">14 putfield #4 &lt;com&#x2F;atguigu&#x2F;java&#x2F;Customer.name&gt;</span><br><span class="line">17 aload_0</span><br><span class="line">18 new #5 &lt;com&#x2F;atguigu&#x2F;java&#x2F;Account&gt;</span><br><span class="line">21 dup</span><br><span class="line">22 invokespecial #6 &lt;com&#x2F;atguigu&#x2F;java&#x2F;Account.&lt;init&gt;&gt;</span><br><span class="line">25 putfield #7 &lt;com&#x2F;atguigu&#x2F;java&#x2F;Customer.acct&gt;</span><br><span class="line">28 return</span><br></pre></td></tr></table></div></figure>
+<p><code>init()</code> 方法的字节码指令：</p>
+<ul>
+<li>属性的显式初始化：<code>id = 1001;</code></li>
+<li>代码块的显式初始化：<code>name = &quot;匿名客户&quot;;</code></li>
+<li>构造器初始化：<code>acct = new Account();</code></li>
+</ul>
+<p>下面详细介绍每个步骤：</p>
+
+        <h4 id="1-判断对象对应的类是否加载-链接-初始化"   >
+          <a href="#1-判断对象对应的类是否加载-链接-初始化" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#1-判断对象对应的类是否加载-链接-初始化"></a> 1、判断对象对应的类是否加载、链接、初始化</h4>
+      
+<p>虚拟机遇到一条new指令，首先去检查这个指令的参数能否在Metaspace的常量池中定位到一个类的符号引用，并且检查这个符号引用代表的类<strong>是否已经被加载，解析和初始化</strong>。即<strong>判断类元信息是否存在</strong>。</p>
+<p>如果没有，那么在双亲委派模式下，使用当前类加载器以ClassLoader + 包名 + 类名为key进行查找对应的 <code>.class</code> 文件，如果没有找到文件，则抛出 <code>ClassNotFoundException</code> 异常，如果找到，则进行类加载，并生成对应的Class对象。</p>
+
+        <h4 id="2-为对象分配内存"   >
+          <a href="#2-为对象分配内存" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#2-为对象分配内存"></a> 2、为对象分配内存</h4>
+      
+<p>首先计算对象占用空间的大小，接着<strong>在堆中划分一块内存</strong>给新对象。如果实例成员变量是引用变量，仅分配引用变量空间即可，即4个字节大小</p>
+<ul>
+<li>如果内存规整：指针碰撞（对应垃圾回收算法里的<strong>复制算法</strong>）
+<ul>
+<li>如果内存是规整的，那么虚拟机将采用的是<strong>指针碰撞法</strong>（Bump The Point）来为对象分配内存。</li>
+<li>意思是<strong>所有用过的内存在一边，空闲的内存放另外一边，中间放着一个指针作为分界点的指示器</strong>，分配内存就仅仅是把指针往空闲内存那边挪动一段与对象大小相等的距离罢了。</li>
+<li>如果垃圾收集器选择的是Serial ，ParNew这种基于压缩算法的，虚拟机采用这种分配方式。一般使用带Compact（整理）过程的收集器时，使用指针碰撞。</li>
+<li>标记压缩（整理）算法会整理内存碎片，堆内存一存对象，另一边为空闲区域</li>
+</ul>
+</li>
+<li>如果内存不规整：虚拟表需要维护一个列表、使用<strong>空闲列表</strong>分配（对应垃圾回收算法里的<strong>标记清除算法</strong>）
+<ul>
+<li>如果内存不是规整的，已使用的内存和未使用的内存相互交错，那么虚拟机将采用的是<strong>空闲列表</strong>来为对象分配内存。</li>
+<li>意思是虚拟机<strong>维护了一个列表</strong>，记录上哪些内存块是可用的，再分配的时候从列表中找到一块足够大的空间划分给对象实例，并更新列表上的内容。这种分配方式成为了 “空闲列表（Free List）”</li>
+<li>标记清除算法清理过后的堆内存，就会存在很多内存碎片。</li>
+</ul>
+</li>
+</ul>
+<p>选择哪种分配方式由Java堆是否规整所决定，而Java堆是否规整又由所采用的垃圾收集器是否带有压缩整理功能决定。</p>
+
+        <h4 id="3-堆中开辟空间时处理并发问题"   >
+          <a href="#3-堆中开辟空间时处理并发问题" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#3-堆中开辟空间时处理并发问题"></a> 3、堆中开辟空间时处理并发问题</h4>
+      
+<ul>
+<li>采用<strong>CAS+失败重试</strong>保证更新的<strong>原子性</strong></li>
+<li>每个线程预先分配<strong>TLAB</strong> - 通过设置 <code>-XX:+UseTLAB</code> 参数来设置（区域加锁机制），TLAB（Thread Local Allocation Buffer） 是每个线程独享的，在Eden区给每个线程分配一块区域，在其内开辟空间是<strong>线程安全</strong>的。</li>
+</ul>
+
+        <h4 id="4-初始化分配到的内存空间"   >
+          <a href="#4-初始化分配到的内存空间" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#4-初始化分配到的内存空间"></a> 4、初始化分配到的内存空间</h4>
+      
+<p>该步骤为所有属性设置<strong>默认值</strong>，保证对象实例字段在不赋值也可以直接使用。</p>
+<p>注意：这一步只为属性进行<strong>默认初始化</strong>（即为属性<strong>赋零值</strong>），显式赋值在 <code>init()</code> 方法调用步骤才执行。</p>
+
+        <h4 id="5-设置对象的对象头"   >
+          <a href="#5-设置对象的对象头" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#5-设置对象的对象头"></a> 5、设置对象的对象头</h4>
+      
+<p>将对象的所属类（即<strong>类的元数据信息</strong>）、对象的<strong>HashCode</strong>和对象的<strong>GC信息</strong>、<strong>锁信息</strong>等数据存储在对象的对象头中。这个过程的具体设置方式取决于JVM实现。</p>
+
+        <h4 id="6-执行-init-方法进行初始化"   >
+          <a href="#6-执行-init-方法进行初始化" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#6-执行-init-方法进行初始化"></a> 6、执行 init 方法进行初始化</h4>
+      
+<p>在Java程序的视角看来，初始化才正式开始。<strong>初始化成员变量</strong>，<strong>执行实例化代码块</strong>，<strong>调用类的构造方法</strong>，并把堆内对象的首地址赋值给引用变量。</p>
+<p><code>init()</code> 初始化的步骤：</p>
+<ul>
+<li>属性的显式初始化 / 代码块初始化，这里才为属性赋上程序中写的值（并列关系，谁先谁后看代码编写的顺序）</li>
+<li>构造器初始化</li>
+</ul>
+<p>因此一般来说（由字节码中跟随<code>invokespecial</code>指令所决定），new指令之后会接着就是执行方法，把对象按照程序员的意愿进行初始化，这样一个真正可用的对象才算完成创建出来。</p>
+
+        <h2 id="对象内存布局"   >
+          <a href="#对象内存布局" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#对象内存布局"></a> 对象内存布局</h2>
+      
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AF%B9%E8%B1%A1%E5%AE%9E%E4%BE%8B%E5%8C%96%E8%BF%87%E7%A8%8B/image-20200709151033237.png" alt="image-20200709151033237" /></p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AF%B9%E8%B1%A1%E5%AE%9E%E4%BE%8B%E5%8C%96%E8%BF%87%E7%A8%8B/image-20200709152801713.png" alt="image-20200709152801713" /></p>
+
+        <h3 id="对象头header"   >
+          <a href="#对象头header" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#对象头header"></a> 对象头（Header）</h3>
+      
+<p>对象头包含了两部分：</p>
+<ul>
+<li><strong>运行时元数据</strong>（Mark Word）</li>
+<li><strong>类型指针</strong></li>
+</ul>
+<blockquote>
+<p>如果是数组，还需要记录数组的长度</p>
+</blockquote>
+
+        <h4 id="运行时元数据"   >
+          <a href="#运行时元数据" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#运行时元数据"></a> 运行时元数据</h4>
+      
+<ul>
+<li>哈希值（HashCode）</li>
+<li>GC分代年龄</li>
+<li>锁状态标志</li>
+<li>线程持有的锁</li>
+<li>偏向线程ID</li>
+<li>翩向时间戳</li>
+</ul>
+
+        <h4 id="类型指针"   >
+          <a href="#类型指针" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#类型指针"></a> 类型指针</h4>
+      
+<p>指向类元数据<code>InstanceKlass</code>，确定该对象所属的类型。指向的其实是方法区中存放的<strong>类元信息</strong></p>
+
+        <h3 id="实例数据instance-data"   >
+          <a href="#实例数据instance-data" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#实例数据instance-data"></a> 实例数据（Instance Data）</h3>
+      
+<p>他是对象真正存储的有效信息，包括程序代码中定义的各种类型的代码（包括从父类继承下来的和本身拥有的字段）</p>
+
+        <h3 id="对齐填充padding"   >
+          <a href="#对齐填充padding" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#对齐填充padding"></a> 对齐填充（Padding）</h3>
+      
+<p>不是必须的，也没有特别的含义，仅仅起到占位符的作用</p>
+
+        <h3 id="小结"   >
+          <a href="#小结" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#小结"></a> 小结</h3>
+      
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AF%B9%E8%B1%A1%E5%AE%9E%E4%BE%8B%E5%8C%96%E8%BF%87%E7%A8%8B/image-20200709152801713.png" alt="image-20200709152801713" /></p>
+
+        <h2 id="对象的访问定位"   >
+          <a href="#对象的访问定位" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#对象的访问定位"></a> 对象的访问定位</h2>
+      
+<p>JVM是如何通过栈帧中的对象引用访问到其内部的对象实例呢？</p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AF%B9%E8%B1%A1%E5%AE%9E%E4%BE%8B%E5%8C%96%E8%BF%87%E7%A8%8B/image-20200709164149920.png" alt="image-20200709164149920" /></p>
+<p>定位，通过栈上reference访问</p>
+
+        <h3 id="对象访问的两种方式"   >
+          <a href="#对象访问的两种方式" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#对象访问的两种方式"></a> 对象访问的两种方式</h3>
+      
+<p>对象的两种访问方式：<strong>句柄访问和直接指针</strong></p>
+
+        <h4 id="句柄访问"   >
+          <a href="#句柄访问" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#句柄访问"></a> 句柄访问</h4>
+      
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AF%B9%E8%B1%A1%E5%AE%9E%E4%BE%8B%E5%8C%96%E8%BF%87%E7%A8%8B/image-20200709164342002.png" alt="image-20200709164342002" /></p>
+<p>句柄访问就是说栈的局部变量表中，记录的对象的引用，然后在堆空间中开辟了一块空间，也就是<strong>句柄池</strong></p>
+<ul>
+<li>缺点：在堆空间中开辟了一块空间作为句柄池，句柄池本身也会占用空间；通过两次指针访问才能访问到堆中的对象，<strong>效率低</strong></li>
+<li>优点：reference中存储稳定句柄地址，对象被移动（垃圾收集时移动对象很普遍）时只会改变句柄中实例数据指针即可，reference本身不需要被修改</li>
+</ul>
+
+        <h4 id="直接指针hotspot采用"   >
+          <a href="#直接指针hotspot采用" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#直接指针hotspot采用"></a> 直接指针（HotSpot采用）</h4>
+      
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AF%B9%E8%B1%A1%E5%AE%9E%E4%BE%8B%E5%8C%96%E8%BF%87%E7%A8%8B/image-20200709164350466.png" alt="image-20200709164350466" /></p>
+<p>直接指针是局部变量表中的引用，直接指向堆中的实例，在对象实例中有类型指针，指向的是方法区中的对象类型数据</p>
+<ul>
+<li>优点：直接指针是局部变量表中的引用，直接指向堆中的实例，在对象实例中有类型指针，指向的是方法区中的对象类型数据</li>
+<li>缺点：对象被移动（垃圾收集时移动对象很普遍，例如复制算法，每次GC时都会将数据复制到另一个内存空间）时需要修改 reference 的值</li>
+</ul>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yuyun-zhao.github.io">yuyun zhao</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yuyun-zhao.github.io/2021/10/01/%E3%80%90JVM%E3%80%91JVM%E5%AF%B9%E8%B1%A1%E5%AE%9E%E4%BE%8B%E5%8C%96%E8%BF%87%E7%A8%8B/">http://yuyun-zhao.github.io/2021/10/01/%E3%80%90JVM%E3%80%91JVM%E5%AF%B9%E8%B1%A1%E5%AE%9E%E4%BE%8B%E5%8C%96%E8%BF%87%E7%A8%8B/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.github.io/tags/JVM/">JVM</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2021/10/02/%E3%80%90JVM%E3%80%91JVM%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">【JVM】JVM 执行引擎</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2021/09/28/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/"><span class="paginator-prev__text">【JVM】JVM 方法区</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E5%AE%9E%E4%BE%8B%E5%8C%96"><span class="toc-text">
+           对象实例化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%A2%E8%AF%95%E9%A2%98"><span class="toc-text">
+           面试题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E5%88%9B%E5%BB%BA%E6%96%B9%E5%BC%8F"><span class="toc-text">
+           对象创建方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%AD%A5%E9%AA%A4"><span class="toc-text">
+           创建对象的步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E5%AE%9E%E4%BE%8B%E5%8C%96%E7%9A%84%E8%BF%87%E7%A8%8B"><span class="toc-text">
+           对象实例化的过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E5%AF%B9%E8%B1%A1%E5%B1%9E%E6%80%A7%E8%B5%8B%E5%80%BC%E7%9A%84%E9%A1%BA%E5%BA%8F"><span class="toc-text">
+           为对象属性赋值的顺序</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%88%A4%E6%96%AD%E5%AF%B9%E8%B1%A1%E5%AF%B9%E5%BA%94%E7%9A%84%E7%B1%BB%E6%98%AF%E5%90%A6%E5%8A%A0%E8%BD%BD-%E9%93%BE%E6%8E%A5-%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-text">
+           1、判断对象对应的类是否加载、链接、初始化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E4%B8%BA%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E5%86%85%E5%AD%98"><span class="toc-text">
+           2、为对象分配内存</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%A0%86%E4%B8%AD%E5%BC%80%E8%BE%9F%E7%A9%BA%E9%97%B4%E6%97%B6%E5%A4%84%E7%90%86%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98"><span class="toc-text">
+           3、堆中开辟空间时处理并发问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%86%E9%85%8D%E5%88%B0%E7%9A%84%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4"><span class="toc-text">
+           4、初始化分配到的内存空间</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E8%AE%BE%E7%BD%AE%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%AF%B9%E8%B1%A1%E5%A4%B4"><span class="toc-text">
+           5、设置对象的对象头</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-%E6%89%A7%E8%A1%8C-init-%E6%96%B9%E6%B3%95%E8%BF%9B%E8%A1%8C%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-text">
+           6、执行 init 方法进行初始化</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80"><span class="toc-text">
+           对象内存布局</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E5%A4%B4header"><span class="toc-text">
+           对象头（Header）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E6%97%B6%E5%85%83%E6%95%B0%E6%8D%AE"><span class="toc-text">
+           运行时元数据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%B1%BB%E5%9E%8B%E6%8C%87%E9%92%88"><span class="toc-text">
+           类型指针</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B%E6%95%B0%E6%8D%AEinstance-data"><span class="toc-text">
+           实例数据（Instance Data）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E9%BD%90%E5%A1%AB%E5%85%85padding"><span class="toc-text">
+           对齐填充（Padding）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-text">
+           小结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%AE%BF%E9%97%AE%E5%AE%9A%E4%BD%8D"><span class="toc-text">
+           对象的访问定位</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E8%AE%BF%E9%97%AE%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F"><span class="toc-text">
+           对象访问的两种方式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%A5%E6%9F%84%E8%AE%BF%E9%97%AE"><span class="toc-text">
+           句柄访问</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9B%B4%E6%8E%A5%E6%8C%87%E9%92%88hotspot%E9%87%87%E7%94%A8"><span class="toc-text">
+           直接指针（HotSpot采用）</span></a></li></ol></li></ol></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/author.png" alt="avatar"></div><p class="sidebar-ov-author__text">no code no life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/YUYUN-ZHAO" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="zyy1024462136" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a><a class="sidebar-ov-social-item" href="1024462136" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="mailto:im.yuyunzhao@gmail.com" target="_blank" rel="noopener" data-popover="social.Gmail" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">Gmail</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">97</div><div class="sidebar-ov-state-item__name">文章</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">33</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">33</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2021</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>yuyun zhao</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script>function initSearch() {
+  var isXML = true;
+  var search_path = 'search.xml';
+
+  if (!search_path) {
+    search_path = 'search.xml';
+  } else if (/json$/i.test(search_path)) {
+    isXML = false;
+  }
+
+  var path = '/' + search_path;
+  $.ajax({
+    url: path,
+    dataType: isXML ? 'xml' : 'json',
+    async: true,
+    success: function (res) {
+      var datas = isXML ? $('entry', res).map(function () {
+        // 将 XML 转为 JSON
+        return {
+          title: $('title', this).text(),
+          content: $('content', this).text(),
+          url: $('url', this).text()
+        };
+      }).get() : res;
+      var $input = $('.search-input input');
+      var $result = $('.search-results');
+      // 搜索对象（标题、内容）的权重，影响显示顺序
+      var WEIGHT = { title: 100, content: 1 };
+      var searchPost = function () {
+        var searchText = $input.val().toLowerCase().trim();
+        // 根据空白字符分隔关键字
+        var keywords = searchText.split(/[\s]+/);
+        // 搜索结果
+        var matchPosts = [];
+
+        // 有多个关键字时，将原文字整个保存下来
+        if (keywords.length > 1) {
+          keywords.push(searchText);
+        }
+        // 防止未输入字符时搜索
+        if (searchText.length > 0) {
+          datas.forEach(function (data) {
+            var isMatch  = false;
+            // 没有标题的文章使用预设的 i18n 变量代替
+            var title = (data.title && data.title.trim()) || '[ 文章无标题 ]';
+            var titleLower = title && title.toLowerCase();
+            // 删除 HTML 标签 和 所有空白字符
+            var content = data.content && data.content.replace(/<[^>]+>/g, '');
+            var contentLower = content && content.toLowerCase();
+            // 删除重复的 /
+            var postURL = data.url && decodeURI(data.url).replace(/\/{2,}/g, '/');
+            // 标题中匹配到的关键词
+            var titleHitSlice = [];
+            // 内容中匹配到的关键词
+            var contentHitSlice = [];
+
+            keywords.forEach(function (keyword) {
+              /**
+              * 获取匹配的关键词的索引
+              * @param {String} keyword 要匹配的关键字
+              * @param {String} text 原文字
+              * @param {Boolean} caseSensitive 是否区分大小写
+              * @param {Number} weight 匹配对象的权重。权重大的优先显示
+              * @return {Array}
+              */
+              function getIndexByword (word, text, caseSensitive, weight) {
+                if (!word || !text) {
+                  return [];
+                };
+
+                var startIndex = 0; // 每次匹配的开始索引
+                var index = -1;     // 匹配到的索引值
+                var result = [];    // 匹配结果
+
+                if (!caseSensitive) {
+                  word = word.toLowerCase();
+                  text = text.toLowerCase();
+                }
+
+                while((index = text.indexOf(word, startIndex)) !== -1) {
+                  var hasMatch = false;
+                  // 索引位置相同的关键词，保留长度较长的
+                  titleHitSlice.forEach(function (hit) {
+                    if (hit.index === index && hit.word.length < word.length) {
+                      hit.word = word;
+                      hasMatch = true;
+                    }
+                  });
+                  startIndex = index + word.length;
+                  !hasMatch && result.push({ index: index, word: word, weight: weight });
+                }
+                return result;
+              }
+              titleHitSlice = titleHitSlice.concat(getIndexByword(keyword, titleLower, false, WEIGHT.title));
+              contentHitSlice = contentHitSlice.concat(getIndexByword(keyword, contentLower, false, WEIGHT.content));
+            });
+
+            var hitTitle = titleHitSlice.length;
+            var hitContent = contentHitSlice.length;
+
+            if (hitTitle > 0 || hitContent > 0) {
+              isMatch = true;
+            }
+            if (isMatch) {
+              ;[titleHitSlice, contentHitSlice].forEach(function (hit) {
+                // 按照匹配文字的索引的递增顺序排序
+                hit.sort(function (left, right) {
+                  return left.index - right.index;
+                });
+              });
+              /**
+              * 给文本中匹配到的关键词添加标记，从而进行高亮显示
+              * @param {String} text 原文本
+              * @param {Array} hitSlice 匹配项的索引信息
+              * @param {Number} start 开始索引
+              * @param {Number} end 结束索引
+              * @return {String}
+              */
+              function highlightKeyword (text, hitSlice, start, end) {
+                if (!text || !hitSlice || !hitSlice.length) {
+                  return;
+                }
+
+                var result = '';
+                var startIndex = start;
+                var endIndex = end;
+                hitSlice.forEach(function (hit) {
+                  if (hit.index < startIndex) {
+                    return;
+                  }
+
+                  var hitWordEnd = hit.index + hit.word.length;
+                  result += text.slice(startIndex, hit.index);
+                  result += '<b>' + text.slice(hit.index, hitWordEnd) + '</b>';
+                  startIndex = hitWordEnd;
+                });
+                result += text.slice(startIndex, endIndex);
+                return result;
+              }
+
+              var postData = {};
+              // 文章总的搜索权重
+              var postWeight = titleHitSlice.length * WEIGHT.title + contentHitSlice.length * WEIGHT.content;
+              // 标记匹配关键词后的标题
+              var postTitle = highlightKeyword(title, titleHitSlice, 0, title.length) || title;
+              // 标记匹配关键词后的内容
+              var postContent;
+              // 显示内容的长度
+              var SHOW_WORD_LENGTH = 200;
+              // 命中关键词前的字符显示长度
+              var SHOW_WORD_FRONT_LENGTH = 20;
+              var SHOW_WORD_END_LENGTH = SHOW_WORD_LENGTH - SHOW_WORD_FRONT_LENGTH;
+
+              // 截取匹配的第一个字符，前后共 200 个字符来显示
+              if (contentHitSlice.length > 0) {
+                var firstIndex = contentHitSlice[0].index;
+                var start = firstIndex > SHOW_WORD_FRONT_LENGTH ? firstIndex - SHOW_WORD_FRONT_LENGTH : 0;
+                var end = firstIndex + SHOW_WORD_END_LENGTH;
+                postContent = highlightKeyword(content, contentHitSlice, start, end);
+              } else { // 未匹配到内容，直接截取前 200 个字符来显示
+                postContent = content.slice(0, SHOW_WORD_LENGTH);
+              }
+              postData.title = postTitle;
+              postData.content = postContent;
+              postData.url = postURL;
+              postData.weight = postWeight;
+              matchPosts.push(postData);
+            }
+          });
+        }
+
+        var resultInnerHtml = '';
+        if (matchPosts.length) {
+          // 按权重递增的顺序排序，使权重大的优先显示
+          matchPosts.sort(function (left, right) {
+            return right.weight - left.weight;
+          });
+          resultInnerHtml += '<ul>';
+          matchPosts.forEach(function (post) {
+            resultInnerHtml += '<li><a class="search-results-title" href="' + post.url + '">';
+            resultInnerHtml += post.title;
+            resultInnerHtml += '</a><div class="search-results-content">';
+            resultInnerHtml += post.content;
+            resultInnerHtml += '</div></li>';
+          });
+          resultInnerHtml += '</ul>';
+        } else {
+          resultInnerHtml += '<div class="search-results-none"><i class="far fa-meh"></i></div>';
+        }
+        $result.html(resultInnerHtml);
+      };
+      $input.on('input', searchPost);
+      $input.on('keyup', function (e) {
+        if (e.keyCode === Stun.utils.codeToKeyCode('Enter')) {
+          searchPost();
+        }
+      });
+    }
+  });
+}
+
+function closeSearch () {
+  $('body').css({ overflow: 'auto' });
+  $('.search-popup').css({ display: 'none' });
+  $('.search-mask').css({ display: 'none' });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+  Stun.utils.pjaxReloadLocalSearch = function () {
+    $('.header-nav-search').on('click', function (e) {
+      e.stopPropagation();
+      $('body').css('overflow', 'hidden');
+      $('.search-popup')
+        .velocity('stop')
+        .velocity('transition.expandIn', {
+          duration: 300,
+          complete: function () {
+            $('.search-popup input').focus();
+          }
+        });
+      $('.search-mask')
+        .velocity('stop')
+        .velocity('transition.fadeIn', {
+          duration: 300
+        });
+
+      initSearch();
+    });
+    $('.search-mask, .search-close').on('click', function () {
+      closeSearch();
+    });
+    $(document).on('keydown', function (e) {
+      // Escape <=> 27
+      if (e.keyCode === Stun.utils.codeToKeyCode('Escape')) {
+        closeSearch();
+      }
+    });
+  };
+
+  Stun.utils.pjaxReloadLocalSearch();
+}, false);
+
+function safeOpenUrl(url) {
+  var newTab = window.open();
+  newTab.opener = null;
+  newTab.location = url;
+}
+
+function extSearch(engine) {
+  var engines = {
+    google: 'https://www.google.com/search?q=',
+    bing: 'https://cn.bing.com/search?q=',
+    baidu: 'https://www.baidu.com/s?ie=UTF-8&wd=',
+  };
+  var host = window.location.host;
+  var query = $('.search-input input').val().toLowerCase().trim();
+  var uri = engines[engine] + query + ' site:' + host;
+
+  if (query) {
+    safeOpenUrl(uri);
+  } else {
+    Stun.utils.popAlert('warning', '请输入字符');
+  }
+}
+
+var assistSearchList = window.CONFIG.assistSearch;
+
+if (Array.isArray(assistSearchList)) {
+  assistSearchList.forEach(function (name) {
+    document.querySelector('.search-btns-item--' + name).addEventListener('click', function () {
+      extSearch(name);
+    }, false);
+  });
+}</script><script src="https://cdn.jsdelivr.net/npm/pjax@latest/pjax.min.js"></script><script>window.addEventListener('DOMContentLoaded', function () {
+  var pjax = new Pjax({"selectors":["head title","#main",".pjax-reload"],"history":true,"scrollTo":false,"scrollRestoration":false,"cacheBust":false,"debug":false,"currentUrlFullReload":false,"timeout":0});
+  // 加载进度条的计时器
+  var loadingTimer = null;
+
+  // 重置页面 Y 方向上的滚动偏移量
+  document.addEventListener('pjax:send', function () {
+    $('.header-nav-menu').removeClass('show');
+    if (CONFIG.pjax && CONFIG.pjax.avoidBanner) {
+      $('html').velocity('scroll', {
+        duration: 500,
+        offset: $('#header').height(),
+        easing: 'easeInOutCubic'
+      });
+    }
+
+    var loadingBarWidth = 20;
+    var MAX_LOADING_WIDTH = 95;
+
+    $('.loading-bar').addClass('loading');
+    $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    clearInterval(loadingTimer);
+    loadingTimer = setInterval(function () {
+      loadingBarWidth += 3;
+      if (loadingBarWidth > MAX_LOADING_WIDTH) {
+        loadingBarWidth = MAX_LOADING_WIDTH;
+      }
+      $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    }, 500);
+  }, false);
+
+  window.addEventListener('pjax:complete', function () {
+    clearInterval(loadingTimer);
+    $('.loading-bar__progress').css('width', '100%');
+    $('.loading-bar').removeClass('loading');
+    setTimeout(function () {
+      $('.loading-bar__progress').css('width', '0');
+    }, 400);
+    $('link[rel=prefetch], script[data-pjax-rm]').each(function () {
+      $(this).remove();
+    });
+    $('script[data-pjax], #pjax-reload script').each(function () {
+      $(this).parent().append($(this).remove());
+    });
+
+    if (Stun.utils.pjaxReloadBoot) {
+      Stun.utils.pjaxReloadBoot();
+    }
+    if (Stun.utils.pjaxReloadScroll) {
+      Stun.utils.pjaxReloadScroll();
+    }
+    if (Stun.utils.pjaxReloadSidebar) {
+      Stun.utils.pjaxReloadSidebar();
+    }
+    if (false) {
+      if (Stun.utils.pjaxReloadHeader) {
+        Stun.utils.pjaxReloadHeader();
+      }
+      if (Stun.utils.pjaxReloadScrollIcon) {
+        Stun.utils.pjaxReloadScrollIcon();
+      }
+      if (Stun.utils.pjaxReloadLocalSearch) {
+        Stun.utils.pjaxReloadLocalSearch();
+      }
+    }
+  }, false);
+}, false);</script><div id="pjax-reload"><link href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" rel="stylesheet" type="text/css"><link href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/copy-tex.css" rel="stylesheet" type="text/css"><script src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/copy-tex.min.js"></script><script src="https://cdn.jsdelivr.net/gh/sukkaw/busuanzi@latest/bsz.pure.mini.js" async></script></div><script src="/js/utils.js?v=2.6.2"></script><script src="/js/stun-boot.js?v=2.6.2"></script><script src="/js/scroll.js?v=2.6.2"></script><script src="/js/header.js?v=2.6.2"></script><script src="/js/sidebar.js?v=2.6.2"></script><script type="application/json" src="/search.xml"></script></body></html>
