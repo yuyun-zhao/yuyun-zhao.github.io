@@ -1,9 +1,9 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="G1 和 CMS 里的并发标记阶段：并发的可达性分析算法： https:&#x2F;&#x2F;segmentfault.com&#x2F;a&#x2F;1190000021820577                      垃圾回收的相关概念        在介绍垃圾回收器之前，首先介绍一下垃圾回收的相关概念                      System.gc() 的理解        在默认情况下，通过System.g">
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="垃圾回收的相关概念        在介绍垃圾回收器之前，首先介绍一下垃圾回收的相关概念                      System.gc() 的理解        在默认情况下，通过System.gc()或者Runtime.getRuntime().gc() 的调用，会显式触发Full GC，同时对老年代和新生代进行回收，尝试释放被丢弃对象占用的内存。 然而Sy">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【JVM】JVM 垃圾回收器">
 <meta property="og:url" content="http://yuyun-zhao.github.io/2021/10/08/%E3%80%90JVM%E3%80%91JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/index.html">
 <meta property="og:site_name" content="yuyun zhao&#39;s blog">
-<meta property="og:description" content="G1 和 CMS 里的并发标记阶段：并发的可达性分析算法： https:&#x2F;&#x2F;segmentfault.com&#x2F;a&#x2F;1190000021820577                      垃圾回收的相关概念        在介绍垃圾回收器之前，首先介绍一下垃圾回收的相关概念                      System.gc() 的理解        在默认情况下，通过System.g">
+<meta property="og:description" content="垃圾回收的相关概念        在介绍垃圾回收器之前，首先介绍一下垃圾回收的相关概念                      System.gc() 的理解        在默认情况下，通过System.gc()或者Runtime.getRuntime().gc() 的调用，会显式触发Full GC，同时对老年代和新生代进行回收，尝试释放被丢弃对象占用的内存。 然而Sy">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/image-20200712195158470.png">
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/0011.png">
@@ -51,7 +51,7 @@
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/image-20200714091401511.png">
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/image-20200714093604012.png">
 <meta property="article:published_time" content="2021-10-08T02:51:29.000Z">
-<meta property="article:modified_time" content="2021-10-12T07:42:42.318Z">
+<meta property="article:modified_time" content="2021-10-13T06:54:54.842Z">
 <meta property="article:author" content="yuyun zhao">
 <meta property="article:tag" content="JVM">
 <meta name="twitter:card" content="summary">
@@ -79,8 +79,7 @@ var CONFIG = {
   sourcePath: {"js":"js","css":"css","images":"images"},
 };
 
-window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【JVM】JVM 垃圾回收器</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-10-08</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-10-12</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">24k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">136分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body"><p>G1 和 CMS 里的并发标记阶段：并发的可达性分析算法： <span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000021820577" >https://segmentfault.com/a/1190000021820577</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
-
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【JVM】JVM 垃圾回收器</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-10-08</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-10-13</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">24.4k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">138分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body">
         <h2 id="垃圾回收的相关概念"   >
           <a href="#垃圾回收的相关概念" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#垃圾回收的相关概念"></a> 垃圾回收的相关概念</h2>
       
@@ -589,6 +588,11 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <li>（绿色虚线）JDK 14中：弃用Parallel Scavenge和Serial Old GC组合（JEP366）</li>
 <li>（青色虚线）JDK 14中：<strong>删除CMS垃圾回收器</strong>（JEP363）</li>
 </ul>
+<p>垃圾回收器中的并发和并行的区别：</p>
+<ul>
+<li>并行更在意<strong>吞吐量</strong>，要求吞吐量必须要高，可以接受⼀定的STW延迟时间</li>
+<li>并发更在意<strong>低延迟</strong>，要求STW要小⼀些，用户交互性要更好，并发地执行用户线程和GC线程</li>
+</ul>
 <p>为什么要有很多收集器，一个不够吗？因为Java的使用场景很多，移动端，服务器等。所以就需要针对不同的场景，提供不同的垃圾收集器，提高垃圾收集的性能。</p>
 <p>虽然我们会对各个收集器进行比较，但并非为了挑选一个最好的收集器出来。没有一种放之四海皆准、任何场景下都适用的完美收集器存在，更加没有万能的收集器。所以我们选择的只是对具体应用最合适的收集器。</p>
 
@@ -762,6 +766,10 @@ A：<strong>不能</strong></p>
 <p>另外，由于在垃圾收集阶段用户线程没有中断，所以在CMS回收过程中，还应该确保应用程序用户线程有足够的内存可用。因此，CMS收集器不能像其他收集器那样等到老年代几乎完全被填满了再进行收集，而是<strong>当堆内存使用率达到某一阈值时，便开始进行回收</strong>，以确保应用程序在CMS工作过程中依然有足够的空间支持应用程序运行。要是CMS运行期间预留的内存无法满足程序需要，就会出现一次“<strong>Concurrent Mode Failure</strong>”失败，这时虚拟机将启动<strong>后备预案</strong>：<strong>临时启用Serial Old收集器</strong>来重新进行老年代的垃圾收集，这样停顿时间就很长了。</p>
 <p>CMS收集器的垃圾收集算法采用的是<strong>标记清除算法</strong>，这意味着每次执行完内存回收后，由于被执行内存回收的无用对象所占用的内存空间极有可能是不连续的一些内存块，不可避免地将会产生一些内存碎片。那么CMS在为新对象分配内存空间时，将无法使用指针碰撞（Bump the Pointer）技术，而只能够选择空闲列表（Free List）执行内存分配。</p>
 <p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/image-20200713212230352.png" alt="image-20200713212230352" /></p>
+<blockquote>
+<p>G1 和 CMS 里并发标记阶段所设计到的重新标记环节详解：<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000021820577" >https://segmentfault.com/a/1190000021820577</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span> 与 <span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000021946606" >https://segmentfault.com/a/1190000021946606</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+</blockquote>
+<p>可以简单地理解并发标记阶段的重新标记原理：在并发标记阶段中，用户线程对某些引用进行了增加操作，那么JVM就会记录下来这些操作，待并发标记阶段结束，再根据这些操作重新判断一次引用关系是否变化了。</p>
 
         <h3 id="cms-为什么不使用标记整理算法"   >
           <a href="#cms-为什么不使用标记整理算法" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#cms-为什么不使用标记整理算法"></a> CMS 为什么不使用标记整理算法？</h3>
@@ -783,6 +791,7 @@ A：<strong>不能</strong></p>
 <li><strong>CMS收集器对CPU资源非常敏感</strong>。在并发阶段，它虽然不会导致用户停顿，但是会因为占用了一部分线程而导致应用程序变慢，总吞吐量会降低。</li>
 <li><strong>CMS收集器无法处理浮动垃圾</strong>。可能出现“Concurrent Mode Failure”失败而导致另一次Full GC的产生。在并发标记阶段由于程序的工作线程和垃圾收集线程是同时运行或者交叉运行的，**那么在并发标记阶段如果产生新的垃圾对象，CMS将无法对这些垃圾对象进行标记，最终会导致这些新产生的垃圾对象没有被及时回收，**从而只能在下一次执行GC时释放这些之前未被回收的内存空间。</li>
 </ul>
+<p>Cms 最大的缺点：会产生内存碎片化，这样在业务高峰期时，如果瞬间来了大量数据，内存碎片化可能导致放不下这些对象，从而会出现 “Concurrent Mode Failure”，然后使用 Serial Old 进行串行回收， 这样的效率会很低，在高峰期时难以承受。</p>
 
         <h3 id="cms-参数配置"   >
           <a href="#cms-参数配置" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#cms-参数配置"></a> CMS 参数配置</h3>
@@ -1024,7 +1033,7 @@ A：<strong>不能</strong></p>
 <li><strong>初始标记阶段</strong>（STW）：标记从根节点<strong>直接可达</strong>的对象。这个阶段是STW的，并且<strong>会触发一次年轻代GC</strong>。</li>
 <li><strong>根区域扫描</strong>（Root Region Scanning）：G1 GC扫描Survivor区直接可达的老年代区域对象，并标记被引用的对象。这一过程必须在Young GC之前完成。</li>
 <li><strong>并发标记</strong>（Concurrent Marking）：在整个堆中进行并发标记（和应用程序并发执行），此过程可能被Young GC中断。在并发标记阶段，<strong>若发现区域对象中的所有对象都是垃圾，那这个区域会被立即回收</strong>。同时，并发标记过程中，会计算每个区域的<strong>对象活性</strong>（区域中存活对象的比例）。</li>
-<li><strong>再次标记</strong>（Remark）：该过程同CMS类似，由于应用程序持续进行，需要修正上一次的标记结果，是STW的。G1中采用了比CMS更快的初始快照算法：snapshot-at-the-beginning（SATB）。</li>
+<li><strong>再次标记</strong>（Remark）：该过程同CMS类似，由于应用程序持续进行，需要修正上一次的标记结果，是STW的。G1中采用了比CMS更快的<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000021946606" >初始快照算法SATB</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>：Snapshot-At-The-Beginning（SATB）。</li>
 <li><strong>独占清理</strong>（Cleanup，STW）：计算各个区域的存活对象和GC回收比例，并进行排序，识别可以混合回收的区域**。为下阶段——混合回收做铺垫**。是STW的。<strong>这个阶段并不会实际上去做垃圾的收集</strong></li>
 <li><strong>并发清理阶段</strong>：识别并清理<strong>完全为垃圾</strong>的区域（并发标记阶段只清除全部为垃圾的Region）。</li>
 </ul>
@@ -1048,6 +1057,7 @@ A：<strong>不能</strong></p>
       
 <p>G1的初衷就是要避免Full GC的出现。但是如果上述方式不能正常工作，G1会停止应用程序的执行（Stop-The-World），使用<strong>单线程</strong>的内存回收算法进行垃圾回收，性能会非常差，应用程序停顿时间会很长。</p>
 <p>避免Full GC的发生，一旦发生Full GC，需要对JVM参数进行调整。什么时候会发生Full GC呢？比如堆内存太小，当G1在复制存活对象的时候没有空的内存分段可用，则会回退到Full GC，这种情况可以<strong>通过增大内存解决</strong>。</p>
+<p>Full GC 的时机：很少执行，只要在老年代也满了，或者因为并发存放数据的速度快于GC的速度，堆空间即将满了，才会 Full GC。</p>
 <p>导致G1 Full GC的原因可能有两个：</p>
 <ul>
 <li>Evacuation的时候没有足够的to-space来存放晋升的对象；</li>
@@ -1077,6 +1087,11 @@ A：<strong>不能</strong></p>
 <p>GC发展阶段：Serial =&gt; Parallel（并行）=&gt; CMS（并发）=&gt; G1 =&gt; ZGC</p>
 <p>不同厂商、不同版本的虚拟机实现差距比较大。HotSpot虚拟机在JDK7/8后所有收集器及组合如下图</p>
 <p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/image-20200714080151020.png" alt="image-20200714080151020" /></p>
+<ul>
+<li>年轻代的GC都使用复制算法</li>
+<li>CMS因为是并发回收所以只能用标记-清除算法</li>
+<li>其他的老年代的GC都使用标记-压缩算法</li>
+</ul>
 
         <h3 id="怎么选择垃圾回收器"   >
           <a href="#怎么选择垃圾回收器" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#怎么选择垃圾回收器"></a> 怎么选择垃圾回收器</h3>
