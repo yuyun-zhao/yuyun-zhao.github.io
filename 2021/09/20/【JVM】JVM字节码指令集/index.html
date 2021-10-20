@@ -1,0 +1,1395 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="前言        曾经：源代码 -&gt; 经过编译 -&gt; 本地机器码 Java：源代码 -&gt; 经过编译 -&gt; 字节码 -&gt; 解释器 -&gt; 本地机器码  字节码：与操作系统和机器指令集无关的，平台中立的程序编译后的存储格式  字节码是无关性的基石  平台无关性的基石：  所有平台都统一支持字节码 不同的Java虚拟机都可以执行平台无关的字节码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【JVM】JVM 字节码指令集">
+<meta property="og:url" content="http://yuyun-zhao.github.io/2021/09/20/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/index.html">
+<meta property="og:site_name" content="yuyun zhao&#39;s blog">
+<meta property="og:description" content="前言        曾经：源代码 -&gt; 经过编译 -&gt; 本地机器码 Java：源代码 -&gt; 经过编译 -&gt; 字节码 -&gt; 解释器 -&gt; 本地机器码  字节码：与操作系统和机器指令集无关的，平台中立的程序编译后的存储格式  字节码是无关性的基石  平台无关性的基石：  所有平台都统一支持字节码 不同的Java虚拟机都可以执行平台无关的字节码">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210508090007130.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20201107172118033.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210512225657765.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20201107175942225.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20201107180153111.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20201107180509860.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20201107181355881.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20201107182407009.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20201107184345952.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20201107184823648.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20201107185136111.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20201107185712220.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20201107191419341.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210513195725462.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210513200417243.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210513200532661.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210513200946912.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210514163308948.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20211020211048622.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210514173650867.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210514230240390.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210515093103500.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210515094055002.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210515095603614.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210515095311597.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210426234249850.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210515103425506.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210515164609270.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210515165351883.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210515180004587.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210515181000595.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210515182307183.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210515183527055.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210515183640270.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210515192750444.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210515193437666.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210515195912727.png">
+<meta property="article:published_time" content="2021-09-20T11:36:54.000Z">
+<meta property="article:modified_time" content="2021-10-20T13:13:16.666Z">
+<meta property="article:author" content="yuyun zhao">
+<meta property="article:tag" content="JVM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210508090007130.png"><title>【JVM】JVM 字节码指令集 | yuyun zhao's blog</title><link ref="canonical" href="http://yuyun-zhao.github.io/2021/09/20/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":true},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"carbon","highlight":"light","wordWrap":false},
+  reward: false,
+  fancybox: true,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: {"avoidBanner":false},
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"复制","copySuccess":"复制成功","copyError":"复制失败"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【JVM】JVM 字节码指令集</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-09-20</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-10-20</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">6.8k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">42分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body">
+        <h2 id="前言"   >
+          <a href="#前言" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#前言"></a> 前言</h2>
+      
+<p>曾经：源代码 -&gt; 经过编译 -&gt; 本地机器码</p>
+<p>Java：源代码 -&gt; 经过编译 -&gt; <strong>字节码</strong> -&gt; <strong>解释器</strong> -&gt; 本地机器码</p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210508090007130.png" alt="image-20210508090007130" /></p>
+<p><strong>字节码：与操作系统和机器指令集无关的，平台中立的程序编译后的存储格式</strong></p>
+<blockquote>
+<p>字节码是无关性的基石</p>
+</blockquote>
+<p><strong>平台无关性</strong>的基石：</p>
+<ul>
+<li>所有平台都统一支持字节码</li>
+<li>不同的Java虚拟机都可以执行平台无关的字节码</li>
+</ul>
+<p>因此实现了<strong>一次编译，到处运行</strong></p>
+<p><strong>语言无关性</strong>的基石：</p>
+<ul>
+<li>Java虚拟机</li>
+<li>字节码</li>
+</ul>
+<p>Java虚拟机不是只可以执行Java源代码编译而成的字节码，只要符合要求（安全…）的字节码，它都可以执行。因此Kotlin等语言也可以运行在Java虚拟机上。</p>
+
+        <h2 id="class-字节码文件结构"   >
+          <a href="#class-字节码文件结构" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#class-字节码文件结构"></a> Class 字节码文件结构</h2>
+      
+<blockquote>
+<p>文件格式存取数据的类型</p>
+</blockquote>
+<ul>
+<li>无符号数 : u1，u2，u4，u8代表1，2，4，8个字节的无符号数(可以表示数字，UTF-8的字符串，索引引用…)</li>
+<li>表: 由n个无符号数或n个表组成(命名以<code>_info</code>结尾)</li>
+</ul>
+
+        <h3 id="初识-class-文件格式"   >
+          <a href="#初识-class-文件格式" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#初识-class-文件格式"></a> 初识 Class 文件格式</h3>
+      
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> m;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> CONSTANT=<span class="number">111</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">inc</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> x;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            x = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">return</span> x;</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            x = <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">return</span>  x;</span><br><span class="line">        &#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">            x = <span class="number">3</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>使用可视化工具classpy查看反编译的结果</p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20201107172118033.png" alt="image-20201107172118033" /></p>
+<p>每个集合前都有一个计数器来统计集合中元素的数量</p>
+<span id="more"></span>
+<blockquote>
+<p>Class文件格式的描述</p>
+</blockquote>
+<div class="table-container"><table>
+<thead>
+<tr>
+<th>数据类型</th>
+<th>名称</th>
+<th>数量</th>
+<th>对应图中名字</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>u4</td>
+<td>magic</td>
+<td>1</td>
+<td>魔数</td>
+<td>确定这个文件是否是一个能被虚拟机接受的Class文件</td>
+</tr>
+<tr>
+<td>u2</td>
+<td>minor_version</td>
+<td>1</td>
+<td>次版本号</td>
+<td>虚拟机必须拒绝执行超过其版本号的Class文件</td>
+</tr>
+<tr>
+<td>u2</td>
+<td>major_version</td>
+<td>1</td>
+<td>主版本号</td>
+<td>虚拟机必须拒绝执行超过其版本号的Class文件</td>
+</tr>
+<tr>
+<td>u2</td>
+<td>constant_pool_count</td>
+<td>1</td>
+<td>常量池容量计数器</td>
+<td>统计常量数量</td>
+</tr>
+<tr>
+<td>cp_info</td>
+<td>constant_pool</td>
+<td>constant_pool_count - 1</td>
+<td>常量池</td>
+<td>存放常量</td>
+</tr>
+<tr>
+<td>u2</td>
+<td>access_flags</td>
+<td>1</td>
+<td>访问标志</td>
+<td>识别类(类，接口)的访问信息</td>
+</tr>
+<tr>
+<td>u2</td>
+<td>this_class</td>
+<td>1</td>
+<td>类索引</td>
+<td>确定类的全限定名</td>
+</tr>
+<tr>
+<td>u2</td>
+<td>super_class</td>
+<td>1</td>
+<td>父类索引</td>
+<td>确定父类的全限定名</td>
+</tr>
+<tr>
+<td>u2</td>
+<td>interfaces_count</td>
+<td>1</td>
+<td>接口计数器</td>
+<td>统计该类实现接口数量</td>
+</tr>
+<tr>
+<td>u2</td>
+<td>interfaces</td>
+<td>interfaces_count</td>
+<td>接口索引集合</td>
+<td>描述该类实现了的接口</td>
+</tr>
+<tr>
+<td>u2</td>
+<td>fields_count</td>
+<td>1</td>
+<td>字段表集合计数器</td>
+<td>统计类的字段数量</td>
+</tr>
+<tr>
+<td>field_info</td>
+<td>fields</td>
+<td>fields_count</td>
+<td>字段表集合</td>
+<td>描述类声明的字段(类变量，实例变量)</td>
+</tr>
+<tr>
+<td>u2</td>
+<td>methods_count</td>
+<td>1</td>
+<td>方法表集合计数器</td>
+<td>统计类的方法数量</td>
+</tr>
+<tr>
+<td>method_info</td>
+<td>methods</td>
+<td>methods_count</td>
+<td>方法表集合</td>
+<td>描述类声明的方法</td>
+</tr>
+<tr>
+<td>u2</td>
+<td>attribute_count</td>
+<td>1</td>
+<td>属性表集合计数器</td>
+<td>统计属性数量</td>
+</tr>
+<tr>
+<td>attribute_info</td>
+<td>attributes</td>
+<td>attributes_count</td>
+<td>属性表集合</td>
+<td>描述属性</td>
+</tr>
+</tbody>
+</table></div>
+
+        <h3 id="魔数与主次版本号"   >
+          <a href="#魔数与主次版本号" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#魔数与主次版本号"></a> 魔数与主次版本号</h3>
+      
+<ul>
+<li><strong>魔数</strong>：确定这个文件是否为一个能被虚拟机接受的有效Class文件</li>
+<li><strong>主次版本号</strong>：虚拟机拒绝执行超过其版本号的Class文件
+<ul>
+<li>不同版本的Java前端编译器编译生成对应的Class文件主次版本号不同</li>
+<li>支持高版本JVM执行低版本前端编译器生成的Class文件(向下兼容)</li>
+<li>拒绝低版本JVM执行高版本前端编译器生成的Clsss文件</li>
+</ul>
+</li>
+</ul>
+
+        <h3 id="常量池"   >
+          <a href="#常量池" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#常量池"></a> 常量池</h3>
+      
+<p>常量池包含两大常量： <strong>字面量和符号引用</strong></p>
+<blockquote>
+<p>符号引用与直接引用</p>
+</blockquote>
+<ul>
+<li><strong>符号引用</strong>
+<ul>
+<li>使用一组符号描述引用（为了定位到目标引用）</li>
+<li>与虚拟机内存布局无关</li>
+<li>还是符号引用时目标引用不一定被加载到内存</li>
+</ul>
+</li>
+<li><strong>直接引用</strong>
+<ul>
+<li>直接执行目标的指针，相对偏移量或间接定位目标引用的句柄</li>
+<li>与虚拟机内存布局相关</li>
+<li>解析直接引用时目标引用已经被加载到内存中</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>字面量与符号引用</p>
+</blockquote>
+<ul>
+<li><strong>字面量</strong>
+<ul>
+<li>文本字符串</li>
+<li>被final声明的常量</li>
+</ul>
+</li>
+<li><strong>符号引用</strong>
+<ul>
+<li>全限定名</li>
+<li>方法或字段的简单名称和描述符</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210512225657765.png" alt="image-20210512225657765" /></p>
+<p>图中的常量有我们代码中熟悉的常量也有很多没有显示出现在代码中的常量</p>
+
+        <h3 id="访问标志"   >
+          <a href="#访问标志" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#访问标志"></a> 访问标志</h3>
+      
+<p>访问标志：<strong>用于识别类或接口的访问信息</strong></p>
+<ul>
+<li>是否是一个接口，枚举，模块，注解…</li>
+<li>是否被final(public，abstract…)修饰</li>
+</ul>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20201107175942225.png" alt="image-20201107175942225" /></p>
+<ul>
+<li><code>ACC_PUBLIC</code>：被public修饰</li>
+<li><code>ACC_SUPER</code>： 允许使用<code>invokespecial</code>字节码指令</li>
+</ul>
+
+        <h3 id="类索引父类索引与接口索引集合"   >
+          <a href="#类索引父类索引与接口索引集合" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#类索引父类索引与接口索引集合"></a> 类索引，父类索引与接口索引集合</h3>
+      
+<blockquote>
+<p>类索引</p>
+</blockquote>
+<p><strong>用于确定本类的全限定名</strong></p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20201107180153111.png" alt="image-20201107180153111" /></p>
+<p>类索引指向常量池中表示该类的符号引用</p>
+<blockquote>
+<p>父类索引</p>
+</blockquote>
+<p><strong>用于确定父类的全限定名</strong></p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20201107180509860.png" alt="image-20201107180509860" /></p>
+<p>父类索引指向常量池中表示该类父类的符号引用。除了Object外，所有类的父类索引都不为0</p>
+<blockquote>
+<p>接口索引集合</p>
+</blockquote>
+<p><strong>描述这个类实现了哪些接口</strong></p>
+<p>我们的例子中没有实现接口，就没有（接口索引集合计数器为0）</p>
+<blockquote>
+<p>总结</p>
+</blockquote>
+<p><strong>Class 文件由“类索引，父类索引，接口索引集合”来确定该类的继承关系</strong></p>
+
+        <h3 id="字段表集合"   >
+          <a href="#字段表集合" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#字段表集合"></a> 字段表集合</h3>
+      
+<p><strong>描述类声明的字段</strong>，字段包括类变量和成员变量（实例变量），不包括局部变量</p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20201107181355881.png" alt="image-20201107181355881" /></p>
+<blockquote>
+<p>简单名称和描述符</p>
+</blockquote>
+<ul>
+<li><strong>简单名称</strong>
+<ul>
+<li>字段： 没有描述字段类型的名称</li>
+<li>方法： 没有描述参数列表和返回类型的名称</li>
+</ul>
+</li>
+<li><strong>描述符</strong>
+<ul>
+<li>字段： 描述字段的类型</li>
+<li>方法： 描述参数列表和返回值</li>
+<li>描述符字符含义(long，boolean，对象类型是J，Z，L 其他都是首字母大写)</li>
+</ul>
+</li>
+</ul>
+<div class="table-container"><table>
+<thead>
+<tr>
+<th>标识字符</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>B</td>
+<td>byte</td>
+</tr>
+<tr>
+<td>C</td>
+<td>char</td>
+</tr>
+<tr>
+<td>D</td>
+<td>double</td>
+</tr>
+<tr>
+<td>F</td>
+<td>float</td>
+</tr>
+<tr>
+<td>I</td>
+<td>int</td>
+</tr>
+<tr>
+<td>J</td>
+<td>long</td>
+</tr>
+<tr>
+<td>S</td>
+<td>short</td>
+</tr>
+<tr>
+<td>Z</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>V</td>
+<td>void</td>
+</tr>
+<tr>
+<td>L</td>
+<td>对象类型，如Ljava/lang/Object</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>描述符描述n维数组
+<ul>
+<li>在前面先写n个<code>[</code> 再写标识字符<br />
+比如 <code>java.lang.Integer[ ]</code> =&gt; <code>[Ljava.lang.Integer</code></li>
+</ul>
+</li>
+<li>描述符描述方法
+<ul>
+<li>参数列表按照从左到右的顺序写在<code>()</code>中</li>
+<li>返回类型写到最后。比如<code>String method(long[], int, String[])</code> =&gt; <code>([JIL[java.lang.String)Ljava.lang.String</code></li>
+</ul>
+</li>
+</ul>
+<p>因此Class文件中字段描述符指向常量池中的#07 I 符号引用(的索引)</p>
+<blockquote>
+<p>注意</p>
+</blockquote>
+<ol>
+<li><strong>字段表集合不会列出父类或父接口中声明的字段</strong></li>
+<li><strong>只用 简单名称 来确定字段，所以不能有重名字段</strong></li>
+<li><strong>用 简单名称 和 描述符 确定方法，所以方法可以重名（重载）</strong>
+<ul>
+<li>字节码文件 规定 简单名称+描述符相同才是同一个方法</li>
+<li>但是 Java语法 规定 重载 = 简单名称相同 + 描述符的参数列表不同 + 描述符的返回类型不能不同</li>
+</ul>
+</li>
+</ol>
+
+        <h3 id="方法表集合"   >
+          <a href="#方法表集合" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#方法表集合"></a> 方法表集合</h3>
+      
+<p><strong>描述类声明的方法</strong>，与字段表集合类似</p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20201107182407009.png" alt="image-20201107182407009" /></p>
+<blockquote>
+<p>注意</p>
+</blockquote>
+<p><strong>方法表集合中不会列出父类方法信息（不重写的情况）</strong></p>
+
+        <h3 id="属性表集合"   >
+          <a href="#属性表集合" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#属性表集合"></a> 属性表集合</h3>
+      
+<p>属性比较多，这里只说明我们例子中出现的，其他的会总结。<strong>用于描述某些场景专有信息</strong>刚刚在字段，方法表集合中都可以看到属性表集合，说明属性表集合是可以被携带的。</p>
+<blockquote>
+<p>怎么没看到Java源代码中的代码呢?</p>
+</blockquote>
+<p>实际上它属于属性表集合中的Code属性</p>
+
+        <h4 id="code-属性"   >
+          <a href="#code-属性" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#code-属性"></a> Code 属性</h4>
+      
+<p>Java源代码中方法体中的代码经过编译后编程字节码指令存储在Code属性内</p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20201107184345952.png" alt="image-20201107184345952" /></p>
+<p>其中的异常表集合代表 <strong>编译器为这段代码生成的多条异常记录，对应着可能出现的代码执行路径</strong>（程序在try中不抛出异常会怎么执行，抛出异常又会怎么执行…）</p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20201107184823648.png" alt="image-20201107184823648" /></p>
+
+        <h4 id="exceptions-属性"   >
+          <a href="#exceptions-属性" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#exceptions-属性"></a> Exceptions 属性</h4>
+      
+<p>列举出方法中可能抛出的检查异常（Checked Exception），也就是方法声明<code>throws</code>关键字后面的列举异常</p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20201107185136111.png" alt="image-20201107185136111" /></p>
+
+        <h4 id="linenumbertable-属性"   >
+          <a href="#linenumbertable-属性" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#linenumbertable-属性"></a> LineNumberTable 属性</h4>
+      
+<p>描述Java源码行号与字节码指令行号(字节码偏移量)对应关系</p>
+
+        <h4 id="sourcefile-属性"   >
+          <a href="#sourcefile-属性" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#sourcefile-属性"></a> SourceFile 属性</h4>
+      
+<p>记录生成此Class文件的源码名称</p>
+
+        <h4 id="stackmaptable属性"   >
+          <a href="#stackmaptable属性" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#stackmaptable属性"></a> StackMapTable属性</h4>
+      
+<p>虚拟机类加载验证阶段的字节码验证时，不需要再检验了，只需要查看StackMapTable属性中的记录是否合法</p>
+<p><strong>编译阶段将一系列的验证类型结果记录在StackMapTable属性中</strong></p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20201107185712220.png" alt="image-20201107185712220" /></p>
+
+        <h4 id="constantvalue"   >
+          <a href="#constantvalue" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#constantvalue"></a> ConstantValue</h4>
+      
+<p>在类加载的准备阶段，为静态变量（常量）赋值。只有类变量才有这个属性。</p>
+<ul>
+<li>实例变量的赋值： 在实例构造器</li>
+<li>类变量的赋值： 在类构造器或带有ConstantValue属性在类加载的准备阶段</li>
+</ul>
+<p><strong>如果类变量被final修饰（此时该变量是一个常量），且该变量数据类型是基本类型或字符串，就会生成ConstantValue属性</strong>，该属性指向常量池中要赋值的常量，在类加载的准备阶段，直接把在常量池中ConstantValue指向的常量赋值给该变量</p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20201107191419341.png" alt="image-20201107191419341" /></p>
+
+        <h4 id="总结所有属性"   >
+          <a href="#总结所有属性" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#总结所有属性"></a> 总结所有属性</h4>
+      
+<div class="table-container"><table>
+<thead>
+<tr>
+<th>属性名</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Code</td>
+<td>方法体内的代码经过编译后变为字节码指令存储在Code属性中</td>
+</tr>
+<tr>
+<td>Exceptions</td>
+<td>列举出方法可能抛出的检查异常(Checked Exception)</td>
+</tr>
+<tr>
+<td>LineNumberTable</td>
+<td>Java源码行号与字节码偏移量(字节码行号)对应关系</td>
+</tr>
+<tr>
+<td>LocalVariableTable</td>
+<td>Java源码定义的局部变量与栈帧中局部变量表中的变量对应关系(<mark>局部变量名称，描述符，局部变量槽位置，局部变量作用范围等</mark>)</td>
+</tr>
+<tr>
+<td>LocalVariableTypeTable</td>
+<td>与<code>LocalVariableTable</code>相似，只是把<code>LocalVariableTable</code>的描述符换成了字段的特征签名(完成对泛型的描述)</td>
+</tr>
+<tr>
+<td>SourceFile</td>
+<td>记录生成这个Class文件的源码文件名称</td>
+</tr>
+<tr>
+<td>SourceDebugExtension</td>
+<td>用于存储额外的代码调式信息</td>
+</tr>
+<tr>
+<td>ConstantValue</td>
+<td>在类加载的准备阶段，为静态变量(常量)赋值</td>
+</tr>
+<tr>
+<td>InnerClasses</td>
+<td>记录内部类与宿主类之间的关系</td>
+</tr>
+<tr>
+<td>Deprecated</td>
+<td>用于表示某个字段，方法或类已弃用 (可以用注解@deprecated表示)</td>
+</tr>
+<tr>
+<td>Synthetic</td>
+<td>用于表示某字段或方法不是由Java源代码生成的，而是由编译器自行添加的</td>
+</tr>
+<tr>
+<td>StackMapTable</td>
+<td>虚拟机类加载验证阶段的字节码验证时，不需要再检验了，只需要查看StackMapTable属性中的记录是否合法</td>
+</tr>
+<tr>
+<td>Signature</td>
+<td>记录泛型签名信息</td>
+</tr>
+<tr>
+<td>BootstrapMethods</td>
+<td>保存动态调用(invokeeddynamic)指令引用的引导方法限定符</td>
+</tr>
+<tr>
+<td>MethodParameters</td>
+<td>记录方法的各个形参名称与信息</td>
+</tr>
+</tbody>
+</table></div>
+
+        <h3 id="javap-解析-class-文件"   >
+          <a href="#javap-解析-class-文件" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#javap-解析-class-文件"></a> javap 解析 Class 文件</h3>
+      
+
+        <h4 id="关于-javac"   >
+          <a href="#关于-javac" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#关于-javac"></a> 关于 javac</h4>
+      
+<ul>
+<li><code>javac xx.java</code> 编译Java源文件，不会生成对应的局部变量表</li>
+<li><code>javac -g xx.java</code> 编译Java源文件，生成对应的局部变量表</li>
+</ul>
+<p>IDEA中编译Java源文件使用的是<code>javac -g</code></p>
+
+        <h4 id="关于-javap"   >
+          <a href="#关于-javap" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#关于-javap"></a> 关于 javap</h4>
+      
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210513195725462.png" alt="image-20210513195725462" /></p>
+<blockquote>
+<p>常用</p>
+</blockquote>
+<p><code>javap -v</code> 基本上可以反编译出Class文件中的很多信息（常量池，字段集合，方法集合…）</p>
+<p>但是它不会显示私有字段或方法的信息，所以可以使用<code>javap -v -p</code></p>
+<blockquote>
+<p>详解 javap -v -p</p>
+</blockquote>
+<figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public class JavapTest &#123;</span><br><span class="line">    private int a &#x3D; 1;</span><br><span class="line">    float b &#x3D; 2.1F;</span><br><span class="line">    protected double c &#x3D; 3.5;</span><br><span class="line">    public  int d &#x3D; 10;</span><br><span class="line"></span><br><span class="line">    private void test(int i)&#123;</span><br><span class="line">        i+&#x3D;1;</span><br><span class="line">        System.out.println(i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void test1()&#123;</span><br><span class="line">        String s &#x3D; &quot;test1&quot;;</span><br><span class="line">        System.out.println(s);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210513200417243.png" alt="image-20210513200417243" /></p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210513200532661.png" alt="image-20210513200532661" /></p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210513200946912.png" alt="image-20210513200946912" /></p>
+
+        <h2 id="字节码指令集"   >
+          <a href="#字节码指令集" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#字节码指令集"></a> 字节码指令集</h2>
+      
+<blockquote>
+<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://www.yuque.com/u21195183/jvm/bg6q2k" >https://www.yuque.com/u21195183/jvm/bg6q2k</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+</blockquote>
+
+        <h3 id="字节码与数据类型"   >
+          <a href="#字节码与数据类型" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#字节码与数据类型"></a> 字节码与数据类型</h3>
+      
+<p>在Java虚拟机的指令集中，大多数的指令都包含了其操作所对应的数据类型信息。例如，iload指令用于从局部变量表中加载int型的数据到操作数栈中，而fload指令加载的则是float类型的数据。</p>
+<p>对于大部分与数据类型相关的字节码指令，它们的操作码助记符中都有特殊的字符来表明专门为哪种数据类型服务：</p>
+<ul>
+<li>i代表对int类型的数据操作</li>
+<li>l代表long</li>
+<li>s代表short</li>
+<li>b代表byte</li>
+<li>c代表char</li>
+<li>f代表float</li>
+<li>d代表double</li>
+</ul>
+<p>也有一些指令的助记符中没有明确地指明操作类型的字母，如arraylength指令，它没有代表数据类型的特殊字符，但操作数永远只能是一个数组类型的对象。还有另外一些指令，如无条件跳转指令goto则是与数据类型无关的。</p>
+<p>大部分的指令都没有支持整数类型byte、char和short，甚至没有任何指令支持boolean类型。编译器会在编译期或运行期将byte和short类型的数据带符号扩展（Sign-Extend）为相应的int类型数据，将boolean和char类型数据零位扩展（Zero-Extend）为相应的int类型数据。与之类似，在处理boolean、byte、short和char类型的数组时，也会转换为使用对应的int类型的字节码指令来处理。因此，大多数对于boolean、byte、short和char类型数据的操作，实际上都是使用相应的int类型作为运算类型。</p>
+
+        <h3 id="指令分析"   >
+          <a href="#指令分析" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#指令分析"></a> 指令分析</h3>
+      
+<p>大部分指令先以i(int)，l(long)，f(float)，d(double)，a(引用)开头。<strong>其中byte，char，short，boolean在hotspot中都是转成int去执行（使用int类型的字节码指令）</strong>。</p>
+<p>字节码指令大致分为:</p>
+<ol>
+<li>加载与存储指令</li>
+<li>算术指令</li>
+<li>类型转换指令</li>
+<li>对象创建与访问指令</li>
+<li>方法调用与返回指令</li>
+<li>操作数栈管理指令</li>
+<li>控制转义指令</li>
+<li>异常处理指令</li>
+<li>同步控制指令</li>
+</ol>
+<p>在hotspot中每个方法对应的一组<strong>字节码指令实际上就是在该方法所对应的栈帧中的局部变量表和操作数栈上进行操作</strong>。</p>
+<p><strong>字节码指令包含字节码操作指令和操作数</strong> （操作数可能是在局部变量表上，也可能在常量池中，还可能就是常数）</p>
+<p>（说在前面）在做值相关操作时：</p>
+<ul>
+<li>一个指令，可以从局部变量表、常量池、堆中对象、方法调用、系统调用中等取得数据，这些数据（可能是值，可能是对象的引用）被压入操作数栈。</li>
+<li>一个指令，也可以从操作数栈中取出一到多个值（pop多次），完成赋值、加减乘除、方法传参、系统调用等等操作。</li>
+</ul>
+
+        <h3 id="加载与存储指令"   >
+          <a href="#加载与存储指令" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#加载与存储指令"></a> 加载与存储指令</h3>
+      
+<blockquote>
+<p>加载</p>
+</blockquote>
+<p>加载和存储指令用于将数据从栈帧的局部变量表和操作数栈之间来回传递。（可以从局部变量表，常量池中加载到操作数栈）</p>
+<p>加载与存储相关指令（<strong>重要</strong>）：</p>
+<ul>
+<li><strong>局部变量压栈指令</strong>：将一个局部变量加载到操作数栈：<code>xload、xload_&lt;n&gt;</code>（其中x为i、l、f、d、a，n为0到3）</li>
+<li><strong>常量入栈指令</strong>：将一个常量加载到操作数栈：<code>bipush、sipush、ldc、ldc_w、ldc2_w、aconst_null、iconst_m1、iconst_&lt;i&gt;、lconst_&lt;l&gt;）、fconst_&lt;f&gt;、dconst_&lt;d&gt;</code></li>
+<li><strong>出栈装入局部变量表指令</strong>：将一个数值从操作数栈存储到局部变量表：<code>xstore、xstore_&lt;n&gt;</code>（其中x为i、l、f、d、a，n为0到3）；<code>xastore</code>（其中x为i、l、f、d、a、b、c、s）</li>
+<li>扩充局部变量表的访问索引的指令：<code>wide</code>。</li>
+</ul>
+<p>上面所列举的指令助记符中，有一部分是以尖括号结尾的（例如<code>iload_&lt;n&gt;</code>）。这些指令助记符实际上代表了一组指令（例如<code>iload_&lt;n&gt;</code>代表了<code>iload_0、iload_1、iload_2</code>和<code>iload_3</code>这几个指令）。这几组指令都是某个带有一个操作数的通用指令（例如iload）的特殊形式，对于这若干组特殊指令来说，它们表面上没有操作数，不需要进行取操作数的动作，但操作数都隐含在指令中。</p>
+<p>除此之外，它们的语义与原生的通用指令完全一致（例如<code>iload_0</code>的语义与操作数为0时的iload指令语义完全一致）。在尖括号之间的字母指定了指令隐含操作数的数据类型，<code>&lt;n&gt;</code>代表非负的整数，<code>&lt;i&gt;</code>代表是int类型数据，<code>&lt;l&gt;</code>代表long类型，<code>&lt;f&gt;</code>代表float类型，<code>&lt;d&gt;</code>代表double类型。</p>
+<p>操作byte、char、short和boolean类型数据时，经常用int类型的指令来表示。</p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210514163308948.png" alt="image-20210514163308948" /></p>
+<p>注意：编译时就知道了局部变量表应该有多少槽的位置和操作数栈的最大深度（为节省空间，局部变量槽还会复用）</p>
+<p><strong>局部变量压栈常用指令集</strong></p>
+<div class="table-container"><table>
+<thead>
+<tr>
+<th>xload_n</th>
+<th>xload_0</th>
+<th>xload_1</th>
+<th>xload_2</th>
+<th>xload_3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>iload_n</strong></td>
+<td>iload_0</td>
+<td>iload_1</td>
+<td>iload_2</td>
+<td>iload_3</td>
+</tr>
+<tr>
+<td><strong>lload_n</strong></td>
+<td>lload_0</td>
+<td>lload_1</td>
+<td>lload_2</td>
+<td>lload_3</td>
+</tr>
+<tr>
+<td><strong>fload_n</strong></td>
+<td>fload_0</td>
+<td>fload_1</td>
+<td>fload_2</td>
+<td>fload_3</td>
+</tr>
+<tr>
+<td><strong>dload_n</strong></td>
+<td>dload_0</td>
+<td>dload_1</td>
+<td>dload_2</td>
+<td>dload_3</td>
+</tr>
+<tr>
+<td><strong>aload_n</strong></td>
+<td>aload_0</td>
+<td>aload_1</td>
+<td>aload_2</td>
+<td>aload_3</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>局部变量压栈指令剖析</strong></p>
+<p>局部变量压栈指令将给定的局部变量表中的数据压入操作数栈。这类指令大体可以分为：</p>
+<ul>
+<li><code>xload_&lt;n&gt;</code>（x为i、l、f、d、a，n为0到3）</li>
+<li><code>xload</code>（x为i、l、f、d、a）</li>
+</ul>
+<p>说明：在这里，x的取值表示数据类型。</p>
+<p>指令<code>xload_n</code>表示将第n个局部变量压入操作数栈，比如<code>iload_1</code>、<code>fload_0</code>、<code>aload_0</code>等指令。其中<code>aload_n</code>表示将一个对象引用压栈。</p>
+<p>指令<code>xload</code>通过指定参数的形式，把局部变量压入操作数栈，当使用这个命令时，表示局部变量的数量可能超过了4个，比如指令<code>iload</code>、<code>fload</code>等。</p>
+<p>举例：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">load</span><span class="params">(<span class="keyword">int</span> num, Object obj, <span class="keyword">long</span> count, <span class="keyword">boolean</span> flag, <span class="keyword">short</span>[] arr)</span> </span>&#123;</span><br><span class="line">    System.out.println(num);</span><br><span class="line">    System.out.println(obj);</span><br><span class="line">    System.out.println(count);</span><br><span class="line">    System.out.println(flag);</span><br><span class="line">    System.out.println(arr);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>字节码执行过程：</p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20211020211048622.png" alt="image-20211020211048622" /></p>
+
+        <h3 id="算术指令"   >
+          <a href="#算术指令" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#算术指令"></a> 算术指令</h3>
+      
+<p><strong>算术指令将操作数栈中的俩个栈顶元素出栈作运算再将运算结果入栈</strong></p>
+<p>使用的是后缀表达式(逆波兰表达式),比如 3 4 + =&gt; 3 + 4</p>
+<blockquote>
+<p>注意</p>
+</blockquote>
+<ol>
+<li>当除数是0时会抛出ArithmeticException异常</li>
+<li>浮点数转整数向0取整</li>
+<li>浮点数计算精度丢失</li>
+<li>Infinity 计算结果无穷大</li>
+<li>Nan 计算结果不确定计算值</li>
+</ol>
+<figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">public void test1() &#123;</span><br><span class="line">       double d1 &#x3D; 10 &#x2F; 0.0;</span><br><span class="line">       &#x2F;&#x2F;Infinity</span><br><span class="line">       System.out.println(d1);</span><br><span class="line"></span><br><span class="line">       double d2 &#x3D; 0.0 &#x2F; 0.0;</span><br><span class="line">       &#x2F;&#x2F;NaN</span><br><span class="line">       System.out.println(d2);</span><br><span class="line"></span><br><span class="line">       &#x2F;&#x2F;向0取整模式:浮点数转整数</span><br><span class="line">       &#x2F;&#x2F;5</span><br><span class="line">       System.out.println((int) 5.9);</span><br><span class="line">       &#x2F;&#x2F;-5</span><br><span class="line">       System.out.println((int) -5.9);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">       &#x2F;&#x2F;向最接近数舍入模式:浮点数运算</span><br><span class="line">       &#x2F;&#x2F;0.060000000000000005</span><br><span class="line">       System.out.println(0.05+0.01);</span><br><span class="line"></span><br><span class="line">       &#x2F;&#x2F;抛出ArithmeticException: &#x2F; by zero异常</span><br><span class="line">       System.out.println(1&#x2F;0);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></div></figure>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210514173650867.png" alt="image-20210514173650867" /></p>
+<p>比较指令说明</p>
+<p>栈顶元素v2先出栈 , 栈顶元素v1再出栈</p>
+<p>如果v1=v2 会将0入栈,如果v1 &lt; v2 将-1入栈,如果v1&gt;v2将1入栈</p>
+<p><code>cmpg</code>和<code>cmpl</code>区别在于结果为Nan时,<code>cmpg</code>将1入栈,<code>cmpl</code>将-1入栈</p>
+<p>因为Nan只发生在浮点数运算中,所以long类型只有一个<code>cmp</code>指令</p>
+
+        <h3 id="类型转换指令"   >
+          <a href="#类型转换指令" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#类型转换指令"></a> 类型转换指令</h3>
+      
+<p>类型转换指令可以分为<strong>宽化类型转换</strong>和<strong>窄化类型转换</strong>(对应基本类型的非强制转换和强制转换)</p>
+<blockquote>
+<p>宽化类型转换</p>
+</blockquote>
+<p><strong>小范围向大范围转换</strong></p>
+<ul>
+<li><mark>int -&gt; long -&gt; float -&gt; double</mark>
+<ul>
+<li><code>i2l</code>,<code>i2f</code>,<code>i2d</code></li>
+<li><code>l2f</code>,<code>l2d</code></li>
+<li><code>f2d</code></li>
+</ul>
+</li>
+</ul>
+<p>byte,short,char 使用int类型的指令</p>
+<p><strong>注意: long转换为float或double时可能发生精度丢失</strong></p>
+<figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public void test2()&#123;</span><br><span class="line">       long l1 &#x3D;  123412345L;</span><br><span class="line">       long l2 &#x3D;  1234567891234567899L;</span><br><span class="line"></span><br><span class="line">       float f1 &#x3D; l1;</span><br><span class="line">       &#x2F;&#x2F;结果: 1.23412344E8 &#x3D;&gt; 123412344</span><br><span class="line">       &#x2F;&#x2F;                l1 &#x3D;  123412345L</span><br><span class="line">       System.out.println(f1);</span><br><span class="line"></span><br><span class="line">       double d1 &#x3D; l2;</span><br><span class="line">       &#x2F;&#x2F;结果: 1.23456789123456794E18 &#x3D;&gt; 1234567891234567940</span><br><span class="line">       &#x2F;&#x2F;                          l2 &#x3D;  1234567891234567899L</span><br><span class="line">       System.out.println(d1);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></div></figure>
+<blockquote>
+<p>窄化类型转换</p>
+</blockquote>
+<p><strong>大范围向小范围转换</strong></p>
+<ul>
+<li>int-&gt;byte,char,short: <code>i2b</code>,<code>i2c</code>,<code>i2s</code></li>
+<li>long-&gt;int: <code>l2i</code></li>
+<li>float-&gt;long,int: <code>f2l</code>,<code>f2i</code></li>
+<li>double-&gt;float,long,int: <code>d2f</code>,<code>d2l</code>,<code>d2i</code></li>
+</ul>
+<p>如果long,float,double要转换为byte,char,short可以先转为int再转为相对应类型</p>
+<p><strong>窄化类型转换会发生精度丢失</strong></p>
+<p>NaN和Infinity的特殊情况:</p>
+<figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">public void test3()&#123;</span><br><span class="line">       double d1 &#x3D; Double.NaN;</span><br><span class="line">       double d2 &#x3D; Double.POSITIVE_INFINITY;</span><br><span class="line"></span><br><span class="line">       int i1 &#x3D; (int) d1;</span><br><span class="line">       int i2 &#x3D; (int) d2;</span><br><span class="line">       &#x2F;&#x2F;0</span><br><span class="line">       System.out.println(i1);</span><br><span class="line">       &#x2F;&#x2F;true</span><br><span class="line">       System.out.println(i2&#x3D;&#x3D;Integer.MAX_VALUE);</span><br><span class="line"></span><br><span class="line">       long l1 &#x3D; (long) d1;</span><br><span class="line">       long l2 &#x3D; (long) d2;</span><br><span class="line">       &#x2F;&#x2F;0</span><br><span class="line">       System.out.println(l1);</span><br><span class="line">       &#x2F;&#x2F;true</span><br><span class="line">       System.out.println(l2&#x3D;&#x3D;Long.MAX_VALUE);</span><br><span class="line"></span><br><span class="line">       float f1 &#x3D; (float) d1;</span><br><span class="line">       float f2 &#x3D; (float) d2;</span><br><span class="line">       &#x2F;&#x2F;NaN</span><br><span class="line">       System.out.println(f1);</span><br><span class="line">       &#x2F;&#x2F;Infinity</span><br><span class="line">       System.out.println(f2);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   &#125;</span><br></pre></td></tr></table></div></figure>
+<p><strong>NaN转为整型会变成0</strong></p>
+<p><strong>正无穷或负无穷转为整型会变成那个类型的最大值或最小值</strong></p>
+
+        <h3 id="对象创建与访问指令"   >
+          <a href="#对象创建与访问指令" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#对象创建与访问指令"></a> 对象创建与访问指令</h3>
+      
+<p>对象创建与访问指令: <strong>创建指令,字段访问指令,数组操作指令,类型检查指令</strong></p>
+
+        <h4 id="创建指令"   >
+          <a href="#创建指令" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#创建指令"></a> 创建指令</h4>
+      
+<p><code>new</code>: 创建实例</p>
+<p><code>newarray</code>: 创建一维基本类型数组</p>
+<p><code>anewarray</code>: 创建一维引用类型数组</p>
+<p><code>multianewarray</code>: 创建多维数组</p>
+<p><strong>注意: 这里的创建可以理解为分配内存,当多维数组只分配了一维数组时使用的是<code>anewarray</code></strong></p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210514230240390.png" alt="image-20210514230240390" /></p>
+
+        <h4 id="字段访问指令"   >
+          <a href="#字段访问指令" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#字段访问指令"></a> 字段访问指令</h4>
+      
+<p><code>getstatic</code>: 对静态字段进行读操作</p>
+<p><code>putstatic</code>: 对静态字段进行写操作</p>
+<p><code>getfield</code>: 对实例字段进行读操作</p>
+<p><code>putfield</code>: 对实例字段进行写操作</p>
+<p><strong>读操作: 把要进行读操作的字段入栈</strong></p>
+<p><strong>写操作: 把要写操作的值出栈再写到对应的字段</strong></p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210515093103500.png" alt="image-20210515093103500" /></p>
+
+        <h4 id="数组操作指令"   >
+          <a href="#数组操作指令" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#数组操作指令"></a> 数组操作指令</h4>
+      
+<ul>
+<li><code>b/c/s/i/l/f/d/a aload</code> : <strong>表示将数组中某索引元素入栈</strong> (读)
+<ul>
+<li>需要的参数从栈顶依次向下: <strong>索引位置,数组引用</strong></li>
+</ul>
+</li>
+<li><code>b/c/s/i/l/f/d/a astore</code>: <strong>表示将某值出栈并写入数组某索引元素</strong> (写)
+<ul>
+<li>需要的参数从栈顶依次向下: <strong>要写入的值,索引位置,数组引用</strong></li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210515094055002.png" alt="image-20210515094055002" /></p>
+<p>注意: b开头的指令对byte和boolean通用</p>
+<ul>
+<li><code>arraylength</code>: <strong>先将数组引用出栈再将获得的数组长度入栈</strong></li>
+</ul>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210515095603614.png" alt="image-20210515095603614" /></p>
+
+        <h4 id="类型检查指令"   >
+          <a href="#类型检查指令" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#类型检查指令"></a> 类型检查指令</h4>
+      
+<p><strong><code>instanceof</code>: 判断某对象是否为某类的实例</strong></p>
+<p><strong><code>checkcast</code>: 检查引用类型是否可以强制转换</strong></p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210515095311597.png" alt="image-20210515095311597" /></p>
+
+        <h3 id="方法调用与返回指令"   >
+          <a href="#方法调用与返回指令" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#方法调用与返回指令"></a> 方法调用与返回指令</h3>
+      
+
+        <h4 id="方法调用指令"   >
+          <a href="#方法调用指令" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#方法调用指令"></a> 方法调用指令</h4>
+      
+<p><strong>非虚方法: 静态方法,私有方法,父类中的方法,被final修饰的方法,实例构造器</strong></p>
+<p>与之对应不是非虚方法的就是虚方法了</p>
+<ul>
+<li>
+<p>普通调用指令</p>
+<ul>
+<li><strong><code>invokestatic</code>:调用静态方法</strong></li>
+<li><strong><code>invokespecial</code>:调用私有方法,父类中的方法,实例构造器方法,final方法</strong></li>
+<li><strong><code>invokeinterface</code>:调用接口方法</strong></li>
+<li><strong><code>invokevirtual</code>: 调用虚方法</strong></li>
+</ul>
+<p><strong>使用<code>invokestatic</code>和<code>invokespecial</code>指令的一定是非虚方法</strong></p>
+<p>使用<code>invokeinterface</code>指令一定是虚方法(因为接口方法需要具体的实现类去实现)</p>
+<p>使用<code>invokevirtual</code>指令可能是虚方法</p>
+</li>
+<li>
+<p>动态调用指令</p>
+<ul>
+<li><strong><code>invokedynamic</code>: 动态解析出需要调用的方法再执行</strong></li>
+</ul>
+<p>jdk 7 出现<code>invokedynamic</code>,支持动态语言</p>
+</li>
+</ul>
+<blockquote>
+<p>测试虚方法代码</p>
+</blockquote>
+<ul>
+<li>父类</li>
+</ul>
+<figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public class Father &#123;</span><br><span class="line">    public static void staticMethod()&#123;</span><br><span class="line">        System.out.println(&quot;father static method&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public final void finalMethod()&#123;</span><br><span class="line">        System.out.println(&quot;father final method&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Father() &#123;</span><br><span class="line">        System.out.println(&quot;father init method&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void overrideMethod()&#123;</span><br><span class="line">        System.out.println(&quot;father override method&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<ul>
+<li>接口</li>
+</ul>
+<figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public interface TestInterfaceMethod &#123;</span><br><span class="line">    void testInterfaceMethod();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<ul>
+<li>子类</li>
+</ul>
+<figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">public class Son extends Father&#123;</span><br><span class="line"></span><br><span class="line">    public Son() &#123;</span><br><span class="line">        &#x2F;&#x2F;invokespecial 调用父类init 非虚方法</span><br><span class="line">        super();</span><br><span class="line">        &#x2F;&#x2F;invokestatic 调用父类静态方法 非虚方法</span><br><span class="line">        staticMethod();</span><br><span class="line">        &#x2F;&#x2F;invokespecial 调用子类私有方法 特殊的非虚方法</span><br><span class="line">        privateMethod();</span><br><span class="line">        &#x2F;&#x2F;invokevirtual 调用子类的重写方法 虚方法</span><br><span class="line">        overrideMethod();</span><br><span class="line">        &#x2F;&#x2F;invokespecial 调用父类方法 非虚方法</span><br><span class="line">        super.overrideMethod();</span><br><span class="line">        &#x2F;&#x2F;invokespecial 调用父类final方法 非虚方法</span><br><span class="line">        super.finalMethod();</span><br><span class="line">        &#x2F;&#x2F;invokedynamic 动态生成接口的实现类 动态调用</span><br><span class="line">        TestInterfaceMethod test &#x3D; ()-&gt;&#123;</span><br><span class="line">            System.out.println(&quot;testInterfaceMethod&quot;);</span><br><span class="line">        &#125;;</span><br><span class="line">        &#x2F;&#x2F;invokeinterface 调用接口方法 虚方法</span><br><span class="line">        test.testInterfaceMethod();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void overrideMethod()&#123;</span><br><span class="line">        System.out.println(&quot;son override method&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private void privateMethod()&#123;</span><br><span class="line">        System.out.println(&quot;son private method&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        new Son();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210426234249850.png" alt="image-20210426234249850" /></p>
+
+        <h4 id="方法返回指令"   >
+          <a href="#方法返回指令" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#方法返回指令"></a> 方法返回指令</h4>
+      
+<p><strong>方法返回指令: 方法结束前,将栈顶元素(最后一个元素)出栈 ,返回给调用者</strong></p>
+<p>根据方法的返回类型划分多种指令</p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210515103425506.png" alt="image-20210515103425506" /></p>
+
+        <h3 id="操作数栈管理指令"   >
+          <a href="#操作数栈管理指令" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#操作数栈管理指令"></a> 操作数栈管理指令</h3>
+      
+<p><strong>通用型指令,不区分类型</strong></p>
+<ul>
+<li>出栈
+<ul>
+<li><code>pop/pop2</code>出栈1个/2个栈顶元素</li>
+</ul>
+</li>
+<li>入栈
+<ul>
+<li><code>dup/dup2</code> 复制栈顶1个/2个slot并重新入栈</li>
+<li><code>dup_x1</code> 复制栈顶1个slot并插入到栈顶开始的第2个slot下</li>
+<li><code>dup_x2</code>复制栈顶1个slot并插入到栈顶开始的第3个slot下</li>
+<li><code>dup2_x1</code>复制栈顶2个slot并插入到栈顶开始的第3个slot下</li>
+<li><code>dup2_x2</code>复制栈顶2个slot并插入到栈顶开始的第4个slot下
+<ul>
+<li>插入到具体的slot计算: dup的系数 + <code>_x</code>的系数</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        <h3 id="控制转义指令"   >
+          <a href="#控制转义指令" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#控制转义指令"></a> 控制转义指令</h3>
+      
+
+        <h4 id="条件跳转指令"   >
+          <a href="#条件跳转指令" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#条件跳转指令"></a> 条件跳转指令</h4>
+      
+<p><strong>通常先进行比较指令,再进行条件跳转指令</strong></p>
+<p>比较指令比较结果-1,0,1再进行判断是否要跳转</p>
+<p><strong>条件跳转指令: 出栈栈顶元素,判断它是否满足条件,若满足条件则跳转到指定位置</strong></p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210515164609270.png" alt="image-20210515164609270" /></p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210515165351883.png" alt="image-20210515165351883" /></p>
+<p>注意: 这种跳转指令一般都&quot;取反&quot;,比如代码中第一个条件语句是d&gt;100,它第一个条件跳转指令就是<code>ifle</code>小于等于0,满足则跳转,不满足则按照顺序往下走</p>
+
+        <h4 id="比较条件跳转指令"   >
+          <a href="#比较条件跳转指令" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#比较条件跳转指令"></a> 比较条件跳转指令</h4>
+      
+<p><strong>比较条件跳转指令 类似 比较指令和条件跳转指令 的结合体</strong></p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210515180004587.png" alt="image-20210515180004587" /></p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210515181000595.png" alt="image-20210515181000595" /></p>
+
+        <h4 id="多条件分支跳转指令"   >
+          <a href="#多条件分支跳转指令" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#多条件分支跳转指令"></a> 多条件分支跳转指令</h4>
+      
+<p><strong>多条件分支跳转指令是为了switch-case提出的</strong></p>
+<p><strong><code>tableswitch</code>用于case值连续的switch多条件分支跳转指令,效率好</strong></p>
+<p><strong><code>lookupswitch</code>用于case值不连续的switch多条件分支跳转指令(虽然case值不连续,但最后会对case值进行排序)</strong></p>
+<blockquote>
+<p>tableswitch</p>
+</blockquote>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210515182307183.png" alt="image-20210515182307183" /></p>
+<blockquote>
+<p>lookupswitch</p>
+</blockquote>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210515183527055.png" alt="image-20210515183527055" /></p>
+<p>对于String类型是先找到对应的哈希值再equals比较确定走哪个case的</p>
+
+        <h4 id="无条件跳转指令"   >
+          <a href="#无条件跳转指令" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#无条件跳转指令"></a> 无条件跳转指令</h4>
+      
+<p><strong>无条件跳转指令就是跳转到某个字节码指令处</strong></p>
+<p><code>goto</code>经常使用</p>
+<p><code>jsr,jsr_w,ret</code>不怎么使用了</p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210515183640270.png" alt="image-20210515183640270" /></p>
+
+        <h3 id="异常处理指令"   >
+          <a href="#异常处理指令" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#异常处理指令"></a> 异常处理指令</h3>
+      
+<p>throw抛出异常对应<code>athrow</code>: <strong>清除该操作数栈上所有内容,将异常实例压入调用者操作数栈上</strong></p>
+<p>使用try-catch/try-final/throws时会产生异常表</p>
+<p><strong>异常表保存了异常处理信息</strong> (起始,结束位置,字节码指令偏移地址,异常类在常量池中的索引等信息)</p>
+<blockquote>
+<p>athrow</p>
+</blockquote>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210515192750444.png" alt="image-20210515192750444" /></p>
+<blockquote>
+<p>异常表</p>
+</blockquote>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210515193437666.png" alt="image-20210515193437666" /></p>
+<p>异常还会被压入栈或者保存到局部变量表中</p>
+
+        <h3 id="同步控制指令"   >
+          <a href="#同步控制指令" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#同步控制指令"></a> 同步控制指令</h3>
+      
+<p>synchronized作用于方法时,方法的访问标识会有<strong>ACC_SYNCHRONIZED表示该方法需要加锁</strong></p>
+<p>synchronized作用于某个对象时,对应着**<code>monitorentry</code>加锁字节码指令和 <code>monitorexit</code>解锁字节码指令**</p>
+<p><strong>Java中的synchronized默认是可重入锁</strong></p>
+<ul>
+<li>当线程要访问需要加锁的对象时 (执行monitorentry)</li>
+</ul>
+<ol>
+<li>先查看对象头中加锁次数,如果为0说明未加锁,获取后,加锁次数自增</li>
+<li>如果不为0,再查看获取锁的线程是不是自己,如果是自己就可以访问,加锁次数自增</li>
+<li>如果不为0且获取锁线程不是自己,就阻塞</li>
+</ol>
+<p>当线程释放锁时 (执行monitorexit)会让加锁次数自减</p>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/image-20210515195912727.png" alt="image-20210515195912727" /></p>
+<p>为什么会有2个monitorexit ?</p>
+<p>程序正常执行应该是一个monitorentry对应一个monitorexit的</p>
+<p>如果程序在加锁的代码中抛出了异常,没有释放锁,那不就会造成其他阻塞的线程永远也拿不到锁了吗</p>
+<p>所以在程序抛出异常时(跳转PC偏移量为15的指令)继续往下执行,<strong>抛出异常前要释放锁</strong></p>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yuyun-zhao.github.io">yuyun zhao</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yuyun-zhao.github.io/2021/09/20/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/">http://yuyun-zhao.github.io/2021/09/20/%E3%80%90JVM%E3%80%91JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.github.io/tags/JVM/">JVM</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2021/09/22/%E3%80%90JVM%E3%80%91JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">【JVM】JVM 类加载机制</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2021/09/15/%E3%80%90Redis%E3%80%91Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/"><span class="paginator-prev__text">【Redis】Redis 分布式锁</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-text">
+           前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#class-%E5%AD%97%E8%8A%82%E7%A0%81%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="toc-text">
+           Class 字节码文件结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9D%E8%AF%86-class-%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F"><span class="toc-text">
+           初识 Class 文件格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%AD%94%E6%95%B0%E4%B8%8E%E4%B8%BB%E6%AC%A1%E7%89%88%E6%9C%AC%E5%8F%B7"><span class="toc-text">
+           魔数与主次版本号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E9%87%8F%E6%B1%A0"><span class="toc-text">
+           常量池</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BF%E9%97%AE%E6%A0%87%E5%BF%97"><span class="toc-text">
+           访问标志</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E7%B4%A2%E5%BC%95%E7%88%B6%E7%B1%BB%E7%B4%A2%E5%BC%95%E4%B8%8E%E6%8E%A5%E5%8F%A3%E7%B4%A2%E5%BC%95%E9%9B%86%E5%90%88"><span class="toc-text">
+           类索引，父类索引与接口索引集合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E6%AE%B5%E8%A1%A8%E9%9B%86%E5%90%88"><span class="toc-text">
+           字段表集合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E8%A1%A8%E9%9B%86%E5%90%88"><span class="toc-text">
+           方法表集合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B1%9E%E6%80%A7%E8%A1%A8%E9%9B%86%E5%90%88"><span class="toc-text">
+           属性表集合</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#code-%E5%B1%9E%E6%80%A7"><span class="toc-text">
+           Code 属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#exceptions-%E5%B1%9E%E6%80%A7"><span class="toc-text">
+           Exceptions 属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#linenumbertable-%E5%B1%9E%E6%80%A7"><span class="toc-text">
+           LineNumberTable 属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sourcefile-%E5%B1%9E%E6%80%A7"><span class="toc-text">
+           SourceFile 属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#stackmaptable%E5%B1%9E%E6%80%A7"><span class="toc-text">
+           StackMapTable属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#constantvalue"><span class="toc-text">
+           ConstantValue</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%BB%E7%BB%93%E6%89%80%E6%9C%89%E5%B1%9E%E6%80%A7"><span class="toc-text">
+           总结所有属性</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#javap-%E8%A7%A3%E6%9E%90-class-%E6%96%87%E4%BB%B6"><span class="toc-text">
+           javap 解析 Class 文件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E-javac"><span class="toc-text">
+           关于 javac</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E-javap"><span class="toc-text">
+           关于 javap</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86"><span class="toc-text">
+           字节码指令集</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E8%8A%82%E7%A0%81%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-text">
+           字节码与数据类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E4%BB%A4%E5%88%86%E6%9E%90"><span class="toc-text">
+           指令分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A0%E8%BD%BD%E4%B8%8E%E5%AD%98%E5%82%A8%E6%8C%87%E4%BB%A4"><span class="toc-text">
+           加载与存储指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%97%E6%9C%AF%E6%8C%87%E4%BB%A4"><span class="toc-text">
+           算术指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E6%8C%87%E4%BB%A4"><span class="toc-text">
+           类型转换指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E5%88%9B%E5%BB%BA%E4%B8%8E%E8%AE%BF%E9%97%AE%E6%8C%87%E4%BB%A4"><span class="toc-text">
+           对象创建与访问指令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%8C%87%E4%BB%A4"><span class="toc-text">
+           创建指令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AD%97%E6%AE%B5%E8%AE%BF%E9%97%AE%E6%8C%87%E4%BB%A4"><span class="toc-text">
+           字段访问指令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E7%BB%84%E6%93%8D%E4%BD%9C%E6%8C%87%E4%BB%A4"><span class="toc-text">
+           数组操作指令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%B1%BB%E5%9E%8B%E6%A3%80%E6%9F%A5%E6%8C%87%E4%BB%A4"><span class="toc-text">
+           类型检查指令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E8%B0%83%E7%94%A8%E4%B8%8E%E8%BF%94%E5%9B%9E%E6%8C%87%E4%BB%A4"><span class="toc-text">
+           方法调用与返回指令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E8%B0%83%E7%94%A8%E6%8C%87%E4%BB%A4"><span class="toc-text">
+           方法调用指令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E8%BF%94%E5%9B%9E%E6%8C%87%E4%BB%A4"><span class="toc-text">
+           方法返回指令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%E7%AE%A1%E7%90%86%E6%8C%87%E4%BB%A4"><span class="toc-text">
+           操作数栈管理指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A7%E5%88%B6%E8%BD%AC%E4%B9%89%E6%8C%87%E4%BB%A4"><span class="toc-text">
+           控制转义指令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9D%A1%E4%BB%B6%E8%B7%B3%E8%BD%AC%E6%8C%87%E4%BB%A4"><span class="toc-text">
+           条件跳转指令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%AF%94%E8%BE%83%E6%9D%A1%E4%BB%B6%E8%B7%B3%E8%BD%AC%E6%8C%87%E4%BB%A4"><span class="toc-text">
+           比较条件跳转指令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%9A%E6%9D%A1%E4%BB%B6%E5%88%86%E6%94%AF%E8%B7%B3%E8%BD%AC%E6%8C%87%E4%BB%A4"><span class="toc-text">
+           多条件分支跳转指令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%A0%E6%9D%A1%E4%BB%B6%E8%B7%B3%E8%BD%AC%E6%8C%87%E4%BB%A4"><span class="toc-text">
+           无条件跳转指令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%8C%87%E4%BB%A4"><span class="toc-text">
+           异常处理指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%8C%E6%AD%A5%E6%8E%A7%E5%88%B6%E6%8C%87%E4%BB%A4"><span class="toc-text">
+           同步控制指令</span></a></li></ol></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/author.png" alt="avatar"></div><p class="sidebar-ov-author__text">no code no life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/YUYUN-ZHAO" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="zyy1024462136" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a><a class="sidebar-ov-social-item" href="1024462136" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="mailto:im.yuyunzhao@gmail.com" target="_blank" rel="noopener" data-popover="social.Gmail" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">Gmail</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">105</div><div class="sidebar-ov-state-item__name">文章</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">35</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">35</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2021</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>yuyun zhao</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script>function initSearch() {
+  var isXML = true;
+  var search_path = 'search.xml';
+
+  if (!search_path) {
+    search_path = 'search.xml';
+  } else if (/json$/i.test(search_path)) {
+    isXML = false;
+  }
+
+  var path = '/' + search_path;
+  $.ajax({
+    url: path,
+    dataType: isXML ? 'xml' : 'json',
+    async: true,
+    success: function (res) {
+      var datas = isXML ? $('entry', res).map(function () {
+        // 将 XML 转为 JSON
+        return {
+          title: $('title', this).text(),
+          content: $('content', this).text(),
+          url: $('url', this).text()
+        };
+      }).get() : res;
+      var $input = $('.search-input input');
+      var $result = $('.search-results');
+      // 搜索对象（标题、内容）的权重，影响显示顺序
+      var WEIGHT = { title: 100, content: 1 };
+      var searchPost = function () {
+        var searchText = $input.val().toLowerCase().trim();
+        // 根据空白字符分隔关键字
+        var keywords = searchText.split(/[\s]+/);
+        // 搜索结果
+        var matchPosts = [];
+
+        // 有多个关键字时，将原文字整个保存下来
+        if (keywords.length > 1) {
+          keywords.push(searchText);
+        }
+        // 防止未输入字符时搜索
+        if (searchText.length > 0) {
+          datas.forEach(function (data) {
+            var isMatch  = false;
+            // 没有标题的文章使用预设的 i18n 变量代替
+            var title = (data.title && data.title.trim()) || '[ 文章无标题 ]';
+            var titleLower = title && title.toLowerCase();
+            // 删除 HTML 标签 和 所有空白字符
+            var content = data.content && data.content.replace(/<[^>]+>/g, '');
+            var contentLower = content && content.toLowerCase();
+            // 删除重复的 /
+            var postURL = data.url && decodeURI(data.url).replace(/\/{2,}/g, '/');
+            // 标题中匹配到的关键词
+            var titleHitSlice = [];
+            // 内容中匹配到的关键词
+            var contentHitSlice = [];
+
+            keywords.forEach(function (keyword) {
+              /**
+              * 获取匹配的关键词的索引
+              * @param {String} keyword 要匹配的关键字
+              * @param {String} text 原文字
+              * @param {Boolean} caseSensitive 是否区分大小写
+              * @param {Number} weight 匹配对象的权重。权重大的优先显示
+              * @return {Array}
+              */
+              function getIndexByword (word, text, caseSensitive, weight) {
+                if (!word || !text) {
+                  return [];
+                };
+
+                var startIndex = 0; // 每次匹配的开始索引
+                var index = -1;     // 匹配到的索引值
+                var result = [];    // 匹配结果
+
+                if (!caseSensitive) {
+                  word = word.toLowerCase();
+                  text = text.toLowerCase();
+                }
+
+                while((index = text.indexOf(word, startIndex)) !== -1) {
+                  var hasMatch = false;
+                  // 索引位置相同的关键词，保留长度较长的
+                  titleHitSlice.forEach(function (hit) {
+                    if (hit.index === index && hit.word.length < word.length) {
+                      hit.word = word;
+                      hasMatch = true;
+                    }
+                  });
+                  startIndex = index + word.length;
+                  !hasMatch && result.push({ index: index, word: word, weight: weight });
+                }
+                return result;
+              }
+              titleHitSlice = titleHitSlice.concat(getIndexByword(keyword, titleLower, false, WEIGHT.title));
+              contentHitSlice = contentHitSlice.concat(getIndexByword(keyword, contentLower, false, WEIGHT.content));
+            });
+
+            var hitTitle = titleHitSlice.length;
+            var hitContent = contentHitSlice.length;
+
+            if (hitTitle > 0 || hitContent > 0) {
+              isMatch = true;
+            }
+            if (isMatch) {
+              ;[titleHitSlice, contentHitSlice].forEach(function (hit) {
+                // 按照匹配文字的索引的递增顺序排序
+                hit.sort(function (left, right) {
+                  return left.index - right.index;
+                });
+              });
+              /**
+              * 给文本中匹配到的关键词添加标记，从而进行高亮显示
+              * @param {String} text 原文本
+              * @param {Array} hitSlice 匹配项的索引信息
+              * @param {Number} start 开始索引
+              * @param {Number} end 结束索引
+              * @return {String}
+              */
+              function highlightKeyword (text, hitSlice, start, end) {
+                if (!text || !hitSlice || !hitSlice.length) {
+                  return;
+                }
+
+                var result = '';
+                var startIndex = start;
+                var endIndex = end;
+                hitSlice.forEach(function (hit) {
+                  if (hit.index < startIndex) {
+                    return;
+                  }
+
+                  var hitWordEnd = hit.index + hit.word.length;
+                  result += text.slice(startIndex, hit.index);
+                  result += '<b>' + text.slice(hit.index, hitWordEnd) + '</b>';
+                  startIndex = hitWordEnd;
+                });
+                result += text.slice(startIndex, endIndex);
+                return result;
+              }
+
+              var postData = {};
+              // 文章总的搜索权重
+              var postWeight = titleHitSlice.length * WEIGHT.title + contentHitSlice.length * WEIGHT.content;
+              // 标记匹配关键词后的标题
+              var postTitle = highlightKeyword(title, titleHitSlice, 0, title.length) || title;
+              // 标记匹配关键词后的内容
+              var postContent;
+              // 显示内容的长度
+              var SHOW_WORD_LENGTH = 200;
+              // 命中关键词前的字符显示长度
+              var SHOW_WORD_FRONT_LENGTH = 20;
+              var SHOW_WORD_END_LENGTH = SHOW_WORD_LENGTH - SHOW_WORD_FRONT_LENGTH;
+
+              // 截取匹配的第一个字符，前后共 200 个字符来显示
+              if (contentHitSlice.length > 0) {
+                var firstIndex = contentHitSlice[0].index;
+                var start = firstIndex > SHOW_WORD_FRONT_LENGTH ? firstIndex - SHOW_WORD_FRONT_LENGTH : 0;
+                var end = firstIndex + SHOW_WORD_END_LENGTH;
+                postContent = highlightKeyword(content, contentHitSlice, start, end);
+              } else { // 未匹配到内容，直接截取前 200 个字符来显示
+                postContent = content.slice(0, SHOW_WORD_LENGTH);
+              }
+              postData.title = postTitle;
+              postData.content = postContent;
+              postData.url = postURL;
+              postData.weight = postWeight;
+              matchPosts.push(postData);
+            }
+          });
+        }
+
+        var resultInnerHtml = '';
+        if (matchPosts.length) {
+          // 按权重递增的顺序排序，使权重大的优先显示
+          matchPosts.sort(function (left, right) {
+            return right.weight - left.weight;
+          });
+          resultInnerHtml += '<ul>';
+          matchPosts.forEach(function (post) {
+            resultInnerHtml += '<li><a class="search-results-title" href="' + post.url + '">';
+            resultInnerHtml += post.title;
+            resultInnerHtml += '</a><div class="search-results-content">';
+            resultInnerHtml += post.content;
+            resultInnerHtml += '</div></li>';
+          });
+          resultInnerHtml += '</ul>';
+        } else {
+          resultInnerHtml += '<div class="search-results-none"><i class="far fa-meh"></i></div>';
+        }
+        $result.html(resultInnerHtml);
+      };
+      $input.on('input', searchPost);
+      $input.on('keyup', function (e) {
+        if (e.keyCode === Stun.utils.codeToKeyCode('Enter')) {
+          searchPost();
+        }
+      });
+    }
+  });
+}
+
+function closeSearch () {
+  $('body').css({ overflow: 'auto' });
+  $('.search-popup').css({ display: 'none' });
+  $('.search-mask').css({ display: 'none' });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+  Stun.utils.pjaxReloadLocalSearch = function () {
+    $('.header-nav-search').on('click', function (e) {
+      e.stopPropagation();
+      $('body').css('overflow', 'hidden');
+      $('.search-popup')
+        .velocity('stop')
+        .velocity('transition.expandIn', {
+          duration: 300,
+          complete: function () {
+            $('.search-popup input').focus();
+          }
+        });
+      $('.search-mask')
+        .velocity('stop')
+        .velocity('transition.fadeIn', {
+          duration: 300
+        });
+
+      initSearch();
+    });
+    $('.search-mask, .search-close').on('click', function () {
+      closeSearch();
+    });
+    $(document).on('keydown', function (e) {
+      // Escape <=> 27
+      if (e.keyCode === Stun.utils.codeToKeyCode('Escape')) {
+        closeSearch();
+      }
+    });
+  };
+
+  Stun.utils.pjaxReloadLocalSearch();
+}, false);
+
+function safeOpenUrl(url) {
+  var newTab = window.open();
+  newTab.opener = null;
+  newTab.location = url;
+}
+
+function extSearch(engine) {
+  var engines = {
+    google: 'https://www.google.com/search?q=',
+    bing: 'https://cn.bing.com/search?q=',
+    baidu: 'https://www.baidu.com/s?ie=UTF-8&wd=',
+  };
+  var host = window.location.host;
+  var query = $('.search-input input').val().toLowerCase().trim();
+  var uri = engines[engine] + query + ' site:' + host;
+
+  if (query) {
+    safeOpenUrl(uri);
+  } else {
+    Stun.utils.popAlert('warning', '请输入字符');
+  }
+}
+
+var assistSearchList = window.CONFIG.assistSearch;
+
+if (Array.isArray(assistSearchList)) {
+  assistSearchList.forEach(function (name) {
+    document.querySelector('.search-btns-item--' + name).addEventListener('click', function () {
+      extSearch(name);
+    }, false);
+  });
+}</script><script src="https://cdn.jsdelivr.net/npm/pjax@latest/pjax.min.js"></script><script>window.addEventListener('DOMContentLoaded', function () {
+  var pjax = new Pjax({"selectors":["head title","#main",".pjax-reload"],"history":true,"scrollTo":false,"scrollRestoration":false,"cacheBust":false,"debug":false,"currentUrlFullReload":false,"timeout":0});
+  // 加载进度条的计时器
+  var loadingTimer = null;
+
+  // 重置页面 Y 方向上的滚动偏移量
+  document.addEventListener('pjax:send', function () {
+    $('.header-nav-menu').removeClass('show');
+    if (CONFIG.pjax && CONFIG.pjax.avoidBanner) {
+      $('html').velocity('scroll', {
+        duration: 500,
+        offset: $('#header').height(),
+        easing: 'easeInOutCubic'
+      });
+    }
+
+    var loadingBarWidth = 20;
+    var MAX_LOADING_WIDTH = 95;
+
+    $('.loading-bar').addClass('loading');
+    $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    clearInterval(loadingTimer);
+    loadingTimer = setInterval(function () {
+      loadingBarWidth += 3;
+      if (loadingBarWidth > MAX_LOADING_WIDTH) {
+        loadingBarWidth = MAX_LOADING_WIDTH;
+      }
+      $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    }, 500);
+  }, false);
+
+  window.addEventListener('pjax:complete', function () {
+    clearInterval(loadingTimer);
+    $('.loading-bar__progress').css('width', '100%');
+    $('.loading-bar').removeClass('loading');
+    setTimeout(function () {
+      $('.loading-bar__progress').css('width', '0');
+    }, 400);
+    $('link[rel=prefetch], script[data-pjax-rm]').each(function () {
+      $(this).remove();
+    });
+    $('script[data-pjax], #pjax-reload script').each(function () {
+      $(this).parent().append($(this).remove());
+    });
+
+    if (Stun.utils.pjaxReloadBoot) {
+      Stun.utils.pjaxReloadBoot();
+    }
+    if (Stun.utils.pjaxReloadScroll) {
+      Stun.utils.pjaxReloadScroll();
+    }
+    if (Stun.utils.pjaxReloadSidebar) {
+      Stun.utils.pjaxReloadSidebar();
+    }
+    if (false) {
+      if (Stun.utils.pjaxReloadHeader) {
+        Stun.utils.pjaxReloadHeader();
+      }
+      if (Stun.utils.pjaxReloadScrollIcon) {
+        Stun.utils.pjaxReloadScrollIcon();
+      }
+      if (Stun.utils.pjaxReloadLocalSearch) {
+        Stun.utils.pjaxReloadLocalSearch();
+      }
+    }
+  }, false);
+}, false);</script><div id="pjax-reload"><link href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" rel="stylesheet" type="text/css"><link href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/copy-tex.css" rel="stylesheet" type="text/css"><script src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/copy-tex.min.js"></script><script src="https://cdn.jsdelivr.net/gh/sukkaw/busuanzi@latest/bsz.pure.mini.js" async></script></div><script src="/js/utils.js?v=2.6.2"></script><script src="/js/stun-boot.js?v=2.6.2"></script><script src="/js/scroll.js?v=2.6.2"></script><script src="/js/header.js?v=2.6.2"></script><script src="/js/sidebar.js?v=2.6.2"></script><script type="application/json" src="/search.xml"></script></body></html>
