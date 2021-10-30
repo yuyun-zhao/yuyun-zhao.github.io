@@ -9,9 +9,8 @@
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90MySQL%E3%80%91MySQL%E9%AB%98%E7%BA%A7/20180831173911997">
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90MySQL%E3%80%91MySQL%E9%AB%98%E7%BA%A7/20200801165252510.png">
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90MySQL%E3%80%91MySQL%E9%AB%98%E7%BA%A7/20200801170442428.png">
-<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90MySQL%E3%80%91MySQL%E9%AB%98%E7%BA%A7/index.png">
 <meta property="article:published_time" content="2021-10-28T08:18:38.000Z">
-<meta property="article:modified_time" content="2021-10-28T13:34:10.121Z">
+<meta property="article:modified_time" content="2021-10-30T06:23:15.911Z">
 <meta property="article:author" content="yuyun zhao">
 <meta property="article:tag" content="MySQL">
 <meta name="twitter:card" content="summary">
@@ -39,7 +38,7 @@ var CONFIG = {
   sourcePath: {"js":"js","css":"css","images":"images"},
 };
 
-window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【MySQL】MySQL 高级</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-10-28</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-10-28</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">2.5k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">14分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body"><p><img src="/images/%E3%80%90MySQL%E3%80%91MySQL%E9%AB%98%E7%BA%A7/image-20210913132511709.png" alt="image-20210913132511709" /></p>
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【MySQL】MySQL 高级</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-10-28</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-10-30</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">2.3k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">12分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body"><p><img src="/images/%E3%80%90MySQL%E3%80%91MySQL%E9%AB%98%E7%BA%A7/image-20210913132511709.png" alt="image-20210913132511709" /></p>
 
         <h2 id="mysql-逻辑架构"   >
           <a href="#mysql-逻辑架构" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#mysql-逻辑架构"></a> MySQL 逻辑架构</h2>
@@ -155,6 +154,18 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <li>InnoDB：适用于查询中包含较多的数据更新操作，其行级锁机制和多版本的支持为数据读取和更新的混合操作提供了良好的并发机制</li>
 <li>MEMORY：适用于存储非永久需要的数据，或者是能够从基于磁盘的表中重新生成的数据</li>
 </ul>
+<p>存储引擎中索引的实现见<a href="https://yuyun-zhao.github.io/2021/10/27/%E3%80%90MySQL%E3%80%91MySQL%E7%B4%A2%E5%BC%95/">【MySQL】MySQL 索引</a>。</p>
+
+        <h3 id="存储引擎的选择"   >
+          <a href="#存储引擎的选择" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#存储引擎的选择"></a> 存储引擎的选择</h3>
+      
+<p>在选择存储引擎时，应该根据应用系统的特点选择合适的存储引擎。对于复杂的应用系统，还可以根据实际情况选择多种存储引擎进行组合。以下是几种常用的存储引擎的使用环境。</p>
+<ul>
+<li>InnoDB : 是Mysql的默认存储引擎，用于事务处理应用程序，支持外键。如果应用对事务的完整性有比较高的要求，在并发条件下要求数据的一致性，数据操作除了插入和查询意外，还包含很多的更新、删除操作，那么InnoDB存储引擎是比较合适的选择。InnoDB存储引擎除了有效的降低由于删除和更新导致的锁定， 还可以确保事务的完整提交和回滚，对于类似于计费系统或者财务系统等对数据准确性要求比较高的系统，InnoDB是最合适的选择。</li>
+<li>MyISAM ： 如果应用是以读操作和插入操作为主，只有很少的更新和删除操作，并且对事务的完整性、并发性要求不是很高，那么选择这个存储引擎是非常合适的。</li>
+<li>MEMORY：将所有数据保存在RAM中，在需要快速定位记录和其他类似数据环境下，可以提供几块的访问。MEMORY的缺陷就是对表的大小有限制，太大的表无法缓存在内存中，其次是要确保表的数据可以恢复，数据库异常终止后表中的数据是可以恢复的。MEMORY表通常用于更新不太频繁的小表，用以快速得到访问结果。</li>
+<li>MERGE：用于将一系列等同的MyISAM表以逻辑方式组合在一起，并作为一个对象引用他们。MERGE表的优点在于可以突破对单个MyISAM表的大小限制，并且通过将不同的表分布在多个磁盘上，可以有效的改善MERGE表的访问效率。这对于存储诸如数据仓储等VLDB环境十分合适。</li>
+</ul>
 
         <h3 id="存储引擎相关命令"   >
           <a href="#存储引擎相关命令" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#存储引擎相关命令"></a> 存储引擎相关命令</h3>
@@ -164,61 +175,10 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <p><img src="/images/%E3%80%90MySQL%E3%80%91MySQL%E9%AB%98%E7%BA%A7/20200801170442428.png" alt="存储引擎" /></p>
 <p><code>show variables like 'default_storage_engine%';</code> 查看当前数据库正在使用的存储引擎。</p>
 <figure class="highlight shell"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> show variables like <span class="string">&#x27;default_storage_engine%&#x27;</span>;</span></span><br><span class="line">+------------------------+--------+</span><br><span class="line">| Variable_name          | Value  |</span><br><span class="line">+------------------------+--------+</span><br><span class="line">| default_storage_engine | InnoDB |</span><br><span class="line">+------------------------+--------+</span><br><span class="line">1 row in set (0.01 sec)</span><br></pre></td></tr></table></div></figure>
-
-        <h3 id="索引的实现原理"   >
-          <a href="#索引的实现原理" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#索引的实现原理"></a> 索引的实现原理</h3>
-      
-<ol>
-<li>在任何数据库当中<strong>主键上都会自动添加索引对象</strong>。另外在MySQL当中，一个字段上如果有<strong>UNIQUE</strong>约束的话，也会自动创建索引对象。</li>
-<li>在任何数据库当中，任何一张表的任何一条记录在硬盘存储上都有—个硬盘上的物理存储编号。</li>
-<li>在MySQL当中，索引是一个单独的对象，在不同的存储引擎中以不同的形式存在。
-<ul>
-<li>MyISAM：索引存储在一个.MYI文件中；</li>
-<li>InnoDB：索引存储在一个逻辑名称叫做tablespace的空间当中；</li>
-<li>MBMORY：索引被存储在内存当中。</li>
-</ul>
-</li>
-</ol>
-<p>不管索引存储在哪里，索引在MySQL当中都是以<strong>自平衡二叉树</strong>(B-Tree) 的形式存在。</p>
-<blockquote>
-<p>索引的简易实现原理：<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Vy4y1z7EX?p=115" >https://www.bilibili.com/video/BV1Vy4y1z7EX?p=115</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span><br />
-索引的数据结构：<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="http://blog.codinglabs.org/articles/theory-of-mysql-index.html" >http://blog.codinglabs.org/articles/theory-of-mysql-index.html</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
-</blockquote>
-<p><img src="/images/%E3%80%90MySQL%E3%80%91MySQL%E9%AB%98%E7%BA%A7/index.png" alt="index" /></p>
-<p>索引的实际实现原理更加复杂（数组+树的结合体），上图只是简易原理。</p>
 <!-- More -->
 
-        <h3 id="索引原则"   >
-          <a href="#索引原则" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#索引原则"></a> 索引原则</h3>
-      
-<ul>
-<li>索引不是越多越好（因为索引也是需要维护的，太多的话反而降低性能）</li>
-<li>不要对经常变动的数据加索引（因为DML之后，索引需要重新排序）</li>
-<li>小数据量的表不需要加索引（数据量庞大时才需要）</li>
-<li>索引一般加在常用来查询的字段上（常出现在<code>WHERE</code>之后）</li>
-<li>建议通过主键或<code>UNIQUE</code>字段修饰的字段进行查询</li>
-</ul>
-
-        <h3 id="创建和删除索引"   >
-          <a href="#创建和删除索引" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#创建和删除索引"></a> 创建和删除索引</h3>
-      
-<blockquote>
-<p>创建索引</p>
-</blockquote>
-<figure class="highlight sql"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> INDEX emp_ename_index <span class="keyword">ON</span> emp(ename);</span><br></pre></td></tr></table></div></figure>
-<p>给emp表的ename字段添加索引并起别名：emp_ename_index。</p>
-<blockquote>
-<p>删除索引</p>
-</blockquote>
-<figure class="highlight sql"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DROP</span> INDEX emp_ename_index <span class="keyword">ON</span> emp;</span><br></pre></td></tr></table></div></figure>
-<p>将emp表上的emp_ename_index索引对象删除。</p>
-<blockquote>
-<p>查看某一个SQL语句是否使用了索引进行检索</p>
-</blockquote>
-<figure class="highlight sql"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> emp <span class="keyword">WHERE</span> ename <span class="operator">=</span> <span class="string">&#x27;KING&#x27;</span>;</span><br></pre></td></tr></table></div></figure>
-
-        <h3 id="索引失效的情况"   >
-          <a href="#索引失效的情况" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#索引失效的情况"></a> 索引失效的情况</h3>
+        <h2 id="索引失效的情况"   >
+          <a href="#索引失效的情况" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#索引失效的情况"></a> 索引失效的情况</h2>
       
 <ol>
 <li>使用模糊查询<code>LIKE</code>，并以<code>%</code>开始时索引失效（因为索引检索时需要知道第一个字母）</li>
@@ -227,55 +187,6 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <li>在<code>WHERE</code>中<strong>索引列参与了运算</strong>时，索引失效</li>
 <li>在<code>WHERE</code>中索引列使用了<strong>函数</strong>时，索引失效</li>
 </ol>
-
-        <h3 id="索引的分类"   >
-          <a href="#索引的分类" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#索引的分类"></a> 索引的分类</h3>
-      
-<blockquote>
-<p>在一个表中，主键索引只能有一个，唯一索引可以有多个</p>
-</blockquote>
-<ul>
-<li>
-<p>主键索引（PRIMARY KEY)</p>
-<ul>
-<li>唯一的标识，主键不可重复，只能有一列作为主键</li>
-</ul>
-</li>
-<li>
-<p>唯一索引（UNIQUE KEY）</p>
-<ul>
-<li>唯一索引的名字不能重复出现，避免重复的列出现，唯一索引可以有多个</li>
-</ul>
-</li>
-<li>
-<p>常规索引（KEY/INDEX）</p>
-<ul>
-<li>默认的，用INDEX或KEY来设置</li>
-</ul>
-</li>
-<li>
-<p>全文索引（FULLTEXT）</p>
-<ul>
-<li>快速定位数据</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight sql"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 索引的使用</span></span><br><span class="line"><span class="comment">-- 1. 在创建表的时候给字段增加索引</span></span><br><span class="line"><span class="comment">-- 2. 创建完毕后，增加索引</span></span><br><span class="line"><span class="keyword">SHOW</span> INDEX <span class="keyword">FROM</span> student;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 增加一个全文索引  ADD FULLTEXT INDEX 索引名（列名）</span></span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> school.`student` <span class="keyword">ADD</span> FULLTEXT INDEX `studentName`(`studentName`);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- EXPLAIN 分析sql执行的状况 </span></span><br><span class="line"></span><br><span class="line">EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> student; <span class="comment">-- 非全文索引</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> student <span class="keyword">WHERE</span> <span class="keyword">MATCH</span>(studentName) AGAINST(<span class="string">&#x27;张&#x27;</span>);</span><br></pre></td></tr></table></div></figure>
-
-        <h3 id="索引原则-2"   >
-          <a href="#索引原则-2" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#索引原则-2"></a> 索引原则</h3>
-      
-<ul>
-<li>索引不是越多越好</li>
-<li>不要对经常变动的数据加索引</li>
-<li>小数据量的表不需要加索引</li>
-<li>索引一般加在常用来查询的字段上</li>
-</ul>
-<blockquote>
-<p>索引的数据结构：<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="http://blog.codinglabs.org/articles/theory-of-mysql-index.html" >http://blog.codinglabs.org/articles/theory-of-mysql-index.html</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
-</blockquote>
-<p>Hash类型的索引</p>
-<p>Btree：InnoDB的默认数据结构</p>
 
         <h2 id="sql-性能下降的原因"   >
           <a href="#sql-性能下降的原因" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#sql-性能下降的原因"></a> SQL 性能下降的原因</h2>
@@ -288,14 +199,10 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 </ul>
 </div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yuyun-zhao.github.io">yuyun zhao</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yuyun-zhao.github.io/2021/10/28/%E3%80%90MySQL%E3%80%91MySQL%E9%AB%98%E7%BA%A7/">http://yuyun-zhao.github.io/2021/10/28/%E3%80%90MySQL%E3%80%91MySQL%E9%AB%98%E7%BA%A7/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.github.io/tags/MySQL/">MySQL</a></span></div><nav class="post-paginator paginator"><div class="paginator-next"><a class="paginator-next__link" href="/2021/10/27/%E3%80%90MySQL%E3%80%91MySQL%E7%B4%A2%E5%BC%95/"><span class="paginator-prev__text">【MySQL】MySQL 索引</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#mysql-%E9%80%BB%E8%BE%91%E6%9E%B6%E6%9E%84"><span class="toc-text">
            MySQL 逻辑架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E"><span class="toc-text">
-           存储引擎</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-text">
-           存储引擎相关命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-text">
-           索引的实现原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E5%8E%9F%E5%88%99"><span class="toc-text">
-           索引原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%92%8C%E5%88%A0%E9%99%A4%E7%B4%A2%E5%BC%95"><span class="toc-text">
-           创建和删除索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88%E7%9A%84%E6%83%85%E5%86%B5"><span class="toc-text">
-           索引失效的情况</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-text">
-           索引的分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E5%8E%9F%E5%88%99-2"><span class="toc-text">
-           索引原则</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sql-%E6%80%A7%E8%83%BD%E4%B8%8B%E9%99%8D%E7%9A%84%E5%8E%9F%E5%9B%A0"><span class="toc-text">
+           存储引擎</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E7%9A%84%E9%80%89%E6%8B%A9"><span class="toc-text">
+           存储引擎的选择</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-text">
+           存储引擎相关命令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88%E7%9A%84%E6%83%85%E5%86%B5"><span class="toc-text">
+           索引失效的情况</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sql-%E6%80%A7%E8%83%BD%E4%B8%8B%E9%99%8D%E7%9A%84%E5%8E%9F%E5%9B%A0"><span class="toc-text">
            SQL 性能下降的原因</span></a></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/author.png" alt="avatar"></div><p class="sidebar-ov-author__text">no code no life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/YUYUN-ZHAO" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="zyy1024462136" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a><a class="sidebar-ov-social-item" href="1024462136" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="mailto:im.yuyunzhao@gmail.com" target="_blank" rel="noopener" data-popover="social.Gmail" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">Gmail</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">108</div><div class="sidebar-ov-state-item__name">文章</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">35</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">35</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2021</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>yuyun zhao</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script>function initSearch() {
   var isXML = true;
   var search_path = 'search.xml';
