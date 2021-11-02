@@ -40,7 +40,7 @@
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90MySQL%E3%80%91MySQL%E7%B4%A2%E5%BC%95/1552489053763.png">
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90MySQL%E3%80%91MySQL%E7%B4%A2%E5%BC%95/1552489671119.png">
 <meta property="article:published_time" content="2021-10-28T13:32:08.000Z">
-<meta property="article:modified_time" content="2021-11-01T12:24:30.143Z">
+<meta property="article:modified_time" content="2021-11-02T02:52:30.361Z">
 <meta property="article:author" content="yuyun zhao">
 <meta property="article:tag" content="MySQL">
 <meta name="twitter:card" content="summary">
@@ -68,7 +68,7 @@ var CONFIG = {
   sourcePath: {"js":"js","css":"css","images":"images"},
 };
 
-window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【MySQL】MySQL 索引</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-10-28</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-11-01</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">15.3k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">90分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body"><p><img src="/images/%E3%80%90MySQL%E3%80%91MySQL%E7%B4%A2%E5%BC%95/image-20210913132511709.png" alt="image-20210913132511709" /></p>
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【MySQL】MySQL 索引</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-10-28</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-11-02</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">17.8k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">109分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body"><p><img src="/images/%E3%80%90MySQL%E3%80%91MySQL%E7%B4%A2%E5%BC%95/image-20210913132511709.png" alt="image-20210913132511709" /></p>
 <blockquote>
 <p>MySQL官方对索引的定义为：索引（Index）是帮助 MySQL 高效<strong>查找</strong>数据的<strong>排好序</strong>的<strong>数据结构</strong>。其中，排好序体现在 B+ 树最底层页结构组成的<strong>双向链表</strong>结构上。</p>
 </blockquote>
@@ -712,11 +712,88 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <p>覆盖索引情况分析：如果要查询的字段正好是索引，这样就不需要回表了，直接在目标索引树上进行查找，用该字段的值作为索引去查找，查找到的结果本身就是要查的目标字段，所以不用回表了，可以直接找到符合条件的目标字段。并且查出的结果本身就是排好序的，因为是在排好序的索引双向链表上直接返回的，本身就排好了序，不需要再 ORDER BY。</p>
 <p><strong>总结</strong>：在必须要回表的情况下，优化器在发现要查找的（满足条件）的数据占比较低时（说明查找的代价较低），就会使用索引，此时查找的代价比较小，速度较快。</p>
 
+        <h3 id="索引失效相关题目"   >
+          <a href="#索引失效相关题目" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#索引失效相关题目"></a> 索引失效相关题目</h3>
+      
+<p>假设 a，b，c 组成了一个复合索引：<code>index(a, b, c)</code></p>
+<div class="table-container"><table>
+<thead>
+<tr>
+<th>Where 语句</th>
+<th>索引是否被使用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>where a = 3</td>
+<td>Y，使用到a</td>
+</tr>
+<tr>
+<td>where a = 3 and b = 5</td>
+<td>Y，使用到a，b</td>
+</tr>
+<tr>
+<td>where a = 3 and b = 5</td>
+<td>Y，使用到a，b，c</td>
+</tr>
+<tr>
+<td>where b = 3 或者 where b = 3 and c = 4 或者 where c = 4</td>
+<td>N，没有用到a字段</td>
+</tr>
+<tr>
+<td>where a = 3 and c = 5</td>
+<td>使用到a，但是没有用到c，因为b断了</td>
+</tr>
+<tr>
+<td>where a = 3 and b &gt; 4 and c = 5</td>
+<td>使用到a，b，但是没有用到c，因为c在范围之后</td>
+</tr>
+<tr>
+<td>where a = 3 and b like ‘kk%’ and c = 4</td>
+<td>Y，a，b，c都用到</td>
+</tr>
+<tr>
+<td>where a = 3 and b like ‘%kk’ and c = 4</td>
+<td>只用到a</td>
+</tr>
+<tr>
+<td>where a = 3 and b like ‘%kk%’ and c = 4</td>
+<td>只用到a</td>
+</tr>
+<tr>
+<td>where a = 3 and b like ‘k%kk%’ and c = 4</td>
+<td>Y，a，b，c都用到</td>
+</tr>
+</tbody>
+</table></div>
+<p>综合案例：</p>
+<blockquote>
+<p>数据准备</p>
+</blockquote>
+<figure class="highlight sql"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 创建表 */</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `test03`(</span><br><span class="line">`id` <span class="type">INT</span> <span class="keyword">PRIMARY</span> KEY <span class="keyword">NOT</span> <span class="keyword">NULL</span> AUTO_INCREMENT,</span><br><span class="line">`c1` <span class="type">CHAR</span>(<span class="number">10</span>),</span><br><span class="line">`c2` <span class="type">CHAR</span>(<span class="number">10</span>),</span><br><span class="line">`c3` <span class="type">CHAR</span>(<span class="number">10</span>),</span><br><span class="line">`c4` <span class="type">CHAR</span>(<span class="number">10</span>),</span><br><span class="line">`c5` <span class="type">CHAR</span>(<span class="number">10</span>)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 插入数据 */</span></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> `test03`(`c1`,`c2`,`c3`,`c4`,`c5`) <span class="keyword">VALUES</span>(<span class="string">&#x27;a1&#x27;</span>,<span class="string">&#x27;a2&#x27;</span>,<span class="string">&#x27;a3&#x27;</span>,<span class="string">&#x27;a4&#x27;</span>,<span class="string">&#x27;a5&#x27;</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> `test03`(`c1`,`c2`,`c3`,`c4`,`c5`) <span class="keyword">VALUES</span>(<span class="string">&#x27;b1&#x27;</span>,<span class="string">&#x27;b22&#x27;</span>,<span class="string">&#x27;b3&#x27;</span>,<span class="string">&#x27;b4&#x27;</span>,<span class="string">&#x27;b5&#x27;</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> `test03`(`c1`,`c2`,`c3`,`c4`,`c5`) <span class="keyword">VALUES</span>(<span class="string">&#x27;c1&#x27;</span>,<span class="string">&#x27;c2&#x27;</span>,<span class="string">&#x27;c3&#x27;</span>,<span class="string">&#x27;c4&#x27;</span>,<span class="string">&#x27;c5&#x27;</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> `test03`(`c1`,`c2`,`c3`,`c4`,`c5`) <span class="keyword">VALUES</span>(<span class="string">&#x27;d1&#x27;</span>,<span class="string">&#x27;d2&#x27;</span>,<span class="string">&#x27;d3&#x27;</span>,<span class="string">&#x27;d4&#x27;</span>,<span class="string">&#x27;d5&#x27;</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> `test03`(`c1`,`c2`,`c3`,`c4`,`c5`) <span class="keyword">VALUES</span>(<span class="string">&#x27;e1&#x27;</span>,<span class="string">&#x27;e2&#x27;</span>,<span class="string">&#x27;e3&#x27;</span>,<span class="string">&#x27;e4&#x27;</span>,<span class="string">&#x27;e5&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 创建复合索引 */</span></span><br><span class="line"><span class="keyword">CREATE</span> INDEX idx_test03_c1234 <span class="keyword">ON</span> `test03`(`c1`,`c2`,`c3`,`c4`);</span><br></pre></td></tr></table></div></figure>
+<blockquote>
+<p>题目</p>
+</blockquote>
+<figure class="highlight sql"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 最好索引怎么创建的，就怎么用，按照顺序使用，避免让MySQL再自己去翻译一次 */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* 1.全值匹配 用到索引c1 c2 c3 c4全字段 */</span></span><br><span class="line">EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `test03` <span class="keyword">WHERE</span> `c1` <span class="operator">=</span> <span class="string">&#x27;a1&#x27;</span> <span class="keyword">AND</span> `c2` <span class="operator">=</span> <span class="string">&#x27;a2&#x27;</span> <span class="keyword">AND</span> `c3` <span class="operator">=</span> <span class="string">&#x27;a3&#x27;</span> <span class="keyword">AND</span> `c4` <span class="operator">=</span> <span class="string">&#x27;a4&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 2.用到索引c1 c2 c3 c4全字段 MySQL的查询优化器会优化SQL语句的顺序*/</span></span><br><span class="line">EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `test03` <span class="keyword">WHERE</span> `c1` <span class="operator">=</span> <span class="string">&#x27;a1&#x27;</span> <span class="keyword">AND</span> `c2` <span class="operator">=</span> <span class="string">&#x27;a2&#x27;</span> <span class="keyword">AND</span> `c4` <span class="operator">=</span> <span class="string">&#x27;a4&#x27;</span> <span class="keyword">AND</span> `c3` <span class="operator">=</span> <span class="string">&#x27;a3&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 3.用到索引c1 c2 c3 c4全字段 MySQL的查询优化器会优化SQL语句的顺序*/</span></span><br><span class="line">EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `test03` <span class="keyword">WHERE</span> `c4` <span class="operator">=</span> <span class="string">&#x27;a4&#x27;</span> <span class="keyword">AND</span> `c3` <span class="operator">=</span> <span class="string">&#x27;a3&#x27;</span> <span class="keyword">AND</span> `c2` <span class="operator">=</span> <span class="string">&#x27;a2&#x27;</span> <span class="keyword">AND</span> `c1` <span class="operator">=</span> <span class="string">&#x27;a1&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 4.用到索引c1 c2 c3字段，c4字段失效，范围之后全失效 */</span></span><br><span class="line">EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `test03` <span class="keyword">WHERE</span> `c1` <span class="operator">=</span> <span class="string">&#x27;a1&#x27;</span> <span class="keyword">AND</span> `c2` <span class="operator">=</span> <span class="string">&#x27;a2&#x27;</span> <span class="keyword">AND</span> `c3` <span class="operator">&gt;</span> <span class="string">&#x27;a3&#x27;</span> <span class="keyword">AND</span> `c4` <span class="operator">=</span> <span class="string">&#x27;a4&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 5.用到索引c1 c2 c3 c4全字段 MySQL的查询优化器会优化SQL语句的顺序*/</span></span><br><span class="line">EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `test03` <span class="keyword">WHERE</span> `c1` <span class="operator">=</span> <span class="string">&#x27;a1&#x27;</span> <span class="keyword">AND</span> `c2` <span class="operator">=</span> <span class="string">&#x27;a2&#x27;</span> <span class="keyword">AND</span> `c4` <span class="operator">&gt;</span> <span class="string">&#x27;a4&#x27;</span> <span class="keyword">AND</span> `c3` <span class="operator">=</span> <span class="string">&#x27;a3&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">   6.用到了索引c1 c2 c3三个字段, c1和c2两个字段用于查找,  c3字段用于排序了但是没有统计到key_len中，c4字段失效</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `test03` <span class="keyword">WHERE</span> `c1` <span class="operator">=</span> <span class="string">&#x27;a1&#x27;</span> <span class="keyword">AND</span> `c2` <span class="operator">=</span> <span class="string">&#x27;a2&#x27;</span> <span class="keyword">AND</span> `c4` <span class="operator">=</span> <span class="string">&#x27;a4&#x27;</span> <span class="keyword">ORDER</span> <span class="keyword">BY</span> `c3`;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 7.用到了索引c1 c2 c3三个字段，c1和c2两个字段用于查找, c3字段用于排序了但是没有统计到key_len中*/</span></span><br><span class="line">EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `test03` <span class="keyword">WHERE</span> `c1` <span class="operator">=</span> <span class="string">&#x27;a1&#x27;</span> <span class="keyword">AND</span> `c2` <span class="operator">=</span> <span class="string">&#x27;a2&#x27;</span> <span class="keyword">ORDER</span> <span class="keyword">BY</span> `c3`;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">   8.用到了索引c1 c2两个字段，c4失效，c1和c2两个字段用于查找，c4字段排序产生了Using filesort说明排序没有用到c4字段 ，因为断了c3，想隔着c3去排序c4是做不到的，需要额外的文件排序</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `test03` <span class="keyword">WHERE</span> `c1` <span class="operator">=</span> <span class="string">&#x27;a1&#x27;</span> <span class="keyword">AND</span> `c2` <span class="operator">=</span> <span class="string">&#x27;a2&#x27;</span> <span class="keyword">ORDER</span> <span class="keyword">BY</span> `c4`;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 9.用到了索引c1 c2 c3三个字段，c1用于查找，c2和c3用于排序 */</span></span><br><span class="line">EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `test03` <span class="keyword">WHERE</span> `c1` <span class="operator">=</span> <span class="string">&#x27;a1&#x27;</span> <span class="keyword">AND</span> `c5` <span class="operator">=</span> <span class="string">&#x27;a5&#x27;</span> <span class="keyword">ORDER</span> <span class="keyword">BY</span> `c2`, `c3`;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 10.用到了c1一个字段，c1用于查找，c3和c2两个字段索引失效，产生了Using filesort */</span></span><br><span class="line">EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `test03` <span class="keyword">WHERE</span> `c1` <span class="operator">=</span> <span class="string">&#x27;a1&#x27;</span> <span class="keyword">AND</span> `c5` <span class="operator">=</span> <span class="string">&#x27;a5&#x27;</span> <span class="keyword">ORDER</span> <span class="keyword">BY</span> `c3`, `c2`;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 11.用到了c1 c2 c3三个字段，c1 c2用于查找，c2 c3用于排序 */</span></span><br><span class="line">EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `test03` <span class="keyword">WHERE</span> `c1` <span class="operator">=</span> <span class="string">&#x27;a1&#x27;</span> <span class="keyword">AND</span>  `c2` <span class="operator">=</span> <span class="string">&#x27;a2&#x27;</span> <span class="keyword">ORDER</span> <span class="keyword">BY</span> c2, c3;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 12.用到了c1 c2 c3三个字段，c1 c2用于查找，c2 c3用于排序 */</span></span><br><span class="line">EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `test03` <span class="keyword">WHERE</span> `c1` <span class="operator">=</span> <span class="string">&#x27;a1&#x27;</span> <span class="keyword">AND</span>  `c2` <span class="operator">=</span> <span class="string">&#x27;a2&#x27;</span> <span class="keyword">AND</span> `c5` <span class="operator">=</span> <span class="string">&#x27;a5&#x27;</span> <span class="keyword">ORDER</span> <span class="keyword">BY</span> c2, c3;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">   13.用到了c1 c2 c3三个字段，c1 c2用于查找，c2 c3用于排序 没有产生Using filesort </span></span><br><span class="line"><span class="comment">      因为之前c2这个字段已经确定了是&#x27;a2&#x27;了，这是一个常量，再去ORDER BY c3,c2 这时候c2已经不用排序了！</span></span><br><span class="line"><span class="comment">      所以没有产生Using filesort 和(10)进行对比学习！</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `test03` <span class="keyword">WHERE</span> `c1` <span class="operator">=</span> <span class="string">&#x27;a1&#x27;</span> <span class="keyword">AND</span> `c2` <span class="operator">=</span> <span class="string">&#x27;a2&#x27;</span> <span class="keyword">AND</span> `c5` <span class="operator">=</span> <span class="string">&#x27;a5&#x27;</span> <span class="keyword">ORDER</span> <span class="keyword">BY</span> c3, c2;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/* GROUP BY 表面上是叫做分组，但是分组之前必定排序。 */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* 14.用到c1 c2 c3三个字段，c1用于查找，c2 c3用于排序，c4失效 */</span></span><br><span class="line">EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `test03` <span class="keyword">WHERE</span> `c1` <span class="operator">=</span> <span class="string">&#x27;a1&#x27;</span> <span class="keyword">AND</span> `c4` <span class="operator">=</span> <span class="string">&#x27;a4&#x27;</span> <span class="keyword">GROUP</span> <span class="keyword">BY</span> `c2`,`c3`;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 15.用到c1这一个字段，c4失效，c2和c3排序失效产生了Using filesort */</span></span><br><span class="line">EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `test03` <span class="keyword">WHERE</span> `c1` <span class="operator">=</span> <span class="string">&#x27;a1&#x27;</span> <span class="keyword">AND</span> `c4` <span class="operator">=</span> <span class="string">&#x27;a4&#x27;</span> <span class="keyword">GROUP</span> <span class="keyword">BY</span> `c3`,`c2`;</span><br></pre></td></tr></table></div></figure>
+<p>总结：<code>GROUP BY</code>基本上都需要进行排序，索引优化几乎和<code>ORDER BY</code>一致，但是<code>GROUP BY</code>会有临时表的产生。</p>
+
         <h2 id="优化-sql-步骤"   >
           <a href="#优化-sql-步骤" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#优化-sql-步骤"></a> 优化 SQL 步骤</h2>
       
-<p>在应用的的开发过程中，由于初期数据量小，开发人员写 SQL 语句时更重视功能上的实现，但是当应用系统正式上线后，随着生产数据量的急剧增长，很多 SQL 语句开始逐渐显露出性能问题，对生产的影响也越来越大，此时这些有问题的 SQL 语句就成为整个系统性能的瓶颈，因此我们必须要对它们进行优化，本章将详细介绍在 MySQL 中优化 SQL 语句的方法。</p>
-<p>当面对一个有 SQL 性能问题的数据库时，我们应该从何处入手来进行系统的分析，使得能够尽快定位问题 SQL 并尽快解决问题。</p>
+<p>在应用的的开发过程中，由于初期数据量小，开发人员写 SQL 语句时更重视功能上的实现，但是当应用系统正式上线后，随着生产数据量的急剧增长，很多 SQL 语句开始逐渐显露出性能问题，对生产的影响也越来越大，此时这些有问题的 SQL 语句就成为整个系统性能的瓶颈，因此我们必须要对它们进行优化。</p>
+<p>当面对一个有 SQL 性能问题的数据库时，我们的分析顺序：</p>
+<ul>
+<li>观察至少 1 天，看看生产环境下的慢 SQL 情况</li>
+<li>定位低效率的 SQL：
+<ul>
+<li>开启<strong>慢查询日志</strong>，设置阈值，比如超过 5 秒钟的就是慢 SQL，并将它抓取出来</li>
+<li>或 <code>show processlist</code> 实时查看 SQL 执行情况</li>
+</ul>
+</li>
+<li><code>EXPLAIN</code> 分析 SQL 执行计划</li>
+<li><code>show profiles</code> 查询 SQL 在 MySQL 数据库中的执行细节和生命周期情况</li>
+<li>运维经理或者DBA，进行 MySQL 数据库服务器的参数调优</li>
+</ul>
 
         <h3 id="查看-sql-执行频率"   >
           <a href="#查看-sql-执行频率" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#查看-sql-执行频率"></a> 查看 SQL 执行频率</h3>
@@ -787,14 +864,57 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <li><code>Innodb_***</code> :  这几个参数只是针对 InnoDB 存储引擎的，累加的算法也略有不同。</li>
 </ul>
 
-        <h3 id="定位低效率执行-sql"   >
-          <a href="#定位低效率执行-sql" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#定位低效率执行-sql"></a> 定位低效率执行 SQL</h3>
+        <h3 id="定位低效率的-sql"   >
+          <a href="#定位低效率的-sql" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#定位低效率的-sql"></a> 定位低效率的 SQL</h3>
       
 <p>可以通过以下两种方式定位执行效率较低的 SQL 语句。</p>
 <ul>
-<li><strong>慢查询日志</strong>：通过慢查询日志定位那些执行效率较低的 SQL 语句，用<code>--log-slow-queries[=file_name]</code>选项启动时，mysqld 写一个包含所有执行时间超过 <code>long_query_time</code> 秒的 SQL 语句的日志文件。具体可以<mark>查看本书第 26 章中日志管理</mark>的相关部分。</li>
+<li><strong>慢查询日志</strong>：通过慢查询日志定位那些执行效率较低的 SQL 语句，用<code>--log-slow-queries[=file_name]</code>选项启动时，mysqld 写一个包含所有执行时间超过 <code>long_query_time</code> 秒的 SQL 语句的日志文件。</li>
 <li><code>show processlist</code>：慢查询日志在查询结束以后才纪录，所以在应用反映执行效率出现问题的时候查询慢查询日志并不能定位问题，可以使用<code>show processlist</code>命令查看当前MySQL在进行的线程，包括线程的状态、是否锁表等，可以实时地查看 SQL 的执行情况，同时对一些锁表操作进行优化。</li>
 </ul>
+
+        <h4 id="慢查询日志"   >
+          <a href="#慢查询日志" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#慢查询日志"></a> 慢查询日志</h4>
+      
+<ul>
+<li>MySQL的慢查询日志是 MySQL 提供的一种日志记录，它用来记录在 MySQL 中响应时间超过阈值的语句，具体指运行时间超过 <code>long_query_time</code> 值的 SQL，则会被记录到慢查询日志中。</li>
+<li><code>long_query_time</code> 的默认值为 10，意思是运行 10 秒以上的语句。</li>
+<li>由慢查询日志来查看哪些 SQL 超出了我们的最大忍耐时间值，比如一条SQL执行超过5秒钟，我们就算慢 SQL，希望能收集超过 5 秒钟的 SQL，结合之前 <code>explain</code> 进行全面分析。</li>
+</ul>
+<blockquote>
+<p>特别说明</p>
+</blockquote>
+<p><strong>默认情况下，MySQL 数据库没有开启慢查询日志</strong>，需要我们手动来设置这个参数。</p>
+<p><strong>当然，如果不是调优需要的话，一般不建议启动该参数</strong>，因为开启慢查询日志会或多或少带来一定的性能影响。慢查询日志支持将日志记录写入文件。</p>
+<blockquote>
+<p>查看慢查询日志是否开以及如何开启</p>
+</blockquote>
+<ul>
+<li>
+<p>查看慢查询日志是否开启：<code>SHOW VARIABLES LIKE '%slow_query_log%';</code>。</p>
+</li>
+<li>
+<p>开启慢查询日志：<code>SET GLOBAL slow_query_log = 1;</code>。<strong>使用该方法开启 MySQL 的慢查询日志只对当前数据库生效，如果 MySQL 重启后会失效。</strong></p>
+</li>
+</ul>
+<figure class="highlight shell"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 1、查看慢查询日志是否开启</span></span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> SHOW VARIABLES LIKE <span class="string">&#x27;%slow_query_log%&#x27;</span>;</span></span><br><span class="line">+---------------------+--------------------------------------+</span><br><span class="line">| Variable_name       | Value                                |</span><br><span class="line">+---------------------+--------------------------------------+</span><br><span class="line">| slow_query_log      | OFF                                  |</span><br><span class="line">| slow_query_log_file | /var/lib/mysql/1dcb5644392c-slow.log |</span><br><span class="line">+---------------------+--------------------------------------+</span><br><span class="line">2 rows in set (0.01 sec)</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 2、开启慢查询日志</span></span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> SET GLOBAL slow_query_log = 1;</span></span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br></pre></td></tr></table></div></figure>
+<p>如果要使慢查询日志永久开启，需要修改<code>my.cnf</code>文件，在<code>[mysqld]</code>下增加修改参数。</p>
+<figure class="highlight shell"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> my.cnf</span></span><br><span class="line">[mysqld]</span><br><span class="line"><span class="meta">#</span><span class="bash"> 1.这个是开启慢查询。注意ON需要大写</span></span><br><span class="line">slow_query_log=ON  </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 2.这个是存储慢查询的日志文件。这个文件不存在的话，需要自己创建</span></span><br><span class="line">slow_query_log_file=/var/lib/mysql/slow.log</span><br></pre></td></tr></table></div></figure>
+<blockquote>
+<p>开启了慢查询日志后，什么样的SQL才会被记录到慢查询日志里面呢？</p>
+</blockquote>
+<p>这个是由参数<code>long_query_time</code>控制的，默认情况下<code>long_query_time</code>的值为10秒。</p>
+<p>MySQL中查看<code>long_query_time</code>的时间：<code>SHOW VARIABLES LIKE 'long_query_time%';</code>。</p>
+<figure class="highlight shell"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 查看long_query_time 默认是10秒</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 只有SQL的执行时间&gt;10才会被记录</span></span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> SHOW VARIABLES LIKE <span class="string">&#x27;long_query_time%&#x27;</span>;</span></span><br><span class="line">+-----------------+-----------+</span><br><span class="line">| Variable_name   | Value     |</span><br><span class="line">+-----------------+-----------+</span><br><span class="line">| long_query_time | 10.000000 |</span><br><span class="line">+-----------------+-----------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></div></figure>
+<p>修改<code>long_query_time</code>的时间，需要在<code>my.cnf</code>修改配置文件</p>
+<figure class="highlight shell"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[mysqld]</span><br><span class="line"><span class="meta">#</span><span class="bash"> 这个是设置慢查询的时间，我设置的为1秒</span></span><br><span class="line">long_query_time=1</span><br></pre></td></tr></table></div></figure>
+<p>查询慢查询日志的总记录条数：<code>SHOW GLOBAL STATUS LIKE '%Slow_queries%';</code>。</p>
+<figure class="highlight shell"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> SHOW GLOBAL STATUS LIKE <span class="string">&#x27;%Slow_queries%&#x27;</span>;</span></span><br><span class="line">+---------------+-------+</span><br><span class="line">| Variable_name | Value |</span><br><span class="line">+---------------+-------+</span><br><span class="line">| Slow_queries  | 3     |</span><br><span class="line">+---------------+-------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></div></figure>
+
+        <h4 id="show-processlist"   >
+          <a href="#show-processlist" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#show-processlist"></a> show processlist</h4>
+      
+<p>慢查询日志在查询结束以后才纪录，所以在应用反映执行效率出现问题的时候查询慢查询日志并不能定位问题，可以使用<code>show processlist</code>命令查看当前MySQL在进行的线程，包括线程的状态、是否锁表等，可以实时地查看 SQL 的执行情况，同时对一些锁表操作进行优化。</p>
 <p><img src="/images/%E3%80%90MySQL%E3%80%91MySQL%E7%B4%A2%E5%BC%95/1556098544349.png" alt="1556098544349" /></p>
 <figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1） id列，用户登录mysql时，系统分配的&quot;connection_id&quot;，可以使用函数connection_id()查看</span><br><span class="line">2） user列，显示当前用户。如果不是root，这个命令就只显示用户权限范围的sql语句</span><br><span class="line">3） host列，显示这个语句是从哪个ip的哪个端口上发的，可以用来跟踪出现问题语句的用户</span><br><span class="line">4） db列，显示这个进程目前连接的是哪个数据库</span><br><span class="line">5） command列，显示当前连接的执行的命令，一般取值为休眠（sleep），查询（query），连接（connect）等</span><br><span class="line">6） time列，显示这个状态持续的时间，单位是秒</span><br><span class="line">7） state列，显示使用当前连接的sql语句的状态，很重要的列。state描述的是语句执行中的某一个状态。一个sql语句，以查询为例，可能需要经过copying to tmp table、sorting result、sending data等状态才可以完成</span><br><span class="line">8） info列，显示这个sql语句，是判断问题语句的一个重要依据</span><br></pre></td></tr></table></div></figure>
 
@@ -820,21 +940,24 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 </ul>
 <p>关于 <code>EXPLAIN</code> 指令的更多详细分析见 <a href="#explain-%E6%8C%87%E4%BB%A4">EXPLAIN 指令</a>。</p>
 
-        <h3 id="show-profile-分析-sql"   >
-          <a href="#show-profile-分析-sql" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#show-profile-分析-sql"></a> show profile 分析 SQL</h3>
+        <h3 id="show-profiles-分析-sql"   >
+          <a href="#show-profiles-分析-sql" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#show-profiles-分析-sql"></a> show profiles 分析 SQL</h3>
       
 <p>MySQL 从 5.0.37 版本开始增加了对 <code>show profiles</code> 和 <code>show profile</code> 语句的支持。<code>show profiles</code> 能够在做SQL优化时帮助我们了解时间都耗费到哪里去了。</p>
-<p>通过 <code>have_profiling</code> 参数，能够看到当前MySQL是否支持profile：</p>
+<p><code>Show Profile</code>：MySQL 提供可以用来分析当前会话中语句执行的资源消耗情况。可以用于SQL的调优的测量。<strong>默认情况下，参数处于关闭状态，并保存最近 15 次的运行结果</strong>。</p>
+<p>1、通过 <code>have_profiling</code> 参数，能够看到当前 MySQL 是否支持 profile：</p>
 <p><img src="/images/%E3%80%90MySQL%E3%80%91MySQL%E7%B4%A2%E5%BC%95/1552488401999.png" alt="1552488401999" /></p>
-<p>默认<code>profiling</code>是关闭的，可以通过set语句在Session级别开启profiling：</p>
+<p>2、默认<code>profiling</code>是关闭的，可以通过 Set 语句在 Session 级别开启 profiling：</p>
 <p><img src="/images/%E3%80%90MySQL%E3%80%91MySQL%E7%B4%A2%E5%BC%95/1552488372405.png" alt="1552488372405" /></p>
 <figure class="highlight sql"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span> profiling<span class="operator">=</span><span class="number">1</span>;  <span class="comment">-- 开启profiling 开关；</span></span><br></pre></td></tr></table></div></figure>
-<p>通过<code>profile</code>，我们能够更清楚地了解SQL执行的过程。</p>
-<p>首先，我们可以执行一系列的操作，如下图所示：</p>
+<p>3、执行一系列的操作，如下图所示：</p>
 <figure class="highlight sql"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> databases;</span><br><span class="line"></span><br><span class="line">use db01;</span><br><span class="line"></span><br><span class="line"><span class="keyword">show</span> tables;</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> tb_item <span class="keyword">where</span> id <span class="operator">&lt;</span> <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> <span class="built_in">count</span>(<span class="operator">*</span>) <span class="keyword">from</span> tb_item;</span><br></pre></td></tr></table></div></figure>
-<p>执行完上述命令之后，再执行<code>show profiles</code> 指令， 来查看SQL语句执行的耗时：</p>
+<p>4、执行完上述命令之后，再执行<code>show profiles</code> 指令， 来查看SQL语句执行的耗时：</p>
 <p><img src="/images/%E3%80%90MySQL%E3%80%91MySQL%E7%B4%A2%E5%BC%95/1552489017940.png" alt="1552489017940" /></p>
-<p>通过<code>show profile for query query_id</code> 语句可以查看到该SQL执行过程中每个线程的状态和消耗的时间：</p>
+<blockquote>
+<p><code>Duration</code>：持续时间</p>
+</blockquote>
+<p>5、诊断SQL：通过<code>show profile for query query_id</code> 语句可以查看到该SQL执行过程中每个线程的状态和消耗的时间：</p>
 <p><img src="/images/%E3%80%90MySQL%E3%80%91MySQL%E7%B4%A2%E5%BC%95/1552489053763.png" alt="1552489053763" /></p>
 <blockquote>
 <p>Sending data 状态表示MySQL线程开始访问数据行并把结果返回给客户端，而不仅仅是返回个客户端。由于在Sending data状态下，MySQL线程往往需要做大量的磁盘读取操作，所以经常是整各查询中耗时最长的状态。</p>
@@ -851,7 +974,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <tbody>
 <tr>
 <td>Status</td>
-<td>sql 语句执行的状态</td>
+<td>sql 语句执行的状态（代表一个 SQL 的<strong>完整生命周期</strong>）</td>
 </tr>
 <tr>
 <td>Duration</td>
@@ -867,6 +990,25 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 </tr>
 </tbody>
 </table></div>
+<p><code>Show Profile</code>查询参数备注：</p>
+<ul>
+<li><code>ALL</code>：显示所有的开销信息。</li>
+<li><code>BLOCK IO</code>：显示块IO相关开销（通用）。</li>
+<li><code>CONTEXT SWITCHES</code>：上下文切换相关开销。</li>
+<li><code>CPU</code>：显示CPU相关开销信息（通用）。</li>
+<li><code>IPC</code>：显示发送和接收相关开销信息。</li>
+<li><code>MEMORY</code>：显示内存相关开销信息。</li>
+<li><code>PAGE FAULTS</code>：显示页面错误相关开销信息。</li>
+<li><code>SOURCE</code>：显示和Source_function。</li>
+<li><code>SWAPS</code>：显示交换次数相关开销的信息。</li>
+</ul>
+<p><code>Show Profile</code>查询列表中若出现以下信息则说明<strong>当前 SQL 存在性能问题</strong>：</p>
+<ul>
+<li><code>converting HEAP to MyISAM</code>：查询结果太大，内存都不够用了，往磁盘上搬了。</li>
+<li><code>Creating tmp table</code>：创建临时表（拷贝数据到临时表，用完再删除），非常耗费数据库性能。</li>
+<li><code>Copying to tmp table on disk</code>：把内存中的临时表复制到磁盘，危险！！！</li>
+<li><code>locked</code>：死锁。</li>
+</ul>
 
         <h3 id="trace-分析优化器执行计划"   >
           <a href="#trace-分析优化器执行计划" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#trace-分析优化器执行计划"></a> trace 分析优化器执行计划</h3>
@@ -882,6 +1024,13 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
         <h2 id="sql-优化"   >
           <a href="#sql-优化" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#sql-优化"></a> SQL 优化</h2>
       
+<p>索引优化的一般性建议：</p>
+<ul>
+<li>对于单值索引，尽量选择针对当前<code>query</code>过滤性更好的索引。</li>
+<li>在选择复合索引的时候，当前<code>query</code>中过滤性最好的字段在索引字段顺序中，位置越靠前越好。</li>
+<li>在选择复合索引的时候，尽量选择可以能够包含当前<code>query</code>中的<code>where</code>子句中更多字段的索引。</li>
+<li>尽可能通过分析统计信息和调整<code>query</code>的写法来达到选择合适索引的目的。</li>
+</ul>
 <p>尽量使用覆盖索引（只访问索引的查询，索引列和查询列一致），减少<code>SELECT *</code></p>
 
         <h2 id="索引最佳实践"   >
@@ -947,12 +1096,15 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
            不等有时会失效</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#like-%E5%B0%91%E5%8A%A0%E5%B7%A6"><span class="toc-text">
            like % 少加左</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#or-%E4%B8%AD%E4%B8%80%E4%B8%AA%E6%B2%A1%E7%B4%A2%E5%BC%95%E6%95%B4%E4%BD%93%E9%83%BD%E4%B8%8D%E7%94%A8%E7%B4%A2%E5%BC%95"><span class="toc-text">
            OR 中一个没索引整体都不用索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mysql-%E8%87%AA%E5%B7%B1%E8%AF%84%E4%BC%B0%E6%98%AF%E5%90%A6%E8%A6%81%E4%BD%BF%E7%94%A8%E7%B4%A2%E5%BC%95"><span class="toc-text">
-           MySQL 自己评估是否要使用索引</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%98%E5%8C%96-sql-%E6%AD%A5%E9%AA%A4"><span class="toc-text">
+           MySQL 自己评估是否要使用索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88%E7%9B%B8%E5%85%B3%E9%A2%98%E7%9B%AE"><span class="toc-text">
+           索引失效相关题目</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%98%E5%8C%96-sql-%E6%AD%A5%E9%AA%A4"><span class="toc-text">
            优化 SQL 步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B-sql-%E6%89%A7%E8%A1%8C%E9%A2%91%E7%8E%87"><span class="toc-text">
-           查看 SQL 执行频率</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%BD%8D%E4%BD%8E%E6%95%88%E7%8E%87%E6%89%A7%E8%A1%8C-sql"><span class="toc-text">
-           定位低效率执行 SQL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#explain-%E5%88%86%E6%9E%90%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92"><span class="toc-text">
-           EXPLAIN 分析执行计划</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#show-profile-%E5%88%86%E6%9E%90-sql"><span class="toc-text">
-           show profile 分析 SQL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#trace-%E5%88%86%E6%9E%90%E4%BC%98%E5%8C%96%E5%99%A8%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92"><span class="toc-text">
+           查看 SQL 执行频率</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%BD%8D%E4%BD%8E%E6%95%88%E7%8E%87%E7%9A%84-sql"><span class="toc-text">
+           定位低效率的 SQL</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%85%A2%E6%9F%A5%E8%AF%A2%E6%97%A5%E5%BF%97"><span class="toc-text">
+           慢查询日志</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#show-processlist"><span class="toc-text">
+           show processlist</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#explain-%E5%88%86%E6%9E%90%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92"><span class="toc-text">
+           EXPLAIN 分析执行计划</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#show-profiles-%E5%88%86%E6%9E%90-sql"><span class="toc-text">
+           show profiles 分析 SQL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#trace-%E5%88%86%E6%9E%90%E4%BC%98%E5%8C%96%E5%99%A8%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92"><span class="toc-text">
            trace 分析优化器执行计划</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sql-%E4%BC%98%E5%8C%96"><span class="toc-text">
            SQL 优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="toc-text">
            索引最佳实践</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%8D%83%E4%B8%87%E7%BA%A7%E5%88%AB%E6%95%B0%E6%8D%AE%E9%87%8F%E4%B8%8B-mysql-%E5%8F%AF%E4%BB%A5%E5%BF%AB%E9%80%9F%E6%9F%A5%E6%89%BE%E5%88%B0%E7%9B%AE%E6%A0%87"><span class="toc-text">
