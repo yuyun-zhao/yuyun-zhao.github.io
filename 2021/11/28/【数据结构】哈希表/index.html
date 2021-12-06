@@ -18,8 +18,11 @@
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%91%E5%93%88%E5%B8%8C%E8%A1%A8/image-20211129213425565.png">
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%91%E5%93%88%E5%B8%8C%E8%A1%A8/image-20211129213452096.png">
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%91%E5%93%88%E5%B8%8C%E8%A1%A8/image-20211129213534006.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%91%E5%93%88%E5%B8%8C%E8%A1%A8/image-20211206160259675.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%91%E5%93%88%E5%B8%8C%E8%A1%A8/image-20211206165633171.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%91%E5%93%88%E5%B8%8C%E8%A1%A8/image-20211206150425460.png">
 <meta property="article:published_time" content="2021-11-28T10:47:59.000Z">
-<meta property="article:modified_time" content="2021-11-29T13:42:07.380Z">
+<meta property="article:modified_time" content="2021-12-06T09:09:19.790Z">
 <meta property="article:author" content="yuyun zhao">
 <meta property="article:tag" content="算法">
 <meta property="article:tag" content="数据结构">
@@ -48,7 +51,7 @@ var CONFIG = {
   sourcePath: {"js":"js","css":"css","images":"images"},
 };
 
-window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【数据结构】哈希表</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-11-28</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-11-29</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">3.9k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">21分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body">
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【数据结构】哈希表</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-11-28</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-12-06</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">5.7k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">31分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body">
         <h2 id="哈希"   >
           <a href="#哈希" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#哈希"></a> 哈希</h2>
       
@@ -228,7 +231,114 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <li>可扩展性。一致性哈希算法保证了增加或减少服务器时，数据存储的改变最少，相比传统哈希算法大大节省了数据移动的开销 。</li>
 <li>更好地适应数据的快速增长。采用一致性哈希算法分布数据，当数据不断增长时，部分虚拟节点中可能包含很多数据、造成数据在虚拟节点上分布不均衡，此时可以将包含数据多的虚拟节点分裂，这种分裂仅仅是将原有的虚拟节点一分为二、不需要对全部的数据进行重新哈希和划分。虚拟节点分裂后，如果物理服务器的负载仍然不均衡，只需在服务器之间调整部分虚拟节点的存储分布。这样可以随数据的增长而动态的扩展物理服务器的数量，且代价远比传统哈希算法重新分布所有数据要小很多</li>
 </ul>
-</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yuyun-zhao.github.io">yuyun zhao</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yuyun-zhao.github.io/2021/11/28/%E3%80%90%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%91%E5%93%88%E5%B8%8C%E8%A1%A8/">http://yuyun-zhao.github.io/2021/11/28/%E3%80%90%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%91%E5%93%88%E5%B8%8C%E8%A1%A8/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.github.io/tags/%E7%AE%97%E6%B3%95/">算法</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.github.io/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2021/11/30/%E3%80%90%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%91%E5%B9%B6%E6%9F%A5%E9%9B%86/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">【数据结构】并查集</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2021/11/28/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E6%9A%B4%E5%8A%9B%E9%80%92%E5%BD%92/"><span class="paginator-prev__text">【算法】暴力递归</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%93%88%E5%B8%8C"><span class="toc-text">
+
+        <h2 id="大数据问题"   >
+          <a href="#大数据问题" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#大数据问题"></a> 大数据问题</h2>
+      
+<p>本章将介绍使用哈希函数解决大数据问题的常见技巧：</p>
+<ul>
+<li>哈希函数可以把数据按照种类<strong>均匀分流</strong></li>
+<li>布隆过滤器用于集合的建立与查询，并可以<strong>节省大量空间</strong></li>
+<li>一致性哈希解决数据服务器的<strong>负载管理</strong>问题</li>
+<li>利用并查集结构做岛问题的<strong>并行计算</strong></li>
+<li>位图解决某一范围上数字的<strong>出现情况</strong>，并可以节省大量空间</li>
+<li>利用<strong>分段统计</strong>思想、并进一步节省大量空间</li>
+<li>利用堆、外排序来做<strong>多个处理单元的结果合并</strong></li>
+</ul>
+
+        <h3 id="均匀分流"   >
+          <a href="#均匀分流" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#均匀分流"></a> 均匀分流</h3>
+      
+<p>题目一：</p>
+<p><img src="/images/%E3%80%90%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%91%E5%93%88%E5%B8%8C%E8%A1%A8/image-20211206160259675.png" alt="image-20211206160259675" /></p>
+<p>思路：如果内存不受限制，则可以创建一个超大的词频表，记录每个数字出现的频次，频次为0的即为未出现过的数。但是当内存受限时，不能创建所有数字的词频表，只能创建少量数字的词频表。</p>
+<p>此时的思路为：创建一个词频表（长度为 N），该表中每个元素代表某一个区间范围内的数字出现的总次数。这样对于没有出现过的数字所在的区间，其词频总数就会小于 <code>40 亿 / N</code>。因此通过第一次的统计，就可以得知哪个区间内的数字至少有一个从未出现过，那么第二次遍历就可以直接缩小范围到该区间内，在该区间内再平均划分 N 份，然后再遍历一次 40 亿个数字，将在该子区间内的数字进行词频统计……重复该过程直到找到某一个数字从未出现过。</p>
+<p>细节：</p>
+<ul>
+<li>unsigned int 的范围为 [0, 2^32 - 1]，2^32 - 1 &gt; 40 亿</li>
+<li>词频表长度 N 如何确定—— N = 10MB（内存限制 ） / 4B（unsigned int 长度）= 10240 * 1000 / 4 = 2560000，从而将 [0, 2^32 - 1] 范围内的数字均匀分到长度为 2560000 的词频表中</li>
+<li>如何确定某个数字应该被分配到词频表的哪个位置：先用 2^32 / N，计算出每个区间上数字的取值范围，然后来一个数字，就将其除以 2^32 / N，即可知道该数字属于哪个区间</li>
+</ul>
+<p>题目二：</p>
+<p><img src="/images/%E3%80%90%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%91%E5%93%88%E5%B8%8C%E8%A1%A8/image-20211206165633171.png" alt="image-20211206165633171" /></p>
+<p>思路一：<strong>哈希函数均匀分流</strong></p>
+<ul>
+<li>先将所有数字先后经过哈希函数和取模操作，均匀分流到不同的子文件，记录其词频</li>
+<li>然后在该子文件中使用哈希表等方式统计出词频为 2 的数字</li>
+<li>对所有子文件都进行该操作，即可得到所有出现 2 次的数字</li>
+</ul>
+<p>思路二：<strong>位图</strong></p>
+<ul>
+<li>创建一个位图，每两个 bit 代表一个数字出现的次数：
+<ul>
+<li>00：没出现过</li>
+<li>01：出现过一次</li>
+<li>10：出现过两处</li>
+<li>11：出现过三次及以上</li>
+</ul>
+</li>
+<li>这样对于 unsigned int 类型的整数，可以在 1GB 的内存空间内创建这么一个位图，每两个 bit 代表一个数字出现的次数，遍历所有数字更新该位图，即可得知所有出现两次的数字。</li>
+</ul>
+<blockquote>
+<p>使用基本数据类型创建位图的方法见博客：<a href="https://yuyun-zhao.github.io/2021/11/24/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E4%BD%8D%E8%BF%90%E7%AE%97/">【算法】位运算</a></p>
+</blockquote>
+<p><strong>【进阶】</strong> 如果最多只能用 10 MB 的内存，如何找到这 40 亿个整数的中位数？</p>
+<p>思路：同上一题一样，可以使用<strong>均匀分流</strong>的技巧。</p>
+<ul>
+<li>先根据内存限制计算出词频数组的长度，然后将每个数字分配到不同的区间内，记录其频次</li>
+<li>遍历完一遍即可得知每个区间内出现数字的总频次</li>
+<li>题目要找的第 20 亿个数字，据此判断这个数字是落在哪个子区间上</li>
+<li>对该子区间继续划分子区间重复上述过程，不断缩小搜索范围，直到找到全局的第 20 亿个数字</li>
+</ul>
+
+        <h3 id="重复的-url"   >
+          <a href="#重复的-url" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#重复的-url"></a> 重复的 URL</h3>
+      
+<p>问题：有一个包含 100 亿个 URL 的大文件，假设每个 URL 占用 64B，请找出其中所有重复的URL。</p>
+
+        <h4 id="方法一哈希函数均匀分流"   >
+          <a href="#方法一哈希函数均匀分流" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#方法一哈希函数均匀分流"></a> 方法一：哈希函数均匀分流</h4>
+      
+<p>所有 URL 放到同一个文件中，则该文件太大。因此可以使用哈希函数将所有的 URL 进行均匀分流，分别存储在许多的小文件中。具体做法为：将每个 URL 经过哈希函数计算后再对某个数（小文件的个数）取模；将其存放在计算结果对应的文件中。这样即可完成一次粗定位，将所有 URL 按照种类均匀存储在不同的文件中。然后再在每个子文件中使用哈希表等方式进行查重。</p>
+
+        <h4 id="方法二使用布隆过滤器"   >
+          <a href="#方法二使用布隆过滤器" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#方法二使用布隆过滤器"></a> 方法二：使用布隆过滤器</h4>
+      
+<p>创建布隆过滤器，当来一个 URL 时，计算其在布隆过滤器中的位置，并都标记为1。之后如果该 URL 再来一次的话，就可以发现其对应的位置在布隆过滤器中都已存在，这说明该 URL 已存在。但是该方法的缺点是会存在一定的错误率。可能两个不同的 URL 算出的值是相同的。</p>
+<hr />
+<p><strong>【进阶】</strong> 某搜索公司一天的用户搜索词汇是海量的（百亿数据量），请设计一种求出每天热门 Top 100 词汇的可行办法。</p>
+<p>分析：如果直接对所有数据进行排序，则空间复杂度过大。因此可以使用<strong>均匀分流</strong>的思路，将所有的词汇平均分配到多个子文件中，然后对每个子文件中的词汇进行排序，选出 Top 100。最终可以得到 N 个 Top 100 排行表。然后利用堆、外排序来做<strong>多个处理单元的结果合并</strong>。具体思路：</p>
+<ul>
+<li>初始化：
+<ul>
+<li>将每个子文件中的 Top 100 数据放入到一个大根堆中</li>
+<li>创建一个<strong>总堆</strong>，用于存储所有词汇的 Top 100 数据</li>
+<li>将所有子堆的堆顶弹出并压入到总堆中；</li>
+</ul>
+</li>
+<li>迭代计算 Top 100：
+<ul>
+<li>弹出总堆的堆顶元素，放入到 Top 100 的结果集中</li>
+<li>该堆顶元素属于哪个子堆，就从哪个子堆中再弹出一个堆顶元素压入到总堆中</li>
+<li>继续弹出总堆的堆顶元素，放入到 Top 100 的结果集中</li>
+<li>再判断该堆顶元素属于哪个子堆，就从哪个子堆中再弹出一个堆顶元素压入到总堆中</li>
+<li>重复上述过程，直到总堆弹出100个堆顶元素，即找到了所有词汇的 Top 100 词语</li>
+</ul>
+</li>
+</ul>
+<hr />
+
+        <h3 id="岛问题"   >
+          <a href="#岛问题" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#岛问题"></a> 岛问题</h3>
+      
+<p><img src="/images/%E3%80%90%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%91%E5%93%88%E5%B8%8C%E8%A1%A8/image-20211206150425460.png" alt="image-20211206150425460" /></p>
+<p>进阶：若该地图特别大，希望用并行算法同时计算多个子地图中的岛屿数量，最后汇总。</p>
+<p>思路：使用<strong>并查集</strong></p>
+<ul>
+<li>先单独计算每个子地图上的岛屿数量，并在子地图与其他子地图交接的边缘区域，将每个岛屿编上号，分别初始化为不同的集合。</li>
+<li>然后两块接壤的子地图的边界元素开始进行并查集算法中的合并操作，若能合并，则当前两个岛屿是同一个；若不能合并，则是两个独立岛屿。</li>
+</ul>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yuyun-zhao.github.io">yuyun zhao</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yuyun-zhao.github.io/2021/11/28/%E3%80%90%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%91%E5%93%88%E5%B8%8C%E8%A1%A8/">http://yuyun-zhao.github.io/2021/11/28/%E3%80%90%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%91%E5%93%88%E5%B8%8C%E8%A1%A8/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.github.io/tags/%E7%AE%97%E6%B3%95/">算法</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.github.io/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2021/11/30/%E3%80%90%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%91%E5%B9%B6%E6%9F%A5%E9%9B%86/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">【数据结构】并查集</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2021/11/28/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"><span class="paginator-prev__text">【算法】动态规划</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%93%88%E5%B8%8C"><span class="toc-text">
            哈希</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%93%88%E5%B8%8C"><span class="toc-text">
            为什么需要哈希</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0"><span class="toc-text">
            哈希函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%93%88%E5%B8%8C%E8%A1%A8"><span class="toc-text">
@@ -247,7 +357,13 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
            4、服务器增加的情况</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%87%8F%E5%B0%91%E7%9A%84%E6%83%85%E5%86%B5"><span class="toc-text">
            5、服务器减少的情况</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E8%8A%82%E7%82%B9"><span class="toc-text">
            虚拟节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95%E4%BC%98%E7%82%B9"><span class="toc-text">
-           一致性哈希算法优点</span></a></li></ol></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/author.png" alt="avatar"></div><p class="sidebar-ov-author__text">no code no life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/YUYUN-ZHAO" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="zyy1024462136" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a><a class="sidebar-ov-social-item" href="1024462136" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="mailto:im.yuyunzhao@gmail.com" target="_blank" rel="noopener" data-popover="social.Gmail" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">Gmail</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">120</div><div class="sidebar-ov-state-item__name">文章</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">35</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">35</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2021</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>yuyun zhao</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script>function initSearch() {
+           一致性哈希算法优点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%97%AE%E9%A2%98"><span class="toc-text">
+           大数据问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9D%87%E5%8C%80%E5%88%86%E6%B5%81"><span class="toc-text">
+           均匀分流</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E5%A4%8D%E7%9A%84-url"><span class="toc-text">
+           重复的 URL</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0%E5%9D%87%E5%8C%80%E5%88%86%E6%B5%81"><span class="toc-text">
+           方法一：哈希函数均匀分流</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C%E4%BD%BF%E7%94%A8%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="toc-text">
+           方法二：使用布隆过滤器</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B2%9B%E9%97%AE%E9%A2%98"><span class="toc-text">
+           岛问题</span></a></li></ol></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/author.png" alt="avatar"></div><p class="sidebar-ov-author__text">no code no life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/YUYUN-ZHAO" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="zyy1024462136" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a><a class="sidebar-ov-social-item" href="1024462136" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="mailto:im.yuyunzhao@gmail.com" target="_blank" rel="noopener" data-popover="social.Gmail" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">Gmail</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">120</div><div class="sidebar-ov-state-item__name">文章</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">35</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">35</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2021</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>yuyun zhao</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script>function initSearch() {
   var isXML = true;
   var search_path = 'search.xml';
 
