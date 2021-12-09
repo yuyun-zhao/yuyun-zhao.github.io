@@ -14,7 +14,7 @@
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Linux%E3%80%91Linux%E6%8C%87%E4%BB%A4/image-20210722210529000.png">
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Linux%E3%80%91Linux/image-20210806210724476.png">
 <meta property="article:published_time" content="2021-07-21T01:37:50.000Z">
-<meta property="article:modified_time" content="2021-10-27T11:11:09.831Z">
+<meta property="article:modified_time" content="2021-12-08T03:18:15.504Z">
 <meta property="article:author" content="yuyun zhao">
 <meta property="article:tag" content="Linux">
 <meta name="twitter:card" content="summary">
@@ -42,7 +42,7 @@ var CONFIG = {
   sourcePath: {"js":"js","css":"css","images":"images"},
 };
 
-window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【Linux】Linux 常用命令</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-07-21</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-10-27</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">9.4k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">62分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body">
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【Linux】Linux 常用命令</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-07-21</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-12-08</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">9.7k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">64分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body">
         <h2 id="linux-和-unix"   >
           <a href="#linux-和-unix" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#linux-和-unix"></a> Linux 和 Unix</h2>
       
@@ -457,6 +457,9 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
         <h2 id="定时任务调度"   >
           <a href="#定时任务调度" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#定时任务调度"></a> 定时任务调度</h2>
       
+<blockquote>
+<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://www.runoob.com/w3cnote/linux-crontab-tasks.html" >https://www.runoob.com/w3cnote/linux-crontab-tasks.html</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+</blockquote>
 <p>任务调度：是指系统在某个时间执行的特定的命令或程序。任务调度分类：</p>
 <ul>
 <li>系统工作：有些重要的工作必须周而复始地执行，如病毒扫描等</li>
@@ -486,40 +489,55 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 </tr>
 </tbody>
 </table></div>
+<p>使用 <strong>crontab -e</strong> 进入当前用户的工作表编辑，是常见的vim界面。每行是一条命令。</p>
+<p>crontab 的命令构成为 时间+动作，其时间有<strong>分、时、日、月、周</strong>五种，操作符有</p>
+<ul>
+<li>***** 取值范围内的所有数字</li>
+<li><strong>/</strong> 每过多少个数字</li>
+<li><strong>-</strong> 从X到Z</li>
+<li>**，**散列数字</li>
+</ul>
+<p>时间说明：</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># .---------------- minute (0 - 59) </span></span><br><span class="line"><span class="comment"># |  .------------- hour (0 - 23)</span></span><br><span class="line"><span class="comment"># |  |  .---------- day of month (1 - 31)</span></span><br><span class="line"><span class="comment"># |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ... </span></span><br><span class="line"><span class="comment"># |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7)  OR</span></span><br><span class="line"><span class="comment">#sun,mon,tue,wed,thu,fri,sat </span></span><br><span class="line"><span class="comment"># |  |  |  |  |</span></span><br><span class="line"><span class="comment"># *  *  *  *  *  command to be executed</span></span><br></pre></td></tr></table></div></figure>
+<ul>
+<li>minute：代表一小时内的第几分，范围 0-59。</li>
+<li>hour：代表一天中的第几小时，范围 0-23。</li>
+<li>mday：代表一个月中的第几天，范围 1-31。</li>
+<li>month：代表一年中第几个月，范围 1-12。</li>
+<li>wday：代表星期几，范围 0-7 (0及7都是星期天)。</li>
+<li>who：要使用什么身份执行该指令，当您使用 crontab -e 时，不必加此字段。</li>
+<li>command：所要执行的指令</li>
+</ul>
+<p>更多使用案例见：<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://www.runoob.com/w3cnote/linux-crontab-tasks.html" >https://www.runoob.com/w3cnote/linux-crontab-tasks.html</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
 <p>重启任务调度</p>
 <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost root] service crond restart</span><br></pre></td></tr></table></div></figure>
-<p>示例：</p>
+
+        <h3 id="案例"   >
+          <a href="#案例" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#案例"></a> 案例</h3>
+      
+
+        <h4 id="案例一"   >
+          <a href="#案例一" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#案例一"></a> 案例一</h4>
+      
+<p>使用 <code>crontab -e</code> 的方式直接编辑命令：</p>
 <ul>
 <li>设置任务调度文件：<code>/etc/crontab</code></li>
 <li>设置个人任务调度。执行 <code>crontab –e</code> 命令。</li>
 <li>接着输入任务到调度文件如：<code>*/1 * * * * ls –l /etc/ &gt; /tmp/to.txt</code>，意思说每小时的每分钟执行 <code>ls –l /etc/ &gt; /tmp/to.txt</code> 命令</li>
+<li><code>crontab -r</code> 终止任务</li>
 </ul>
-<div class="table-container"><table>
-<thead>
-<tr>
-<th></th>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>第一个“*”</td>
-<td>一小时当中的第几分钟</td>
-<td>0-59</td>
-</tr>
-<tr>
-<td>第二个“*”</td>
-<td>一天当中的第几小时</td>
-<td>0-23</td>
-</tr>
-<tr>
-<td>第三个“*”</td>
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table></div>
+
+        <h4 id="案例二"   >
+          <a href="#案例二" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#案例二"></a> 案例二</h4>
+      
+<p>如果指令比较复杂，可以将其先写入到一个 .sh 文件中，然后再在 <code>crontab -e</code> 中执行该脚本文件</p>
+<ul>
+<li>编写脚本文件：<code>/home/mytask.sh</code>，在其内写上要执行的命令</li>
+<li>给 <code>mytask.sh</code> 赋予可执行的权限</li>
+<li>执行 <code>crontab -e</code> 命令</li>
+<li>在其中输入 <code>*/1 * * * * /home/mytask.sh</code>即可</li>
+<li><code>crontab -r</code> 终止任务</li>
+</ul>
 
         <h2 id="分区"   >
           <a href="#分区" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#分区"></a> 分区</h2>
@@ -866,7 +884,10 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
            搜索查找类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E9%80%9A%E8%AE%AF%E7%B1%BB"><span class="toc-text">
            网络通讯类</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E7%94%A8%E6%8C%87%E4%BB%A4"><span class="toc-text">
            实用指令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6"><span class="toc-text">
-           定时任务调度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E5%8C%BA"><span class="toc-text">
+           定时任务调度</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B"><span class="toc-text">
+           案例</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B%E4%B8%80"><span class="toc-text">
+           案例一</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B%E4%BA%8C"><span class="toc-text">
+           案例二</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E5%8C%BA"><span class="toc-text">
            分区</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B"><span class="toc-text">
            进程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E5%8E%86%E5%8F%B2"><span class="toc-text">
            进程历史</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#systemd-%E6%A6%82%E8%BF%B0"><span class="toc-text">
