@@ -1,0 +1,540 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="堆结构          堆结构本身比堆排序要重要  堆结构就是用数组实现的完全二叉树结构。  堆结构的节点公式：  节点 i 的父节点为 (i - 1) &#x2F; 2（左右节点都可以统一用这个公式） 节点 i 的左子节点为 2 * i + 1 节点 i 的右子节点为 2 * i + 2  使用上述公式即直接定位到某个节点的父&#x2F;子节点                      大">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【算法】堆">
+<meta property="og:url" content="http://yuyun-zhao.github.io/2021/12/14/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%A0%86/index.html">
+<meta property="og:site_name" content="yuyun zhao&#39;s blog">
+<meta property="og:description" content="堆结构          堆结构本身比堆排序要重要  堆结构就是用数组实现的完全二叉树结构。  堆结构的节点公式：  节点 i 的父节点为 (i - 1) &#x2F; 2（左右节点都可以统一用这个公式） 节点 i 的左子节点为 2 * i + 1 节点 i 的右子节点为 2 * i + 2  使用上述公式即直接定位到某个节点的父&#x2F;子节点                      大">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%A0%86/image-20211003201744690-1633921333456.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/image-20211004174447857-1633921333457.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%A0%86/image-20211004203745738-1633921354763.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%A0%86/image-20211004203713788-1633921354763.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%A0%86/image-20211004204032904-1633921378395.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%A0%86/image-20211214210648202.png">
+<meta property="article:published_time" content="2021-12-14T12:54:45.000Z">
+<meta property="article:modified_time" content="2021-12-14T14:06:24.581Z">
+<meta property="article:author" content="yuyun zhao">
+<meta property="article:tag" content="算法">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yuyun-zhao.github.io/images/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%A0%86/image-20211003201744690-1633921333456.png"><title>【算法】堆 | yuyun zhao's blog</title><link ref="canonical" href="http://yuyun-zhao.github.io/2021/12/14/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%A0%86/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":true},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"carbon","highlight":"light","wordWrap":false},
+  reward: false,
+  fancybox: true,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: {"avoidBanner":false},
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"复制","copySuccess":"复制成功","copyError":"复制失败"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【算法】堆</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-12-14</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-12-14</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">4.6k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">29分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body">
+        <h2 id="堆结构"   >
+          <a href="#堆结构" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#堆结构"></a> 堆结构</h2>
+      
+<p><img src="/images/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%A0%86/image-20211003201744690-1633921333456.png" alt="image-20211003201744690" /></p>
+<blockquote>
+<p>堆结构本身比堆排序要重要</p>
+</blockquote>
+<p>堆结构就是用数组实现的<strong>完全二叉树</strong>结构。</p>
+<img src="/images/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/image-20211004174447857-1633921333457.png" alt="image-20211004174447857" style="zoom:50%;" />
+<p>堆结构的节点公式：</p>
+<ul>
+<li>节点 i 的父节点为 (i - 1) / 2（左右节点都可以统一用这个公式）</li>
+<li>节点 i 的左子节点为 2 * i + 1</li>
+<li>节点 i 的右子节点为 2 * i + 2</li>
+</ul>
+<p>使用上述公式即直接定位到某个节点的父/子节点</p>
+
+        <h3 id="大小根堆"   >
+          <a href="#大小根堆" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#大小根堆"></a> 大/小根堆</h3>
+      
+<ul>
+<li><strong>大根堆</strong>：堆中的每一个父节点都要比其子节点上的数字大（不考虑其对称的另一侧分支里的节点数字大小）。</li>
+<li><strong>小根堆</strong>：堆中的每一个父节点都要比其子节点上的数字小（不考虑其对称的另一侧分支里的节点数字大小）。</li>
+</ul>
+<p>堆结构最重要的两个操作：</p>
+<ul>
+<li><strong>heapInsert</strong>：add 操作，<strong>新增</strong>一个数据到已知堆中。具体做法是新增的数据不断向上遍历堆结构，将数字插入到合适的父节点位置</li>
+<li><strong>heapify</strong>：poll 操作，<strong>弹出</strong>堆里第一个元素（根节点）的值，并重新调整堆结构，令其余部分的元素继续保持大/小根堆结构。具体做法是新的根结点的元素不断向下遍历堆结构，交换其到合适的子节点位置</li>
+</ul>
+<hr />
+<p><strong>heapInsert</strong>：add 操作。用于新增一个数据到堆中，当新来一个数字时，将其添加到堆结构中，并且满足大根堆（或小根堆）：向上遍历他的每一个父节点，判断其是否大于它的父节点，若大于则和父节点交换，若小于则停止遍历。直到当前数字放到合适的父节点位置，使得当前堆满足大根。</p>
+<p><strong>heapify</strong>：poll 操作。用于弹出堆中第一个元素，并令其余部分继续保持大/小根堆结构，若用户要求返回并删除当前大根堆的最大元素，并且要求删除后的其他元素依旧符合大根堆：返回当前堆的第一个节点（其肯定是最大元素），然后将当前堆的最后一个元素放到第一个元素的位置。之后开始向下遍历第一个元素的子节点，选出其子节点中最大的数字，并且判断该数字和自身的大小，若子节点数字更大，则交换自身和子节点，若子节点数字更小，则停止遍历；直到该元素被放到合适的子节点位置。</p>
+<hr />
+<p>这两个操作的空间复杂度都是 O(logN)，因为 N 个节点的完全二叉树的高度为 O(logN)，上述两个操作都只需要遍历二叉树中的某一条分支即可，因此时间只有 O(logN)</p>
+<p>heapInsert 的代码：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">heapInsert</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 向上遍历当前节点的父节点,直到满足条件: 父节点的值 &gt; 当前节点的值</span></span><br><span class="line">  <span class="keyword">while</span> (arr[(index - <span class="number">1</span>) / <span class="number">2</span>] &lt; arr[index]) &#123;</span><br><span class="line">    swap(arr, (index - <span class="number">1</span>) / <span class="number">2</span>, index);</span><br><span class="line">    index = (index - <span class="number">1</span>) / <span class="number">2</span>; <span class="comment">// index 记得变为父节点的值</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>heapify 的代码：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// heapSize 用于表示逻辑上的堆的大小, 其和数组的大小没关系</span></span><br><span class="line"><span class="comment">// 该方法的作用是, 在给定堆结构中, 当某个位置的元素被弹出,替换成了其他数字后</span></span><br><span class="line"><span class="comment">// 要保证新的数组仍然保持堆结构, 那么就需要从这个位置开始向下遍历</span></span><br><span class="line"><span class="comment">// 交换其子节点中最大的元素</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">heapify</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> index, <span class="keyword">int</span> heapSize)</span></span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (heapSize &gt; arr.length) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">while</span> (<span class="number">2</span>*index+<span class="number">1</span> &lt; heapSize) &#123;</span><br><span class="line">    <span class="comment">// 两个孩子中, 判断谁的值更大</span></span><br><span class="line">    <span class="keyword">int</span> largest = (<span class="number">2</span>*index+<span class="number">2</span> &lt; heapSize) &amp;&amp; arr[<span class="number">2</span>*index+<span class="number">1</span>] &lt; arr[<span class="number">2</span>*index+<span class="number">2</span>]</span><br><span class="line">      ? <span class="number">2</span>*index+<span class="number">2</span> : <span class="number">2</span>*index+<span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 当前节点和子孩子中, 判断谁的值更大</span></span><br><span class="line">    largest = arr[index] &lt; arr[largest] ? largest : index;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果相等, 说明此时已经满足了大根堆的条件, 可以跳出循环</span></span><br><span class="line">    <span class="keyword">if</span> (largest == index) &#123;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 交换</span></span><br><span class="line">    swap(arr, index, largest);</span><br><span class="line">    index = largest;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="具体应用"   >
+          <a href="#具体应用" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#具体应用"></a> 具体应用</h3>
+      
+<p>若用户要求修改堆结构中<strong>任意一个位置</strong>的元素的值，并要求修改后的数字仍然满足大根堆，则只需要判断修改后的元素是比原先大还是小：</p>
+<ul>
+<li>若修改后的元素比原先大，则进行 <strong>heapInsert</strong> 操作，将当前元素向上交换到合适的父节点位置</li>
+<li>若修改后的元素比原先小，则进行 <strong>heapify</strong> 操作，将当前元素向下交换到合适的子节点位置</li>
+</ul>
+<hr />
+<p>小根堆在 Java 中就是<strong>优先级队列</strong>默认的实现方式： <code>PriorityQueue&lt;Interger&gt;</code>，其两个方法：</p>
+<ul>
+<li><code>add()</code> ：本质上就是 heapInsert 操作，将一个数字添加到已存在的小根堆中</li>
+<li><code>poll()</code>：本质上就是 heapify 操作，首先弹出当前小根堆的根结点元素，并令剩余数字依旧保持小根堆结构。</li>
+</ul>
+<p>但是其不能支持“修改堆中某个结构后以很轻的代价重新调整堆的结构”，只支持“弹出堆的根结点元素后重新调整堆的结构”，若想实现这些个性化的功能还需要自己定义堆结构。</p>
+<blockquote>
+<p>其扩容机制是当 heapSize 快满时，将 heapSize * 2。这个操作的时间复杂度在每个元素平摊下来后其实很低</p>
+</blockquote>
+<span id="more"></span>
+
+        <h2 id="堆排序"   >
+          <a href="#堆排序" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#堆排序"></a> 堆排序</h2>
+      
+<p>堆排序的思想是：利用大根堆第一个元素最大的特性，令数组不断地组成大根堆，从而每次形成的大根堆里的第一个元素都是当前的最大值。</p>
+<p>算法流程：</p>
+<ul>
+<li>首先令当前数组的所有数字符合大根堆顺序（令一个数组变成大根堆的方式见后文，本质上就是不断做 heapInsert）</li>
+<li>当前大根堆的根节点就是最大的元素，将其与数组的最后一个元素交换位置，此时即得到了整个数组最大的元素</li>
+<li>接着将 heapSize–（因为已经有一个数字排好了序，heapSize 将减小），并对交换后的元素进行一次 heapify 操作：不断向下遍历子节点，直到与合适的位置数字进行交换。heapify 后，新的堆就又符合了大根堆结构</li>
+<li>再取当前大根堆的根节点上的元素，它就是原数组第二大的数字，将其与大根堆结构中最后一个节点的元素进行交换。此时原数组中最后两个位置的元素就是最大和第二大的元素</li>
+<li>再次 heapSize-- ，并对交换后的元素再进行一次 heapify 操作，新的大根堆的根结点的元素就是第三大的元素，将其与大根堆结构中最后一个节点的元素进行交换。</li>
+<li>重复上述过程，直到大根堆的 heapSize == 0，此时即完成了排序</li>
+</ul>
+<p>堆排序的复杂度：</p>
+<ul>
+<li>时间复杂度是 O(N * logN)</li>
+<li>额外空间复杂度 O(1)，只需要 swap 交换操作，不用开辟额外空间</li>
+</ul>
+<p>代码：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">heapSort</span><span class="params">(<span class="keyword">int</span>[] arr)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (arr == <span class="keyword">null</span> || arr.length &lt; <span class="number">2</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 1. 先将数组变为大根堆</span></span><br><span class="line">  <span class="comment">// 1.1 方式一: 依次将每个数字添加到堆结构中, 堆大小从0开始, 依次将新数字 heapInsert 进堆中</span></span><br><span class="line">  <span class="comment">// 编码思路是, 从前往后将每个节点进行 heapInsert</span></span><br><span class="line">  <span class="comment">// 其时间复杂度为 O(N*logN)</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; i++) &#123;  <span class="comment">// O(N)</span></span><br><span class="line">    heapInsert(arr, i);                   <span class="comment">// O(logN)</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 1.2 方式二: 从下向上, 先将每个子堆变为大根堆, 然后再将其父节点纳入再进行 heapify</span></span><br><span class="line">  <span class="comment">// 编码思路是, 从后往前将每个节点进行 heapify</span></span><br><span class="line">  <span class="comment">// 该方法速度更快, 其时间复杂度为 O(N)</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = arr.length - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">    heapify(arr, i, arr.length);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 2. 每次将大根堆的根结点元素与最后一个元素交换</span></span><br><span class="line">  <span class="keyword">int</span> heapSize = arr.length;</span><br><span class="line">  <span class="keyword">while</span> (heapSize &gt; <span class="number">0</span>) &#123;                  <span class="comment">// O(N)</span></span><br><span class="line">    swap(arr, <span class="number">0</span>, heapSize-<span class="number">1</span>);             <span class="comment">// O(1)</span></span><br><span class="line">    <span class="comment">// 注意 heapSize 先减一再进入 heapify</span></span><br><span class="line">    heapify(arr, <span class="number">0</span>, --heapSize);          <span class="comment">// O(logN)</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 整体时间复杂度为 O(N*logN)</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">heapInsert</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 向上遍历当前节点的父节点,直到满足条件: 父节点的值 &gt; 当前节点的值</span></span><br><span class="line">  <span class="keyword">while</span> (arr[(index - <span class="number">1</span>) / <span class="number">2</span>] &lt; arr[index]) &#123;</span><br><span class="line">    swap(arr, (index - <span class="number">1</span>) / <span class="number">2</span>, index);</span><br><span class="line">    index = (index - <span class="number">1</span>) / <span class="number">2</span>; <span class="comment">// index 记得变为父节点的值</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// heapSize 用于表示逻辑上的堆的大小, 其和数组的大小没关系</span></span><br><span class="line"><span class="comment">// 该方法的作用是, 在给定堆结构中, 当某个位置的元素被弹出,替换成了其他数字后</span></span><br><span class="line"><span class="comment">// 要保证新的数组仍然保持堆结构, 那么就需要从这个位置开始向下遍历</span></span><br><span class="line"><span class="comment">// 交换其子节点中最大的元素</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">heapify</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> index, <span class="keyword">int</span> heapSize)</span></span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (heapSize &gt; arr.length) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">while</span> (<span class="number">2</span>*index+<span class="number">1</span> &lt; heapSize) &#123;</span><br><span class="line">    <span class="comment">// 两个孩子中, 判断谁的值更大</span></span><br><span class="line">    <span class="keyword">int</span> largest = (<span class="number">2</span>*index+<span class="number">2</span> &lt; heapSize) &amp;&amp; arr[<span class="number">2</span>*index+<span class="number">1</span>] &lt; arr[<span class="number">2</span>*index+<span class="number">2</span>]</span><br><span class="line">      ? <span class="number">2</span>*index+<span class="number">2</span> : <span class="number">2</span>*index+<span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 当前节点和子孩子中, 判断谁的值更大</span></span><br><span class="line">    largest = arr[index] &lt; arr[largest] ? largest : index;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果相等, 说明此时已经满足了大根堆的条件, 可以跳出循环</span></span><br><span class="line">    <span class="keyword">if</span> (largest == index) &#123;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 交换</span></span><br><span class="line">    swap(arr, index, largest);</span><br><span class="line">    index = largest;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (a == b) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  arr[a] = arr[a] ^ arr[b];</span><br><span class="line">  arr[b] = arr[a] ^ arr[b];</span><br><span class="line">  arr[a] = arr[a] ^ arr[b];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<hr />
+<p>补充：想让一组数字变成一个大根堆/小根堆结构，上文中的编码方式时间复杂度是 O(N * logN)。然后还有一种更快的方式令一个数组变为大根堆/小根堆结构，其时间复杂度为 O(N)</p>
+<ul>
+<li>方式一：依次将每个数字添加到堆结构中，堆大小从0开始，依次将新数字 heapInsert 进堆中。当遍历完成后，即得到了大根堆，但这种方法的时间复杂度为 O(N * logN)</li>
+<li>方式二：从下向上，先将每个子堆变为大根堆，然后再将其父节点纳入再进行 heapify。其时间复杂度为 O(N)（其时间复杂度的估计方法使用了错位相减法）</li>
+</ul>
+<p>方式二就是一种逆向思维，反过来从后往前遍历数组，令其往后的子树符合大根堆，然后再向前遍历，不断扩大子树的大小，令新的子树也符合大根堆。这样的操作时间复杂度更低，因为整个树上一半的节点都是叶子节点，根本不需要做交换：</p>
+<p><img src="/images/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%A0%86/image-20211004203745738-1633921354763.png" alt="image-20211004203745738" /></p>
+<p><img src="/images/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%A0%86/image-20211004203713788-1633921354763.png" alt="image-20211004203713788" /></p>
+<p>代码：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 先将数组变为大根堆</span></span><br><span class="line"><span class="comment">// 1.1 方式一: 依次将每个数字添加到堆结构中, 堆大小从0开始, 依次将新数字 heapInsert 进堆中</span></span><br><span class="line"><span class="comment">// 编码思路是, 从前往后将每个节点进行 heapInsert</span></span><br><span class="line"><span class="comment">// 其时间复杂度为 O(N*logN)</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; i++) &#123;  <span class="comment">// O(N)</span></span><br><span class="line">  heapInsert(arr, i);                   <span class="comment">// O(logN)</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1.2 方式二: 从下向上, 先将每个子堆变为大根堆, 然后再将其父节点纳入再进行 heapify</span></span><br><span class="line"><span class="comment">// 编码思路是, 从后往前将每个节点进行 heapify</span></span><br><span class="line"><span class="comment">// 该方法速度更快, 其时间复杂度为 O(N)</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = arr.length - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">  heapify(arr, i, arr.length);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<hr />
+
+        <h3 id="堆排序的扩展几乎有序的数组"   >
+          <a href="#堆排序的扩展几乎有序的数组" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#堆排序的扩展几乎有序的数组"></a> 堆排序的扩展：几乎有序的数组</h3>
+      
+<p><img src="/images/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%A0%86/image-20211004204032904-1633921378395.png" alt="image-20211004204032904" /></p>
+<p><strong>解题思路</strong>：这个移动距离不超过 k 非常重要，这意味着我们可以在 k 范围内组成一个小根堆，这个小根堆的第一个元素就是这个范围内的最小值，依次移动指针，将每个子 k 区域内的数组组成小根堆，即可不断得到当前范围内的最小值，从而完成排序。</p>
+<p>具体流程：</p>
+<ul>
+<li>首先取数组的前 k 个数字，组成小根堆（复杂度为 O(k * logk)，或用更快的方式可以达到 O(k)），然后将小根堆第一个位置的元素弹出，放到原数组的0位置，这个数就是整个数组的最小值（因为这道题限制了每个数字的移动距离不会超过 k）</li>
+<li>接着向后移动1个位置，再取 k+1 位置上的数 arr[k+1] 与上一步剩下的 k-1 个元素一起再组成新的小根堆后，再取出最新小根堆里的第一个元素（此元素就是整个数组第二小的数）</li>
+</ul>
+<p>重复上述过程，直到整个数组被遍历完，即可得到排序后的数组。此过程的时间复杂度为 O(N * logk)，如果这个k很小，那么这个算法的时间复杂度就比较接近 O(N)</p>
+<p>具体实现既可以通过自己定义堆结构，又可以直接使用 Java 提供的优先级队列：<code>PriorityQueue&lt;Interger&gt;</code>，其底层就是一个小根堆结构。</p>
+<hr />
+<p><strong>小根堆</strong>在 Java 中就是<strong>优先级队列</strong>默认的实现方式： <code>PriorityQueue&lt;Interger&gt;</code>，其两个方法：</p>
+<ul>
+<li><code>add()</code> ：本质上就是 heapInsert 操作，将一个数字添加到已存在的小根堆中</li>
+<li><code>poll()</code>：本质上就是 heapify 操作，首先弹出当前小根堆的根结点元素，并令剩余数字依旧保持小根堆结构。</li>
+</ul>
+<p>但是其不能支持“修改堆中某个结构后以很轻的代价重新调整堆的结构”，只支持“弹出堆的根结点元素后重新调整堆的结构”，若想实现这些个性化的功能还需要自己定义堆结构。</p>
+<blockquote>
+<p>其扩容机制是当 heapSize 快满时，将 heapSize * 2。这个操作的时间复杂度在每个元素平摊下来后其实很低</p>
+</blockquote>
+<p>若想实现大根堆，则只需要在创建优先级队列时传入自定义的比较器：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 修改成大根堆</span></span><br><span class="line">PriorityQueue&lt;Integer&gt; heap = <span class="keyword">new</span> PriorityQueue&lt;&gt;((o1, o2) -&gt; o2 - o1);</span><br></pre></td></tr></table></div></figure>
+<hr />
+<p>使用 <code>PriorityQueue&lt;Interger&gt;</code> 解该题：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.zhao;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"><span class="keyword">import</span> java.util.PriorityQueue;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SortArrayDistanceLessK</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sortArrayDistanceLessK</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (arr == <span class="keyword">null</span> || arr.length &lt; <span class="number">2</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 默认为小根堆</span></span><br><span class="line">        PriorityQueue&lt;Integer&gt; heap = <span class="keyword">new</span> PriorityQueue&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 0 ~ k-1 位置上的数组成小根堆(这里要取k和arr.length的最小值)</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; Math.min(k, arr.length); i++) &#123;</span><br><span class="line">            heap.add(arr[i]);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (; i &lt; arr.length - k; i++) &#123;</span><br><span class="line">            arr[i] = heap.poll();</span><br><span class="line">            <span class="comment">// 注意索引值不是 i+k+1</span></span><br><span class="line">            <span class="comment">// 因为整个小根堆的heapSize==k, 所以 &quot;当前根节点索引+k&quot; 就是小根堆的下一个索引值</span></span><br><span class="line">            heap.add(arr[i + k]);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 上述遍历完毕后, 将大根堆里剩余的数挨个弹出放到数组的最后k个位置</span></span><br><span class="line">        <span class="keyword">while</span> (!heap.isEmpty()) &#123;</span><br><span class="line">            arr[i++] = heap.poll();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] arr = <span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">2</span>,<span class="number">3</span>,<span class="number">1</span>,<span class="number">5</span>,<span class="number">4</span>,<span class="number">6</span>,<span class="number">8</span>,<span class="number">7</span>&#125;;</span><br><span class="line"></span><br><span class="line">        SortArrayDistanceLessK.sortArrayDistanceLessK(arr, <span class="number">3</span>);</span><br><span class="line">        System.out.println(Arrays.toString(arr));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h2 id="堆结构的常见问题"   >
+          <a href="#堆结构的常见问题" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#堆结构的常见问题"></a> 堆结构的常见问题</h2>
+      
+
+        <h3 id="最小的-k-个数"   >
+          <a href="#最小的-k-个数" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#最小的-k-个数"></a> 最小的 K 个数</h3>
+      
+<blockquote>
+<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/zui-xiao-de-kge-shu-lcof/solution/3chong-jie-fa-miao-sha-topkkuai-pai-dui-er-cha-sou/" >https://leetcode-cn.com/problems/zui-xiao-de-kge-shu-lcof/solution/3chong-jie-fa-miao-sha-topkkuai-pai-dui-er-cha-sou/</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+</blockquote>
+<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/zui-xiao-de-kge-shu-lcof/" >剑指 Offer 40. 最小的k个数</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>：输入整数数组 <code>arr</code> ，找出其中最小的 <code>k</code> 个数。例如，输入4、5、1、6、2、7、3、8这8个数字，则最小的4个数字是1、2、3、4。</p>
+<p>思路：我们用一个大根堆<strong>实时维护数组的前 k 小值</strong>。首先将前 k 个数插入大根堆中，随后从第 k+1 个数开始遍历，如果当前遍历到的数比大根堆的堆顶的数要小，就把堆顶的数弹出，再插入当前遍历到的数。最后将大根堆里的数存入数组返回即可。</p>
+<p>代码：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 大根堆不断维护当前小的k个数字，当来新的数字，如果比堆顶大</span></span><br><span class="line"><span class="comment">//（比当前k个小数里的最大的小，说明这个最大的堆顶肯定不在答案里了），弹出堆顶</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">int</span>[] getLeastNumbers01(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> k) &#123;</span><br><span class="line">    <span class="comment">// 注意！！将系统默认的小根堆改成大根堆</span></span><br><span class="line">    Queue&lt;Integer&gt; maxHeap = <span class="keyword">new</span> PriorityQueue&lt;&gt;((o1, o2) -&gt; o2 - o1);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (i &lt; k) &#123;</span><br><span class="line">            maxHeap.offer(arr[i]);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (maxHeap.peek() &gt; arr[i]) &#123;</span><br><span class="line">                maxHeap.poll();</span><br><span class="line">                maxHeap.offer(arr[i]);</span><br><span class="line">            &#125; </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span>[] res = <span class="keyword">new</span> <span class="keyword">int</span>[k];</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 弹出前k个元素</span></span><br><span class="line">    <span class="keyword">while</span> (!maxHeap.isEmpty()) &#123;</span><br><span class="line">        res[i++] = maxHeap.poll();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="数据流中的中位数"   >
+          <a href="#数据流中的中位数" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#数据流中的中位数"></a> 数据流中的中位数</h3>
+      
+<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/shu-ju-liu-zhong-de-zhong-wei-shu-lcof/" >剑指 Offer 41. 数据流中的中位数</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>：如何得到一个数据流中的中位数？如果从数据流中读出奇数个数值，那么中位数就是所有数值排序之后位于中间的数值。如果从数据流中读出偶数个数值，那么中位数就是所有数值排序之后中间两个数的平均值。</p>
+<p>思路：建立一个 <strong>小根堆</strong> A 和 <strong>大根堆</strong> B ，各保存列表的<strong>一半元素</strong>，且规定：</p>
+<ul>
+<li>A 保存<strong>较大的一半数字</strong>，长度为 N/2（N 为偶数时）或 (N + 1) / 2 （N 为奇数时）</li>
+<li>A 保存<strong>较小的一半数字</strong>，长度为 N/2（N 为偶数时）或 (N - 1) / 2 （N 为奇数时）</li>
+<li>每次添加一个新元素时，若需要加入到 A 中，则<strong>不能直接加入到 A</strong>，而是先加入到 B 中，令其重新调整后弹出 B 的堆顶后再加入到 A 中；加入到 B 同理</li>
+</ul>
+<p>随后，中位数可仅根据 A, B 的堆顶元素计算得到。总结：<strong>A 中所有数字都比 B 中的大</strong>，并且当 N 为奇数时，<strong>A 中保存的数字个数比 B 多一个</strong>。</p>
+<img src="/images/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%A0%86/image-20211214210648202.png" alt="image-20211214210648202" style="zoom: 67%;" />
+<p>代码：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MedianFinder</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> PriorityQueue&lt;Integer&gt; A;</span><br><span class="line">    <span class="keyword">public</span> PriorityQueue&lt;Integer&gt; B = <span class="keyword">new</span> PriorityQueue&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MedianFinder</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// A：保存较大的一半数，是一个小根堆</span></span><br><span class="line">        A = <span class="keyword">new</span> PriorityQueue&lt;&gt;();</span><br><span class="line">        <span class="comment">// B：保存较小的一半数，是一个大根堆</span></span><br><span class="line">        B = <span class="keyword">new</span> PriorityQueue&lt;&gt;((x, y) -&gt; y - x);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addNum</span><span class="params">(<span class="keyword">int</span> num)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 如果 A 比 B 多，当前数字应该加入到 B 中</span></span><br><span class="line">        <span class="keyword">if</span> (A.size() &gt; B.size()) &#123;</span><br><span class="line">            A.offer(num);</span><br><span class="line">            B.offer(A.poll());</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 如果一样多，加到 A 中</span></span><br><span class="line">            B.offer(num);</span><br><span class="line">            A.offer(B.poll());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">findMedian</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> A.size() == B.size() ? <span class="number">0.5</span> * (A.peek() + B.peek()) : A.peek();</span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yuyun-zhao.github.io">yuyun zhao</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yuyun-zhao.github.io/2021/12/14/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%A0%86/">http://yuyun-zhao.github.io/2021/12/14/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%A0%86/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.github.io/tags/%E7%AE%97%E6%B3%95/">算法</a></span></div><nav class="post-paginator paginator"><div class="paginator-next"><a class="paginator-next__link" href="/2021/12/01/%E3%80%90%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%91%E5%AD%97%E7%AC%A6%E4%B8%B2/"><span class="paginator-prev__text">【数据结构】字符串</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A0%86%E7%BB%93%E6%9E%84"><span class="toc-text">
+           堆结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%A7%E5%B0%8F%E6%A0%B9%E5%A0%86"><span class="toc-text">
+           大&#x2F;小根堆</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E5%BA%94%E7%94%A8"><span class="toc-text">
+           具体应用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A0%86%E6%8E%92%E5%BA%8F"><span class="toc-text">
+           堆排序</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A0%86%E6%8E%92%E5%BA%8F%E7%9A%84%E6%89%A9%E5%B1%95%E5%87%A0%E4%B9%8E%E6%9C%89%E5%BA%8F%E7%9A%84%E6%95%B0%E7%BB%84"><span class="toc-text">
+           堆排序的扩展：几乎有序的数组</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A0%86%E7%BB%93%E6%9E%84%E7%9A%84%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="toc-text">
+           堆结构的常见问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E5%B0%8F%E7%9A%84-k-%E4%B8%AA%E6%95%B0"><span class="toc-text">
+           最小的 K 个数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%AD%E7%9A%84%E4%B8%AD%E4%BD%8D%E6%95%B0"><span class="toc-text">
+           数据流中的中位数</span></a></li></ol></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/author.png" alt="avatar"></div><p class="sidebar-ov-author__text">no code no life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/YUYUN-ZHAO" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="zyy1024462136" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a><a class="sidebar-ov-social-item" href="1024462136" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="mailto:im.yuyunzhao@gmail.com" target="_blank" rel="noopener" data-popover="social.Gmail" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">Gmail</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">121</div><div class="sidebar-ov-state-item__name">文章</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">35</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">35</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2021</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>yuyun zhao</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script>function initSearch() {
+  var isXML = true;
+  var search_path = 'search.xml';
+
+  if (!search_path) {
+    search_path = 'search.xml';
+  } else if (/json$/i.test(search_path)) {
+    isXML = false;
+  }
+
+  var path = '/' + search_path;
+  $.ajax({
+    url: path,
+    dataType: isXML ? 'xml' : 'json',
+    async: true,
+    success: function (res) {
+      var datas = isXML ? $('entry', res).map(function () {
+        // 将 XML 转为 JSON
+        return {
+          title: $('title', this).text(),
+          content: $('content', this).text(),
+          url: $('url', this).text()
+        };
+      }).get() : res;
+      var $input = $('.search-input input');
+      var $result = $('.search-results');
+      // 搜索对象（标题、内容）的权重，影响显示顺序
+      var WEIGHT = { title: 100, content: 1 };
+      var searchPost = function () {
+        var searchText = $input.val().toLowerCase().trim();
+        // 根据空白字符分隔关键字
+        var keywords = searchText.split(/[\s]+/);
+        // 搜索结果
+        var matchPosts = [];
+
+        // 有多个关键字时，将原文字整个保存下来
+        if (keywords.length > 1) {
+          keywords.push(searchText);
+        }
+        // 防止未输入字符时搜索
+        if (searchText.length > 0) {
+          datas.forEach(function (data) {
+            var isMatch  = false;
+            // 没有标题的文章使用预设的 i18n 变量代替
+            var title = (data.title && data.title.trim()) || '[ 文章无标题 ]';
+            var titleLower = title && title.toLowerCase();
+            // 删除 HTML 标签 和 所有空白字符
+            var content = data.content && data.content.replace(/<[^>]+>/g, '');
+            var contentLower = content && content.toLowerCase();
+            // 删除重复的 /
+            var postURL = data.url && decodeURI(data.url).replace(/\/{2,}/g, '/');
+            // 标题中匹配到的关键词
+            var titleHitSlice = [];
+            // 内容中匹配到的关键词
+            var contentHitSlice = [];
+
+            keywords.forEach(function (keyword) {
+              /**
+              * 获取匹配的关键词的索引
+              * @param {String} keyword 要匹配的关键字
+              * @param {String} text 原文字
+              * @param {Boolean} caseSensitive 是否区分大小写
+              * @param {Number} weight 匹配对象的权重。权重大的优先显示
+              * @return {Array}
+              */
+              function getIndexByword (word, text, caseSensitive, weight) {
+                if (!word || !text) {
+                  return [];
+                };
+
+                var startIndex = 0; // 每次匹配的开始索引
+                var index = -1;     // 匹配到的索引值
+                var result = [];    // 匹配结果
+
+                if (!caseSensitive) {
+                  word = word.toLowerCase();
+                  text = text.toLowerCase();
+                }
+
+                while((index = text.indexOf(word, startIndex)) !== -1) {
+                  var hasMatch = false;
+                  // 索引位置相同的关键词，保留长度较长的
+                  titleHitSlice.forEach(function (hit) {
+                    if (hit.index === index && hit.word.length < word.length) {
+                      hit.word = word;
+                      hasMatch = true;
+                    }
+                  });
+                  startIndex = index + word.length;
+                  !hasMatch && result.push({ index: index, word: word, weight: weight });
+                }
+                return result;
+              }
+              titleHitSlice = titleHitSlice.concat(getIndexByword(keyword, titleLower, false, WEIGHT.title));
+              contentHitSlice = contentHitSlice.concat(getIndexByword(keyword, contentLower, false, WEIGHT.content));
+            });
+
+            var hitTitle = titleHitSlice.length;
+            var hitContent = contentHitSlice.length;
+
+            if (hitTitle > 0 || hitContent > 0) {
+              isMatch = true;
+            }
+            if (isMatch) {
+              ;[titleHitSlice, contentHitSlice].forEach(function (hit) {
+                // 按照匹配文字的索引的递增顺序排序
+                hit.sort(function (left, right) {
+                  return left.index - right.index;
+                });
+              });
+              /**
+              * 给文本中匹配到的关键词添加标记，从而进行高亮显示
+              * @param {String} text 原文本
+              * @param {Array} hitSlice 匹配项的索引信息
+              * @param {Number} start 开始索引
+              * @param {Number} end 结束索引
+              * @return {String}
+              */
+              function highlightKeyword (text, hitSlice, start, end) {
+                if (!text || !hitSlice || !hitSlice.length) {
+                  return;
+                }
+
+                var result = '';
+                var startIndex = start;
+                var endIndex = end;
+                hitSlice.forEach(function (hit) {
+                  if (hit.index < startIndex) {
+                    return;
+                  }
+
+                  var hitWordEnd = hit.index + hit.word.length;
+                  result += text.slice(startIndex, hit.index);
+                  result += '<b>' + text.slice(hit.index, hitWordEnd) + '</b>';
+                  startIndex = hitWordEnd;
+                });
+                result += text.slice(startIndex, endIndex);
+                return result;
+              }
+
+              var postData = {};
+              // 文章总的搜索权重
+              var postWeight = titleHitSlice.length * WEIGHT.title + contentHitSlice.length * WEIGHT.content;
+              // 标记匹配关键词后的标题
+              var postTitle = highlightKeyword(title, titleHitSlice, 0, title.length) || title;
+              // 标记匹配关键词后的内容
+              var postContent;
+              // 显示内容的长度
+              var SHOW_WORD_LENGTH = 200;
+              // 命中关键词前的字符显示长度
+              var SHOW_WORD_FRONT_LENGTH = 20;
+              var SHOW_WORD_END_LENGTH = SHOW_WORD_LENGTH - SHOW_WORD_FRONT_LENGTH;
+
+              // 截取匹配的第一个字符，前后共 200 个字符来显示
+              if (contentHitSlice.length > 0) {
+                var firstIndex = contentHitSlice[0].index;
+                var start = firstIndex > SHOW_WORD_FRONT_LENGTH ? firstIndex - SHOW_WORD_FRONT_LENGTH : 0;
+                var end = firstIndex + SHOW_WORD_END_LENGTH;
+                postContent = highlightKeyword(content, contentHitSlice, start, end);
+              } else { // 未匹配到内容，直接截取前 200 个字符来显示
+                postContent = content.slice(0, SHOW_WORD_LENGTH);
+              }
+              postData.title = postTitle;
+              postData.content = postContent;
+              postData.url = postURL;
+              postData.weight = postWeight;
+              matchPosts.push(postData);
+            }
+          });
+        }
+
+        var resultInnerHtml = '';
+        if (matchPosts.length) {
+          // 按权重递增的顺序排序，使权重大的优先显示
+          matchPosts.sort(function (left, right) {
+            return right.weight - left.weight;
+          });
+          resultInnerHtml += '<ul>';
+          matchPosts.forEach(function (post) {
+            resultInnerHtml += '<li><a class="search-results-title" href="' + post.url + '">';
+            resultInnerHtml += post.title;
+            resultInnerHtml += '</a><div class="search-results-content">';
+            resultInnerHtml += post.content;
+            resultInnerHtml += '</div></li>';
+          });
+          resultInnerHtml += '</ul>';
+        } else {
+          resultInnerHtml += '<div class="search-results-none"><i class="far fa-meh"></i></div>';
+        }
+        $result.html(resultInnerHtml);
+      };
+      $input.on('input', searchPost);
+      $input.on('keyup', function (e) {
+        if (e.keyCode === Stun.utils.codeToKeyCode('Enter')) {
+          searchPost();
+        }
+      });
+    }
+  });
+}
+
+function closeSearch () {
+  $('body').css({ overflow: 'auto' });
+  $('.search-popup').css({ display: 'none' });
+  $('.search-mask').css({ display: 'none' });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+  Stun.utils.pjaxReloadLocalSearch = function () {
+    $('.header-nav-search').on('click', function (e) {
+      e.stopPropagation();
+      $('body').css('overflow', 'hidden');
+      $('.search-popup')
+        .velocity('stop')
+        .velocity('transition.expandIn', {
+          duration: 300,
+          complete: function () {
+            $('.search-popup input').focus();
+          }
+        });
+      $('.search-mask')
+        .velocity('stop')
+        .velocity('transition.fadeIn', {
+          duration: 300
+        });
+
+      initSearch();
+    });
+    $('.search-mask, .search-close').on('click', function () {
+      closeSearch();
+    });
+    $(document).on('keydown', function (e) {
+      // Escape <=> 27
+      if (e.keyCode === Stun.utils.codeToKeyCode('Escape')) {
+        closeSearch();
+      }
+    });
+  };
+
+  Stun.utils.pjaxReloadLocalSearch();
+}, false);
+
+function safeOpenUrl(url) {
+  var newTab = window.open();
+  newTab.opener = null;
+  newTab.location = url;
+}
+
+function extSearch(engine) {
+  var engines = {
+    google: 'https://www.google.com/search?q=',
+    bing: 'https://cn.bing.com/search?q=',
+    baidu: 'https://www.baidu.com/s?ie=UTF-8&wd=',
+  };
+  var host = window.location.host;
+  var query = $('.search-input input').val().toLowerCase().trim();
+  var uri = engines[engine] + query + ' site:' + host;
+
+  if (query) {
+    safeOpenUrl(uri);
+  } else {
+    Stun.utils.popAlert('warning', '请输入字符');
+  }
+}
+
+var assistSearchList = window.CONFIG.assistSearch;
+
+if (Array.isArray(assistSearchList)) {
+  assistSearchList.forEach(function (name) {
+    document.querySelector('.search-btns-item--' + name).addEventListener('click', function () {
+      extSearch(name);
+    }, false);
+  });
+}</script><script src="https://cdn.jsdelivr.net/npm/pjax@latest/pjax.min.js"></script><script>window.addEventListener('DOMContentLoaded', function () {
+  var pjax = new Pjax({"selectors":["head title","#main",".pjax-reload"],"history":true,"scrollTo":false,"scrollRestoration":false,"cacheBust":false,"debug":false,"currentUrlFullReload":false,"timeout":0});
+  // 加载进度条的计时器
+  var loadingTimer = null;
+
+  // 重置页面 Y 方向上的滚动偏移量
+  document.addEventListener('pjax:send', function () {
+    $('.header-nav-menu').removeClass('show');
+    if (CONFIG.pjax && CONFIG.pjax.avoidBanner) {
+      $('html').velocity('scroll', {
+        duration: 500,
+        offset: $('#header').height(),
+        easing: 'easeInOutCubic'
+      });
+    }
+
+    var loadingBarWidth = 20;
+    var MAX_LOADING_WIDTH = 95;
+
+    $('.loading-bar').addClass('loading');
+    $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    clearInterval(loadingTimer);
+    loadingTimer = setInterval(function () {
+      loadingBarWidth += 3;
+      if (loadingBarWidth > MAX_LOADING_WIDTH) {
+        loadingBarWidth = MAX_LOADING_WIDTH;
+      }
+      $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    }, 500);
+  }, false);
+
+  window.addEventListener('pjax:complete', function () {
+    clearInterval(loadingTimer);
+    $('.loading-bar__progress').css('width', '100%');
+    $('.loading-bar').removeClass('loading');
+    setTimeout(function () {
+      $('.loading-bar__progress').css('width', '0');
+    }, 400);
+    $('link[rel=prefetch], script[data-pjax-rm]').each(function () {
+      $(this).remove();
+    });
+    $('script[data-pjax], #pjax-reload script').each(function () {
+      $(this).parent().append($(this).remove());
+    });
+
+    if (Stun.utils.pjaxReloadBoot) {
+      Stun.utils.pjaxReloadBoot();
+    }
+    if (Stun.utils.pjaxReloadScroll) {
+      Stun.utils.pjaxReloadScroll();
+    }
+    if (Stun.utils.pjaxReloadSidebar) {
+      Stun.utils.pjaxReloadSidebar();
+    }
+    if (false) {
+      if (Stun.utils.pjaxReloadHeader) {
+        Stun.utils.pjaxReloadHeader();
+      }
+      if (Stun.utils.pjaxReloadScrollIcon) {
+        Stun.utils.pjaxReloadScrollIcon();
+      }
+      if (Stun.utils.pjaxReloadLocalSearch) {
+        Stun.utils.pjaxReloadLocalSearch();
+      }
+    }
+  }, false);
+}, false);</script><div id="pjax-reload"><link href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" rel="stylesheet" type="text/css"><link href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/copy-tex.css" rel="stylesheet" type="text/css"><script src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/copy-tex.min.js"></script><script src="https://cdn.jsdelivr.net/gh/sukkaw/busuanzi@latest/bsz.pure.mini.js" async></script></div><script src="/js/utils.js?v=2.6.2"></script><script src="/js/stun-boot.js?v=2.6.2"></script><script src="/js/scroll.js?v=2.6.2"></script><script src="/js/header.js?v=2.6.2"></script><script src="/js/sidebar.js?v=2.6.2"></script><script type="application/json" src="/search.xml"></script></body></html>
