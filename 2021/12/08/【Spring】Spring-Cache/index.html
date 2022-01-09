@@ -1,0 +1,517 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="简介         https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;266804094  为在项目中使用缓存技术（例如 Redis），我们通常要将添加缓存的代码耦合到业务代码中，这样每个业务代码都需要添加重复的缓存代码。自然可以想到，使用 Spring AOP 的思想进行解耦。 Spring Cache 就是这么一个框架。它利用了 Spring AOP，实现了基">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Spring】Spring Cache">
+<meta property="og:url" content="http://yuyun-zhao.github.io/2021/12/08/%E3%80%90Spring%E3%80%91Spring-Cache/index.html">
+<meta property="og:site_name" content="yuyun zhao&#39;s blog">
+<meta property="og:description" content="简介         https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;266804094  为在项目中使用缓存技术（例如 Redis），我们通常要将添加缓存的代码耦合到业务代码中，这样每个业务代码都需要添加重复的缓存代码。自然可以想到，使用 Spring AOP 的思想进行解耦。 Spring Cache 就是这么一个框架。它利用了 Spring AOP，实现了基">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring-Cache/image-20220109113102413.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring-Cache/image-20220109112149406.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring-Cache/image-20220109112440209.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring-Cache/image-20220109122600333.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E/image-20220108213246545.png">
+<meta property="article:published_time" content="2021-12-08T13:59:17.000Z">
+<meta property="article:modified_time" content="2022-01-09T11:56:25.594Z">
+<meta property="article:author" content="yuyun zhao">
+<meta property="article:tag" content="Spring">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91Spring-Cache/image-20220109113102413.png"><title>【Spring】Spring Cache | yuyun zhao's blog</title><link ref="canonical" href="http://yuyun-zhao.github.io/2021/12/08/%E3%80%90Spring%E3%80%91Spring-Cache/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":true},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"carbon","highlight":"light","wordWrap":false},
+  reward: false,
+  fancybox: true,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: {"avoidBanner":false},
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"复制","copySuccess":"复制成功","copyError":"复制失败"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【Spring】Spring Cache</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-12-08</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-01-09</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">2.9k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">19分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body">
+        <h2 id="简介"   >
+          <a href="#简介" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#简介"></a> 简介</h2>
+      
+<blockquote>
+<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/266804094" >https://zhuanlan.zhihu.com/p/266804094</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+</blockquote>
+<p>为在项目中使用缓存技术（例如 Redis），我们通常要将添加缓存的代码耦合到业务代码中，这样每个业务代码都需要添加重复的缓存代码。自然可以想到，使用 Spring AOP 的思想进行解耦。</p>
+<p>Spring Cache 就是这么一个框架。<strong>它利用了 Spring AOP，实现了基于注解的缓存功能</strong>，并且进行了合理的抽象，业务代码不用关心底层是使用了什么缓存框架，只需要简单地加一个注解并配置缓存框架的类型，就能实现缓存功能了。而且 Spring Cache 也提供了很多默认的配置，用户可以为自己的业务代码快速加上一个很不错的缓存功能。</p>
+<blockquote>
+<p>官网地址：<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://docs.spring.io/spring-framework/docs/5.2.10.RELEASE/spring-framework-reference/integration.html#cache-strategie" >https://docs.spring.io/spring-framework/docs/5.2.10.RELEASE/spring-framework-reference/integration.html#cache-strategie</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+</blockquote>
+<p>Spring 从3.1开始定义了 <code>org.springframework.cache.Cache</code> 和 <code>org.sprngframework.cache.CacheManager</code> 接口来统一不同的缓存技术，并支持使用 <code>JCache</code>（JSR-107）注解简化我们的开发。</p>
+<p><code>CacheManager</code>  接口为缓存的组件<strong>定义存储规则</strong>，其内部的缓存组件（<code>Cache</code> 接口类型）才是真正向缓存中存储数据的（以 k:v 存储数据）。这些组件根据名字进行区分，存储的规则是由 <code>CacheManager</code> 制定的。例如：</p>
+<ul>
+<li>如果使用<code>ConcrrentMapCache</code> 类型的 <code>CacheManager</code>，则其内部存储的 <code>ConcrrentMapCache</code> 里面都是使用 <code>ConcurrentMap</code> 存储数据的，通常用于本地缓存。</li>
+<li>如果使用 <code>RedisCache</code>类型的 <code>RedisCacheManager</code>，则其内部存储的 <code>RedisCache</code>对象存储的数据都是存放在 Redis 中的，通常用于分布式缓存。</li>
+</ul>
+<img src="/images/%E3%80%90Spring%E3%80%91Spring-Cache/image-20220109113102413.png" alt="image-20220109113102413" style="zoom:67%;" />
+<p>从图中可以看到，不同的 <code>CacheManager</code> 中保存着不同类型的 <code>Cache</code>，并且这些 <code>Cache</code> 都有自己的名字（在 Redis 中显示的 Key 的名字），并且其内按照 k:v 的方式保存数据。</p>
+<p>以 <code>RedisCache</code> 为例。使用 Spring Cache 时，在方法上标注注解 <code>@Cacheable</code>。这样每次在调用该方法前会向 Redis 检查该缓存是否已存在：</p>
+<ul>
+<li>如果已存在就直接从缓存中获取方法调用后的结果，方法内代码将不再被执行</li>
+<li>如果不存在再执行方法内代码并将方法的返回结果到 Redis 中，下次就可以直接调用从缓存中获取该数据了</li>
+</ul>
+<span id="more"></span>
+
+        <h3 id="原理"   >
+          <a href="#原理" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#原理"></a> 原理</h3>
+      
+<p>引入 Spring Cache 的场景启动器后，其将注入一个 <code>CacheAutoConfiguration</code>的自动配置类：</p>
+<p><img src="/images/%E3%80%90Spring%E3%80%91Spring-Cache/image-20220109112149406.png" alt="image-20220109112149406" /></p>
+<p>该自动配置类将注入一些缓存框架的自动配置类，例如 <code>RedisAutoConfiguration</code>：</p>
+<p><img src="/images/%E3%80%90Spring%E3%80%91Spring-Cache/image-20220109112440209.png" alt="image-20220109112440209" /></p>
+<p>并且 Spring Cache 自动配置了 <code>RedisCacheManager</code> 与 <code>RedisCacheConfiguration</code> ，用于设置 Redis 缓存的各个配置参数。如果容器中有开发人员编写的 <code>RedisCacheConfiguration</code>，就使用。否则就使用默认提供的配置参数。</p>
+<p>若开发人员想自定义缓存的配置，只需要向容器中注入一个自定义的 <code>RedisCacheConfiguration</code> 并在其内设置缓存参数即可，这样这些参数就会应用到当前 <code>RedisCacheManager</code> 管理所有缓存分区中。</p>
+<p><img src="/images/%E3%80%90Spring%E3%80%91Spring-Cache/image-20220109122600333.png" alt="image-20220109122600333" /></p>
+
+        <h2 id="快速使用"   >
+          <a href="#快速使用" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#快速使用"></a> 快速使用</h2>
+      
+<ol>
+<li>导入 Maven 依赖</li>
+</ol>
+<figure class="highlight xml"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-cache<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></div></figure>
+<ol start="2">
+<li>在启动类加上 <code>@EnableCaching</code> 注解即可开启使用缓存</li>
+</ol>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@EnableCaching</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CachingApplication</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(CachingApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<ol start="3">
+<li>配置使用 Redis 进行缓存</li>
+</ol>
+<figure class="highlight yaml"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">redis:</span></span><br><span class="line">    <span class="attr">host:</span> <span class="string">yuyunzhao.cn</span></span><br><span class="line">    <span class="attr">port:</span> <span class="number">6379</span></span><br><span class="line">    <span class="attr">password:</span> <span class="string">zhaoyuyun</span> <span class="comment"># 设置密码防止被别人利用</span></span><br><span class="line">  <span class="attr">cache:</span></span><br><span class="line">    <span class="attr">type:</span> <span class="string">redis</span>         <span class="comment"># 配置使用 Redis 进行缓存</span></span><br><span class="line">    <span class="comment"># cache-names:      # 如果没配名字，就按照系统中用到的缓存进行起名，一般不设置</span></span><br><span class="line">    <span class="attr">redis:</span></span><br><span class="line">      <span class="attr">time-to-live:</span> <span class="number">360000</span>       <span class="comment"># 设置过期时间，单位是 ms</span></span><br><span class="line">      <span class="comment"># key-prefix: CACHE_       # key 前缀。推荐不指定前缀，这样分区名（value）默认就是缓存的前缀，有利于分级展示 key 的信息</span></span><br><span class="line">      <span class="attr">use-key-prefix:</span> <span class="literal">true</span>       <span class="comment"># 是否使用前缀（开启后，默认使用 @Cacheable 中指定的分区名作为前缀）</span></span><br><span class="line">      <span class="attr">cache-null-values:</span> <span class="literal">true</span>    <span class="comment"># 是否允许缓存空值，可用于防止缓存穿透</span></span><br></pre></td></tr></table></div></figure>
+<ol start="4">
+<li>在要缓存的方法上面添加 <code>@Cacheable</code> 注解，即可缓存这个方法的返回值</li>
+</ol>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Cacheable(value = &#123;&quot;category&quot;, &quot;product&quot;&#125;, key = &quot;#root.method.name&quot;)</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> List&lt;CategoryEntity&gt; <span class="title">getLevel1Categorys</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 如果缓存中没有才会执行该方法内的代码，否则直接返回缓存中的结果</span></span><br><span class="line">    List&lt;CategoryEntity&gt; categoryEntities = baseMapper.selectList(<span class="keyword">new</span> QueryWrapper&lt;CategoryEntity&gt;().eq(<span class="string">&quot;parent_cid&quot;</span>, <span class="number">0</span>));</span><br><span class="line">    <span class="keyword">return</span> categoryEntities;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>下面详细介绍 Spring Cache 里的常用注解。</p>
+
+        <h2 id="常用注解"   >
+          <a href="#常用注解" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#常用注解"></a> 常用注解</h2>
+      
+<p>Spring Cache有几个常用注解，分别为<code>@Cacheable</code>、<code>@CachePut</code>、<code>@CacheEvict</code>、<code>@Caching</code>、 <code>@CacheConfig</code>。除了最后一个<code>CacheConfig</code> 外，其余四个都可以用在类上或者方法级别上，如果用在类上，就是对该类的所有public方法生效，下面分别介绍一下这几个注解。</p>
+
+        <h3 id="cacheable"   >
+          <a href="#cacheable" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#cacheable"></a> @Cacheable</h3>
+      
+<p><code>@Cacheble</code>注解表示这个方法有了缓存的功能，方法的返回值会被缓存下来，下一次调用该方法前，会去检查是否缓存中已经有值，如果有就直接返回，不调用方法。如果没有，就调用方法，然后把结果缓存起来。这个注解<strong>一般用在查询方法上</strong>。示例：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Cacheable(value = &#123;&quot;category&quot;, &quot;product&quot;&#125;, key = &quot;#root.method.name&quot;, sync = true)</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> List&lt;CategoryEntity&gt; <span class="title">getCategoryLevel1</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;方法执行了&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.baseMapper.selectList(<span class="keyword">new</span> QueryWrapper&lt;CategoryEntity&gt;().eq(<span class="string">&quot;parent_cid&quot;</span>, <span class="number">0</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Cacheable(value = &#123;&quot;category&quot;, &quot;product&quot;&#125;, key = &quot;&#x27;getCatalogJson&#x27;&quot;)</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> Map&lt;String, List&lt;Catalog2Vo&gt;&gt; getCatalogJson() &#123;</span><br><span class="line">    <span class="comment">// 不需要再手动写缓存的代码了</span></span><br><span class="line">    <span class="keyword">return</span> getCatalogJsonFromDB();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>该注解的参数：</p>
+<ul>
+<li><code>value</code>：同 <code>cacheNames</code>。缓存的<strong>分区名称</strong>。如果不指定 <code>key-prefix</code> 时，就会作为缓存名称的前半部分（即前缀）</li>
+<li><code>key</code>：<strong>缓存名称</strong>。如果不指定 <code>key-prefix</code> 时，就会以 value 为前缀拼接在一起，共同组成在 Redis 中的缓存 key 值。例如上例中在 Redis 里保存的缓存数据的key 值为 <code>category::getCatalogJson</code></li>
+<li><code>sync</code>：为 true 代表开启<strong>本地锁</strong>（注意不是分布式锁）。默认是不开启的。可用该参数缓解缓存击穿问题</li>
+</ul>
+<blockquote>
+<p>key 的取值采用 <span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://docs.spring.io/spring-framework/docs/3.0.x/reference/expressions.html" >Spring Expression Language (SpEL)</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span> 规则，如果想直接取值需要加 ‘xxx’。否则要使用 #root.xxxx 进行动态取值。并且 key 只能写单个值，不可以指定多个 key</p>
+</blockquote>
+<p>注意：当配置文件中不显式指定前缀 <code>key-prefix</code> 时，就会使用该注解中的 value 值作为前缀，这样最终保存在 Redis 里的缓存的 key 就是 <code>value 值（分区名）:: key 值（缓存名）</code>。上例中的两个缓存数据在 Redis 里的显示效果为：</p>
+<img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E/image-20220108213246545.png" alt="image-20220108213246545" style="zoom:67%;" />
+<p>其中 <code>category</code> 和 <code>product</code> 是分区名（value 值），其后的 <code>getCatalogJson</code> 和 <code>getCategoryLevel1</code> 是缓存名（key 值）。</p>
+<hr />
+<p><code>@Cacheable</code> 的默认配置：</p>
+<ul>
+<li>如果缓存中有，方法就不再调用</li>
+<li><code>key</code> 如果不显式指定，则默认自动生成为：<code>缓存的区分:SimpleKey</code></li>
+<li>缓存中存储的值，默认使用 JDK 序列化（若想指定为 JSON 格式需要自定义配置）</li>
+<li>默认的过期时间：-1（可自定义）</li>
+</ul>
+<hr />
+
+        <h3 id="cacheput"   >
+          <a href="#cacheput" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#cacheput"></a> @CachePut</h3>
+      
+<p>加了 <code>@CachePut</code> 注解的方法，会把方法的返回值立即 put 到缓存里面缓存起来，供其它地方使用。它<strong>通常用在新增方法上</strong>。<strong>双写模式</strong>可以使用该注解，要求方法必须有返回值，该注解会将该返回值存到缓存中。</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@CachePut</span></span><br><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> CategoryEntity <span class="title">addCascade</span><span class="params">(CategoryEntity category)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.add(category);</span><br><span class="line">    <span class="comment">// 要求必须有返回值</span></span><br><span class="line">    <span class="keyword">return</span> category;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="cacheevict"   >
+          <a href="#cacheevict" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#cacheevict"></a> @CacheEvict</h3>
+      
+<p>使用了 <code>@CacheEvict</code> 注解的方法，会在执行完方法内容后清空指定缓存。<strong>一般用在更新或者删除的方法上</strong>。<strong>失效模式</strong>可以使用该注解。方法不需要返回值。</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@CacheEvict(value = &#123;&quot;category&quot;, &quot;product&quot;&#125;, key = &quot;&#x27;getCategoryLevel1&#x27;&quot;, allEntries = true)</span> <span class="comment">// 注意只能写单个key；并且指定删除某个分区下的所有数据</span></span><br><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">updateCascade</span><span class="params">(CategoryEntity category)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 先更新商品表</span></span><br><span class="line">    <span class="keyword">this</span>.updateById(category);</span><br><span class="line">    <span class="comment">// 更新关联表中的数据</span></span><br><span class="line">    relationService.updateCategoryName(category.getCatId(), category.getName());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>注意：该注解的 key 只能写单个值，不可以指定多个 key，若想同时指定多个 key，则需要使用 <code>@Caching</code> 注解。</p>
+<p><code>allEntries = true</code> 作用：指定删除某个分区下的所有数据</p>
+
+        <h3 id="caching"   >
+          <a href="#caching" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#caching"></a> @Caching</h3>
+      
+<p>Java注解的机制决定了，一个方法上只能有一个相同的注解生效。那有时候可能一个方法会操作多个缓存（这个在删除缓存操作中比较常见，在添加操作中不太常见）。</p>
+<p>Spring Cache当然也考虑到了这种情况，<code>@Caching</code>注解就是用来解决这类情况的，一看它的源码就明白了。</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Caching &#123;</span><br><span class="line">    Cacheable[] cacheable() <span class="keyword">default</span> &#123;&#125;;</span><br><span class="line">    CachePut[] put() <span class="keyword">default</span> &#123;&#125;;</span><br><span class="line">    CacheEvict[] evict() <span class="keyword">default</span> &#123;&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>可以使用该注解组合多个注解，例如：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Caching(evict = &#123;</span></span><br><span class="line"><span class="meta">    @CacheEvict(value = &#123;&quot;category&quot;, &quot;product&quot;&#125;, key = &quot;&#x27;getCategoryLevel1&#x27;&quot;),</span></span><br><span class="line"><span class="meta">    @CacheEvict(value = &#123;&quot;category&quot;, &quot;product&quot;&#125;, key = &quot;&#x27;getCatalogJson&#x27;&quot;)</span></span><br><span class="line"><span class="meta">&#125;)</span></span><br><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">updateCascade</span><span class="params">(CategoryEntity category)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 先更新商品表</span></span><br><span class="line">    <span class="keyword">this</span>.updateById(category);</span><br><span class="line">    <span class="comment">// 更新关联表中的数据</span></span><br><span class="line">    relationService.updateCategoryName(category.getCatId(), category.getName());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="cacheconfig"   >
+          <a href="#cacheconfig" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#cacheconfig"></a> @CacheConfig</h3>
+      
+<p>前面提到的四个注解，都是 Spring Cache 常用的注解。每个注解都有很多可以配置的属性。但这几个注解通常都是作用在方法上的，而有些配置可能又是一个类通用的，这种情况就可以使用<code>@CacheConfig</code>了，它是一个类级别的注解，可以在类级别上配置<code>cacheNames</code>、<code>keyGenerator</code>、<code>cacheManager</code>、<code>cacheResolver</code>等。</p>
+
+        <h2 id="自定义配置缓存参数"   >
+          <a href="#自定义配置缓存参数" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#自定义配置缓存参数"></a> 自定义配置缓存参数</h2>
+      
+<p>若想自定义配置 Spring Cache 的缓存配置，只需要向容器中注入一个自定义的 <code>RedisCacheConfiguration</code> 并在其内设置缓存参数即可，这样这些参数就会应用到当前 <code>RedisCacheManager</code> 管理所有缓存分区中。</p>
+<p>需要注意的是，如果不加 <code>@EnableConfigurationProperties(CacheProperties.class)</code> 注解，则该配置类将无法读取配置文件中的相关配置参数。该注解将会使 <code>CacheProperties</code> 对象绑定配置文件中的 <code>cache</code> 配置并使其生效。详细原理见文章 <a href="https://yuyun-zhao.github.io/2021/06/30/%E3%80%90SpringBoot%E3%80%91SpringBoot2/">【Spring Boot】Spring Boot2</a></p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@EnableConfigurationProperties(CacheProperties.class)</span></span><br><span class="line"><span class="meta">@EnableCaching</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyCacheConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 默认配置文件中的东西是没有用上的</span></span><br><span class="line"><span class="comment">    * 1、原来的配置文件绑定的配置类是这样子的</span></span><br><span class="line"><span class="comment">    *      <span class="doctag">@ConfigurationProperties</span>(prefix = &quot;Spring.cache&quot;)</span></span><br><span class="line"><span class="comment">    * 2、要让他生效的话，必须加上下面注解，将CacheProperties属性与配置文件中的指定前缀内容进行绑定，否则配置文件的内容无法生效</span></span><br><span class="line"><span class="comment">    *      <span class="doctag">@EnableConfigurationProperties</span>(CacheProperties.class)</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> cacheProperties 从容器中自动注入的缓存属性对象，其内绑定了本项目配置文件中的一些属性值</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function">RedisCacheConfiguration <span class="title">redisCacheConfiguration</span><span class="params">(CacheProperties cacheProperties)</span> </span>&#123;</span><br><span class="line">        RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig();</span><br><span class="line">        <span class="comment">// 设置key的序列化</span></span><br><span class="line">        config = config.serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(<span class="keyword">new</span> StringRedisSerializer()));</span><br><span class="line">        <span class="comment">// 设置value序列化 -&gt;JackSon，否则会使用默认的JDK序列化</span></span><br><span class="line">        config = config.serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(<span class="keyword">new</span> GenericJackson2JsonRedisSerializer()));</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 将配置文件中的所有配置都生效</span></span><br><span class="line">        <span class="comment">// 从缓存属性对象中读取配置文件中的自定义属性</span></span><br><span class="line">        CacheProperties.Redis redisProperties = cacheProperties.getRedis();</span><br><span class="line">        <span class="keyword">if</span> (redisProperties.getTimeToLive() != <span class="keyword">null</span>) &#123;</span><br><span class="line">            config = config.entryTtl(redisProperties.getTimeToLive());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (redisProperties.getKeyPrefix() != <span class="keyword">null</span>) &#123;</span><br><span class="line">            config = config.prefixKeysWith(redisProperties.getKeyPrefix());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (!redisProperties.isCacheNullValues()) &#123;</span><br><span class="line">            config = config.disableCachingNullValues();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (!redisProperties.isUseKeyPrefix()) &#123;</span><br><span class="line">            config = config.disableKeyPrefix();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> config;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>配置文件：</p>
+<figure class="highlight yaml"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">redis:</span></span><br><span class="line">    <span class="attr">host:</span> <span class="string">yuyunzhao.cn</span></span><br><span class="line">    <span class="attr">port:</span> <span class="number">6379</span></span><br><span class="line">    <span class="attr">password:</span> <span class="string">zhaoyuyun</span> <span class="comment"># 设置密码防止被别人利用</span></span><br><span class="line">  <span class="attr">cache:</span></span><br><span class="line">    <span class="attr">type:</span> <span class="string">redis</span>         <span class="comment"># 配置使用 Redis 进行缓存</span></span><br><span class="line">    <span class="comment"># cache-names:      # 如果没配名字，就按照系统中用到的缓存进行起名</span></span><br><span class="line">    <span class="attr">redis:</span></span><br><span class="line">      <span class="attr">time-to-live:</span> <span class="number">360000</span>       <span class="comment"># 设置过期时间，单位是 ms</span></span><br><span class="line">      <span class="comment"># key-prefix: CACHE_       # key 前缀，推荐不指定，这样分区名（value）默认就是缓存的前缀</span></span><br><span class="line">      <span class="attr">use-key-prefix:</span> <span class="literal">true</span>       <span class="comment"># 是否使用写入 Redis 前缀</span></span><br><span class="line">      <span class="attr">cache-null-values:</span> <span class="literal">true</span>    <span class="comment"># 是否允许缓存空值，可用于防止缓存穿透</span></span><br></pre></td></tr></table></div></figure></div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yuyun-zhao.github.io">yuyun zhao</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yuyun-zhao.github.io/2021/12/08/%E3%80%90Spring%E3%80%91Spring-Cache/">http://yuyun-zhao.github.io/2021/12/08/%E3%80%90Spring%E3%80%91Spring-Cache/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.github.io/tags/Spring/">Spring</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2021/12/08/%E3%80%90SpringCloud%E3%80%91OSS/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">【Spring Cloud】Spring Cloud Alibaba OSS</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2021/12/01/%E3%80%90%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%91%E6%95%B0%E7%BB%84%E4%B8%8E%E5%AD%97%E7%AC%A6%E4%B8%B2/"><span class="paginator-prev__text">【数据结构】数组与字符串</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-text">
+           简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-text">
+           原理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BF%AB%E9%80%9F%E4%BD%BF%E7%94%A8"><span class="toc-text">
+           快速使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3"><span class="toc-text">
+           常用注解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#cacheable"><span class="toc-text">
+           @Cacheable</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cacheput"><span class="toc-text">
+           @CachePut</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cacheevict"><span class="toc-text">
+           @CacheEvict</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#caching"><span class="toc-text">
+           @Caching</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cacheconfig"><span class="toc-text">
+           @CacheConfig</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E9%85%8D%E7%BD%AE%E7%BC%93%E5%AD%98%E5%8F%82%E6%95%B0"><span class="toc-text">
+           自定义配置缓存参数</span></a></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/author.png" alt="avatar"></div><p class="sidebar-ov-author__text">no code no life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/YUYUN-ZHAO" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="zyy18749810683" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a><a class="sidebar-ov-social-item" href="1024462136" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="mailto:im.yuyunzhao@gmail.com" target="_blank" rel="noopener" data-popover="social.Gmail" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">Gmail</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">129</div><div class="sidebar-ov-state-item__name">文章</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">37</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">37</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2022</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>yuyun zhao</span><span class="footer__devider">|</span><span>沪ICP备2022000458号</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script>function initSearch() {
+  var isXML = true;
+  var search_path = 'search.json';
+
+  if (!search_path) {
+    search_path = 'search.xml';
+  } else if (/json$/i.test(search_path)) {
+    isXML = false;
+  }
+
+  var path = '/' + search_path;
+  $.ajax({
+    url: path,
+    dataType: isXML ? 'xml' : 'json',
+    async: true,
+    success: function (res) {
+      var datas = isXML ? $('entry', res).map(function () {
+        // 将 XML 转为 JSON
+        return {
+          title: $('title', this).text(),
+          content: $('content', this).text(),
+          url: $('url', this).text()
+        };
+      }).get() : res;
+      var $input = $('.search-input input');
+      var $result = $('.search-results');
+      // 搜索对象（标题、内容）的权重，影响显示顺序
+      var WEIGHT = { title: 100, content: 1 };
+      var searchPost = function () {
+        var searchText = $input.val().toLowerCase().trim();
+        // 根据空白字符分隔关键字
+        var keywords = searchText.split(/[\s]+/);
+        // 搜索结果
+        var matchPosts = [];
+
+        // 有多个关键字时，将原文字整个保存下来
+        if (keywords.length > 1) {
+          keywords.push(searchText);
+        }
+        // 防止未输入字符时搜索
+        if (searchText.length > 0) {
+          datas.forEach(function (data) {
+            var isMatch  = false;
+            // 没有标题的文章使用预设的 i18n 变量代替
+            var title = (data.title && data.title.trim()) || '[ 文章无标题 ]';
+            var titleLower = title && title.toLowerCase();
+            // 删除 HTML 标签 和 所有空白字符
+            var content = data.content && data.content.replace(/<[^>]+>/g, '');
+            var contentLower = content && content.toLowerCase();
+            // 删除重复的 /
+            var postURL = data.url && decodeURI(data.url).replace(/\/{2,}/g, '/');
+            // 标题中匹配到的关键词
+            var titleHitSlice = [];
+            // 内容中匹配到的关键词
+            var contentHitSlice = [];
+
+            keywords.forEach(function (keyword) {
+              /**
+              * 获取匹配的关键词的索引
+              * @param {String} keyword 要匹配的关键字
+              * @param {String} text 原文字
+              * @param {Boolean} caseSensitive 是否区分大小写
+              * @param {Number} weight 匹配对象的权重。权重大的优先显示
+              * @return {Array}
+              */
+              function getIndexByword (word, text, caseSensitive, weight) {
+                if (!word || !text) {
+                  return [];
+                };
+
+                var startIndex = 0; // 每次匹配的开始索引
+                var index = -1;     // 匹配到的索引值
+                var result = [];    // 匹配结果
+
+                if (!caseSensitive) {
+                  word = word.toLowerCase();
+                  text = text.toLowerCase();
+                }
+
+                while((index = text.indexOf(word, startIndex)) !== -1) {
+                  var hasMatch = false;
+                  // 索引位置相同的关键词，保留长度较长的
+                  titleHitSlice.forEach(function (hit) {
+                    if (hit.index === index && hit.word.length < word.length) {
+                      hit.word = word;
+                      hasMatch = true;
+                    }
+                  });
+                  startIndex = index + word.length;
+                  !hasMatch && result.push({ index: index, word: word, weight: weight });
+                }
+                return result;
+              }
+              titleHitSlice = titleHitSlice.concat(getIndexByword(keyword, titleLower, false, WEIGHT.title));
+              contentHitSlice = contentHitSlice.concat(getIndexByword(keyword, contentLower, false, WEIGHT.content));
+            });
+
+            var hitTitle = titleHitSlice.length;
+            var hitContent = contentHitSlice.length;
+
+            if (hitTitle > 0 || hitContent > 0) {
+              isMatch = true;
+            }
+            if (isMatch) {
+              ;[titleHitSlice, contentHitSlice].forEach(function (hit) {
+                // 按照匹配文字的索引的递增顺序排序
+                hit.sort(function (left, right) {
+                  return left.index - right.index;
+                });
+              });
+              /**
+              * 给文本中匹配到的关键词添加标记，从而进行高亮显示
+              * @param {String} text 原文本
+              * @param {Array} hitSlice 匹配项的索引信息
+              * @param {Number} start 开始索引
+              * @param {Number} end 结束索引
+              * @return {String}
+              */
+              function highlightKeyword (text, hitSlice, start, end) {
+                if (!text || !hitSlice || !hitSlice.length) {
+                  return;
+                }
+
+                var result = '';
+                var startIndex = start;
+                var endIndex = end;
+                hitSlice.forEach(function (hit) {
+                  if (hit.index < startIndex) {
+                    return;
+                  }
+
+                  var hitWordEnd = hit.index + hit.word.length;
+                  result += text.slice(startIndex, hit.index);
+                  result += '<b>' + text.slice(hit.index, hitWordEnd) + '</b>';
+                  startIndex = hitWordEnd;
+                });
+                result += text.slice(startIndex, endIndex);
+                return result;
+              }
+
+              var postData = {};
+              // 文章总的搜索权重
+              var postWeight = titleHitSlice.length * WEIGHT.title + contentHitSlice.length * WEIGHT.content;
+              // 标记匹配关键词后的标题
+              var postTitle = highlightKeyword(title, titleHitSlice, 0, title.length) || title;
+              // 标记匹配关键词后的内容
+              var postContent;
+              // 显示内容的长度
+              var SHOW_WORD_LENGTH = 200;
+              // 命中关键词前的字符显示长度
+              var SHOW_WORD_FRONT_LENGTH = 20;
+              var SHOW_WORD_END_LENGTH = SHOW_WORD_LENGTH - SHOW_WORD_FRONT_LENGTH;
+
+              // 截取匹配的第一个字符，前后共 200 个字符来显示
+              if (contentHitSlice.length > 0) {
+                var firstIndex = contentHitSlice[0].index;
+                var start = firstIndex > SHOW_WORD_FRONT_LENGTH ? firstIndex - SHOW_WORD_FRONT_LENGTH : 0;
+                var end = firstIndex + SHOW_WORD_END_LENGTH;
+                postContent = highlightKeyword(content, contentHitSlice, start, end);
+              } else { // 未匹配到内容，直接截取前 200 个字符来显示
+                postContent = content.slice(0, SHOW_WORD_LENGTH);
+              }
+              postData.title = postTitle;
+              postData.content = postContent;
+              postData.url = postURL;
+              postData.weight = postWeight;
+              matchPosts.push(postData);
+            }
+          });
+        }
+
+        var resultInnerHtml = '';
+        if (matchPosts.length) {
+          // 按权重递增的顺序排序，使权重大的优先显示
+          matchPosts.sort(function (left, right) {
+            return right.weight - left.weight;
+          });
+          resultInnerHtml += '<ul>';
+          matchPosts.forEach(function (post) {
+            resultInnerHtml += '<li><a class="search-results-title" href="' + post.url + '">';
+            resultInnerHtml += post.title;
+            resultInnerHtml += '</a><div class="search-results-content">';
+            resultInnerHtml += post.content;
+            resultInnerHtml += '</div></li>';
+          });
+          resultInnerHtml += '</ul>';
+        } else {
+          resultInnerHtml += '<div class="search-results-none"><i class="far fa-meh"></i></div>';
+        }
+        $result.html(resultInnerHtml);
+      };
+      $input.on('input', searchPost);
+      $input.on('keyup', function (e) {
+        if (e.keyCode === Stun.utils.codeToKeyCode('Enter')) {
+          searchPost();
+        }
+      });
+    }
+  });
+}
+
+function closeSearch () {
+  $('body').css({ overflow: 'auto' });
+  $('.search-popup').css({ display: 'none' });
+  $('.search-mask').css({ display: 'none' });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+  Stun.utils.pjaxReloadLocalSearch = function () {
+    $('.header-nav-search').on('click', function (e) {
+      e.stopPropagation();
+      $('body').css('overflow', 'hidden');
+      $('.search-popup')
+        .velocity('stop')
+        .velocity('transition.expandIn', {
+          duration: 300,
+          complete: function () {
+            $('.search-popup input').focus();
+          }
+        });
+      $('.search-mask')
+        .velocity('stop')
+        .velocity('transition.fadeIn', {
+          duration: 300
+        });
+
+      initSearch();
+    });
+    $('.search-mask, .search-close').on('click', function () {
+      closeSearch();
+    });
+    $(document).on('keydown', function (e) {
+      // Escape <=> 27
+      if (e.keyCode === Stun.utils.codeToKeyCode('Escape')) {
+        closeSearch();
+      }
+    });
+  };
+
+  Stun.utils.pjaxReloadLocalSearch();
+}, false);
+
+function safeOpenUrl(url) {
+  var newTab = window.open();
+  newTab.opener = null;
+  newTab.location = url;
+}
+
+function extSearch(engine) {
+  var engines = {
+    google: 'https://www.google.com/search?q=',
+    bing: 'https://cn.bing.com/search?q=',
+    baidu: 'https://www.baidu.com/s?ie=UTF-8&wd=',
+  };
+  var host = window.location.host;
+  var query = $('.search-input input').val().toLowerCase().trim();
+  var uri = engines[engine] + query + ' site:' + host;
+
+  if (query) {
+    safeOpenUrl(uri);
+  } else {
+    Stun.utils.popAlert('warning', '请输入字符');
+  }
+}
+
+var assistSearchList = window.CONFIG.assistSearch;
+
+if (Array.isArray(assistSearchList)) {
+  assistSearchList.forEach(function (name) {
+    document.querySelector('.search-btns-item--' + name).addEventListener('click', function () {
+      extSearch(name);
+    }, false);
+  });
+}</script><script src="https://cdn.jsdelivr.net/npm/pjax@latest/pjax.min.js"></script><script>window.addEventListener('DOMContentLoaded', function () {
+  var pjax = new Pjax({"selectors":["head title","#main",".pjax-reload"],"history":true,"scrollTo":false,"scrollRestoration":false,"cacheBust":false,"debug":false,"currentUrlFullReload":false,"timeout":0});
+  // 加载进度条的计时器
+  var loadingTimer = null;
+
+  // 重置页面 Y 方向上的滚动偏移量
+  document.addEventListener('pjax:send', function () {
+    $('.header-nav-menu').removeClass('show');
+    if (CONFIG.pjax && CONFIG.pjax.avoidBanner) {
+      $('html').velocity('scroll', {
+        duration: 500,
+        offset: $('#header').height(),
+        easing: 'easeInOutCubic'
+      });
+    }
+
+    var loadingBarWidth = 20;
+    var MAX_LOADING_WIDTH = 95;
+
+    $('.loading-bar').addClass('loading');
+    $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    clearInterval(loadingTimer);
+    loadingTimer = setInterval(function () {
+      loadingBarWidth += 3;
+      if (loadingBarWidth > MAX_LOADING_WIDTH) {
+        loadingBarWidth = MAX_LOADING_WIDTH;
+      }
+      $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    }, 500);
+  }, false);
+
+  window.addEventListener('pjax:complete', function () {
+    clearInterval(loadingTimer);
+    $('.loading-bar__progress').css('width', '100%');
+    $('.loading-bar').removeClass('loading');
+    setTimeout(function () {
+      $('.loading-bar__progress').css('width', '0');
+    }, 400);
+    $('link[rel=prefetch], script[data-pjax-rm]').each(function () {
+      $(this).remove();
+    });
+    $('script[data-pjax], #pjax-reload script').each(function () {
+      $(this).parent().append($(this).remove());
+    });
+
+    if (Stun.utils.pjaxReloadBoot) {
+      Stun.utils.pjaxReloadBoot();
+    }
+    if (Stun.utils.pjaxReloadScroll) {
+      Stun.utils.pjaxReloadScroll();
+    }
+    if (Stun.utils.pjaxReloadSidebar) {
+      Stun.utils.pjaxReloadSidebar();
+    }
+    if (false) {
+      if (Stun.utils.pjaxReloadHeader) {
+        Stun.utils.pjaxReloadHeader();
+      }
+      if (Stun.utils.pjaxReloadScrollIcon) {
+        Stun.utils.pjaxReloadScrollIcon();
+      }
+      if (Stun.utils.pjaxReloadLocalSearch) {
+        Stun.utils.pjaxReloadLocalSearch();
+      }
+    }
+  }, false);
+}, false);</script><div id="pjax-reload"><link href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" rel="stylesheet" type="text/css"><link href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/copy-tex.css" rel="stylesheet" type="text/css"><script src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/copy-tex.min.js"></script><script src="https://cdn.jsdelivr.net/gh/sukkaw/busuanzi@latest/bsz.pure.mini.js" async></script></div><script src="/js/utils.js?v=2.6.2"></script><script src="/js/stun-boot.js?v=2.6.2"></script><script src="/js/scroll.js?v=2.6.2"></script><script src="/js/header.js?v=2.6.2"></script><script src="/js/sidebar.js?v=2.6.2"></script><script type="application/json" src="/search.json"></script></body></html>
