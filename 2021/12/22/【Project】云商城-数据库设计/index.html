@@ -1,0 +1,630 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="数据库设计         云商城完整项目介绍见文章 【Project】云商城  本项目共有 6 个数据库：  yunmall_admin：后台管理系统数据库 yunmall_oms：订单数据库 yunmall_pms：商品数据库 yunmall_sms：积分数据库 yunmall_ums：会员数据库 yunmall_wms：库存数据库  下面逐个介绍每个数据库的设计结构。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Project】云商城 - 数据库设计">
+<meta property="og:url" content="http://yuyun-zhao.github.io/2021/12/22/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/index.html">
+<meta property="og:site_name" content="yuyun zhao&#39;s blog">
+<meta property="og:description" content="数据库设计         云商城完整项目介绍见文章 【Project】云商城  本项目共有 6 个数据库：  yunmall_admin：后台管理系统数据库 yunmall_oms：订单数据库 yunmall_pms：商品数据库 yunmall_sms：积分数据库 yunmall_ums：会员数据库 yunmall_wms：库存数据库  下面逐个介绍每个数据库的设计结构。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111140827318.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111150611427.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220110153628156.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111141251559.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111145930311.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111143048778.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111145850683.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111143709651.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111151228915.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111151801695.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111170403502.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111152257418.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111170000107.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111102824754.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111103622978.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111152503752.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111153803017.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111165422294.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111154734210.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111152503752.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111145731856.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111164737204.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111170643703.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111183150949.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111191132519.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111171358460.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111145850683.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111152257418.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111170000107.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111171546089.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111170947056.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111171654041.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111171710435.png">
+<meta property="article:published_time" content="2021-12-22T06:14:39.000Z">
+<meta property="article:modified_time" content="2022-01-11T11:12:03.446Z">
+<meta property="article:author" content="yuyun zhao">
+<meta property="article:tag" content="Project">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111140827318.png"><title>【Project】云商城 - 数据库设计 | yuyun zhao's blog</title><link ref="canonical" href="http://yuyun-zhao.github.io/2021/12/22/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":true},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"carbon","highlight":"light","wordWrap":false},
+  reward: false,
+  fancybox: true,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: {"avoidBanner":false},
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"复制","copySuccess":"复制成功","copyError":"复制失败"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【Project】云商城 - 数据库设计</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-12-22</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-01-11</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">1.9k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">10分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body">
+        <h2 id="数据库设计"   >
+          <a href="#数据库设计" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#数据库设计"></a> 数据库设计</h2>
+      
+<blockquote>
+<p>云商城完整项目介绍见文章 <a href="https://yuyun-zhao.github.io/2021/12/20/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E/">【Project】云商城</a></p>
+</blockquote>
+<p>本项目共有 6 个数据库：</p>
+<ul>
+<li><code>yunmall_admin</code>：后台管理系统数据库</li>
+<li><code>yunmall_oms</code>：订单数据库</li>
+<li><code>yunmall_pms</code>：商品数据库</li>
+<li><code>yunmall_sms</code>：积分数据库</li>
+<li><code>yunmall_ums</code>：会员数据库</li>
+<li><code>yunmall_wms</code>：库存数据库</li>
+</ul>
+<p>下面逐个介绍每个数据库的设计结构。</p>
+<span id="more"></span>
+
+        <h2 id="商品数据库"   >
+          <a href="#商品数据库" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#商品数据库"></a> 商品数据库</h2>
+      
+<p>商品数据库中共有 15 张表：</p>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111140827318.png" alt="image-20220111140827318" /></p>
+<p>这些表按照类型可大致分类以下几类：</p>
+<ul>
+<li>商品<strong>分类</strong>信息表</li>
+<li>商品<strong>品牌</strong>信息表</li>
+<li>商品<strong>属性</strong>信息表
+<ul>
+<li>商品属性<strong>分组</strong>信息</li>
+<li>商品<strong>基本属性</strong>信息</li>
+<li>商品<strong>销售属性</strong>信息</li>
+</ul>
+</li>
+<li><strong>SKU</strong> 信息表</li>
+<li><strong>SPU</strong> 信息表</li>
+</ul>
+<img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111150611427.png" alt="image-20220111150611427" style="zoom:67%;" />
+<p>为了保证查询效率，本项目不使用联表查询，而是选择冗余存储信息。即使这会违背数据库三范式，但在大型项目中联表查询会耗费极大的时间。</p>
+<p>下面按照分类逐一介绍每个表的结构细节。</p>
+
+        <h3 id="商品分类信息表"   >
+          <a href="#商品分类信息表" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#商品分类信息表"></a> 商品分类信息表</h3>
+      
+<p>商品分类信息表 <code>pms_category</code> 负责保存商品的分类信息，将在<strong>三级分类</strong>功能中进行展示。效果如下：</p>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220110153628156.png" alt="image-20220110153628156" /></p>
+<p><code>pms_category</code> 表结构：</p>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111141251559.png" alt="image-20220111141251559" /></p>
+<p>其中，<code>cat_id</code> 为当前分类的 id（主键），<code>parent_id</code> 为当前分类的父级分类的 id，可以为其增加索引以提高查询效率。</p>
+<p>在后台管理系统中的展示效果：</p>
+<img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111145930311.png" alt="image-20220111145930311" style="zoom:67%;" />
+
+        <h3 id="商品品牌信息表"   >
+          <a href="#商品品牌信息表" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#商品品牌信息表"></a> 商品品牌信息表</h3>
+      
+<p>商品品牌信息表 <code>pms_brand</code> 负责保存所有的商品品牌信息，表结构：</p>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111143048778.png" alt="image-20220111143048778" /></p>
+<p>其中，<code>brand_id</code> 为品牌 id（主键），<code>logo</code> 为该品牌的图片 URL（图片数据保存在阿里云的 OSS 中）</p>
+<p>在后台管理系统中的展示效果：</p>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111145850683.png" alt="image-20220111145850683" /></p>
+<blockquote>
+<p>商品分类与品牌关联表 <code>pms_category_brand_relation</code></p>
+</blockquote>
+<p>每一种商品分类都对应了一些品牌，例如手机分类下有“华为、苹果、小米”等品牌。因此还需要一个关联表将商品分类与品牌进行关联。查询时只需要去关联表里即可得到对应的品牌 id，然后再去品牌表里查询更详细的信息，而不能使用外键的方式查询，否则查询效率极低。表结构：</p>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111143709651.png" alt="image-20220111143709651" /></p>
+<p>画一个示意图：</p>
+
+        <h3 id="商品属性信息表"   >
+          <a href="#商品属性信息表" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#商品属性信息表"></a> 商品属性信息表</h3>
+      
+<p>商品属性信息的存储较为复杂，共有五张表：</p>
+<ul>
+<li><code>pms_attr</code>：商品<strong>属性配置</strong>表
+<ul>
+<li><code>pms_product_attr_value</code>：商品<strong>基本属性值</strong>表（以 SPU 为单位）</li>
+<li><code>pms_sku_sale_attr_value</code>：商品<strong>销售属性值</strong>表（以 SKU 为单位）</li>
+</ul>
+</li>
+<li><code>pms_attr_group</code>：商品<strong>属性分组</strong>表</li>
+<li><code>pms_attr_attrgroup_relation</code>：商品属性与属性分组<strong>关联</strong>表</li>
+</ul>
+<p>其中，每一个属性分组下包含着多个属性，对应关系保存在关联表中，并且：</p>
+<ul>
+<li><code>pms_attr</code> 仅保存每个属性的<strong>配置</strong>信息，不保存每类商品的<strong>具体值</strong>；类似于<strong>类</strong>，包括基本属性和销售属性，只定义字段类型，不保存具体值
+<ul>
+<li><code>pms_product_attr_value</code> 保存每个 <strong>SPU</strong> 的<strong>基本属性具体值</strong>，是包含 <code>spu_id</code> 的；类似于<strong>实例对象</strong>，每个 SPU 拥有自己独特的基本属性值；同一个 SPU 下的 SKU 共享同一份基本属性</li>
+<li><code>pms_sku_sale_attr_value</code> 保存每个 <strong>SKU</strong> 的 <strong>销售属性具体值</strong>，是包含 <code>sku_id</code> 的；类似于<strong>实例对象</strong>，每个 SKU 拥有自己独有的销售属性值</li>
+</ul>
+</li>
+<li><code>pms_attr_group</code> 保存<strong>属性分组</strong>的信息，是包含 <code>catelog_id</code> 的；每一种商品分类共享同一份属性分组</li>
+</ul>
+
+        <h4 id="商品属性表"   >
+          <a href="#商品属性表" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#商品属性表"></a> 商品属性表</h4>
+      
+<p><code>pms_attr</code> 表结构：</p>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111151228915.png" alt="image-20220111151228915" /></p>
+<p><code>pms_product_attr_value</code> 表结构：</p>
+<img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111151801695.png" alt="image-20220111151801695" style="zoom:67%;" />
+<p><code>pms_sku_sale_attr_value</code> 表结构：</p>
+<img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111170403502.png" alt="image-20220111170403502" style="zoom: 50%;" />
+<p>对比三者内容可以看出一个是保存的<strong>属性配置</strong>（类似于定义类中的属性），另一个则是保存的具体的基本属性值与 <code>spu_id</code>（类似于实例对象），最后一个则是保存的<strong>销售属性值</strong>与 <code>sku_id</code>。</p>
+<p><strong>具体使用时</strong>：首先需要先在后台管理系统中<strong>新增商品属性配置</strong>，然后才能在<strong>发布商品</strong>时为每个 SPU <strong>分配具体的属性值</strong>：</p>
+<blockquote>
+<p>新增基本属性</p>
+</blockquote>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111152257418.png" alt="image-20220111152257418" /></p>
+<blockquote>
+<p>新增销售属性</p>
+</blockquote>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111170000107.png" alt="image-20220111170000107" /></p>
+<p>另外，观察商品属性表 <code>pms_attr</code> 中的 <code>attr_type</code> 字段，该字段代表当前属性是<strong>基本属性</strong>（规格参数）还是<strong>销售属性</strong>：</p>
+<ul>
+<li><strong>基本属性</strong>：又称规格参数。同一个 SPU 下的所有 SKU 都<strong>共享</strong>同一份基本属性。体现在 <code>attr_type = 1</code></li>
+<li><strong>销售属性</strong>：不同的 SKU 拥有<strong>不同</strong>的销售属性。体现在 <code>attr_type = 0</code></li>
+</ul>
+<p>在商城首页的具体展示效果如下：</p>
+<blockquote>
+<p>销售属性</p>
+</blockquote>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111102824754.png" alt="image-20220111102824754" /></p>
+<blockquote>
+<p>基本属性（规格参数）</p>
+</blockquote>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111103622978.png" alt="image-20220111103622978" /></p>
+<p>这两种属性都存储在 <code>pms_attr</code> 表中。在新增属性配置时只需要在<strong>属性类型</strong>一栏选择时规格参数胡还是销售属性即可：</p>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111152503752.png" alt="image-20220111152503752" /></p>
+
+        <h4 id="商品属性分组表"   >
+          <a href="#商品属性分组表" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#商品属性分组表"></a> 商品属性分组表</h4>
+      
+<p><strong>每一种基本属性都会从属于一个属性分组</strong>，例如：基本信息分组下有机身宽度、机身重量、机身长度等基本属性。属性分组表 <code>pms_attr_group</code> 的结构：</p>
+<img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111153803017.png" alt="image-20220111153803017" style="zoom:67%;" />
+<p>可以看到，每一个属性分组都关联着一个商品分类 <code>catelog_id</code>，代表<strong>属性分组是同一个商品分类下共享同一份的</strong>。例如手机分类下的属性分组固定为：主题、基本信息、主芯片等，只要是手机分类下的 SPU，都固定拥有这些属性分组，只是不同的 SPU 拥有不同的具体属性。</p>
+<p>属性分组在后台管理系统中的展示效果：</p>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111165422294.png" alt="image-20220111165422294" /></p>
+<p>基本属性信息与属性分组信息的对应关系信息存储在关联表 <code>pms_attr_attrgroup_relation</code> 中：</p>
+<img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111154734210.png" alt="image-20220111154734210" style="zoom:67%;" />
+<p>注意：<strong>只有基本属性才和属性分组关联，销售属性不和属性分组关联</strong>，因为销售属性是因 SKU 而已的，不属于 SPU 的共享信息。</p>
+<p>在新增属性配置时，需要指定该属性所属分组：</p>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111152503752.png" alt="image-20220111152503752" /></p>
+
+        <h3 id="spu-信息表"   >
+          <a href="#spu-信息表" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#spu-信息表"></a> SPU 信息表</h3>
+      
+<ul>
+<li>SPU：Standard Product Unit （标准化产品单元）。是商品信息聚合的最小单位，是一组可复用，易检索的标准化信息的组合，该集合描述了一个产品的特性。SPU 不是销售的基本单位，其内的 SKU 才是销售的基本单位。每一个 SPU 都从属于某一种商品分类</li>
+<li>SKU：Stock Keeping Unit （库存量单位）。是用户购买到的真正的商品单位，也是真正在库存中存储的单位。同一个 SPU 下的 SKU 拥有相同的基本属性，不同的 SKU 间则拥有不同的销售属性</li>
+</ul>
+<p>例如 IPhoneX 是 SPU，MI8 是 SPU，而 “IPhoneX 64G 黑曜石” 和 “MIX8 + 64G” 是 SKU</p>
+<p>SPU 信息存储在 <code>pms_spu_info</code> 表中，并且每个 SPU 都关联着一个分类 id，这样冗余存储更加方便根据分类 id 查询 SPU 信息。表结构：</p>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111145731856.png" alt="image-20220111145731856" /></p>
+<p>后台管理系统的效果展示：</p>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111164737204.png" alt="image-20220111164737204" /></p>
+<p>SPU 的其他信息存储在：</p>
+<ul>
+<li><code>pms_spu_comment</code></li>
+<li><code>pms_spu_images</code></li>
+<li><code>pms_spu_info_desc</code></li>
+</ul>
+
+        <h3 id="sku-信息表"   >
+          <a href="#sku-信息表" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#sku-信息表"></a> SKU 信息表</h3>
+      
+<p>SKU 信息存储在 <code>pms_sku_info</code> 表中，并且每个 SKU 都关联着其所属的 SPU，这样即可根据 SPU 查询出其所属的所有 SKU。表结构：</p>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111170643703.png" alt="image-20220111170643703" /></p>
+<p>SKU 与<strong>销售属性值</strong>进行绑定，存储在 <code>pms_sku_sale_attr_value</code> 表中（见<a href="#%E5%95%86%E5%93%81%E5%B1%9E%E6%80%A7%E8%A1%A8">商品属性表</a>）。SKU 的其他信息存储在<code>pms_sku_images</code> 中。</p>
+
+        <h3 id="总结"   >
+          <a href="#总结" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#总结"></a> 总结</h3>
+      
+<p>商品三级分类表与品牌表的关系：</p>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111183150949.png" alt="image-20220111183150949" /></p>
+<p>商品属性表间关系：</p>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111191132519.png" alt="image-20220111191132519" /></p>
+
+        <h3 id="后台添加商品流程"   >
+          <a href="#后台添加商品流程" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#后台添加商品流程"></a> 后台添加商品流程</h3>
+      
+<p>总体流程：</p>
+<img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111171358460.png" alt="image-20220111171358460" style="zoom:67%;" />
+<ol>
+<li>添加品牌信息，并绑定对应的<strong>分类</strong></li>
+</ol>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111145850683.png" alt="image-20220111145850683" /></p>
+<ol start="2">
+<li>新增基本属性与销售属性</li>
+</ol>
+<blockquote>
+<p>新增基本属性</p>
+</blockquote>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111152257418.png" alt="image-20220111152257418" /></p>
+<blockquote>
+<p>新增销售属性</p>
+</blockquote>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111170000107.png" alt="image-20220111170000107" /></p>
+<ol start="3">
+<li>新增属性分组，并<strong>关联</strong>每个分组内都有哪些属性</li>
+</ol>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111171546089.png" alt="image-20220111171546089" /></p>
+<ol start="4">
+<li>发布商品，需要依次指定商品的分类、品牌、基本树形（规格参数）、销售属性、SKU 信息：</li>
+</ol>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111170947056.png" alt="image-20220111170947056" /></p>
+<ol start="5">
+<li>发布完成后，即可进行 <strong>SPU 管理</strong>与<strong>商品（SKU）管理</strong>，例如上架等更多操作</li>
+</ol>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111171654041.png" alt="image-20220111171654041" /></p>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220111171710435.png" alt="image-20220111171710435" /></p>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yuyun-zhao.github.io">yuyun zhao</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yuyun-zhao.github.io/2021/12/22/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/">http://yuyun-zhao.github.io/2021/12/22/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.github.io/tags/Project/">Project</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2021/12/29/%E3%80%90MyBatis%E3%80%91MyBatis-Plus/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">【MyBatis】MyBatis-Plus</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2021/12/20/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E/"><span class="paginator-prev__text">【Project】云商城</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1"><span class="toc-text">
+           数据库设计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%95%86%E5%93%81%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-text">
+           商品数据库</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%95%86%E5%93%81%E5%88%86%E7%B1%BB%E4%BF%A1%E6%81%AF%E8%A1%A8"><span class="toc-text">
+           商品分类信息表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%95%86%E5%93%81%E5%93%81%E7%89%8C%E4%BF%A1%E6%81%AF%E8%A1%A8"><span class="toc-text">
+           商品品牌信息表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%95%86%E5%93%81%E5%B1%9E%E6%80%A7%E4%BF%A1%E6%81%AF%E8%A1%A8"><span class="toc-text">
+           商品属性信息表</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%95%86%E5%93%81%E5%B1%9E%E6%80%A7%E8%A1%A8"><span class="toc-text">
+           商品属性表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%95%86%E5%93%81%E5%B1%9E%E6%80%A7%E5%88%86%E7%BB%84%E8%A1%A8"><span class="toc-text">
+           商品属性分组表</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#spu-%E4%BF%A1%E6%81%AF%E8%A1%A8"><span class="toc-text">
+           SPU 信息表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sku-%E4%BF%A1%E6%81%AF%E8%A1%A8"><span class="toc-text">
+           SKU 信息表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">
+           总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%8E%E5%8F%B0%E6%B7%BB%E5%8A%A0%E5%95%86%E5%93%81%E6%B5%81%E7%A8%8B"><span class="toc-text">
+           后台添加商品流程</span></a></li></ol></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/author.png" alt="avatar"></div><p class="sidebar-ov-author__text">no code no life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/YUYUN-ZHAO" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="zyy18749810683" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a><a class="sidebar-ov-social-item" href="1024462136" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="mailto:im.yuyunzhao@gmail.com" target="_blank" rel="noopener" data-popover="social.Gmail" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">Gmail</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">130</div><div class="sidebar-ov-state-item__name">文章</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">37</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">37</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2022</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>yuyun zhao</span><span class="footer__devider">|</span><span>沪ICP备2022000458号</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script>function initSearch() {
+  var isXML = true;
+  var search_path = 'search.json';
+
+  if (!search_path) {
+    search_path = 'search.xml';
+  } else if (/json$/i.test(search_path)) {
+    isXML = false;
+  }
+
+  var path = '/' + search_path;
+  $.ajax({
+    url: path,
+    dataType: isXML ? 'xml' : 'json',
+    async: true,
+    success: function (res) {
+      var datas = isXML ? $('entry', res).map(function () {
+        // 将 XML 转为 JSON
+        return {
+          title: $('title', this).text(),
+          content: $('content', this).text(),
+          url: $('url', this).text()
+        };
+      }).get() : res;
+      var $input = $('.search-input input');
+      var $result = $('.search-results');
+      // 搜索对象（标题、内容）的权重，影响显示顺序
+      var WEIGHT = { title: 100, content: 1 };
+      var searchPost = function () {
+        var searchText = $input.val().toLowerCase().trim();
+        // 根据空白字符分隔关键字
+        var keywords = searchText.split(/[\s]+/);
+        // 搜索结果
+        var matchPosts = [];
+
+        // 有多个关键字时，将原文字整个保存下来
+        if (keywords.length > 1) {
+          keywords.push(searchText);
+        }
+        // 防止未输入字符时搜索
+        if (searchText.length > 0) {
+          datas.forEach(function (data) {
+            var isMatch  = false;
+            // 没有标题的文章使用预设的 i18n 变量代替
+            var title = (data.title && data.title.trim()) || '[ 文章无标题 ]';
+            var titleLower = title && title.toLowerCase();
+            // 删除 HTML 标签 和 所有空白字符
+            var content = data.content && data.content.replace(/<[^>]+>/g, '');
+            var contentLower = content && content.toLowerCase();
+            // 删除重复的 /
+            var postURL = data.url && decodeURI(data.url).replace(/\/{2,}/g, '/');
+            // 标题中匹配到的关键词
+            var titleHitSlice = [];
+            // 内容中匹配到的关键词
+            var contentHitSlice = [];
+
+            keywords.forEach(function (keyword) {
+              /**
+              * 获取匹配的关键词的索引
+              * @param {String} keyword 要匹配的关键字
+              * @param {String} text 原文字
+              * @param {Boolean} caseSensitive 是否区分大小写
+              * @param {Number} weight 匹配对象的权重。权重大的优先显示
+              * @return {Array}
+              */
+              function getIndexByword (word, text, caseSensitive, weight) {
+                if (!word || !text) {
+                  return [];
+                };
+
+                var startIndex = 0; // 每次匹配的开始索引
+                var index = -1;     // 匹配到的索引值
+                var result = [];    // 匹配结果
+
+                if (!caseSensitive) {
+                  word = word.toLowerCase();
+                  text = text.toLowerCase();
+                }
+
+                while((index = text.indexOf(word, startIndex)) !== -1) {
+                  var hasMatch = false;
+                  // 索引位置相同的关键词，保留长度较长的
+                  titleHitSlice.forEach(function (hit) {
+                    if (hit.index === index && hit.word.length < word.length) {
+                      hit.word = word;
+                      hasMatch = true;
+                    }
+                  });
+                  startIndex = index + word.length;
+                  !hasMatch && result.push({ index: index, word: word, weight: weight });
+                }
+                return result;
+              }
+              titleHitSlice = titleHitSlice.concat(getIndexByword(keyword, titleLower, false, WEIGHT.title));
+              contentHitSlice = contentHitSlice.concat(getIndexByword(keyword, contentLower, false, WEIGHT.content));
+            });
+
+            var hitTitle = titleHitSlice.length;
+            var hitContent = contentHitSlice.length;
+
+            if (hitTitle > 0 || hitContent > 0) {
+              isMatch = true;
+            }
+            if (isMatch) {
+              ;[titleHitSlice, contentHitSlice].forEach(function (hit) {
+                // 按照匹配文字的索引的递增顺序排序
+                hit.sort(function (left, right) {
+                  return left.index - right.index;
+                });
+              });
+              /**
+              * 给文本中匹配到的关键词添加标记，从而进行高亮显示
+              * @param {String} text 原文本
+              * @param {Array} hitSlice 匹配项的索引信息
+              * @param {Number} start 开始索引
+              * @param {Number} end 结束索引
+              * @return {String}
+              */
+              function highlightKeyword (text, hitSlice, start, end) {
+                if (!text || !hitSlice || !hitSlice.length) {
+                  return;
+                }
+
+                var result = '';
+                var startIndex = start;
+                var endIndex = end;
+                hitSlice.forEach(function (hit) {
+                  if (hit.index < startIndex) {
+                    return;
+                  }
+
+                  var hitWordEnd = hit.index + hit.word.length;
+                  result += text.slice(startIndex, hit.index);
+                  result += '<b>' + text.slice(hit.index, hitWordEnd) + '</b>';
+                  startIndex = hitWordEnd;
+                });
+                result += text.slice(startIndex, endIndex);
+                return result;
+              }
+
+              var postData = {};
+              // 文章总的搜索权重
+              var postWeight = titleHitSlice.length * WEIGHT.title + contentHitSlice.length * WEIGHT.content;
+              // 标记匹配关键词后的标题
+              var postTitle = highlightKeyword(title, titleHitSlice, 0, title.length) || title;
+              // 标记匹配关键词后的内容
+              var postContent;
+              // 显示内容的长度
+              var SHOW_WORD_LENGTH = 200;
+              // 命中关键词前的字符显示长度
+              var SHOW_WORD_FRONT_LENGTH = 20;
+              var SHOW_WORD_END_LENGTH = SHOW_WORD_LENGTH - SHOW_WORD_FRONT_LENGTH;
+
+              // 截取匹配的第一个字符，前后共 200 个字符来显示
+              if (contentHitSlice.length > 0) {
+                var firstIndex = contentHitSlice[0].index;
+                var start = firstIndex > SHOW_WORD_FRONT_LENGTH ? firstIndex - SHOW_WORD_FRONT_LENGTH : 0;
+                var end = firstIndex + SHOW_WORD_END_LENGTH;
+                postContent = highlightKeyword(content, contentHitSlice, start, end);
+              } else { // 未匹配到内容，直接截取前 200 个字符来显示
+                postContent = content.slice(0, SHOW_WORD_LENGTH);
+              }
+              postData.title = postTitle;
+              postData.content = postContent;
+              postData.url = postURL;
+              postData.weight = postWeight;
+              matchPosts.push(postData);
+            }
+          });
+        }
+
+        var resultInnerHtml = '';
+        if (matchPosts.length) {
+          // 按权重递增的顺序排序，使权重大的优先显示
+          matchPosts.sort(function (left, right) {
+            return right.weight - left.weight;
+          });
+          resultInnerHtml += '<ul>';
+          matchPosts.forEach(function (post) {
+            resultInnerHtml += '<li><a class="search-results-title" href="' + post.url + '">';
+            resultInnerHtml += post.title;
+            resultInnerHtml += '</a><div class="search-results-content">';
+            resultInnerHtml += post.content;
+            resultInnerHtml += '</div></li>';
+          });
+          resultInnerHtml += '</ul>';
+        } else {
+          resultInnerHtml += '<div class="search-results-none"><i class="far fa-meh"></i></div>';
+        }
+        $result.html(resultInnerHtml);
+      };
+      $input.on('input', searchPost);
+      $input.on('keyup', function (e) {
+        if (e.keyCode === Stun.utils.codeToKeyCode('Enter')) {
+          searchPost();
+        }
+      });
+    }
+  });
+}
+
+function closeSearch () {
+  $('body').css({ overflow: 'auto' });
+  $('.search-popup').css({ display: 'none' });
+  $('.search-mask').css({ display: 'none' });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+  Stun.utils.pjaxReloadLocalSearch = function () {
+    $('.header-nav-search').on('click', function (e) {
+      e.stopPropagation();
+      $('body').css('overflow', 'hidden');
+      $('.search-popup')
+        .velocity('stop')
+        .velocity('transition.expandIn', {
+          duration: 300,
+          complete: function () {
+            $('.search-popup input').focus();
+          }
+        });
+      $('.search-mask')
+        .velocity('stop')
+        .velocity('transition.fadeIn', {
+          duration: 300
+        });
+
+      initSearch();
+    });
+    $('.search-mask, .search-close').on('click', function () {
+      closeSearch();
+    });
+    $(document).on('keydown', function (e) {
+      // Escape <=> 27
+      if (e.keyCode === Stun.utils.codeToKeyCode('Escape')) {
+        closeSearch();
+      }
+    });
+  };
+
+  Stun.utils.pjaxReloadLocalSearch();
+}, false);
+
+function safeOpenUrl(url) {
+  var newTab = window.open();
+  newTab.opener = null;
+  newTab.location = url;
+}
+
+function extSearch(engine) {
+  var engines = {
+    google: 'https://www.google.com/search?q=',
+    bing: 'https://cn.bing.com/search?q=',
+    baidu: 'https://www.baidu.com/s?ie=UTF-8&wd=',
+  };
+  var host = window.location.host;
+  var query = $('.search-input input').val().toLowerCase().trim();
+  var uri = engines[engine] + query + ' site:' + host;
+
+  if (query) {
+    safeOpenUrl(uri);
+  } else {
+    Stun.utils.popAlert('warning', '请输入字符');
+  }
+}
+
+var assistSearchList = window.CONFIG.assistSearch;
+
+if (Array.isArray(assistSearchList)) {
+  assistSearchList.forEach(function (name) {
+    document.querySelector('.search-btns-item--' + name).addEventListener('click', function () {
+      extSearch(name);
+    }, false);
+  });
+}</script><script src="https://cdn.jsdelivr.net/npm/pjax@latest/pjax.min.js"></script><script>window.addEventListener('DOMContentLoaded', function () {
+  var pjax = new Pjax({"selectors":["head title","#main",".pjax-reload"],"history":true,"scrollTo":false,"scrollRestoration":false,"cacheBust":false,"debug":false,"currentUrlFullReload":false,"timeout":0});
+  // 加载进度条的计时器
+  var loadingTimer = null;
+
+  // 重置页面 Y 方向上的滚动偏移量
+  document.addEventListener('pjax:send', function () {
+    $('.header-nav-menu').removeClass('show');
+    if (CONFIG.pjax && CONFIG.pjax.avoidBanner) {
+      $('html').velocity('scroll', {
+        duration: 500,
+        offset: $('#header').height(),
+        easing: 'easeInOutCubic'
+      });
+    }
+
+    var loadingBarWidth = 20;
+    var MAX_LOADING_WIDTH = 95;
+
+    $('.loading-bar').addClass('loading');
+    $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    clearInterval(loadingTimer);
+    loadingTimer = setInterval(function () {
+      loadingBarWidth += 3;
+      if (loadingBarWidth > MAX_LOADING_WIDTH) {
+        loadingBarWidth = MAX_LOADING_WIDTH;
+      }
+      $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    }, 500);
+  }, false);
+
+  window.addEventListener('pjax:complete', function () {
+    clearInterval(loadingTimer);
+    $('.loading-bar__progress').css('width', '100%');
+    $('.loading-bar').removeClass('loading');
+    setTimeout(function () {
+      $('.loading-bar__progress').css('width', '0');
+    }, 400);
+    $('link[rel=prefetch], script[data-pjax-rm]').each(function () {
+      $(this).remove();
+    });
+    $('script[data-pjax], #pjax-reload script').each(function () {
+      $(this).parent().append($(this).remove());
+    });
+
+    if (Stun.utils.pjaxReloadBoot) {
+      Stun.utils.pjaxReloadBoot();
+    }
+    if (Stun.utils.pjaxReloadScroll) {
+      Stun.utils.pjaxReloadScroll();
+    }
+    if (Stun.utils.pjaxReloadSidebar) {
+      Stun.utils.pjaxReloadSidebar();
+    }
+    if (false) {
+      if (Stun.utils.pjaxReloadHeader) {
+        Stun.utils.pjaxReloadHeader();
+      }
+      if (Stun.utils.pjaxReloadScrollIcon) {
+        Stun.utils.pjaxReloadScrollIcon();
+      }
+      if (Stun.utils.pjaxReloadLocalSearch) {
+        Stun.utils.pjaxReloadLocalSearch();
+      }
+    }
+  }, false);
+}, false);</script><div id="pjax-reload"><link href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" rel="stylesheet" type="text/css"><link href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/copy-tex.css" rel="stylesheet" type="text/css"><script src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/copy-tex.min.js"></script><script src="https://cdn.jsdelivr.net/gh/sukkaw/busuanzi@latest/bsz.pure.mini.js" async></script></div><script src="/js/utils.js?v=2.6.2"></script><script src="/js/stun-boot.js?v=2.6.2"></script><script src="/js/scroll.js?v=2.6.2"></script><script src="/js/header.js?v=2.6.2"></script><script src="/js/sidebar.js?v=2.6.2"></script><script type="application/json" src="/search.json"></script></body></html>
