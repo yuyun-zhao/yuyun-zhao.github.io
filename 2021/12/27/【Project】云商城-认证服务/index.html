@@ -1,0 +1,693 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="本文将详细介绍云商城的认证服务。云商城完整项目介绍见文章 【Project】云商城                      认证服务        创建认证服务 mall-auth-server，用于实现以下功能：  用户注册 用户登录 社交登录 单点登录">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Project】云商城 - 认证服务">
+<meta property="og:url" content="http://yuyun-zhao.github.io/2021/12/27/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A4%E8%AF%81%E6%9C%8D%E5%8A%A1/index.html">
+<meta property="og:site_name" content="yuyun zhao&#39;s blog">
+<meta property="og:description" content="本文将详细介绍云商城的认证服务。云商城完整项目介绍见文章 【Project】云商城                      认证服务        创建认证服务 mall-auth-server，用于实现以下功能：  用户注册 用户登录 社交登录 单点登录">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A4%E8%AF%81%E6%9C%8D%E5%8A%A1/image-20220113095419390.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E/image-20220112215321726.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A4%E8%AF%81%E6%9C%8D%E5%8A%A1/image-20201231084909415.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A4%E8%AF%81%E6%9C%8D%E5%8A%A1/image-20201231012207446.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A4%E8%AF%81%E6%9C%8D%E5%8A%A1/image-20220113125330410.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A4%E8%AF%81%E6%9C%8D%E5%8A%A1/image-20201231012134722.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A4%E8%AF%81%E6%9C%8D%E5%8A%A1/20200401212802671.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A4%E8%AF%81%E6%9C%8D%E5%8A%A1/image-20201231084733753.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A4%E8%AF%81%E6%9C%8D%E5%8A%A1/image-20220113154148949.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A4%E8%AF%81%E6%9C%8D%E5%8A%A1/image-20220113161932370.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A4%E8%AF%81%E6%9C%8D%E5%8A%A1/image-20220113162829509.png">
+<meta property="article:published_time" content="2021-12-27T14:42:15.000Z">
+<meta property="article:modified_time" content="2022-01-13T12:23:18.692Z">
+<meta property="article:author" content="yuyun zhao">
+<meta property="article:tag" content="Project">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A4%E8%AF%81%E6%9C%8D%E5%8A%A1/image-20220113095419390.png"><title>【Project】云商城 - 认证服务 | yuyun zhao's blog</title><link ref="canonical" href="http://yuyun-zhao.github.io/2021/12/27/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A4%E8%AF%81%E6%9C%8D%E5%8A%A1/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":true},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"carbon","highlight":"light","wordWrap":false},
+  reward: false,
+  fancybox: true,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: {"avoidBanner":false},
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"复制","copySuccess":"复制成功","copyError":"复制失败"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【Project】云商城 - 认证服务</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-12-27</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-01-13</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">5.9k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">42分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body"><p>本文将详细介绍云商城的认证服务。云商城完整项目介绍见文章 <a href="https://yuyun-zhao.github.io/2021/12/20/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E/">【Project】云商城</a></p>
+
+        <h2 id="认证服务"   >
+          <a href="#认证服务" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#认证服务"></a> 认证服务</h2>
+      
+<p>创建认证服务 <code>mall-auth-server</code>，用于实现以下功能：</p>
+<ul>
+<li>用户注册</li>
+<li>用户登录</li>
+<li>社交登录</li>
+<li>单点登录</li>
+</ul>
+<span id="more"></span>
+
+        <h2 id="用户注册"   >
+          <a href="#用户注册" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#用户注册"></a> 用户注册</h2>
+      
+
+        <h3 id="前端配置"   >
+          <a href="#前端配置" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#前端配置"></a> 前端配置</h3>
+      
+<ol>
+<li>导入 Maven 依赖（注意一定要导入依赖，否则不报错也无法显示页面效果）</li>
+</ol>
+<figure class="highlight xml"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-thymeleaf<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 版本由 Spring Boot 进行管理--&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></div></figure>
+<ol start="2">
+<li>配置关闭缓存</li>
+</ol>
+<figure class="highlight yaml"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">Spring:</span></span><br><span class="line">  <span class="attr">thymeleaf:</span></span><br><span class="line">    <span class="attr">cache:</span> <span class="literal">false</span>  <span class="comment"># 开发过程建议关闭缓存</span></span><br></pre></td></tr></table></div></figure>
+<ol start="3">
+<li>在 <code>resources</code> 目录下存放前端代码：</li>
+</ol>
+<img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A4%E8%AF%81%E6%9C%8D%E5%8A%A1/image-20220113095419390.png" alt="image-20220113095419390" style="zoom:67%;" />
+<ol start="4">
+<li>前端页面文件必须加上</li>
+</ol>
+<figure class="highlight html"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 使用 thymeleaf 中必须声明加上该行代码 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>  <span class="attr">xmlns:th</span>=<span class="string">&quot;http://www.thymeleaf.org&quot;</span>&gt;</span></span><br></pre></td></tr></table></div></figure>
+<ol start="5">
+<li>如果前端页面跳转时有固定前缀（例如 <code>/static</code>），则需要在配置文件中指定该前缀：</li>
+</ol>
+<figure class="highlight yaml"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">resources:</span></span><br><span class="line">    <span class="attr">static-locations:</span> [<span class="string">classpath:/static/</span>]</span><br><span class="line">  <span class="attr">mvc:</span></span><br><span class="line">    <span class="attr">static-path-pattern:</span> <span class="string">/static/**</span>  <span class="comment"># 因为所有的请求都额外带了前缀 /static/，为了后期动静分离</span></span><br></pre></td></tr></table></div></figure>
+<ol start="6">
+<li>配置静态页面跳转 Controller，只有配置了页面跳转规则才可以访问到 <code>templates</code> 目录下的页面。</li>
+</ol>
+<blockquote>
+<p>Spring Boot 只支持自动跳转到 <code>index.html</code> 页面。<code>templates</code> 目录下的其他路径都不能直接在浏览器中访问到，必须通过 Controller 进行跳转</p>
+</blockquote>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&#123;&quot;/&quot;, &quot;/login.html&quot;&#125;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">loginPage</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 转发到 login.html 视图</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;login&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@GetMapping(&quot;/reg.html&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">regPage</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 转发到 reg.html 视图</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;reg&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>如果每一个页面跳转都这样写难免有些复杂，我们可以将页面跳转的逻辑单独抽取到一个 <code>WebMvcConfigurer</code> 中：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AuthWebConfig</span> <span class="keyword">implements</span> <span class="title">WebMvcConfigurer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 在这里配置静态资源的跳转规则</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> registry</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addViewControllers</span><span class="params">(ViewControllerRegistry registry)</span> </span>&#123;</span><br><span class="line">        registry.addViewController(<span class="string">&quot;/&quot;</span>).setViewName(<span class="string">&quot;login&quot;</span>);</span><br><span class="line">        registry.addViewController(<span class="string">&quot;/login.html&quot;</span>).setViewName(<span class="string">&quot;login&quot;</span>);</span><br><span class="line">        registry.addViewController(<span class="string">&quot;/reg.html&quot;</span>).setViewName(<span class="string">&quot;reg&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>在 <code>WebMvcConfigurer</code> 中重写的方法将会覆盖 Spring MVC 中默认的方法，从而做到定制化效果，具体原理见文章<a href="https://yuyun-zhao.github.io/2021/07/12/%E3%80%90SpringBoot%E3%80%91SpringBoot2-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">【Spring Boot】Spring Boot2 源码分析</a></p>
+<blockquote>
+<p>注意此时不能标注 <strong>@EnableWebMvc</strong> 注解，否则将变成全面接管 Spring MVC，需要自己实现所有功能</p>
+</blockquote>
+<p>登录页面渲染效果：</p>
+<img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E/image-20220112215321726.png" alt="image-20220112215321726" style="zoom:67%;" />
+
+        <h3 id="业务流程"   >
+          <a href="#业务流程" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#业务流程"></a> 业务流程</h3>
+      
+<p>用户注册模块需要完成以下功能：</p>
+<ul>
+<li>发送短信验证码</li>
+<li>数据校验
+<ul>
+<li>前端数据校验</li>
+<li>后端 JSR 303 校验</li>
+<li>验证码校验</li>
+</ul>
+</li>
+<li>远程调用会员服务 <code>mall-member</code> 保存用户数据
+<ul>
+<li>校验用户名和手机号是否已存在</li>
+<li>用户密码加密存储</li>
+</ul>
+</li>
+</ul>
+<p>总体流程图：</p>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A4%E8%AF%81%E6%9C%8D%E5%8A%A1/image-20201231084909415.png" alt="image-20201231084909415" /></p>
+
+        <h3 id="1-发送短信验证码"   >
+          <a href="#1-发送短信验证码" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#1-发送短信验证码"></a> 1. 发送短信验证码</h3>
+      
+<p>本项目使用阿里云的短信服务实现短信验证功能，具体开通与使用方法见文章<a href="https://yuyun-zhao.github.io/2022/01/12/%E3%80%90AlibabaCloud%E3%80%91%E9%98%BF%E9%87%8C%E4%BA%91%E7%9F%AD%E4%BF%A1%E6%9C%8D%E5%8A%A1/">【AlibabaCloud】阿里云短信服务</a></p>
+<p>在给用户发送短信验证码后，<strong>需要将该验证码存储在 Redis 缓存中</strong>，保存格式：<code>prefix:phoneNumber : 验证码_currentTime</code>，例如 <code>sms:code:182385494 : s82hd_83627171</code>。其中增加 <code>currentTime</code> 的目的是防止用户在 60 秒内重复点击发送验证码按钮。</p>
+<p>短信验证码业务的整体逻辑为：</p>
+<ul>
+<li>根据用户的手机号拼接出 <code>key = sms:code:182385494</code></li>
+<li>去 Redis 中查询该 key 对应的 value 值
+<ul>
+<li>如果不存在，说明该用户是<strong>第一次注册</strong>。随机生成一个验证码，并<strong>拼接上当前时刻的时间戳</strong>：<code>s82hd_83627171</code>。将验证码和用户手机号按照格式： <code>sms:code:182385494 : s82hd_83627171</code> 存储到 Redis 中</li>
+<li>如果存在，则先根据用户手机号拼接成的 key 去 Redis 中查询 value 值： <code>s82hd_83627171</code>，截取出后面的时间戳和当前时间进行比较，
+<ul>
+<li>如果相差小于 60 秒，则<strong>阻止用户重复点击</strong>；</li>
+<li>如果大于 60 秒，才可以继续为其生成新的验证码并拼接上当前的时间戳，最终重新保存到 Redis 中</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>验证码发送流程图：</p>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A4%E8%AF%81%E6%9C%8D%E5%8A%A1/image-20201231012207446.png" alt="image-20201231012207446" /></p>
+<p>短信验证码功能的完整代码：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="meta">@GetMapping(&quot;/sms/sendCode&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> R <span class="title">sendCode</span><span class="params">(<span class="meta">@RequestParam(&quot;phone&quot;)</span> String phone)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// TODO 接口防刷</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 1. 首先检验用户是否在60秒内重复点击发送按钮，</span></span><br><span class="line">    <span class="comment">// 检验方式为：去Redis中查询当前手机号对应的value值（为该短信上一次发送的时间），如果该时间与当前相比不大于60秒，则拒绝发送</span></span><br><span class="line">    String redisCode = redisTemplate.opsForValue().get(AuthServerConstant.SMS_CODE_CACHE_PREFIX + phone);</span><br><span class="line">    <span class="keyword">if</span> (!StringUtils.isEmpty(redisCode)) &#123;</span><br><span class="line">        <span class="keyword">long</span> time = Long.parseLong(redisCode.split(<span class="string">&quot;_&quot;</span>)[<span class="number">1</span>]);</span><br><span class="line">        <span class="keyword">if</span> (System.currentTimeMillis() - time &lt; <span class="number">60</span> * <span class="number">1000</span>) &#123;</span><br><span class="line">            <span class="comment">// 如果发送间隔小于60s，不允许再发送</span></span><br><span class="line">            <span class="keyword">return</span> R.error(BizCodeEnum.SMS_CODE_EXCEPTION.getCode(), BizCodeEnum.SMS_CODE_EXCEPTION.getMsg());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 当可以再次发送时，随机生成验证码，并将该验证码存储在 Redis 中</span></span><br><span class="line">    String code = UUID.randomUUID().toString().substring(<span class="number">0</span>, <span class="number">5</span>);</span><br><span class="line">    <span class="comment">// 向 Redis 中存储验证码时，需要带上当前时间（为了保证60秒内不能重复发送短信）</span></span><br><span class="line">    String codeWithTime = code + <span class="string">&quot;_&quot;</span> + System.currentTimeMillis();</span><br><span class="line">    <span class="comment">// 3. 将用户的手机号和验证码存到缓存中。格式：prefix:phoneNumber-currentTime - 验证码</span></span><br><span class="line">    <span class="comment">// 例如 sms:code:1829847-83627171 - s82hd</span></span><br><span class="line">    <span class="comment">// 新的验证码会覆盖旧的。给每个验证码设置过期时间为十分钟</span></span><br><span class="line">    redisTemplate.opsForValue().set(AuthServerConstant.SMS_CODE_CACHE_PREFIX + phone,</span><br><span class="line">                                    codeWithTime, <span class="number">10</span>, TimeUnit.MINUTES);</span><br><span class="line">    <span class="comment">// 4. 远程调用第三方服务，向用户手机发送验证码</span></span><br><span class="line">    thirdPartFeignService.sendCode(phone, code);</span><br><span class="line">    <span class="keyword">return</span> R.ok();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="2-数据校验"   >
+          <a href="#2-数据校验" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#2-数据校验"></a> 2. 数据校验</h3>
+      
+<p>分别进行前端数据校验和后端数据校验，限制用户名长度、密码长度与类型、手机号格式。关于后端 JSR 303 校验的详细介绍参考文章 <a href="https://yuyun-zhao.github.io/2021/12/09/%E3%80%90Java%E3%80%91JSR303%E6%95%B0%E6%8D%AE%E6%A0%A1%E9%AA%8C/">【Java】JSR 303 数据校验</a></p>
+<ol>
+<li>在实体类上添加注解：</li>
+</ol>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserRegisterVo</span> </span>&#123;</span><br><span class="line">    <span class="meta">@NotEmpty(message = &quot;用户名不能为空&quot;)</span></span><br><span class="line">    <span class="meta">@Length(min=6,max=19,message = &quot;用户名长度在6—18字符&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String userName;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@NotEmpty(message = &quot;密码必须填写&quot;)</span></span><br><span class="line">    <span class="meta">@Length(min=6,max=19,message = &quot;密码必须是6—18字符&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String password;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@NotEmpty(message = &quot;手机号不能为空&quot;)</span></span><br><span class="line">    <span class="meta">@Pattern(regexp = &quot;^[1]([3-9])[0-9]&#123;9&#125;$&quot;, message = &quot;手机号格式不正确&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String phone;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@NotEmpty(message = &quot;验证码不能为空&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String code;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<ol start="2">
+<li>在 Controller 层添加验证的异常处理：</li>
+</ol>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PostMapping(&quot;/register&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">register</span><span class="params">(<span class="meta">@Valid</span> UserRegisterVo registerVo, BindingResult result, RedirectAttributes attributes)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 1. 判断校验是否通过</span></span><br><span class="line">    Map&lt;String, String&gt; errors = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="keyword">if</span> (result.hasErrors())&#123;</span><br><span class="line">        <span class="comment">// 1.1 如果校验不通过，则封装校验结果</span></span><br><span class="line">        result.getFieldErrors().forEach(item-&gt;&#123;</span><br><span class="line">            errors.put(item.getField(), item.getDefaultMessage());</span><br><span class="line">            <span class="comment">// 1.2 将错误信息封装到session中（RedirectAttributes里的数据将保存到session中，这样重定向也能获取到数据。如果放到请求域中，则重定向后的页面将无法获得数据</span></span><br><span class="line">            attributes.addFlashAttribute(<span class="string">&quot;errors&quot;</span>, errors);</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="comment">// 1.2 重定向到注册页</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;redirect:http://localhost:20000/reg.html&quot;</span>;</span><br><span class="line">    &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 2.若JSR303校验通过</span></span><br><span class="line">        <span class="comment">// 后续业务....</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<ol start="3">
+<li>验证 Reids 中的验证码是否等于用户传来的验证码</li>
+</ol>
+<p>用户注册业务的完整代码：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 点击注册按钮，先校验前端传来的数据是否合法</span></span><br><span class="line"><span class="comment"> * 若合法则验证短信验证码是否匹配，如果也合法，则使用重定向转发到首页</span></span><br><span class="line"><span class="comment"> * 选择使用重定向是为了防止用户多次刷新页面时重复提交</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> registerVo</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> result</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> attributes</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@PostMapping(&quot;/register&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">register</span><span class="params">(<span class="meta">@Valid</span> UserRegisterVo registerVo, BindingResult result, RedirectAttributes attributes)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 1. 判断校验是否通过</span></span><br><span class="line">    Map&lt;String, String&gt; errors = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="keyword">if</span> (result.hasErrors())&#123;</span><br><span class="line">        <span class="comment">// 1.1 如果校验不通过，则封装校验结果</span></span><br><span class="line">        result.getFieldErrors().forEach(item-&gt;&#123;</span><br><span class="line">            errors.put(item.getField(), item.getDefaultMessage());</span><br><span class="line">            <span class="comment">// 1.2 将错误信息封装到session中</span></span><br><span class="line">            attributes.addFlashAttribute(<span class="string">&quot;errors&quot;</span>, errors);</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="comment">// 1.2 重定向到注册页</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;redirect:http://localhost:20000/reg.html&quot;</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 2. 若JSR303校验通过</span></span><br><span class="line">        <span class="comment">// 判断验证码是否正确</span></span><br><span class="line">        String code = redisTemplate.opsForValue().get(AuthServerConstant.SMS_CODE_CACHE_PREFIX + registerVo.getPhone());</span><br><span class="line">        <span class="comment">// 2.1 如果对应手机的验证码不为空且与提交上的相等 -&gt; 验证码正确</span></span><br><span class="line">        <span class="keyword">if</span> (!StringUtils.isEmpty(code) &amp;&amp; registerVo.getCode().equals(code.split(<span class="string">&quot;_&quot;</span>)[<span class="number">0</span>])) &#123;</span><br><span class="line">            <span class="comment">// 2.1.1 使得验证后的验证码失效</span></span><br><span class="line">            redisTemplate.delete(AuthServerConstant.SMS_CODE_CACHE_PREFIX + registerVo.getPhone());</span><br><span class="line">            <span class="comment">// 2.1.2 远程调用会员服务注册</span></span><br><span class="line">            R r = memberFeignService.register(registerVo);</span><br><span class="line">            <span class="keyword">if</span> (r.getCode() == <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="comment">// 调用成功，重定向登录页</span></span><br><span class="line">                <span class="keyword">return</span> <span class="string">&quot;redirect:http://localhost:20000/login.html&quot;</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="comment">// 调用失败，返回注册页并显示错误信息</span></span><br><span class="line">                String msg = (String) r.get(<span class="string">&quot;msg&quot;</span>);</span><br><span class="line">                errors.put(<span class="string">&quot;msg&quot;</span>, msg);</span><br><span class="line">                attributes.addFlashAttribute(<span class="string">&quot;errors&quot;</span>, errors);</span><br><span class="line">                <span class="keyword">return</span> <span class="string">&quot;redirect:http://localhost:20000/reg.html&quot;</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 2.2 验证码错误</span></span><br><span class="line">            errors.put(<span class="string">&quot;code&quot;</span>, <span class="string">&quot;验证码错误&quot;</span>);</span><br><span class="line">            attributes.addFlashAttribute(<span class="string">&quot;errors&quot;</span>, errors);</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;redirect:http://localhost:20000/reg.html&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="3-远程调用会员服务保存数据"   >
+          <a href="#3-远程调用会员服务保存数据" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#3-远程调用会员服务保存数据"></a> 3. 远程调用会员服务保存数据</h3>
+      
+<p>当验证通过后，需要远程调用会员服务 <code>mall-member</code> 保存数据。</p>
+<ol>
+<li>Controller 层需要捕获可能出现的异常：<code>PhoneExistException</code> 和 <code>UsernameExistException</code></li>
+</ol>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PostMapping(&quot;/register&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> R <span class="title">register</span><span class="params">(<span class="meta">@RequestBody</span> MemberRegisterVo vo)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 捕获可能发生的异常：用户名已存在或手机号已存在</span></span><br><span class="line">        memberService.register(vo);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (PhoneExistException e) &#123;</span><br><span class="line">        <span class="keyword">return</span> R.error(BizCodeEnum.PHONE_EXIST_EXCEPTION.getCode(), BizCodeEnum.PHONE_EXIST_EXCEPTION.getMsg());</span><br><span class="line">    &#125; <span class="keyword">catch</span> (UsernameExistException e) &#123;</span><br><span class="line">        <span class="keyword">return</span> R.error(BizCodeEnum.USER_EXIST_EXCEPTION.getCode(), BizCodeEnum.USER_EXIST_EXCEPTION.getMsg());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> R.ok();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<ol start="2">
+<li>Service 层负责将认证服务传来的 vo 数据进行解析，然后检验用户名和手机号是否已存在，并最终保存到数据库中：</li>
+</ol>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">register</span><span class="params">(MemberRegisterVo vo)</span> </span>&#123;</span><br><span class="line">    MemberEntity memberEntity = <span class="keyword">new</span> MemberEntity();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 先去会员等级表查询默认的等级名称是什么</span></span><br><span class="line">    Long levelId = memberLevelDao.getDefaultLevel();</span><br><span class="line">    <span class="comment">// 设置默认等级</span></span><br><span class="line">    memberEntity.setLevelId(levelId);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 检查用户名和手机号是否唯一</span></span><br><span class="line">    <span class="comment">// 为了让controller能感知异常，使用异常机制</span></span><br><span class="line">    memberEntity.setMobile(vo.getPhone());</span><br><span class="line">    memberEntity.setUsername(vo.getUserName());</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 密码要进行加密存储</span></span><br><span class="line">    BCryptPasswordEncoder passwordEncoder = <span class="keyword">new</span> BCryptPasswordEncoder();</span><br><span class="line">    String encode = passwordEncoder.encode(vo.getPassword());</span><br><span class="line">    <span class="comment">// 设置密码</span></span><br><span class="line">    memberEntity.setPassword(encode);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.baseMapper.insert(memberEntity);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 声明可能抛出的异常PhoneExistException</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> phone</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> PhoneExistException</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">checkPhoneUnique</span><span class="params">(String phone)</span> <span class="keyword">throws</span> PhoneExistException </span>&#123;</span><br><span class="line">    Integer count = baseMapper.selectCount(<span class="keyword">new</span> QueryWrapper&lt;MemberEntity&gt;().eq(<span class="string">&quot;mobile&quot;</span>, phone));</span><br><span class="line">    <span class="keyword">if</span> (count &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> PhoneExistException();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 声明可能抛出的异常UsernameExistException</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> username</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> UsernameExistException</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">checkUsernameUnique</span><span class="params">(String username)</span> <span class="keyword">throws</span> UsernameExistException </span>&#123;</span><br><span class="line">    Integer count = baseMapper.selectCount(<span class="keyword">new</span> QueryWrapper&lt;MemberEntity&gt;().eq(<span class="string">&quot;username&quot;</span>, username));</span><br><span class="line">    <span class="keyword">if</span> (count &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> UsernameExistException();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>若已存在，则需要抛出自定义的异常到 Controller 层，然后返回相应的报错信息给认证服务，最后渲染到前端页面上。</p>
+
+        <h3 id="用户密码加密存储"   >
+          <a href="#用户密码加密存储" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#用户密码加密存储"></a> 用户密码加密存储</h3>
+      
+
+        <h4 id="md5"   >
+          <a href="#md5" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#md5"></a> MD5</h4>
+      
+<blockquote>
+<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://www.jianshu.com/p/81c30781d4f7" >https://www.jianshu.com/p/81c30781d4f7</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+</blockquote>
+<p>MD5 的全称是 <strong>MD5 信息摘要算法（英文：MD5 Message-Digest Algorithm ）</strong>，一种被广泛使用的密码散列函数，可以产生一个128位（16字节，1字节8位）的散列值（常见的是用32位的16进制表示，比如：0caa3b23b8da53f9e4e041d95dc8fa2c），用于确保信息传输的完整一致。MD5 的特性：</p>
+<ul>
+<li><strong>不可逆</strong>：没有系统有办法知道 MD5 原来的文字是什么，除非暴力尝试</li>
+<li><strong>高度的离散性</strong>：MD5 码具有高度的散列性，没有规律可循，哪怕原信息只有一点点的变化，比如多个空格，那么就会导致 MD5 发生巨大变化，也可以说产生的 MD5 码是不可预测的</li>
+<li><strong>压缩性</strong>：任意长度的数据，算出的 MD5 值的长度都是固定的</li>
+<li><strong>弱碰撞性</strong>：已知原数据和其 MD5 的值，想找到一个具有相同 MD5 值得数据（即伪造数据）是非常困难的。</li>
+</ul>
+<p>但 MD5 较容易破解，因为其可以通过暴力尝试的方法将很多常见字符串的 MD5 值匹配出来存到一个<strong>字典</strong>中，因此不够安全。</p>
+<p>一种更加安全的加密方法是在 MD5 的基础上<strong>加盐</strong>。具体做法是，在要加密的字符串上随机拼接一个字符串，然后再进行编码。这样生成的加密值就不能再用建立好的字典匹配出来了。一种可行的思路是将盐值也存储到数据库中，每次匹配时将盐值读取出来后进行拼接然后再编码。这样做的缺点是还需要额外存储盐值，效率上低了一些。</p>
+
+        <h4 id="bcryptpasswordencoder"   >
+          <a href="#bcryptpasswordencoder" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#bcryptpasswordencoder"></a> BCryptPasswordEncoder</h4>
+      
+<p>为防止数据库被爆破后用户密码被人破解，本项目使用 Spring Security 提供的 <code>BCryptPasswordEncoder</code> 编码器对前端传来的用户密码进行加密（非普通的加盐加密方式）。该编码器的特点是：</p>
+<ul>
+<li>同一个密码，调用多次该编码器得到的结果不相等，就这导致明文和密文没有一一对应关系，无法暴力匹配破解</li>
+<li>编码后的字符串中包含了<strong>盐值</strong>，例如 <code>$10$O8mw.X0151vZoan1oVOi.OKcAtTfeoSHsSLBMIUNUQiMu3Tf9iB/G</code>，<code>$$</code>包裹的部分为其增加的盐值，这样就不需要额外存储盐值到数据库中了</li>
+<li>调用其 <code>matches()</code> 方法即可返回明文与加密值是否匹配</li>
+</ul>
+<p>使用该编码器就可以保证，前端用户传来的密码经过该编码器的 <code>matches()</code> 方法计算即可得知该明文密码是否和数据库中之前存储的密码相匹配。</p>
+<p>使用方法：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 加密。vo.getPassword() 为前端传来的明文密码</span></span><br><span class="line">BCryptPasswordEncoder passwordEncoder = <span class="keyword">new</span> BCryptPasswordEncoder();</span><br><span class="line">String encode = passwordEncoder.encode(vo.getPassword());</span><br><span class="line"></span><br><span class="line"><span class="comment">// 解密。passwordDB 为数据库中存储的加密后密码</span></span><br><span class="line"><span class="keyword">boolean</span> matches = passwordEncoder.matches(password, passwordDB);</span><br></pre></td></tr></table></div></figure>
+
+        <h2 id="用户登录"   >
+          <a href="#用户登录" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#用户登录"></a> 用户登录</h2>
+      
+<img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A4%E8%AF%81%E6%9C%8D%E5%8A%A1/image-20220113125330410.png" alt="image-20220113125330410" style="zoom:67%;" />
+
+        <h3 id="业务流程-2"   >
+          <a href="#业务流程-2" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#业务流程-2"></a> 业务流程</h3>
+      
+<p>用户登录模块的业务流程：</p>
+<ul>
+<li>前端传递用户名和密码数据到认证服务</li>
+<li>认证服务远程调用会员服务</li>
+<li>会员服务验证用户名和密码是否匹配</li>
+<li>返回验证结果给认证服务</li>
+</ul>
+<p>总体流程图：</p>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A4%E8%AF%81%E6%9C%8D%E5%8A%A1/image-20201231012134722.png" alt="image-20201231012134722" /></p>
+
+        <h3 id="认证服务-2"   >
+          <a href="#认证服务-2" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#认证服务-2"></a> 认证服务</h3>
+      
+<p>如果验证成功，跳转到首页；否则还是跳转到登录页面，并且提示错误信息：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PostMapping(&quot;/login&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">login</span><span class="params">(UserLoginVo vo, RedirectAttributes redirectAttributes)</span> </span>&#123;</span><br><span class="line">    R res = memberFeignService.login(vo);</span><br><span class="line">    <span class="keyword">if</span> (res.getCode() == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="comment">// 成功</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;redirect:http://localhost:10000&quot;</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        Map&lt;String, String&gt; errors = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        errors.put(<span class="string">&quot;msg&quot;</span>, (String) res.get(<span class="string">&quot;msg&quot;</span>));</span><br><span class="line">        redirectAttributes.addFlashAttribute(<span class="string">&quot;errors&quot;</span>, errors);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;redirect:http://localhost:20000/login.html&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="会员服务"   >
+          <a href="#会员服务" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#会员服务"></a> 会员服务</h3>
+      
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 根据传来的数据验证用户名和密码是否匹配</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> vo</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@PostMapping(&quot;/login&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> R <span class="title">login</span><span class="params">(<span class="meta">@RequestBody</span> MemberLoginVo vo)</span> </span>&#123;</span><br><span class="line">    MemberEntity entity = memberService.login(vo);</span><br><span class="line">    <span class="keyword">if</span> (entity == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> R.error(BizCodeEnum.LOGIN_INVALID_EXCEPTION.getCode(), BizCodeEnum.LOGIN_INVALID_EXCEPTION.getMsg());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> R.ok();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>Service 层验证用户名和密码是否匹配：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 获取 vo 的用户名和密码，去数据库中查看是否匹配</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> vo 前端传来的数据</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> 返回 null 代表不存在</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> MemberEntity <span class="title">login</span><span class="params">(MemberLoginVo vo)</span> </span>&#123;</span><br><span class="line">    String loginAccount = vo.getLoginAccount();</span><br><span class="line">    String password = vo.getPassword();</span><br><span class="line"></span><br><span class="line">    MemberEntity entity = <span class="keyword">this</span>.baseMapper.selectOne(<span class="keyword">new</span> QueryWrapper&lt;MemberEntity&gt;()</span><br><span class="line">                                                    .eq(<span class="string">&quot;username&quot;</span>, loginAccount)</span><br><span class="line">                                                    .or().eq(<span class="string">&quot;mobile&quot;</span>, loginAccount));</span><br><span class="line">    <span class="keyword">if</span> (entity == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="comment">// 查询不到，登录失败</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 如果能查到，还要和密码匹配看是否一样</span></span><br><span class="line">        String passwordDB = entity.getPassword();</span><br><span class="line">        BCryptPasswordEncoder encoder = <span class="keyword">new</span> BCryptPasswordEncoder();</span><br><span class="line">        <span class="keyword">boolean</span> matches = encoder.matches(password, passwordDB);</span><br><span class="line">        <span class="keyword">if</span> (matches) &#123;</span><br><span class="line">            <span class="keyword">return</span> entity;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h2 id="社交登录"   >
+          <a href="#社交登录" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#社交登录"></a> 社交登录</h2>
+      
+<p>QQ、微博，Gitee 等网站的用户量非常大，我们自己开发的网站为了简化网站的登陆和注册逻辑，可以引入社交登录功能，允许其他平台的用户快速注册并登陆自己的网站。</p>
+
+        <h3 id="oauth-20"   >
+          <a href="#oauth-20" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#oauth-20"></a> OAuth 2.0</h3>
+      
+<blockquote>
+<p>详细介绍：<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html" >https://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+</blockquote>
+<p>本节以 Gitee 的授权认证为例介绍社交登录的配置方法。完整的开通与配置参考博客 <span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40065776/article/details/105255146" >https://blog.csdn.net/qq_40065776/article/details/105255146</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span> 。 OAuth 2.0 的流程图：</p>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A4%E8%AF%81%E6%9C%8D%E5%8A%A1/20200401212802671.png" alt="img" /></p>
+<p>整体流程：</p>
+<ul>
+<li><code>(A)</code> 前端页面引导用户到 Gitee 的授权页地址，并发送本系统的应用 ID 与<strong>后端服务器回调地址</strong> <code>/oauth2.0/weibo/success</code> 给授权页，方便其授权后回调到后端服务器</li>
+<li><code>(B)</code> 用户在 Gitee 的授权页输入正确的信息</li>
+<li><code>(C)</code> Gitee 认证服务器验证用户输入的信息。如果正确，则生成一个一次性的<strong>授权码 Code</strong>，并将该授权码<strong>回调</strong>发给前端发来的回调地址（该地址指向后端应用服务器，而非回到前端页面，这样浏览器中就不会暴露用户的授权码）：<code>/oauth2.0/weibo/success</code></li>
+<li><code>(D)</code> 后端应用服务器获取到传来的授权码后，去 Gitee 认证服务器<strong>换取 Access Token（访问令牌）</strong>，换取后授权码就失效了</li>
+<li><code>(E)</code> Gitee 认证服务器发送 Access Token 给后端应用服务器</li>
+<li>后端服务器获取到 Access Token 后，就可以向 Gitee 认证服务器发送请求访问其公开的社交信息了（例如昵称、头像等）</li>
+</ul>
+<p>其中一些细节：</p>
+<ul>
+<li>使用授权码 Code 换取 Access Token 后，Code 就立即失效。</li>
+<li>同一个用户的 Access Token 在过期时间内可以重复使用。</li>
+<li><code>(A)</code> 步骤在跳转到授权页时，如果之前已经登陆了 Gitee，则 Gitee 网站的 Cookie 里就保存了之前登陆过的用户信息，此时就不会再显示授权页了，而是 Gitee 认证服务器直接发送<strong>新的授权码</strong>给回调地址<code>/oauth2.0/weibo/success</code>。也就是直接到步骤 <code>(D)</code> 了 。除非清空 Cookie 或退出登录</li>
+</ul>
+<p>以微博登录为例，流程图：</p>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A4%E8%AF%81%E6%9C%8D%E5%8A%A1/image-20201231084733753.png" alt="image-20201231084733753" /></p>
+<p>时序图：</p>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A4%E8%AF%81%E6%9C%8D%E5%8A%A1/image-20220113154148949.png" alt="image-20220113154148949" /></p>
+
+        <h3 id="回调处理代码"   >
+          <a href="#回调处理代码" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#回调处理代码"></a> 回调处理代码</h3>
+      
+<p>以微博社交登录为例，回调处理的代码：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(&quot;/oauth2.0/weibo/success&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">authorize</span><span class="params">(String code, HttpSession session)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    <span class="comment">// 1. 使用code换取token，换取成功则继续2，否则重定向至登录页</span></span><br><span class="line">    Map&lt;String, String&gt; query = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    query.put(<span class="string">&quot;client_id&quot;</span>, <span class="string">&quot;2144471074&quot;</span>);</span><br><span class="line">    query.put(<span class="string">&quot;client_secret&quot;</span>, <span class="string">&quot;ff63a0d8d591a85a29a19492817316ab&quot;</span>);</span><br><span class="line">    query.put(<span class="string">&quot;grant_type&quot;</span>, <span class="string">&quot;authorization_code&quot;</span>);</span><br><span class="line">    query.put(<span class="string">&quot;redirect_uri&quot;</span>, <span class="string">&quot;http://auth.yunmall.com/oauth2.0/weibo/success&quot;</span>);</span><br><span class="line">    query.put(<span class="string">&quot;code&quot;</span>, code);</span><br><span class="line">    <span class="comment">// 发送post请求换取access token</span></span><br><span class="line">    HttpResponse response = HttpUtils.doPost(<span class="string">&quot;https://api.weibo.com&quot;</span>, <span class="string">&quot;/oauth2/access_token&quot;</span>, <span class="string">&quot;post&quot;</span>, <span class="keyword">new</span> HashMap&lt;String, String&gt;(), query, <span class="keyword">new</span> HashMap&lt;String, String&gt;());</span><br><span class="line">    </span><br><span class="line">    Map&lt;String, String&gt; errors = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="keyword">if</span> (response.getStatusLine().getStatusCode() == <span class="number">200</span>) &#123;</span><br><span class="line">        <span class="comment">// 2. 调用会员服务远程接口进行oauth登录，登录成功则转发至首页并携带返回用户信息，否则转发至登录页</span></span><br><span class="line">        String json = EntityUtils.toString(response.getEntity());</span><br><span class="line">        SocialUser socialUser = JSON.parseObject(json, <span class="keyword">new</span> TypeReference&lt;SocialUser&gt;() &#123;</span><br><span class="line">        &#125;);</span><br><span class="line">        R login = memberFeignService.login(socialUser);</span><br><span class="line">        <span class="comment">// 2.1 远程调用成功，返回首页并携带用户信息</span></span><br><span class="line">        <span class="keyword">if</span> (login.getCode() == <span class="number">0</span>) &#123;</span><br><span class="line">            String jsonString = JSON.toJSONString(login.get(<span class="string">&quot;memberEntity&quot;</span>));</span><br><span class="line">            System.out.println(<span class="string">&quot;----------------&quot;</span> + jsonString);</span><br><span class="line">            MemberResponseVo memberResponseVo = JSON.parseObject(jsonString, <span class="keyword">new</span> TypeReference&lt;MemberResponseVo&gt;() &#123;</span><br><span class="line">            &#125;);</span><br><span class="line">            System.out.println(<span class="string">&quot;----------------&quot;</span> + memberResponseVo);</span><br><span class="line">            session.setAttribute(AuthServerConstant.LOGIN_USER, memberResponseVo);</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;redirect:http://yunmall.com&quot;</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 2.2 否则返回登录页</span></span><br><span class="line">            errors.put(<span class="string">&quot;msg&quot;</span>, <span class="string">&quot;登录失败，请重试&quot;</span>);</span><br><span class="line">            session.setAttribute(<span class="string">&quot;errors&quot;</span>, errors);</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;redirect:http://auth.yunmall.com/login.html&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">        errors.put(<span class="string">&quot;msg&quot;</span>, <span class="string">&quot;获得第三方授权失败，请重试&quot;</span>);</span><br><span class="line">        session.setAttribute(<span class="string">&quot;errors&quot;</span>, errors);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;redirect:http://auth.yunmall.com/login.html&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>微博认证服务器返回的数据被封装到 <code>SocialUser</code> 中：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 用以封装社交登录认证后换回的令牌等信息</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SocialUser</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 令牌</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String access_token;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String remind_in;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 令牌过期时间</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">long</span> expires_in;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 该社交用户的唯一标识</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String uid;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String isRealName;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>其中，<code>uid</code> 是微博认证服务器为每个用户指定的唯一识别。在成功获取到认证服务器返回的数据后，将远程调用会员服务 <code>mall-member</code>，将该用户信息保存到会员数据库中。</p>
+
+        <h3 id="新社交用户绑定"   >
+          <a href="#新社交用户绑定" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#新社交用户绑定"></a> 新社交用户绑定</h3>
+      
+<p>在会员服务中，需要判断传来的社交用户 <code>SocialUser</code> 是否是第一次使用该账号登录：</p>
+<ul>
+<li>如果是，就需要进行注册流程：<strong>将该社交账号与本系统的某一个会员账号信息进行绑定关联</strong></li>
+<li>如果不是，则不需要额外注册，只需要更新该用户的 Access Token 和其过期时间即可</li>
+</ul>
+<p>将社交账号与本系统会员账号进行<strong>绑定关联</strong>的方式是：在本系统的数据库中为每一个会员账号添加一个 <code>uid</code> 字段（一个社交账号对应唯一一个 <code>uid</code>），当新登录一个社交账号后，就判断该账号的 <code>uid</code> 是否和数据库中某个会员账号的 <code>uid</code> 相同：</p>
+<ul>
+<li>如果相同，则说明该社交用户之前已经登录过，已经和本系统的某个会员账号进行了绑定。此时只需要更新该用户的 Access Token 和其过期时间即可</li>
+<li>如果不同，则说明该社交用户是第一次登录，此时需要为其注册，即创建一个会员账号，设置其 <code>uid</code> 等于该社交账号的 <code>uid</code>，然后将社交账号的昵称头像等信息设置到本系统的会员账号内，从而完成了社交账号与本地会员账号的绑定与注册</li>
+</ul>
+<p>其中，保存 Access Token 的目的是做免登陆/验证。只要用户在微博的认证界面成功登陆过一次，就可以重复使用该 Access Token。下一次再登录本系统，直接使用之前获取的 Access Token 获取 Gitee 认证服务器的数据信息，就可以实现免登陆；也可以在后期获取用户的其他数据。</p>
+<ol>
+<li>Controller 层：</li>
+</ol>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(&quot;/oauth2/login&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> R <span class="title">login</span><span class="params">(<span class="meta">@RequestBody</span> SocialUser socialUser)</span> </span>&#123;</span><br><span class="line">    MemberEntity entity = memberService.login(socialUser);</span><br><span class="line">    <span class="keyword">if</span> (entity != <span class="keyword">null</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> R.ok().put(<span class="string">&quot;memberEntity&quot;</span>, entity);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> R.error();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<ol start="2">
+<li>Service 层：</li>
+</ol>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> MemberEntity <span class="title">login</span><span class="params">(SocialUser socialUser)</span></span>&#123;</span><br><span class="line">    <span class="comment">// 去数据库查询该 uid 是否存在</span></span><br><span class="line">    MemberEntity uid = <span class="keyword">this</span>.getOne(<span class="keyword">new</span> QueryWrapper&lt;MemberEntity&gt;().eq(<span class="string">&quot;uid&quot;</span>, socialUser.getUid()));</span><br><span class="line">    <span class="comment">// 判断会员数据库中是否已存在该 uid</span></span><br><span class="line">    <span class="keyword">if</span> (uid == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="comment">// 1. 如果之前未登陆过，则查询其社交信息进行注册</span></span><br><span class="line">        Map&lt;String, String&gt; query = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        query.put(<span class="string">&quot;access_token&quot;</span>,socialUser.getAccess_token());</span><br><span class="line">        query.put(<span class="string">&quot;uid&quot;</span>, socialUser.getUid());</span><br><span class="line">        <span class="comment">// 调用微博api接口获取用户信息</span></span><br><span class="line">        String json = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            HttpResponse response = HttpUtils.doGet(<span class="string">&quot;https://api.weibo.com&quot;</span>, <span class="string">&quot;/2/users/show.json&quot;</span>, <span class="string">&quot;get&quot;</span>, <span class="keyword">new</span> HashMap&lt;&gt;(), query);</span><br><span class="line">            json = EntityUtils.toString(response.getEntity());</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        JSONObject jsonObject = JSON.parseObject(json);</span><br><span class="line">        <span class="comment">// 获得昵称，性别，头像</span></span><br><span class="line">        String name = jsonObject.getString(<span class="string">&quot;name&quot;</span>);</span><br><span class="line">        String gender = jsonObject.getString(<span class="string">&quot;gender&quot;</span>);</span><br><span class="line">        String profile_image_url = jsonObject.getString(<span class="string">&quot;profile_image_url&quot;</span>);</span><br><span class="line">        <span class="comment">// 封装用户信息并保存</span></span><br><span class="line">        uid = <span class="keyword">new</span> MemberEntity();</span><br><span class="line">        MemberLevelEntity defaultLevel = memberLevelService.getOne(<span class="keyword">new</span> QueryWrapper&lt;MemberLevelEntity&gt;().eq(<span class="string">&quot;default_status&quot;</span>, <span class="number">1</span>));</span><br><span class="line">        uid.setLevelId(defaultLevel.getId());</span><br><span class="line">        uid.setNickname(name);</span><br><span class="line">        uid.setGender(<span class="string">&quot;m&quot;</span>.equals(gender)?<span class="number">0</span>:<span class="number">1</span>);</span><br><span class="line">        uid.setHeader(profile_image_url);</span><br><span class="line">        uid.setAccessToken(socialUser.getAccess_token());</span><br><span class="line">        uid.setUid(socialUser.getUid());</span><br><span class="line">        uid.setExpiresIn(socialUser.getExpires_in());</span><br><span class="line">        <span class="keyword">this</span>.save(uid);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 2. 如果已经存在，说明之前登陆过，则更新令牌与过期时间信息并返回</span></span><br><span class="line">        uid.setAccessToken(socialUser.getAccess_token());</span><br><span class="line">        uid.setUid(socialUser.getUid());</span><br><span class="line">        uid.setExpiresIn(socialUser.getExpires_in());</span><br><span class="line">        <span class="keyword">this</span>.updateById(uid);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> uid;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h2 id="session-共享问题"   >
+          <a href="#session-共享问题" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#session-共享问题"></a> Session 共享问题</h2>
+      
+<p>每个客户端（浏览器）在与服务器端产生连接后，都会在服务器端为该客户端创建一个<strong>独有的 Session 对象</strong>。Session 就是 Tomcat 服务器内存中保存的一个 Map 对象，所有 Session 对象都放到一个 SessionManager 里进行管理，不同的 Session 代表与不同的客户端进行的会话。</p>
+<p>Session 和 Cookie 的关系：</p>
+<ul>
+<li>在某个客户端（浏览器）第一次访问服务器时，将创建一个 Session 对象，并保存到服务器端</li>
+<li>同时令客户端保存一个 <code>jsessionid = sessionId</code> 的 Cookie，key 值是固定的 <code>jsessionid</code>，value 是 Session Id。浏览器关闭前该 Cookie 将一直存在</li>
+<li>之后 Cookie 存在期间每次访问服务器都将带上 Cookie 信息</li>
+<li>浏览器关闭后，清除掉 Cookie，服务器端清除掉 Session</li>
+</ul>
+<p>示意图：</p>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A4%E8%AF%81%E6%9C%8D%E5%8A%A1/image-20220113161932370.png" alt="image-20220113161932370" /></p>
+<p>每个 Cookie 都有一个 Domain，只和其对应的服务器匹配。其他微服务无法获取该微服务的 Session 里的数据，即：Session 不能跨不同的域名共享。</p>
+<p>分布式下：</p>
+<ul>
+<li>不同服务间无法共享 Session</li>
+<li>在集群环境下同一个服务的不同实例也无法共享</li>
+</ul>
+<p>这是因为 Session 是保存在服务器的内存中的，A 服务的内存中的 Session 数据显然无法被 B 服务访问：</p>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A4%E8%AF%81%E6%9C%8D%E5%8A%A1/image-20220113162829509.png" alt="image-20220113162829509" /></p>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yuyun-zhao.github.io">yuyun zhao</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yuyun-zhao.github.io/2021/12/27/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A4%E8%AF%81%E6%9C%8D%E5%8A%A1/">http://yuyun-zhao.github.io/2021/12/27/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A4%E8%AF%81%E6%9C%8D%E5%8A%A1/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.github.io/tags/Project/">Project</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2021/12/29/%E3%80%90MyBatis%E3%80%91MyBatis-Plus/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">【MyBatis】MyBatis-Plus</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2021/12/22/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/"><span class="paginator-prev__text">【Project】云商城 - 数据库设计</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A4%E8%AF%81%E6%9C%8D%E5%8A%A1"><span class="toc-text">
+           认证服务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E6%B3%A8%E5%86%8C"><span class="toc-text">
+           用户注册</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E7%AB%AF%E9%85%8D%E7%BD%AE"><span class="toc-text">
+           前端配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%9A%E5%8A%A1%E6%B5%81%E7%A8%8B"><span class="toc-text">
+           业务流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%8F%91%E9%80%81%E7%9F%AD%E4%BF%A1%E9%AA%8C%E8%AF%81%E7%A0%81"><span class="toc-text">
+           1. 发送短信验证码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%95%B0%E6%8D%AE%E6%A0%A1%E9%AA%8C"><span class="toc-text">
+           2. 数据校验</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%E4%BC%9A%E5%91%98%E6%9C%8D%E5%8A%A1%E4%BF%9D%E5%AD%98%E6%95%B0%E6%8D%AE"><span class="toc-text">
+           3. 远程调用会员服务保存数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E5%AF%86%E7%A0%81%E5%8A%A0%E5%AF%86%E5%AD%98%E5%82%A8"><span class="toc-text">
+           用户密码加密存储</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#md5"><span class="toc-text">
+           MD5</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#bcryptpasswordencoder"><span class="toc-text">
+           BCryptPasswordEncoder</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95"><span class="toc-text">
+           用户登录</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%9A%E5%8A%A1%E6%B5%81%E7%A8%8B-2"><span class="toc-text">
+           业务流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A4%E8%AF%81%E6%9C%8D%E5%8A%A1-2"><span class="toc-text">
+           认证服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%9A%E5%91%98%E6%9C%8D%E5%8A%A1"><span class="toc-text">
+           会员服务</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A4%BE%E4%BA%A4%E7%99%BB%E5%BD%95"><span class="toc-text">
+           社交登录</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#oauth-20"><span class="toc-text">
+           OAuth 2.0</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9E%E8%B0%83%E5%A4%84%E7%90%86%E4%BB%A3%E7%A0%81"><span class="toc-text">
+           回调处理代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B0%E7%A4%BE%E4%BA%A4%E7%94%A8%E6%88%B7%E7%BB%91%E5%AE%9A"><span class="toc-text">
+           新社交用户绑定</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#session-%E5%85%B1%E4%BA%AB%E9%97%AE%E9%A2%98"><span class="toc-text">
+           Session 共享问题</span></a></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/author.png" alt="avatar"></div><p class="sidebar-ov-author__text">no code no life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/YUYUN-ZHAO" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="zyy18749810683" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a><a class="sidebar-ov-social-item" href="1024462136" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="mailto:im.yuyunzhao@gmail.com" target="_blank" rel="noopener" data-popover="social.Gmail" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">Gmail</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">132</div><div class="sidebar-ov-state-item__name">文章</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">38</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">38</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2022</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>yuyun zhao</span><span class="footer__devider">|</span><span>沪ICP备2022000458号</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script>function initSearch() {
+  var isXML = true;
+  var search_path = 'search.json';
+
+  if (!search_path) {
+    search_path = 'search.xml';
+  } else if (/json$/i.test(search_path)) {
+    isXML = false;
+  }
+
+  var path = '/' + search_path;
+  $.ajax({
+    url: path,
+    dataType: isXML ? 'xml' : 'json',
+    async: true,
+    success: function (res) {
+      var datas = isXML ? $('entry', res).map(function () {
+        // 将 XML 转为 JSON
+        return {
+          title: $('title', this).text(),
+          content: $('content', this).text(),
+          url: $('url', this).text()
+        };
+      }).get() : res;
+      var $input = $('.search-input input');
+      var $result = $('.search-results');
+      // 搜索对象（标题、内容）的权重，影响显示顺序
+      var WEIGHT = { title: 100, content: 1 };
+      var searchPost = function () {
+        var searchText = $input.val().toLowerCase().trim();
+        // 根据空白字符分隔关键字
+        var keywords = searchText.split(/[\s]+/);
+        // 搜索结果
+        var matchPosts = [];
+
+        // 有多个关键字时，将原文字整个保存下来
+        if (keywords.length > 1) {
+          keywords.push(searchText);
+        }
+        // 防止未输入字符时搜索
+        if (searchText.length > 0) {
+          datas.forEach(function (data) {
+            var isMatch  = false;
+            // 没有标题的文章使用预设的 i18n 变量代替
+            var title = (data.title && data.title.trim()) || '[ 文章无标题 ]';
+            var titleLower = title && title.toLowerCase();
+            // 删除 HTML 标签 和 所有空白字符
+            var content = data.content && data.content.replace(/<[^>]+>/g, '');
+            var contentLower = content && content.toLowerCase();
+            // 删除重复的 /
+            var postURL = data.url && decodeURI(data.url).replace(/\/{2,}/g, '/');
+            // 标题中匹配到的关键词
+            var titleHitSlice = [];
+            // 内容中匹配到的关键词
+            var contentHitSlice = [];
+
+            keywords.forEach(function (keyword) {
+              /**
+              * 获取匹配的关键词的索引
+              * @param {String} keyword 要匹配的关键字
+              * @param {String} text 原文字
+              * @param {Boolean} caseSensitive 是否区分大小写
+              * @param {Number} weight 匹配对象的权重。权重大的优先显示
+              * @return {Array}
+              */
+              function getIndexByword (word, text, caseSensitive, weight) {
+                if (!word || !text) {
+                  return [];
+                };
+
+                var startIndex = 0; // 每次匹配的开始索引
+                var index = -1;     // 匹配到的索引值
+                var result = [];    // 匹配结果
+
+                if (!caseSensitive) {
+                  word = word.toLowerCase();
+                  text = text.toLowerCase();
+                }
+
+                while((index = text.indexOf(word, startIndex)) !== -1) {
+                  var hasMatch = false;
+                  // 索引位置相同的关键词，保留长度较长的
+                  titleHitSlice.forEach(function (hit) {
+                    if (hit.index === index && hit.word.length < word.length) {
+                      hit.word = word;
+                      hasMatch = true;
+                    }
+                  });
+                  startIndex = index + word.length;
+                  !hasMatch && result.push({ index: index, word: word, weight: weight });
+                }
+                return result;
+              }
+              titleHitSlice = titleHitSlice.concat(getIndexByword(keyword, titleLower, false, WEIGHT.title));
+              contentHitSlice = contentHitSlice.concat(getIndexByword(keyword, contentLower, false, WEIGHT.content));
+            });
+
+            var hitTitle = titleHitSlice.length;
+            var hitContent = contentHitSlice.length;
+
+            if (hitTitle > 0 || hitContent > 0) {
+              isMatch = true;
+            }
+            if (isMatch) {
+              ;[titleHitSlice, contentHitSlice].forEach(function (hit) {
+                // 按照匹配文字的索引的递增顺序排序
+                hit.sort(function (left, right) {
+                  return left.index - right.index;
+                });
+              });
+              /**
+              * 给文本中匹配到的关键词添加标记，从而进行高亮显示
+              * @param {String} text 原文本
+              * @param {Array} hitSlice 匹配项的索引信息
+              * @param {Number} start 开始索引
+              * @param {Number} end 结束索引
+              * @return {String}
+              */
+              function highlightKeyword (text, hitSlice, start, end) {
+                if (!text || !hitSlice || !hitSlice.length) {
+                  return;
+                }
+
+                var result = '';
+                var startIndex = start;
+                var endIndex = end;
+                hitSlice.forEach(function (hit) {
+                  if (hit.index < startIndex) {
+                    return;
+                  }
+
+                  var hitWordEnd = hit.index + hit.word.length;
+                  result += text.slice(startIndex, hit.index);
+                  result += '<b>' + text.slice(hit.index, hitWordEnd) + '</b>';
+                  startIndex = hitWordEnd;
+                });
+                result += text.slice(startIndex, endIndex);
+                return result;
+              }
+
+              var postData = {};
+              // 文章总的搜索权重
+              var postWeight = titleHitSlice.length * WEIGHT.title + contentHitSlice.length * WEIGHT.content;
+              // 标记匹配关键词后的标题
+              var postTitle = highlightKeyword(title, titleHitSlice, 0, title.length) || title;
+              // 标记匹配关键词后的内容
+              var postContent;
+              // 显示内容的长度
+              var SHOW_WORD_LENGTH = 200;
+              // 命中关键词前的字符显示长度
+              var SHOW_WORD_FRONT_LENGTH = 20;
+              var SHOW_WORD_END_LENGTH = SHOW_WORD_LENGTH - SHOW_WORD_FRONT_LENGTH;
+
+              // 截取匹配的第一个字符，前后共 200 个字符来显示
+              if (contentHitSlice.length > 0) {
+                var firstIndex = contentHitSlice[0].index;
+                var start = firstIndex > SHOW_WORD_FRONT_LENGTH ? firstIndex - SHOW_WORD_FRONT_LENGTH : 0;
+                var end = firstIndex + SHOW_WORD_END_LENGTH;
+                postContent = highlightKeyword(content, contentHitSlice, start, end);
+              } else { // 未匹配到内容，直接截取前 200 个字符来显示
+                postContent = content.slice(0, SHOW_WORD_LENGTH);
+              }
+              postData.title = postTitle;
+              postData.content = postContent;
+              postData.url = postURL;
+              postData.weight = postWeight;
+              matchPosts.push(postData);
+            }
+          });
+        }
+
+        var resultInnerHtml = '';
+        if (matchPosts.length) {
+          // 按权重递增的顺序排序，使权重大的优先显示
+          matchPosts.sort(function (left, right) {
+            return right.weight - left.weight;
+          });
+          resultInnerHtml += '<ul>';
+          matchPosts.forEach(function (post) {
+            resultInnerHtml += '<li><a class="search-results-title" href="' + post.url + '">';
+            resultInnerHtml += post.title;
+            resultInnerHtml += '</a><div class="search-results-content">';
+            resultInnerHtml += post.content;
+            resultInnerHtml += '</div></li>';
+          });
+          resultInnerHtml += '</ul>';
+        } else {
+          resultInnerHtml += '<div class="search-results-none"><i class="far fa-meh"></i></div>';
+        }
+        $result.html(resultInnerHtml);
+      };
+      $input.on('input', searchPost);
+      $input.on('keyup', function (e) {
+        if (e.keyCode === Stun.utils.codeToKeyCode('Enter')) {
+          searchPost();
+        }
+      });
+    }
+  });
+}
+
+function closeSearch () {
+  $('body').css({ overflow: 'auto' });
+  $('.search-popup').css({ display: 'none' });
+  $('.search-mask').css({ display: 'none' });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+  Stun.utils.pjaxReloadLocalSearch = function () {
+    $('.header-nav-search').on('click', function (e) {
+      e.stopPropagation();
+      $('body').css('overflow', 'hidden');
+      $('.search-popup')
+        .velocity('stop')
+        .velocity('transition.expandIn', {
+          duration: 300,
+          complete: function () {
+            $('.search-popup input').focus();
+          }
+        });
+      $('.search-mask')
+        .velocity('stop')
+        .velocity('transition.fadeIn', {
+          duration: 300
+        });
+
+      initSearch();
+    });
+    $('.search-mask, .search-close').on('click', function () {
+      closeSearch();
+    });
+    $(document).on('keydown', function (e) {
+      // Escape <=> 27
+      if (e.keyCode === Stun.utils.codeToKeyCode('Escape')) {
+        closeSearch();
+      }
+    });
+  };
+
+  Stun.utils.pjaxReloadLocalSearch();
+}, false);
+
+function safeOpenUrl(url) {
+  var newTab = window.open();
+  newTab.opener = null;
+  newTab.location = url;
+}
+
+function extSearch(engine) {
+  var engines = {
+    google: 'https://www.google.com/search?q=',
+    bing: 'https://cn.bing.com/search?q=',
+    baidu: 'https://www.baidu.com/s?ie=UTF-8&wd=',
+  };
+  var host = window.location.host;
+  var query = $('.search-input input').val().toLowerCase().trim();
+  var uri = engines[engine] + query + ' site:' + host;
+
+  if (query) {
+    safeOpenUrl(uri);
+  } else {
+    Stun.utils.popAlert('warning', '请输入字符');
+  }
+}
+
+var assistSearchList = window.CONFIG.assistSearch;
+
+if (Array.isArray(assistSearchList)) {
+  assistSearchList.forEach(function (name) {
+    document.querySelector('.search-btns-item--' + name).addEventListener('click', function () {
+      extSearch(name);
+    }, false);
+  });
+}</script><script src="https://cdn.jsdelivr.net/npm/pjax@latest/pjax.min.js"></script><script>window.addEventListener('DOMContentLoaded', function () {
+  var pjax = new Pjax({"selectors":["head title","#main",".pjax-reload"],"history":true,"scrollTo":false,"scrollRestoration":false,"cacheBust":false,"debug":false,"currentUrlFullReload":false,"timeout":0});
+  // 加载进度条的计时器
+  var loadingTimer = null;
+
+  // 重置页面 Y 方向上的滚动偏移量
+  document.addEventListener('pjax:send', function () {
+    $('.header-nav-menu').removeClass('show');
+    if (CONFIG.pjax && CONFIG.pjax.avoidBanner) {
+      $('html').velocity('scroll', {
+        duration: 500,
+        offset: $('#header').height(),
+        easing: 'easeInOutCubic'
+      });
+    }
+
+    var loadingBarWidth = 20;
+    var MAX_LOADING_WIDTH = 95;
+
+    $('.loading-bar').addClass('loading');
+    $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    clearInterval(loadingTimer);
+    loadingTimer = setInterval(function () {
+      loadingBarWidth += 3;
+      if (loadingBarWidth > MAX_LOADING_WIDTH) {
+        loadingBarWidth = MAX_LOADING_WIDTH;
+      }
+      $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    }, 500);
+  }, false);
+
+  window.addEventListener('pjax:complete', function () {
+    clearInterval(loadingTimer);
+    $('.loading-bar__progress').css('width', '100%');
+    $('.loading-bar').removeClass('loading');
+    setTimeout(function () {
+      $('.loading-bar__progress').css('width', '0');
+    }, 400);
+    $('link[rel=prefetch], script[data-pjax-rm]').each(function () {
+      $(this).remove();
+    });
+    $('script[data-pjax], #pjax-reload script').each(function () {
+      $(this).parent().append($(this).remove());
+    });
+
+    if (Stun.utils.pjaxReloadBoot) {
+      Stun.utils.pjaxReloadBoot();
+    }
+    if (Stun.utils.pjaxReloadScroll) {
+      Stun.utils.pjaxReloadScroll();
+    }
+    if (Stun.utils.pjaxReloadSidebar) {
+      Stun.utils.pjaxReloadSidebar();
+    }
+    if (false) {
+      if (Stun.utils.pjaxReloadHeader) {
+        Stun.utils.pjaxReloadHeader();
+      }
+      if (Stun.utils.pjaxReloadScrollIcon) {
+        Stun.utils.pjaxReloadScrollIcon();
+      }
+      if (Stun.utils.pjaxReloadLocalSearch) {
+        Stun.utils.pjaxReloadLocalSearch();
+      }
+    }
+  }, false);
+}, false);</script><div id="pjax-reload"><link href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" rel="stylesheet" type="text/css"><link href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/copy-tex.css" rel="stylesheet" type="text/css"><script src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/copy-tex.min.js"></script><script src="https://cdn.jsdelivr.net/gh/sukkaw/busuanzi@latest/bsz.pure.mini.js" async></script></div><script src="/js/utils.js?v=2.6.2"></script><script src="/js/stun-boot.js?v=2.6.2"></script><script src="/js/scroll.js?v=2.6.2"></script><script src="/js/header.js?v=2.6.2"></script><script src="/js/sidebar.js?v=2.6.2"></script><script type="application/json" src="/search.json"></script></body></html>
