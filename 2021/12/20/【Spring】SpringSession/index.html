@@ -1,0 +1,488 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="Session 和 Cookie        每个客户端（浏览器）在与服务器端产生连接后，都会在服务器端为该客户端创建一个独有的 Session 对象。Session 就是 Tomcat 服务器内存中保存的一个 Map 对象，所有 Session 对象都放到一个 SessionManager 里进行管理，不同的 Session 代表与不同的客户端进行的会">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Spring】Spring Session">
+<meta property="og:url" content="http://yuyun-zhao.github.io/2021/12/20/%E3%80%90Spring%E3%80%91SpringSession/index.html">
+<meta property="og:site_name" content="yuyun zhao&#39;s blog">
+<meta property="og:description" content="Session 和 Cookie        每个客户端（浏览器）在与服务器端产生连接后，都会在服务器端为该客户端创建一个独有的 Session 对象。Session 就是 Tomcat 服务器内存中保存的一个 Map 对象，所有 Session 对象都放到一个 SessionManager 里进行管理，不同的 Session 代表与不同的客户端进行的会">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91SpringSession/image-20220113161932370.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91SpringSession/image-20220113162829509.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91SpringSession/image-20220113211409465.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91SpringSession/image-20220113214632057.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91SpringSession/image-20220113214753521.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91SpringSession/image-20220113215228971.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91SpringSession/image-20220113215710544.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91SpringSession/image-20220113225011032.png">
+<meta property="article:published_time" content="2021-12-20T13:59:17.000Z">
+<meta property="article:modified_time" content="2022-01-14T02:02:46.782Z">
+<meta property="article:author" content="yuyun zhao">
+<meta property="article:tag" content="Spring">
+<meta property="article:tag" content="分布式">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Spring%E3%80%91SpringSession/image-20220113161932370.png"><title>【Spring】Spring Session | yuyun zhao's blog</title><link ref="canonical" href="http://yuyun-zhao.github.io/2021/12/20/%E3%80%90Spring%E3%80%91SpringSession/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":true},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"carbon","highlight":"light","wordWrap":false},
+  reward: false,
+  fancybox: true,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: {"avoidBanner":false},
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"复制","copySuccess":"复制成功","copyError":"复制失败"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【Spring】Spring Session</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-12-20</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-01-14</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">2.2k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">14分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body">
+        <h2 id="session-和-cookie"   >
+          <a href="#session-和-cookie" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#session-和-cookie"></a> Session 和 Cookie</h2>
+      
+<p>每个客户端（浏览器）在与服务器端产生连接后，都会在服务器端为该客户端创建一个<strong>独有的 Session 对象</strong>。Session 就是 Tomcat 服务器内存中保存的一个 Map 对象，所有 Session 对象都放到一个 <code>SessionManager</code> 里进行管理，不同的 Session 代表与不同的客户端进行的会话。</p>
+<p>Session 和 Cookie 的关系：</p>
+<ul>
+<li>在某个客户端（浏览器）第一次访问服务器时，将创建一个 Session 对象，并保存到服务器端</li>
+<li>同时<strong>令客户端保存一个 <code>jsessionid = sessionId</code> 的 Cookie</strong>。其 key 值是固定的 <code>jsessionid</code>，value 是 <code>sessionId</code>。浏览器关闭前该 Cookie 将一直存在</li>
+<li>Cookie 中还保存着一个重要信息：<strong><code>Domain</code></strong>（域名）。该值保存着该 Cookie 可以访问的网站域名。当访问一个网站时，浏览器会从目前存活的所有 Cookie 中选出 <code>Domain</code> 匹配当前网站的那些 Cookie，并在访问该网站时在请求头里带上这些 Cookie。</li>
+<li>之后 Cookie 存在期间每次访问对应 <code>Domain</code> 的服务器<strong>都将带上 Cookie 信息（在请求头中）</strong></li>
+<li>浏览器关闭后，<strong>清除掉 Cookie</strong>，服务器端清除掉 Session</li>
+</ul>
+<p><strong>Cookie 是浏览器负责保存</strong>，<strong>Session 是服务器负责保存</strong>。Cookie 中保存着 Session 信息，对应唯一的一个 Session。</p>
+<p>示意图：</p>
+<p><img src="/images/%E3%80%90Spring%E3%80%91SpringSession/image-20220113161932370.png" alt="image-20220113161932370" /></p>
+<p>关于 Session 和 Cookie 的完整介绍见文章<a href=""></a></p>
+
+        <h3 id="session-共享问题"   >
+          <a href="#session-共享问题" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#session-共享问题"></a> Session 共享问题</h3>
+      
+<p>在分布式下存在着 Session 共享问题：</p>
+<ul>
+<li>不同微服务间无法共享 Session：因为每个 Session 都是存储在当前微服务的内存中的，所以无法获取其他微服务内存中的 Session 里数据，即：Session 不能跨不同的域名共享</li>
+<li>在集群环境下同一个服务的不同实例也无法共享：在负载均衡算法作用下，可能第一次访问节点1，将数据存储到了节点1的 Session 里。而第二次访问节点2时，其内并没有保存节点1里的 Session 数据，所以仍然无法共享</li>
+</ul>
+<p>二者的共同原因是：Session 是保存在服务器的内存中的，A 服务内存中的 Session 数据显然无法被 B 服务访问到：</p>
+<p><img src="/images/%E3%80%90Spring%E3%80%91SpringSession/image-20220113162829509.png" alt="image-20220113162829509" /></p>
+<!--- More -->
+
+        <h3 id="解决方案"   >
+          <a href="#解决方案" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#解决方案"></a> 解决方案</h3>
+      
+
+        <h4 id="方案一session-复制同步"   >
+          <a href="#方案一session-复制同步" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#方案一session-复制同步"></a> 方案一：Session 复制（同步）</h4>
+      
+<p><img src="/images/%E3%80%90Spring%E3%80%91SpringSession/image-20220113211409465.png" alt="image-20220113211409465" /></p>
+<p>缺点是每个服务都需要保存其他所有服务的 Session 数据，消耗了大量空间。并且 Session 同步占用了大量的网络宽带，降低了服务器集群的业务处理能力。不推荐使用。</p>
+
+        <h4 id="方案二客户端存储"   >
+          <a href="#方案二客户端存储" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#方案二客户端存储"></a> 方案二：客户端存储</h4>
+      
+<p><img src="/images/%E3%80%90Spring%E3%80%91SpringSession/image-20220113214632057.png" alt="image-20220113214632057" /></p>
+<p>这种方式的缺点也很明显，同样不推荐使用。</p>
+
+        <h4 id="方案三一致性-hash"   >
+          <a href="#方案三一致性-hash" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#方案三一致性-hash"></a> 方案三：一致性 Hash</h4>
+      
+<p><img src="/images/%E3%80%90Spring%E3%80%91SpringSession/image-20220113214753521.png" alt="image-20220113214753521" /></p>
+<p>在负载均衡时，使用 <code>ip_hash</code> 策略将同一个 ip 的请求负载均衡到同一个服务节点上，这样就能保证同一个 ip 每次都能访问到同一台服务器上的 Session 了。这种方案的缺点不是很大，可以考虑使用。</p>
+
+        <h4 id="方案四统一存储到-redis推荐"   >
+          <a href="#方案四统一存储到-redis推荐" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#方案四统一存储到-redis推荐"></a> 方案四：统一存储到 Redis（推荐）</h4>
+      
+<p><img src="/images/%E3%80%90Spring%E3%80%91SpringSession/image-20220113215228971.png" alt="image-20220113215228971" /></p>
+<p>为了做到多个微服务间共享 Session，我们可以把<strong>所有微服务</strong>的 Session 都<strong>统一存储到 Redis 中</strong>。这样就可以同时解决两种共享问题，既能让同一服务的不同实例访问到彼此的 Session，也能让不同的微服务也能访问到彼此的 Session。</p>
+<p>该方案的缺点就是<strong>增加了一次网络调用</strong>，并且<strong>需要修改代码</strong>，例如将原本获取 Session 的方法 <code>getSession()</code> 修改成从 Redis 中读取。不过<strong>这些缺点可以使用 Spring Session 完美解决</strong>。</p>
+
+        <h4 id="方案五不同服务的子域-session-共享推荐"   >
+          <a href="#方案五不同服务的子域-session-共享推荐" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#方案五不同服务的子域-session-共享推荐"></a> 方案五：不同服务的子域 Session 共享（推荐）</h4>
+      
+<p><img src="/images/%E3%80%90Spring%E3%80%91SpringSession/image-20220113215710544.png" alt="image-20220113215710544" /></p>
+<p>通过方案四，我们实现了所有微服务都可以通过 <code>sessionId</code> 从 Redis 中查询某个 Session 数据。但是问题又来了，<strong>其他微服务如何得知要查询的 <code>sessionId</code> 是多少呢？</strong> 此时就需要先解释一下浏览器是如何让后端服务知道是要访问哪个 <code>sessionId</code> 的：</p>
+<p><strong><code>Domain</code></strong>：每个 Cookie 都有一个 <code>Domain</code>（域名）。该值保存着该 Cookie 可以访问的网站域名。当访问一个网站时，浏览器会从目前存活的所有 Cookie 中选出 <code>Domain</code> 匹配当前网站的那些 Cookie，并在访问该网站时在请求头里带上这些 Cookie。这些 Cookie 里就保存了 <code>jsessionId = sessionid</code> 信息，也就是其要向该 <code>sessionId</code> 对应的 Session 获取数据。这样，<strong>浏览器在发出请求时，就会在请求头里携带上该 Cookie，从而携带了要查询的 <code>sessionId</code>，这样后端服务就可以根据该 Id 去 Redis 中查询出对应的 <code>Session</code> 数据了</strong>。</p>
+<p>那么我们只需要保证<strong>所有微服务都拥有同一份 Cookie</strong> 即可。在某个服务给浏览器发放 Cookie 时，需要指定 <code>Domain</code> 为<strong>当前服务域名的父域的值</strong>，这样浏览器在访问该父域的其他子域时也能带上该 Cookie，也就可以获取到当前服务的 Session 数据（Session 存储在 Redis 中，所有服务都可以根据 <code>sessionId</code> 获取到 Session 数据）了。</p>
+<p>关于 <code>Domian</code> 域名：</p>
+<ul>
+<li>父域：<code>yunmall.com</code></li>
+<li>子域： <code>auth.yunmall.com</code>、<code>order.yunmall.com</code> 等</li>
+</ul>
+<p>例如认证服务 <code>mall-auth-server</code> 的域 <code>auth.yunmall.com</code> 在发放 Session 时，需要设置 <code>Domain</code> 为父域 <code>yunmall.com</code>。这样浏览器在访问其他微服务时也可以带上此 Cookie，也就可以获取到认证服务存储的 Session 数据了。</p>
+<p>在 JavaWeb 原生 API 中指定父域的方式：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> Cookie(<span class="string">&quot;JSESSIONID&quot;</span>, <span class="string">&quot;.....&quot;</span>).setDomain(<span class="string">&quot;yunmall.com&quot;</span>);</span><br></pre></td></tr></table></div></figure>
+<p>下面将介绍如何使用 Spring Session 框架快速实现微服务间的 Session 共享。</p>
+<p>只需要配置就可以直接存了</p>
+<p>默认是 JDK 的序列化到 Redis，注意对象要实现序列化接口</p>
+<p>也可以修改为 JSON 序列化方式，就不需要序列化了。将 VO 转换成 JSON 字符串再存就行了</p>
+<p>页面重定向后，浏览器要访问新的 URL，此时浏览器就会先搜索出和要访问的网站想匹配的 Cookie，然后带着这些 Cookie 访问该 URL。这样就可以根据该 Cookie 里存的 <code>sessionid</code> 去 Redis 中查找出对应的 Session 数据</p>
+<p>一个 setAttrbute(“loginUser”)，一个getAtt 或前端模板页面里[[${session.loginUser}]] 取</p>
+<p><img src="/images/%E3%80%90Spring%E3%80%91SpringSession/image-20220113225011032.png" alt="image-20220113225011032" /></p>
+<p>session 里保存的是实体对象的 JSON 形式，</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">session.setAttribute(<span class="string">&quot;loginUser&quot;</span>, user)</span><br></pre></td></tr></table></div></figure>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(&quot;/oauth2.0/weibo/success&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">authorize</span><span class="params">(String code, HttpSession session)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    <span class="comment">//1. 使用code换取token，换取成功则继续2，否则重定向至登录页</span></span><br><span class="line">    Map&lt;String, String&gt; query = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    query.put(<span class="string">&quot;client_id&quot;</span>, <span class="string">&quot;2144471074&quot;</span>);</span><br><span class="line">    query.put(<span class="string">&quot;client_secret&quot;</span>, <span class="string">&quot;ff63a0d8d591a85a29a19492817316ab&quot;</span>);</span><br><span class="line">    query.put(<span class="string">&quot;grant_type&quot;</span>, <span class="string">&quot;authorization_code&quot;</span>);</span><br><span class="line">    query.put(<span class="string">&quot;redirect_uri&quot;</span>, <span class="string">&quot;http://auth.gulimall.com/oauth2.0/weibo/success&quot;</span>);</span><br><span class="line">    query.put(<span class="string">&quot;code&quot;</span>, code);</span><br><span class="line">    <span class="comment">//发送post请求换取token</span></span><br><span class="line">    HttpResponse response = HttpUtils.doPost(<span class="string">&quot;https://api.weibo.com&quot;</span>, <span class="string">&quot;/oauth2/access_token&quot;</span>, <span class="string">&quot;post&quot;</span>, <span class="keyword">new</span> HashMap&lt;String, String&gt;(), query, <span class="keyword">new</span> HashMap&lt;String, String&gt;());</span><br><span class="line">    Map&lt;String, String&gt; errors = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="keyword">if</span> (response.getStatusLine().getStatusCode() == <span class="number">200</span>) &#123;</span><br><span class="line">        <span class="comment">//2. 调用member远程接口进行oauth登录，登录成功则转发至首页并携带返回用户信息，否则转发至登录页</span></span><br><span class="line">        String json = EntityUtils.toString(response.getEntity());</span><br><span class="line">        SocialUser socialUser = JSON.parseObject(json, <span class="keyword">new</span> TypeReference&lt;SocialUser&gt;() &#123;</span><br><span class="line">        &#125;);</span><br><span class="line">        R login = memberFeignService.login(socialUser);</span><br><span class="line">        <span class="comment">//2.1 远程调用成功，返回首页并携带用户信息</span></span><br><span class="line">        <span class="keyword">if</span> (login.getCode() == <span class="number">0</span>) &#123;</span><br><span class="line">            String jsonString = JSON.toJSONString(login.get(<span class="string">&quot;memberEntity&quot;</span>));</span><br><span class="line">            System.out.println(<span class="string">&quot;----------------&quot;</span>+jsonString);</span><br><span class="line">            MemberResponseVo memberResponseVo = JSON.parseObject(jsonString, <span class="keyword">new</span> TypeReference&lt;MemberResponseVo&gt;() &#123;</span><br><span class="line">            &#125;);</span><br><span class="line">            System.out.println(<span class="string">&quot;----------------&quot;</span>+memberResponseVo);</span><br><span class="line">            session.setAttribute(AuthServerConstant.LOGIN_USER, memberResponseVo);</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;redirect:http://gulimall.com&quot;</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">//2.2 否则返回登录页</span></span><br><span class="line">            errors.put(<span class="string">&quot;msg&quot;</span>, <span class="string">&quot;登录失败，请重试&quot;</span>);</span><br><span class="line">            session.setAttribute(<span class="string">&quot;errors&quot;</span>, errors);</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;redirect:http://auth.gulimall.com/login.html&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">        errors.put(<span class="string">&quot;msg&quot;</span>, <span class="string">&quot;获得第三方授权失败，请重试&quot;</span>);</span><br><span class="line">        session.setAttribute(<span class="string">&quot;errors&quot;</span>, errors);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;redirect:http://auth.gulimall.com/login.html&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>Spring MVC 的 Controller 里的跳转和 转发的那些 是不一样的</p>
+<p>一个转去 Thymeleaf解析一个是转发</p>
+<p>要看一看源码的文章</p>
+<ul>
+<li><strong>&quot;/xxx&quot;</strong> 对应 <strong>ThymeleafView</strong></li>
+</ul>
+<p>但是都应该是属于转发类型的</p>
+<p>转发是不需要考虑session问题的，因为转发是可以直接在转发域中获取到数据的，根本不需要去session。只有重定向需要从session取数据</p>
+<p>拼接上.html？</p>
+<p>重定向是直接让浏览器访问新的URL了，所以会带上匹配的 Cookie（保存到请求头里） 一起访问目标URL</p>
+<p>单独抽到 Spring Session 文章里，tag 也放到 分布式 分类里。补充到 Java Web ，或者单独弄一个 Session Cookie的文章</p>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yuyun-zhao.github.io">yuyun zhao</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yuyun-zhao.github.io/2021/12/20/%E3%80%90Spring%E3%80%91SpringSession/">http://yuyun-zhao.github.io/2021/12/20/%E3%80%90Spring%E3%80%91SpringSession/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.github.io/tags/Spring/">Spring</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2021/12/22/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">【Project】云商城 - 数据库设计</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2021/12/20/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E/"><span class="paginator-prev__text">【Project】云商城</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#session-%E5%92%8C-cookie"><span class="toc-text">
+           Session 和 Cookie</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#session-%E5%85%B1%E4%BA%AB%E9%97%AE%E9%A2%98"><span class="toc-text">
+           Session 共享问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-text">
+           解决方案</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E6%A1%88%E4%B8%80session-%E5%A4%8D%E5%88%B6%E5%90%8C%E6%AD%A5"><span class="toc-text">
+           方案一：Session 复制（同步）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E6%A1%88%E4%BA%8C%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%AD%98%E5%82%A8"><span class="toc-text">
+           方案二：客户端存储</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E6%A1%88%E4%B8%89%E4%B8%80%E8%87%B4%E6%80%A7-hash"><span class="toc-text">
+           方案三：一致性 Hash</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E6%A1%88%E5%9B%9B%E7%BB%9F%E4%B8%80%E5%AD%98%E5%82%A8%E5%88%B0-redis%E6%8E%A8%E8%8D%90"><span class="toc-text">
+           方案四：统一存储到 Redis（推荐）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E6%A1%88%E4%BA%94%E4%B8%8D%E5%90%8C%E6%9C%8D%E5%8A%A1%E7%9A%84%E5%AD%90%E5%9F%9F-session-%E5%85%B1%E4%BA%AB%E6%8E%A8%E8%8D%90"><span class="toc-text">
+           方案五：不同服务的子域 Session 共享（推荐）</span></a></li></ol></li></ol></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/author.png" alt="avatar"></div><p class="sidebar-ov-author__text">no code no life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/YUYUN-ZHAO" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="zyy18749810683" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a><a class="sidebar-ov-social-item" href="1024462136" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="mailto:im.yuyunzhao@gmail.com" target="_blank" rel="noopener" data-popover="social.Gmail" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">Gmail</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">134</div><div class="sidebar-ov-state-item__name">文章</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">38</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">38</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2022</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>yuyun zhao</span><span class="footer__devider">|</span><span>沪ICP备2022000458号</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script>function initSearch() {
+  var isXML = true;
+  var search_path = 'search.json';
+
+  if (!search_path) {
+    search_path = 'search.xml';
+  } else if (/json$/i.test(search_path)) {
+    isXML = false;
+  }
+
+  var path = '/' + search_path;
+  $.ajax({
+    url: path,
+    dataType: isXML ? 'xml' : 'json',
+    async: true,
+    success: function (res) {
+      var datas = isXML ? $('entry', res).map(function () {
+        // 将 XML 转为 JSON
+        return {
+          title: $('title', this).text(),
+          content: $('content', this).text(),
+          url: $('url', this).text()
+        };
+      }).get() : res;
+      var $input = $('.search-input input');
+      var $result = $('.search-results');
+      // 搜索对象（标题、内容）的权重，影响显示顺序
+      var WEIGHT = { title: 100, content: 1 };
+      var searchPost = function () {
+        var searchText = $input.val().toLowerCase().trim();
+        // 根据空白字符分隔关键字
+        var keywords = searchText.split(/[\s]+/);
+        // 搜索结果
+        var matchPosts = [];
+
+        // 有多个关键字时，将原文字整个保存下来
+        if (keywords.length > 1) {
+          keywords.push(searchText);
+        }
+        // 防止未输入字符时搜索
+        if (searchText.length > 0) {
+          datas.forEach(function (data) {
+            var isMatch  = false;
+            // 没有标题的文章使用预设的 i18n 变量代替
+            var title = (data.title && data.title.trim()) || '[ 文章无标题 ]';
+            var titleLower = title && title.toLowerCase();
+            // 删除 HTML 标签 和 所有空白字符
+            var content = data.content && data.content.replace(/<[^>]+>/g, '');
+            var contentLower = content && content.toLowerCase();
+            // 删除重复的 /
+            var postURL = data.url && decodeURI(data.url).replace(/\/{2,}/g, '/');
+            // 标题中匹配到的关键词
+            var titleHitSlice = [];
+            // 内容中匹配到的关键词
+            var contentHitSlice = [];
+
+            keywords.forEach(function (keyword) {
+              /**
+              * 获取匹配的关键词的索引
+              * @param {String} keyword 要匹配的关键字
+              * @param {String} text 原文字
+              * @param {Boolean} caseSensitive 是否区分大小写
+              * @param {Number} weight 匹配对象的权重。权重大的优先显示
+              * @return {Array}
+              */
+              function getIndexByword (word, text, caseSensitive, weight) {
+                if (!word || !text) {
+                  return [];
+                };
+
+                var startIndex = 0; // 每次匹配的开始索引
+                var index = -1;     // 匹配到的索引值
+                var result = [];    // 匹配结果
+
+                if (!caseSensitive) {
+                  word = word.toLowerCase();
+                  text = text.toLowerCase();
+                }
+
+                while((index = text.indexOf(word, startIndex)) !== -1) {
+                  var hasMatch = false;
+                  // 索引位置相同的关键词，保留长度较长的
+                  titleHitSlice.forEach(function (hit) {
+                    if (hit.index === index && hit.word.length < word.length) {
+                      hit.word = word;
+                      hasMatch = true;
+                    }
+                  });
+                  startIndex = index + word.length;
+                  !hasMatch && result.push({ index: index, word: word, weight: weight });
+                }
+                return result;
+              }
+              titleHitSlice = titleHitSlice.concat(getIndexByword(keyword, titleLower, false, WEIGHT.title));
+              contentHitSlice = contentHitSlice.concat(getIndexByword(keyword, contentLower, false, WEIGHT.content));
+            });
+
+            var hitTitle = titleHitSlice.length;
+            var hitContent = contentHitSlice.length;
+
+            if (hitTitle > 0 || hitContent > 0) {
+              isMatch = true;
+            }
+            if (isMatch) {
+              ;[titleHitSlice, contentHitSlice].forEach(function (hit) {
+                // 按照匹配文字的索引的递增顺序排序
+                hit.sort(function (left, right) {
+                  return left.index - right.index;
+                });
+              });
+              /**
+              * 给文本中匹配到的关键词添加标记，从而进行高亮显示
+              * @param {String} text 原文本
+              * @param {Array} hitSlice 匹配项的索引信息
+              * @param {Number} start 开始索引
+              * @param {Number} end 结束索引
+              * @return {String}
+              */
+              function highlightKeyword (text, hitSlice, start, end) {
+                if (!text || !hitSlice || !hitSlice.length) {
+                  return;
+                }
+
+                var result = '';
+                var startIndex = start;
+                var endIndex = end;
+                hitSlice.forEach(function (hit) {
+                  if (hit.index < startIndex) {
+                    return;
+                  }
+
+                  var hitWordEnd = hit.index + hit.word.length;
+                  result += text.slice(startIndex, hit.index);
+                  result += '<b>' + text.slice(hit.index, hitWordEnd) + '</b>';
+                  startIndex = hitWordEnd;
+                });
+                result += text.slice(startIndex, endIndex);
+                return result;
+              }
+
+              var postData = {};
+              // 文章总的搜索权重
+              var postWeight = titleHitSlice.length * WEIGHT.title + contentHitSlice.length * WEIGHT.content;
+              // 标记匹配关键词后的标题
+              var postTitle = highlightKeyword(title, titleHitSlice, 0, title.length) || title;
+              // 标记匹配关键词后的内容
+              var postContent;
+              // 显示内容的长度
+              var SHOW_WORD_LENGTH = 200;
+              // 命中关键词前的字符显示长度
+              var SHOW_WORD_FRONT_LENGTH = 20;
+              var SHOW_WORD_END_LENGTH = SHOW_WORD_LENGTH - SHOW_WORD_FRONT_LENGTH;
+
+              // 截取匹配的第一个字符，前后共 200 个字符来显示
+              if (contentHitSlice.length > 0) {
+                var firstIndex = contentHitSlice[0].index;
+                var start = firstIndex > SHOW_WORD_FRONT_LENGTH ? firstIndex - SHOW_WORD_FRONT_LENGTH : 0;
+                var end = firstIndex + SHOW_WORD_END_LENGTH;
+                postContent = highlightKeyword(content, contentHitSlice, start, end);
+              } else { // 未匹配到内容，直接截取前 200 个字符来显示
+                postContent = content.slice(0, SHOW_WORD_LENGTH);
+              }
+              postData.title = postTitle;
+              postData.content = postContent;
+              postData.url = postURL;
+              postData.weight = postWeight;
+              matchPosts.push(postData);
+            }
+          });
+        }
+
+        var resultInnerHtml = '';
+        if (matchPosts.length) {
+          // 按权重递增的顺序排序，使权重大的优先显示
+          matchPosts.sort(function (left, right) {
+            return right.weight - left.weight;
+          });
+          resultInnerHtml += '<ul>';
+          matchPosts.forEach(function (post) {
+            resultInnerHtml += '<li><a class="search-results-title" href="' + post.url + '">';
+            resultInnerHtml += post.title;
+            resultInnerHtml += '</a><div class="search-results-content">';
+            resultInnerHtml += post.content;
+            resultInnerHtml += '</div></li>';
+          });
+          resultInnerHtml += '</ul>';
+        } else {
+          resultInnerHtml += '<div class="search-results-none"><i class="far fa-meh"></i></div>';
+        }
+        $result.html(resultInnerHtml);
+      };
+      $input.on('input', searchPost);
+      $input.on('keyup', function (e) {
+        if (e.keyCode === Stun.utils.codeToKeyCode('Enter')) {
+          searchPost();
+        }
+      });
+    }
+  });
+}
+
+function closeSearch () {
+  $('body').css({ overflow: 'auto' });
+  $('.search-popup').css({ display: 'none' });
+  $('.search-mask').css({ display: 'none' });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+  Stun.utils.pjaxReloadLocalSearch = function () {
+    $('.header-nav-search').on('click', function (e) {
+      e.stopPropagation();
+      $('body').css('overflow', 'hidden');
+      $('.search-popup')
+        .velocity('stop')
+        .velocity('transition.expandIn', {
+          duration: 300,
+          complete: function () {
+            $('.search-popup input').focus();
+          }
+        });
+      $('.search-mask')
+        .velocity('stop')
+        .velocity('transition.fadeIn', {
+          duration: 300
+        });
+
+      initSearch();
+    });
+    $('.search-mask, .search-close').on('click', function () {
+      closeSearch();
+    });
+    $(document).on('keydown', function (e) {
+      // Escape <=> 27
+      if (e.keyCode === Stun.utils.codeToKeyCode('Escape')) {
+        closeSearch();
+      }
+    });
+  };
+
+  Stun.utils.pjaxReloadLocalSearch();
+}, false);
+
+function safeOpenUrl(url) {
+  var newTab = window.open();
+  newTab.opener = null;
+  newTab.location = url;
+}
+
+function extSearch(engine) {
+  var engines = {
+    google: 'https://www.google.com/search?q=',
+    bing: 'https://cn.bing.com/search?q=',
+    baidu: 'https://www.baidu.com/s?ie=UTF-8&wd=',
+  };
+  var host = window.location.host;
+  var query = $('.search-input input').val().toLowerCase().trim();
+  var uri = engines[engine] + query + ' site:' + host;
+
+  if (query) {
+    safeOpenUrl(uri);
+  } else {
+    Stun.utils.popAlert('warning', '请输入字符');
+  }
+}
+
+var assistSearchList = window.CONFIG.assistSearch;
+
+if (Array.isArray(assistSearchList)) {
+  assistSearchList.forEach(function (name) {
+    document.querySelector('.search-btns-item--' + name).addEventListener('click', function () {
+      extSearch(name);
+    }, false);
+  });
+}</script><script src="https://cdn.jsdelivr.net/npm/pjax@latest/pjax.min.js"></script><script>window.addEventListener('DOMContentLoaded', function () {
+  var pjax = new Pjax({"selectors":["head title","#main",".pjax-reload"],"history":true,"scrollTo":false,"scrollRestoration":false,"cacheBust":false,"debug":false,"currentUrlFullReload":false,"timeout":0});
+  // 加载进度条的计时器
+  var loadingTimer = null;
+
+  // 重置页面 Y 方向上的滚动偏移量
+  document.addEventListener('pjax:send', function () {
+    $('.header-nav-menu').removeClass('show');
+    if (CONFIG.pjax && CONFIG.pjax.avoidBanner) {
+      $('html').velocity('scroll', {
+        duration: 500,
+        offset: $('#header').height(),
+        easing: 'easeInOutCubic'
+      });
+    }
+
+    var loadingBarWidth = 20;
+    var MAX_LOADING_WIDTH = 95;
+
+    $('.loading-bar').addClass('loading');
+    $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    clearInterval(loadingTimer);
+    loadingTimer = setInterval(function () {
+      loadingBarWidth += 3;
+      if (loadingBarWidth > MAX_LOADING_WIDTH) {
+        loadingBarWidth = MAX_LOADING_WIDTH;
+      }
+      $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    }, 500);
+  }, false);
+
+  window.addEventListener('pjax:complete', function () {
+    clearInterval(loadingTimer);
+    $('.loading-bar__progress').css('width', '100%');
+    $('.loading-bar').removeClass('loading');
+    setTimeout(function () {
+      $('.loading-bar__progress').css('width', '0');
+    }, 400);
+    $('link[rel=prefetch], script[data-pjax-rm]').each(function () {
+      $(this).remove();
+    });
+    $('script[data-pjax], #pjax-reload script').each(function () {
+      $(this).parent().append($(this).remove());
+    });
+
+    if (Stun.utils.pjaxReloadBoot) {
+      Stun.utils.pjaxReloadBoot();
+    }
+    if (Stun.utils.pjaxReloadScroll) {
+      Stun.utils.pjaxReloadScroll();
+    }
+    if (Stun.utils.pjaxReloadSidebar) {
+      Stun.utils.pjaxReloadSidebar();
+    }
+    if (false) {
+      if (Stun.utils.pjaxReloadHeader) {
+        Stun.utils.pjaxReloadHeader();
+      }
+      if (Stun.utils.pjaxReloadScrollIcon) {
+        Stun.utils.pjaxReloadScrollIcon();
+      }
+      if (Stun.utils.pjaxReloadLocalSearch) {
+        Stun.utils.pjaxReloadLocalSearch();
+      }
+    }
+  }, false);
+}, false);</script><div id="pjax-reload"><link href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" rel="stylesheet" type="text/css"><link href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/copy-tex.css" rel="stylesheet" type="text/css"><script src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/copy-tex.min.js"></script><script src="https://cdn.jsdelivr.net/gh/sukkaw/busuanzi@latest/bsz.pure.mini.js" async></script></div><script src="/js/utils.js?v=2.6.2"></script><script src="/js/stun-boot.js?v=2.6.2"></script><script src="/js/scroll.js?v=2.6.2"></script><script src="/js/header.js?v=2.6.2"></script><script src="/js/sidebar.js?v=2.6.2"></script><script type="application/json" src="/search.json"></script></body></html>
