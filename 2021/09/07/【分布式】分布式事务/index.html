@@ -36,7 +36,7 @@
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/302377d33ddcd708e20b996bd9f2c7b8.png">
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/302377d33ddcd708e20b996bd9f2c7b8.png">
 <meta property="article:published_time" content="2021-09-07T09:50:32.000Z">
-<meta property="article:modified_time" content="2021-10-15T12:24:48.338Z">
+<meta property="article:modified_time" content="2022-01-18T11:11:10.128Z">
 <meta property="article:author" content="yuyun zhao">
 <meta property="article:tag" content="分布式">
 <meta name="twitter:card" content="summary">
@@ -64,7 +64,7 @@ var CONFIG = {
   sourcePath: {"js":"js","css":"css","images":"images"},
 };
 
-window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【分布式】分布式事务理论</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-09-07</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-10-15</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">9.5k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">52分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body">
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【分布式】分布式事务理论</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-09-07</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-01-18</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">10.8k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">59分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body">
         <h2 id="分布式事务"   >
           <a href="#分布式事务" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#分布式事务"></a> 分布式事务</h2>
       
@@ -179,18 +179,36 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
         <h2 id="base-理论"   >
           <a href="#base-理论" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#base-理论"></a> BASE 理论</h2>
       
-<p>BASE就是为了解决关系数据库强一致性而引起的可用性降低问题而提出的解决方案。它的思想是通过<strong>让系统放松对某一时刻数据一致性的要求来换取系统整体伸缩性和性能上改观</strong>。</p>
+<p>BASE理论是对CAP理论的延伸，思想是即使无法做到强一致性（CAP的一致性就是强一致性），但是可以采用适当的弱一致性，即<strong>最终一致性</strong>。BASE就是为了解决关系数据库强一致性而引起的可用性降低问题（即为了满足CP，导致A降低）而提出的解决方案。它的思想是通过<strong>让系统放松对某一时刻数据一致性的要求来换取系统整体伸缩性和性能上改观</strong>。</p>
 <p>BASE是三个单词的缩写：</p>
 <ul>
-<li><strong>Basically Available</strong>（基本可用）：服务在等待同步的一小段时间内是不可用的，所以只是基本可用</li>
-<li><strong>Soft state</strong>（软状态）</li>
-<li><strong>Eventually consistent</strong>（最终一致性）：不是数据立刻一致，而是等一段时间后一致，最终结果是一致的即可</li>
+<li><strong>Basically Available</strong>（基本可用）：基本可用是指分布式系统中在出现故障的时候，<strong>允许损失部分可用性</strong>（例如响应时间，功能上的可用性）。需要注意的是基本可用不等价于系统不可用。服务在等待同步的一小段时间内是不可用的，所以只是基本可用。即一两个节点的不可用不能影响整个系统的不可用（这个节点宕机了去查其他节点也行，只要有能用的就可以，慢一些也无所谓。不必所有节点都得可用）
+<ul>
+<li><strong>响应时间</strong>上的损失：正常情况下搜索引擎需要在0.5秒之内返回给用户相应的查询结果，但由于出现故障（比如系统部分机房断电断网故障），查询的结果响应时间增加到了1~2秒</li>
+<li><strong>功能</strong>上的损失：购物网站双十一购物高峰，为了保证系统的稳定性，部分消费者会被引入到一个降级页面</li>
 </ul>
-<p>我们解决分布式事务就是根据上述理论来实现。还以上面的下单减库存和扣款为例：</p>
-<p>订单服务、库存服务、用户服务及他们对应的数据库就是分布式应用中的三个部分。</p>
+</li>
+<li><strong>Soft state</strong>（软状态）：不像强一致性系统只有两个状态，要么成功要么失败。软状态是指允许 系统存在<strong>中间状态</strong>（“<strong>正在同步中</strong>”状态），而该中间状态不会影响系统整体可用性。分布式存储中一般一份数据会有多个副本，允许不同副本同步的延时就是软状态的体现。MySQL 主从复制的<strong>异步复制</strong>就是一种体现。也就是说：<strong>系统允许有延迟，等待一定时间后能保证数据一致即可</strong>。</li>
+<li><strong>Eventually consistent</strong>（最终一致性）：最终致性是指系统中的<strong>所有数据副本经过一定时间后，最终能够达到一致的状态</strong>。弱一致性和强一致性相反，最终一致性是弱一致性的一种特殊情况。不是数据立刻一致，而是等一段时间后一致，最终结果是一致的即可。</li>
+</ul>
+
+        <h4 id="强一致性-弱一致性-最终一致性"   >
+          <a href="#强一致性-弱一致性-最终一致性" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#强一致性-弱一致性-最终一致性"></a> 强一致性、弱一致性、最终一致性</h4>
+      
+<p>从客户端角度，多进程并发访问时，更新过的数据在不同进程如何获取的不同策略，决定了不同的一致性。对于关系型数据库，</p>
+<ul>
+<li>要求更新过的数据能被后续的访问都能看到，这是<strong>强一致性</strong></li>
+<li>如果能容忍后续的部分或者全部访问不到，则是<strong>弱一致性</strong></li>
+<li>如果经过一段时间后要求能访问到更新后的数据，则是<strong>最终一致性</strong></li>
+</ul>
+
+        <h3 id="173-分布式事务"   >
+          <a href="#173-分布式事务" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#173-分布式事务"></a> 17.3 分布式事务</h3>
+      
+<p>我们解决分布式事务就是根据上述理论来实现。还以上面的下单减库存和扣款为例：订单服务、库存服务、用户服务及他们对应的数据库就是分布式应用中的三个部分。</p>
 <ul>
 <li><strong>CP方式</strong>：现在如果要满足事务的强一致性，就必须在订单服务数据库锁定的同时，对库存服务、用户服务数据资源同时锁定。等待三个服务业务全部处理完成，才可以释放资源。此时如果有其他请求想要操作被锁定的资源就会被阻塞，这样就是满足了CP。这就是强一致，弱可用</li>
-<li><strong>AP方式</strong>：三个服务的对应数据库各自独立执行自己的业务，执行本地事务，不要求互相锁定资源。但是这个中间状态下，我们去访问数据库，可能遇到数据不一致的情况，不过我们需要做一些后补措施，保证在经过一段时间后，数据最终满足一致性，例如高峰期视频的点击量等数据不需要强一致性，但要保证高可用。这就是高可用，但弱一致（最终一致）。</li>
+<li><strong>AP方式</strong>：三个服务的对应数据库各自独立执行自己的业务，执行本地事务，不要求互相锁定资源。但是这个中间状态下，我们去访问数据库，可能遇到数据不一致的情况，不过我们需要做一些后补措施，<strong>保证在经过一段时间后，数据最终满足一致性</strong>，例如高峰期视频的点击量等数据不需要强一致性，但要保证高可用。又例如订单服务下单成功后，库存服务锁库存失败，此时不要求订单服务立即回滚保证一致，而是可以允许等待一定时间后再将该订单数据删除以保证最终一致。这就是高可用，但弱一致（最终一致）。</li>
 </ul>
 <p>由上面的两种思想，延伸出了很多的分布式事务解决方案：</p>
 <ul>
@@ -201,8 +219,15 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 </ul>
 <p>下文将逐一介绍这些解决方案。</p>
 
-        <h2 id="xa"   >
-          <a href="#xa" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#xa"></a> XA</h2>
+        <h2 id="2pc-二阶段提交"   >
+          <a href="#2pc-二阶段提交" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#2pc-二阶段提交"></a> 2PC 二阶段提交</h2>
+      
+<blockquote>
+<p>参考：<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/35298019" >漫话分布式系统共识协议: 2PC/3PC篇</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+</blockquote>
+
+        <h3 id="xa"   >
+          <a href="#xa" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#xa"></a> XA</h3>
       
 <p>分布式事务的解决手段之一，就是<strong>二阶段提交协议</strong>（2PC：Two-Phase Commit）</p>
 <p>1994 年，X/Open 组织（即现在的 Open Group ）定义了分布式事务处理的 DTP 模型。该模型包括这样几个角色：</p>
@@ -215,18 +240,15 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <p>在该模型中，一个分布式事务（全局事务）可以被拆分成许多个本地事务，运行在不同的AP和RM上。每个本地事务的ACID很好实现，但是全局事务必须保证其中包含的每一个本地事务都能同时成功，若有一个本地事务失败，则所有其它事务都必须回滚。但问题是，本地事务处理过程中，并不知道其它事务的运行状态。因此，就需要通过CRM来通知各个本地事务，同步事务执行的状态。</p>
 <p>因此，各个本地事务的通信必须有统一的标准，否则不同数据库间就无法通信。<strong>XA</strong> 就是 X/Open DTP中通信中间件与TM间联系的<strong>接口规范</strong>，定义了用于通知事务开始、提交、终止、回滚等接口，各个数据库厂商都必须实现这些接口。</p>
 
-        <h2 id="二阶段提交"   >
-          <a href="#二阶段提交" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#二阶段提交"></a> 二阶段提交</h2>
+        <h3 id="二阶段提交协议"   >
+          <a href="#二阶段提交协议" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#二阶段提交协议"></a> 二阶段提交协议</h3>
       
-<blockquote>
-<p>参考：<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/35298019" >漫话分布式系统共识协议: 2PC/3PC篇</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
-</blockquote>
-<p><strong>二阶提交协议</strong>就是根据XA这一思想衍生出来的，将全局事务拆分为两个阶段来执行：</p>
+<p><strong>二阶段提交协议</strong>（2 Phase Commit）就是根据XA Transactions这一思想衍生出来的，将全局事务拆分为两个阶段来执行：</p>
 <ul>
 <li>阶段一：准备阶段，各个本地事务完成本地事务的准备工作。</li>
 <li>阶段二：执行阶段，各个本地事务根据上一阶段执行结果，进行提交或回滚。</li>
 </ul>
-<p>这个过程中需要一个协调者（coordinator），还有事务的参与者（voter）。</p>
+<p>这个过程中需要一个协调者（coordinator），还有事务的参与者（voter）。二阶段提交是一个<strong>刚性事务</strong>。</p>
 
         <h3 id="正常情况"   >
           <a href="#正常情况" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#正常情况"></a> 正常情况</h3>
@@ -246,6 +268,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <li><strong>投票阶段</strong>：协调组询问各个事务参与者，是否可以执行事务。每个事务参与者执行事务，写入redo和undo日志，然后反馈事务执行结果，但只要有一个参与者返回的是<code>Disagree</code>，则说明执行失败。</li>
 <li><strong>提交阶段</strong>：协调组发现有一个或多个参与者返回的是<code>Disagree</code>，认为执行失败。于是向各个事务参与者发出<code>abort</code>指令，各个事务参与者回滚事务。</li>
 </ul>
+<p>3PC 在 2PC 的基础上引入了<strong>超时机制</strong>：无论协调者还是参与者，在向对方发送请求后，若长时间未收到回应则做出相应处理</p>
 
         <h3 id="缺陷"   >
           <a href="#缺陷" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#缺陷"></a> 缺陷</h3>
@@ -260,7 +283,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <li>上轮voter3反对所以干脆没有通过。</li>
 </ul>
 <p><strong>2. 阻塞问题</strong></p>
-<p>在准备阶段、提交阶段，每个事务参与者都会<strong>锁定本地资源</strong>，<strong>并等待其它事务的执行结果</strong>，阻塞时间较长，资源锁定时间太久，因此执行的效率就比较低了。</p>
+<p>在准备阶段、提交阶段，每个事务参与者都会<strong>锁定本地资源</strong>，<strong>并等待其它事务的执行结果</strong>，阻塞时间较长，资源锁定时间太久，因此执行的效率就比较低了，在高并发情境下基本无法工作。</p>
 <p>面对二阶段提交的上述缺点，后来又演变出了三阶段提交，但是依然没有完全解决阻塞和资源锁定的问题，而且引入了一些新的问题，因此实际使用的场景较少。</p>
 
         <h3 id="使用场景"   >
@@ -268,13 +291,21 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
       
 <p><strong>对事务有强一致性要求</strong>，对事务执行效率不敏感，并且不希望有太多代码侵入。</p>
 
-        <h2 id="tcc"   >
-          <a href="#tcc" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#tcc"></a> TCC</h2>
+        <h2 id="tcc-事务补偿型方案"   >
+          <a href="#tcc-事务补偿型方案" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#tcc-事务补偿型方案"></a> TCC - 事务补偿型方案</h2>
       
 <blockquote>
 <p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="http://www.zhdba.com/mysqlops/2012/04/06/innodb-log1/" >http://www.zhdba.com/mysqlops/2012/04/06/innodb-log1/</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
 </blockquote>
-<p>TCC模式可以解决2PC中的资源锁定和阻塞问题，减少资源锁定时间。</p>
+<p>TCC模式可以解决2PC中的资源锁定和阻塞问题，减少资源锁定时间。TCC是一种<strong>柔性事务</strong>。它是一种<strong>事务补偿型方案</strong>，使用补偿的思路。</p>
+<hr />
+<p>刚性事务与柔性事务</p>
+<ul>
+<li>刚性事务：遵循ACID原则，强一致性</li>
+<li>柔性事务：遵循BASE理论，最终一致性</li>
+</ul>
+<p>与刚性事务不同，柔性事务允许一定时间内，不同节点的数据不一致，但要求最终一致。</p>
+<hr />
 
         <h3 id="基本原理"   >
           <a href="#基本原理" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#基本原理"></a> 基本原理</h3>
@@ -350,10 +381,12 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <li>开发人员具备较高的编码能力和幂等处理经验</li>
 </ul>
 
-        <h2 id="可靠消息服务"   >
-          <a href="#可靠消息服务" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#可靠消息服务"></a> 可靠消息服务</h2>
+        <h2 id="可靠消息服务-最大努力通知型方案"   >
+          <a href="#可靠消息服务-最大努力通知型方案" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#可靠消息服务-最大努力通知型方案"></a> 可靠消息服务 - 最大努力通知型方案</h2>
       
-<p>这种实现方式的思路，其实是源于ebay，其基本的设计思想是将远程分布式事务拆分成一系列的本地事务。</p>
+<p>这种实现方式的思路，其实是源于ebay，其基本的设计思想是将远程分布式事务拆分成一系列的本地事务，一旦某个服务执行失败，就使用<strong>消息队列</strong>通知其他服务进行回滚，之所以叫最大通知型是因为他会不断地发送消息直到其他服务受到该消息后进行回滚。它也是一种<strong>柔性事务</strong>。</p>
+<p>按规律进行通知，<strong>不保证数据一定能通知成功，但会提供可查询操作接口进行核对</strong>。这种方案主要用在与第三方系统通讯时，比如调用微信或支付宝支付后的支付结果通知。这种方案也是结合MQ进行实现。例如：通过MQ发送http请求，设置最大通知次数。达到通知次数后即不再通知。</p>
+<p>案例：银行通知、商户通知等（各大交易业务平台间的商户通知：多次通知、查询校对、对账文件），支付宝的支付成功异步回调</p>
 
         <h3 id="基本原理-2"   >
           <a href="#基本原理-2" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#基本原理-2"></a> 基本原理</h3>
@@ -362,7 +395,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <ul>
 <li>事务发起者A执行本地事务</li>
 <li>事务发起者A通过<strong>消息队列MQ</strong>将需要执行的事务信息发送给事务参与者B</li>
-<li>事务参与者B接收到消息后执行本地事务，若失败则一直重试执行事务</li>
+<li>事务参与者B事先订阅该消息队列，在接收到消息后执行本地事务，若失败则一直重试执行事务</li>
 </ul>
 <p>如图：</p>
 <p><img src="/images/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/image-20200305181454125.png" alt="image-20200305181454125" /></p>
@@ -530,14 +563,15 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 </li>
 </ul>
 
-        <h2 id="at-模式"   >
-          <a href="#at-模式" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#at-模式"></a> AT 模式</h2>
+        <h2 id="at自动提交模式"   >
+          <a href="#at自动提交模式" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#at自动提交模式"></a> AT（自动提交）模式</h2>
       
 <blockquote>
 <p>Seata <span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://seata.io/zh-cn/docs/dev/mode/at-mode.html" >官方文档</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>。</p>
 </blockquote>
-<p>2019年 1 月份，Seata 开源了 AT 模式。AT 模式是一种<strong>无侵入</strong>的分布式事务解决方案。可以看做是<strong>对TCC或者二阶段提交模型的一种优化</strong>，解决了TCC模式中的代码侵入、编码复杂等问题。</p>
+<p>2019年 1 月份，Seata 开源了 AT（<strong>Auto Transaction</strong>）模式。AT 模式是一种<strong>无侵入</strong>的分布式事务解决方案。可以看做是<strong>对TCC或者二阶段提交模型的一种优化</strong>，解决了TCC模式中的代码侵入、编码复杂等问题。</p>
 <p>在 AT 模式下，用户只需关注自己的“业务 SQL”，用户的 “业务 SQL” 作为一阶段，Seata 框架<strong>会自动生成事务的二阶段提交和回滚操作</strong>。</p>
+<p>但是，<strong>AT 模式不适合高并发场景</strong>，其吞吐量和并发非常低。这是因为其需要<strong>给数据库添加全局行锁</strong>，并且频繁删除 before image 和 after image，这就会导致并发降低。</p>
 
         <h3 id="基本原理-3"   >
           <a href="#基本原理-3" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#基本原理-3"></a> 基本原理</h3>
@@ -560,7 +594,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <li>首先解析 SQL 语义，根据SQL语义找到“业务 SQL”要更新的业务数据，在业务数据被更新前，将这些要更新的数据保存成“<strong>before image</strong>”（前镜像，undo log，用于二阶段回滚时恢复原数据）</li>
 <li>然后执行“业务 SQL”更新业务数据，在业务数据更新之后，再将这些更新后的数据保存成“<strong>after image</strong>”（后镜像，redo log，其用于二阶段回滚前对比当前数据有无被脏写）</li>
 <li>将<strong>前后镜像</strong>数据以及<strong>业务 SQL 相关的信息</strong>组成一条回滚日志记录，插入到 <code>UNDO_LOG</code> 表中（数据库中除了业务表还需要准备一张 <code>UNDO_LOG</code> 表存放这些回滚日志，用于回滚时利用记录的SQL语句与前镜像进行回滚补偿）。</li>
-<li>最后获取全局行锁，<strong>立即提交事务（不阻塞）</strong>。</li>
+<li>最后获取<strong>全局行锁</strong>，<strong>立即提交事务（不阻塞）</strong>。</li>
 </ul>
 <p>以上操作全部<strong>在一个数据库事务内完成</strong>，这样保证了一阶段操作的<strong>原子性</strong>。这里的<code>before image</code>和<code>after image</code>类似于数据库的<strong>undo</strong>和<strong>redo</strong>日志，但其实<strong>是用数据库模拟的</strong>，即将undo和redo日志保存到日志Log表里。</p>
 <p><img src="/images/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/image-20200305213652558.png" alt="image-20200305213652558" /></p>
@@ -590,6 +624,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <p>缺点：</p>
 <ul>
 <li>与TCC相比，需要动态生成二阶段的反向补偿操作，<strong>执行性能略低于TCC</strong></li>
+<li>AT 模式不适合高并发场景，因为其需要给数据库添加全局锁，一旦加锁就会导致并发降低</li>
 </ul>
 
         <h3 id="几种模式对比"   >
@@ -598,7 +633,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <ul>
 <li>XA 二阶段：一阶段会有阻塞问题，必须等到所有事务都提交才能一起提交，每个事务都会阻塞等待其他事务</li>
 <li>TCC：一阶段不阻塞，二阶段需要手动添加补偿代码，较繁琐</li>
-<li>AT：一阶段不阻塞，每个事务执行完立即提交；二阶段框架自动实现补偿，性能略低于TCC</li>
+<li>AT：一阶段不阻塞，每个事务执行完立即提交；二阶段框架自动实现补偿，性能略低于TCC；不适合高并发场景（因为要加行锁并且频繁删除 before image 和 after image）</li>
 </ul>
 
         <h2 id="saga-模式"   >
@@ -878,29 +913,32 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
            Availability</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#consistency-%E5%92%8C-availability-%E7%9A%84%E7%9F%9B%E7%9B%BE"><span class="toc-text">
            Consistency 和 Availability 的矛盾</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%A0%E7%82%B9%E7%96%91%E9%97%AE"><span class="toc-text">
            几点疑问</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#base-%E7%90%86%E8%AE%BA"><span class="toc-text">
-           BASE 理论</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#xa"><span class="toc-text">
-           XA</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4"><span class="toc-text">
-           二阶段提交</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A3%E5%B8%B8%E6%83%85%E5%86%B5"><span class="toc-text">
+           BASE 理论</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%BA%E4%B8%80%E8%87%B4%E6%80%A7-%E5%BC%B1%E4%B8%80%E8%87%B4%E6%80%A7-%E6%9C%80%E7%BB%88%E4%B8%80%E8%87%B4%E6%80%A7"><span class="toc-text">
+           强一致性、弱一致性、最终一致性</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#173-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1"><span class="toc-text">
+           17.3 分布式事务</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2pc-%E4%BA%8C%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4"><span class="toc-text">
+           2PC 二阶段提交</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#xa"><span class="toc-text">
+           XA</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4%E5%8D%8F%E8%AE%AE"><span class="toc-text">
+           二阶段提交协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A3%E5%B8%B8%E6%83%85%E5%86%B5"><span class="toc-text">
            正常情况</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%82%E5%B8%B8%E6%83%85%E5%86%B5"><span class="toc-text">
            异常情况</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E9%99%B7"><span class="toc-text">
            缺陷</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">
-           使用场景</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tcc"><span class="toc-text">
-           TCC</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="toc-text">
+           使用场景</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tcc-%E4%BA%8B%E5%8A%A1%E8%A1%A5%E5%81%BF%E5%9E%8B%E6%96%B9%E6%A1%88"><span class="toc-text">
+           TCC - 事务补偿型方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="toc-text">
            基本原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B"><span class="toc-text">
            实例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9"><span class="toc-text">
            优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9"><span class="toc-text">
            缺点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">
            总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-2"><span class="toc-text">
-           使用场景</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AF%E9%9D%A0%E6%B6%88%E6%81%AF%E6%9C%8D%E5%8A%A1"><span class="toc-text">
-           可靠消息服务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86-2"><span class="toc-text">
+           使用场景</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AF%E9%9D%A0%E6%B6%88%E6%81%AF%E6%9C%8D%E5%8A%A1-%E6%9C%80%E5%A4%A7%E5%8A%AA%E5%8A%9B%E9%80%9A%E7%9F%A5%E5%9E%8B%E6%96%B9%E6%A1%88"><span class="toc-text">
+           可靠消息服务 - 最大努力通知型方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86-2"><span class="toc-text">
            基本原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E6%B6%88%E6%81%AF%E8%A1%A8"><span class="toc-text">
            本地消息表</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AE%80%E5%8C%96%E7%89%88%E6%9C%AC"><span class="toc-text">
            简化版本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%8B%AC%E7%AB%8B%E6%B6%88%E6%81%AF%E6%9C%8D%E5%8A%A1"><span class="toc-text">
            独立消息服务</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rocketmq-%E4%BA%8B%E5%8A%A1%E6%B6%88%E6%81%AF"><span class="toc-text">
            RocketMQ 事务消息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rabbitmq-%E7%9A%84%E6%B6%88%E6%81%AF%E7%A1%AE%E8%AE%A4"><span class="toc-text">
            RabbitMQ 的消息确认</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E4%BA%8B%E5%8A%A1%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="toc-text">
-           消息事务的优缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#at-%E6%A8%A1%E5%BC%8F"><span class="toc-text">
-           AT 模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86-3"><span class="toc-text">
+           消息事务的优缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#at%E8%87%AA%E5%8A%A8%E6%8F%90%E4%BA%A4%E6%A8%A1%E5%BC%8F"><span class="toc-text">
+           AT（自动提交）模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86-3"><span class="toc-text">
            基本原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E9%98%B6%E6%AE%B5"><span class="toc-text">
            一阶段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E9%98%B6%E6%AE%B5-%E6%8F%90%E4%BA%A4"><span class="toc-text">
            二阶段 提交</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E9%98%B6%E6%AE%B5-%E5%9B%9E%E6%BB%9A"><span class="toc-text">
@@ -921,7 +959,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
            场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%80%E9%98%B6%E6%AE%B5-2"><span class="toc-text">
            一阶段</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8C%E9%98%B6%E6%AE%B5-%E5%9B%9E%E6%BB%9A-2"><span class="toc-text">
            二阶段-回滚</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8C%E9%98%B6%E6%AE%B5-%E6%8F%90%E4%BA%A4-2"><span class="toc-text">
-           二阶段-提交</span></a></li></ol></li></ol></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/author.png" alt="avatar"></div><p class="sidebar-ov-author__text">no code no life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/YUYUN-ZHAO" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="zyy18749810683" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a><a class="sidebar-ov-social-item" href="1024462136" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="mailto:im.yuyunzhao@gmail.com" target="_blank" rel="noopener" data-popover="social.Gmail" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">Gmail</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">141</div><div class="sidebar-ov-state-item__name">文章</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">39</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">39</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2022</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>yuyun zhao</span><span class="footer__devider">|</span><span>沪ICP备2022000458号</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script>function initSearch() {
+           二阶段-提交</span></a></li></ol></li></ol></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/author.png" alt="avatar"></div><p class="sidebar-ov-author__text">no code no life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/YUYUN-ZHAO" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="zyy18749810683" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a><a class="sidebar-ov-social-item" href="1024462136" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="mailto:im.yuyunzhao@gmail.com" target="_blank" rel="noopener" data-popover="social.Gmail" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">Gmail</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">143</div><div class="sidebar-ov-state-item__name">文章</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">39</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">39</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2022</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>yuyun zhao</span><span class="footer__devider">|</span><span>沪ICP备2022000458号</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script>function initSearch() {
   var isXML = true;
   var search_path = 'search.json';
 
