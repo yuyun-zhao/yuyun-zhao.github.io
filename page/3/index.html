@@ -273,7 +273,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <p>模板二适合于在遍历过程中，mid 位置很可能就是符合题意的答案，但是因为在二分过程中没有写“遇到答案立即返回”的代码，因此需要考虑到 mid 就是答案的情况，在 right 更新时要包含 mid，不能将其跳过。</p>
 <blockquote>
 <p>关于二分查找法模板的更多细节：<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://blog.csdn.net/xiao_jj_jj/article/details/106018702" >https://blog.csdn.net/xiao_jj_jj/article/details/106018702</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
-</blockquote></div><div class="post-readmore"><a class="post-readmore__link" href="/2021/11/24/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE%E6%B3%95/"><span class="post-readmore__text">阅读全文</span><span class="post-readmore__icon"><i class="fas fa-long-arrow-alt-right"></i></span></a></div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2021/11/19/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E5%B9%82%E7%AD%89%E6%80%A7%E9%97%AE%E9%A2%98/">【分布式】幂等性问题</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-11-19</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-01-19</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">1.7k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">10分</span></span></div></header><div class="post-body"><div class="post-excerpt">
+</blockquote></div><div class="post-readmore"><a class="post-readmore__link" href="/2021/11/24/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE%E6%B3%95/"><span class="post-readmore__text">阅读全文</span><span class="post-readmore__icon"><i class="fas fa-long-arrow-alt-right"></i></span></a></div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2021/11/19/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E5%B9%82%E7%AD%89%E6%80%A7%E9%97%AE%E9%A2%98/">【分布式】幂等性问题</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-11-19</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-01-19</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">1.8k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">10分</span></span></div></header><div class="post-body"><div class="post-excerpt">
         <h2 id="幂等性问题"   >
           <a href="#幂等性问题" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#幂等性问题"></a> 幂等性问题</h2>
       
@@ -305,8 +305,8 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
           <a href="#幂等性问题解决方案" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#幂等性问题解决方案"></a> 幂等性问题解决方案</h2>
       
 
-        <h3 id="1-token-机制"   >
-          <a href="#1-token-机制" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#1-token-机制"></a> 1. token 机制</h3>
+        <h3 id="1-token令牌机制"   >
+          <a href="#1-token令牌机制" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#1-token令牌机制"></a> 1. token（令牌）机制</h3>
       
 <p>1、服务端提供了发送 <code>token</code> 的接口，我们在分析业务的时候，哪些业务是存在幂等性问题的，就必须在执行业务前，先获取 <code>token</code>，服务器会把 <code>token</code> 保存到 redis 中</p>
 <p>2、然后调用业务接口请求时， 把 <code>token</code> 携带过去，一般放在请求头部</p>
@@ -317,7 +317,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <ol>
 <li>先删除可能导致，业务确实没有执行，重试还得带上之前的 token, 由于防重设计导致，请求还是不能执行</li>
 <li>后删除可能导致，业务处理成功，但是服务闪断，出现超时，没有删除掉token，别人继续重试，导致业务被执行两次</li>
-<li>我们最后设计为先删除 token，如果业务调用失败，就重新获取 token 再次请求</li>
+<li>我们最后设计为先删除 token，如果业务调用失败，就重新获取 token 再次请求（重新跳转回去结算页面或者重新给其生成一个token，保存到redis并还给他</li>
 </ol>
 <p><strong>2、Token 获取，比较 和删除 必须是原子性</strong></p>
 <ol>
@@ -330,15 +330,15 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
           <a href="#2-各种锁机制" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#2-各种锁机制"></a> 2. 各种锁机制</h3>
       
 
-        <h4 id="1-数据库悲观锁"   >
-          <a href="#1-数据库悲观锁" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#1-数据库悲观锁"></a> 1、数据库悲观锁</h4>
+        <h4 id="数据库悲观锁"   >
+          <a href="#数据库悲观锁" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#数据库悲观锁"></a> 数据库悲观锁</h4>
       
-<p>select * from xxx where id = 1 for update;</p>
+<p><code>select * from xxx where id = 1 for update;</code></p>
 <p>for update 查询的时候锁定这条记录 别人需要等待</p>
 <p>悲观锁使用的时候一般伴随事务一起使用，数据锁定时间可能会很长，需要根据实际情况选用，另外需要注意的是，id字段一定是主键或唯一索引，不然可能造成锁表的结果，处理起来会非常麻烦</p>
 
-        <h4 id="2-数据库的乐观锁"   >
-          <a href="#2-数据库的乐观锁" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#2-数据库的乐观锁"></a> 2、数据库的乐观锁</h4>
+        <h4 id="数据库乐观锁"   >
+          <a href="#数据库乐观锁" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#数据库乐观锁"></a> 数据库乐观锁</h4>
       
 <p>这种方法适合在更新的场景中</p>
 <p>update t_goods set count = count - 1,version = version + 1 where good_id = 2 and version = 1</p>
@@ -346,8 +346,8 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <p>到 version 为 1，调用库存服务 version = 2，但返回给订单服务出现了问题，订单服务又一次调用了库存服务，当订单服务传的 version 还是 1，再执行上面的</p>
 <p>sql 语句 就不会执行，因为 version 已经变成 2 了，where 条件不成立，这样就保证了不管调用几次，只会真正处理一次，乐观锁主要使用于处理读多写少的问题</p>
 
-        <h4 id="3-业务层分布锁"   >
-          <a href="#3-业务层分布锁" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#3-业务层分布锁"></a> 3、业务层分布锁</h4>
+        <h4 id="业务层分布式锁"   >
+          <a href="#业务层分布式锁" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#业务层分布式锁"></a> 业务层分布式锁</h4>
       
 <p>如果多个机器可能在同一时间处理相同的数据，比如多台机器定时任务拿到了相同的数据，我们就可以加分布式锁，锁定此数据，处理完成后后释放锁，获取锁必须先判断这个数据是否被处理过</p>
 
@@ -355,15 +355,15 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
           <a href="#3-各种唯一约束" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#3-各种唯一约束"></a> 3. 各种唯一约束</h3>
       
 
-        <h4 id="1-数据库唯一约束"   >
-          <a href="#1-数据库唯一约束" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#1-数据库唯一约束"></a> 1、数据库唯一约束</h4>
+        <h4 id="数据库唯一约束"   >
+          <a href="#数据库唯一约束" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#数据库唯一约束"></a> 数据库唯一约束</h4>
       
 <p>插入数据，应该按照唯一索引进行插入，比如订单号，相同订单就不可能有两条订单插入，我们在数据库层面防止重复</p>
 <p>这个机制利用了数据库的主键唯一约束的特性，解决了 insert场 景时幂等问题，但主键的要求不是自增的主键，这样就需要业务生成全局唯一的主键</p>
 <p>如果是分库分表场景下，路由规则要保证相同请求下，落地在同一个数据库和同一表中，要不然数据库主键约束就不起效果了，因为是不同的数据库和表主键不相关</p>
 
-        <h4 id="2-redis-set-防重"   >
-          <a href="#2-redis-set-防重" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#2-redis-set-防重"></a> 2、redis set 防重</h4>
+        <h4 id="redis-set-防重"   >
+          <a href="#redis-set-防重" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#redis-set-防重"></a> redis set 防重</h4>
       
 <p>很多数据需要处理，只能被处理一次，比如我们可以计算数据的 MD5 将其放入 redis 的</p>
 <p>set,每次处理数据，先看这个 MD5 是否已经存在，存在就不处理</p>
