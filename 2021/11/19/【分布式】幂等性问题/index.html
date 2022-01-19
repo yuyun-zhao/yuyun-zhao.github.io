@@ -1,0 +1,503 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="幂等性问题                             什么是幂等性        接口幂等性就是用户对同一操作发起的一次请求和多次请求结果是一致的，不会因为多次点击而产生了副作用，比如支付场景，用户购买了商品，支付扣款成功，但是返回结果的时候出现了网络异常，此时钱已经扣了，用户再次点击按钮，此时就会进行第二次扣款，返回结果成功，用户查询余额发">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【分布式】幂等性问题">
+<meta property="og:url" content="http://yuyun-zhao.github.io/2021/11/19/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E5%B9%82%E7%AD%89%E6%80%A7%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:site_name" content="yuyun zhao&#39;s blog">
+<meta property="og:description" content="幂等性问题                             什么是幂等性        接口幂等性就是用户对同一操作发起的一次请求和多次请求结果是一致的，不会因为多次点击而产生了副作用，比如支付场景，用户购买了商品，支付扣款成功，但是返回结果的时候出现了网络异常，此时钱已经扣了，用户再次点击按钮，此时就会进行第二次扣款，返回结果成功，用户查询余额发">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E5%B9%82%E7%AD%89%E6%80%A7%E9%97%AE%E9%A2%98/image-20220117164745600.png">
+<meta property="article:published_time" content="2021-11-19T15:01:46.000Z">
+<meta property="article:modified_time" content="2022-01-19T15:12:25.402Z">
+<meta property="article:author" content="yuyun zhao">
+<meta property="article:tag" content="分布式">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yuyun-zhao.github.io/images/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E5%B9%82%E7%AD%89%E6%80%A7%E9%97%AE%E9%A2%98/image-20220117164745600.png"><title>【分布式】幂等性问题 | yuyun zhao's blog</title><link ref="canonical" href="http://yuyun-zhao.github.io/2021/11/19/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E5%B9%82%E7%AD%89%E6%80%A7%E9%97%AE%E9%A2%98/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":true},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"carbon","highlight":"light","wordWrap":false},
+  reward: false,
+  fancybox: true,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: {"avoidBanner":false},
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"复制","copySuccess":"复制成功","copyError":"复制失败"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【分布式】幂等性问题</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-11-19</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-01-19</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">1.7k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">10分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body">
+        <h2 id="幂等性问题"   >
+          <a href="#幂等性问题" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#幂等性问题"></a> 幂等性问题</h2>
+      
+
+        <h3 id="什么是幂等性"   >
+          <a href="#什么是幂等性" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#什么是幂等性"></a> 什么是幂等性</h3>
+      
+<p><strong>接口幂等性就是用户对同一操作发起的一次请求和多次请求结果是一致的</strong>，不会因为多次点击而产生了副作用，比如支付场景，用户购买了商品，支付扣款成功，但是返回结果的时候出现了网络异常，此时钱已经扣了，用户再次点击按钮，此时就会进行第二次扣款，返回结果成功，用户查询余额发现多扣钱了，流水记录也变成了两条。这就没有保证接口幂等性</p>
+<p>哪些情况需要防止幂等性问题：</p>
+<ul>
+<li>用户多次点击按钮</li>
+<li>用户页面回退再次提交</li>
+<li>微服务互相调用，由于网络问题，导致请求失败，feign 触发重试机制导致发送重复请求</li>
+</ul>
+<p>以 SQL 为例，有些操作是天然<strong>幂等</strong>的：</p>
+<ul>
+<li><code>SELECT * FROM table WHERE id =?</code> 无论执行多少次都不会改变状态</li>
+<li><code>UPDATE tab1 SET col1=1 WHERE col2=2</code> 无论执行多少次状态都是一致的</li>
+<li><code>DELETE FROM user WHERE userid=1</code> 无论执行多少次状态都是一致的</li>
+<li><code>INSERT INTO user(userid, name) VALUES(1, 'a' )</code> 若 <code>userid</code> 为唯一主键，则无论执行多少次，都只会插入一条用户记录</li>
+</ul>
+<p>不是幂等的操作：</p>
+<ul>
+<li><code>UPDATE tab1 SET col1=col1+1 WHERE col2=2</code> 每次执行的结果都会发生变化，不是幂等的</li>
+<li><code>INSERT INTO user(userid, name) VALUES(1, 'a' )</code> 若 <code>userid</code> 不是唯一主键，则执行多次会重复插入相同的用户记录，不具备幂等性。</li>
+</ul>
+
+        <h2 id="幂等性问题解决方案"   >
+          <a href="#幂等性问题解决方案" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#幂等性问题解决方案"></a> 幂等性问题解决方案</h2>
+      
+
+        <h3 id="1-token-机制"   >
+          <a href="#1-token-机制" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#1-token-机制"></a> 1. token 机制</h3>
+      
+<p>1、服务端提供了发送 <code>token</code> 的接口，我们在分析业务的时候，哪些业务是存在幂等性问题的，就必须在执行业务前，先获取 <code>token</code>，服务器会把 <code>token</code> 保存到 redis 中</p>
+<p>2、然后调用业务接口请求时， 把 <code>token</code> 携带过去，一般放在请求头部</p>
+<p>3、服务器判断 <code>token</code> 是否存在 <code>redis</code>，存在表示第一次请求，然后删除 <code>token</code>，继续执行业务</p>
+<p>4、如果判断 <code>token</code> 不存在 <code>redis</code> 中，就表示重复操作，直接返回重复标记给 <code>client</code>，这样就保证了业务代码，不被重复执行</p>
+<p>危险性：</p>
+<p><strong>1、先删除 token 还是后删除 token：</strong></p>
+<ol>
+<li>先删除可能导致，业务确实没有执行，重试还得带上之前的 token, 由于防重设计导致，请求还是不能执行</li>
+<li>后删除可能导致，业务处理成功，但是服务闪断，出现超时，没有删除掉token，别人继续重试，导致业务被执行两次</li>
+<li>我们最后设计为先删除 token，如果业务调用失败，就重新获取 token 再次请求</li>
+</ol>
+<p><strong>2、Token 获取，比较 和删除 必须是原子性</strong></p>
+<ol>
+<li>redis.get（token），token.equals、redis.del（token）,如果说这两个操作都不是原子，可能导致，在高并发下，都 get 同样的数据，判断都成功，继续业务并发执行</li>
+<li>可以在 redis 使用 lua 脚本完成这个操作</li>
+</ol>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;if redis.call(&#x27;get&#x27;,KEYS[1]) == ARGV[1] then return redis.call(&#x27;del&#x27;,KEYS[1]) else return 0 end&quot;</span></span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="2-各种锁机制"   >
+          <a href="#2-各种锁机制" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#2-各种锁机制"></a> 2. 各种锁机制</h3>
+      
+
+        <h4 id="1-数据库悲观锁"   >
+          <a href="#1-数据库悲观锁" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#1-数据库悲观锁"></a> 1、数据库悲观锁</h4>
+      
+<p>select * from xxx where id = 1 for update;</p>
+<p>for update 查询的时候锁定这条记录 别人需要等待</p>
+<p>悲观锁使用的时候一般伴随事务一起使用，数据锁定时间可能会很长，需要根据实际情况选用，另外需要注意的是，id字段一定是主键或唯一索引，不然可能造成锁表的结果，处理起来会非常麻烦</p>
+
+        <h4 id="2-数据库的乐观锁"   >
+          <a href="#2-数据库的乐观锁" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#2-数据库的乐观锁"></a> 2、数据库的乐观锁</h4>
+      
+<p>这种方法适合在更新的场景中</p>
+<p>update t_goods set count = count - 1,version = version + 1 where good_id = 2 and version = 1</p>
+<p>根据 version 版本，也就是在操作数据库存前先获取当前商品的 version 版本号，然后操作的时候带上 version 版本号，我们梳理下，我们第一次操作库存时，得</p>
+<p>到 version 为 1，调用库存服务 version = 2，但返回给订单服务出现了问题，订单服务又一次调用了库存服务，当订单服务传的 version 还是 1，再执行上面的</p>
+<p>sql 语句 就不会执行，因为 version 已经变成 2 了，where 条件不成立，这样就保证了不管调用几次，只会真正处理一次，乐观锁主要使用于处理读多写少的问题</p>
+
+        <h4 id="3-业务层分布锁"   >
+          <a href="#3-业务层分布锁" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#3-业务层分布锁"></a> 3、业务层分布锁</h4>
+      
+<p>如果多个机器可能在同一时间处理相同的数据，比如多台机器定时任务拿到了相同的数据，我们就可以加分布式锁，锁定此数据，处理完成后后释放锁，获取锁必须先判断这个数据是否被处理过</p>
+
+        <h3 id="3-各种唯一约束"   >
+          <a href="#3-各种唯一约束" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#3-各种唯一约束"></a> 3. 各种唯一约束</h3>
+      
+
+        <h4 id="1-数据库唯一约束"   >
+          <a href="#1-数据库唯一约束" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#1-数据库唯一约束"></a> 1、数据库唯一约束</h4>
+      
+<p>插入数据，应该按照唯一索引进行插入，比如订单号，相同订单就不可能有两条订单插入，我们在数据库层面防止重复</p>
+<p>这个机制利用了数据库的主键唯一约束的特性，解决了 insert场 景时幂等问题，但主键的要求不是自增的主键，这样就需要业务生成全局唯一的主键</p>
+<p>如果是分库分表场景下，路由规则要保证相同请求下，落地在同一个数据库和同一表中，要不然数据库主键约束就不起效果了，因为是不同的数据库和表主键不相关</p>
+
+        <h4 id="2-redis-set-防重"   >
+          <a href="#2-redis-set-防重" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#2-redis-set-防重"></a> 2、redis set 防重</h4>
+      
+<p>很多数据需要处理，只能被处理一次，比如我们可以计算数据的 MD5 将其放入 redis 的</p>
+<p>set,每次处理数据，先看这个 MD5 是否已经存在，存在就不处理</p>
+
+        <h3 id="4-防重表"   >
+          <a href="#4-防重表" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#4-防重表"></a> 4. 防重表</h3>
+      
+<p>使用订单表 <code>orderNo</code> 做为去重表的唯一索引，把唯一索引插入去重表，再进行业务操作，且他们在同一个事务中，这样就保证了重复请求时，因为去重表有唯一</p>
+<p>约束，导致请求失败，避免了幂等性等问题，去重表和业务表应该在同一个库中，这样就保证了在同一个事务，即使业务操作失败，也会把去重表的数据回滚，这</p>
+<p>个很好的保证了数据的一致性，</p>
+<p>redis防重也算</p>
+
+        <h3 id="5-全局请求唯一id"   >
+          <a href="#5-全局请求唯一id" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#5-全局请求唯一id"></a> 5. 全局请求唯一id</h3>
+      
+<p>调用接口时，生成一个唯一的id，redis 将数据保存到集合中（去重），存在即处理过，可以使用 nginx 设置每一个请求一个唯一id</p>
+<p>proxy_set_header X-Request-Id $Request_id</p>
+<blockquote>
+<p>feign 防止重试可以使用这个方法。但是页面的重复提交防止不了</p>
+</blockquote>
+<p>为订单号字段 <code>order_sn</code> 添加唯一性索引 <code>UNIQUE</code>，从而做到数据库层面的幂等性：</p>
+<p><img src="/images/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E5%B9%82%E7%AD%89%E6%80%A7%E9%97%AE%E9%A2%98/image-20220117164745600.png" alt="image-20220117164745600" /></p>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yuyun-zhao.github.io">yuyun zhao</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yuyun-zhao.github.io/2021/11/19/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E5%B9%82%E7%AD%89%E6%80%A7%E9%97%AE%E9%A2%98/">http://yuyun-zhao.github.io/2021/11/19/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E5%B9%82%E7%AD%89%E6%80%A7%E9%97%AE%E9%A2%98/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2021/11/24/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE%E6%B3%95/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">【算法】二分查找法</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2021/11/18/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%80%E8%87%B4%E6%80%A7/"><span class="paginator-prev__text">【分布式】分布式一致性</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B9%82%E7%AD%89%E6%80%A7%E9%97%AE%E9%A2%98"><span class="toc-text">
+           幂等性问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%B9%82%E7%AD%89%E6%80%A7"><span class="toc-text">
+           什么是幂等性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B9%82%E7%AD%89%E6%80%A7%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-text">
+           幂等性问题解决方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-token-%E6%9C%BA%E5%88%B6"><span class="toc-text">
+           1. token 机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%90%84%E7%A7%8D%E9%94%81%E6%9C%BA%E5%88%B6"><span class="toc-text">
+           2. 各种锁机制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%95%B0%E6%8D%AE%E5%BA%93%E6%82%B2%E8%A7%82%E9%94%81"><span class="toc-text">
+           1、数据库悲观锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E4%B9%90%E8%A7%82%E9%94%81"><span class="toc-text">
+           2、数据库的乐观锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E4%B8%9A%E5%8A%A1%E5%B1%82%E5%88%86%E5%B8%83%E9%94%81"><span class="toc-text">
+           3、业务层分布锁</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%90%84%E7%A7%8D%E5%94%AF%E4%B8%80%E7%BA%A6%E6%9D%9F"><span class="toc-text">
+           3. 各种唯一约束</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%94%AF%E4%B8%80%E7%BA%A6%E6%9D%9F"><span class="toc-text">
+           1、数据库唯一约束</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-redis-set-%E9%98%B2%E9%87%8D"><span class="toc-text">
+           2、redis set 防重</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E9%98%B2%E9%87%8D%E8%A1%A8"><span class="toc-text">
+           4. 防重表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E5%85%A8%E5%B1%80%E8%AF%B7%E6%B1%82%E5%94%AF%E4%B8%80id"><span class="toc-text">
+           5. 全局请求唯一id</span></a></li></ol></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/author.png" alt="avatar"></div><p class="sidebar-ov-author__text">no code no life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/YUYUN-ZHAO" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="zyy18749810683" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a><a class="sidebar-ov-social-item" href="1024462136" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="mailto:im.yuyunzhao@gmail.com" target="_blank" rel="noopener" data-popover="social.Gmail" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">Gmail</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">144</div><div class="sidebar-ov-state-item__name">文章</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">39</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">39</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2022</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>yuyun zhao</span><span class="footer__devider">|</span><span>沪ICP备2022000458号</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script>function initSearch() {
+  var isXML = true;
+  var search_path = 'search.json';
+
+  if (!search_path) {
+    search_path = 'search.xml';
+  } else if (/json$/i.test(search_path)) {
+    isXML = false;
+  }
+
+  var path = '/' + search_path;
+  $.ajax({
+    url: path,
+    dataType: isXML ? 'xml' : 'json',
+    async: true,
+    success: function (res) {
+      var datas = isXML ? $('entry', res).map(function () {
+        // 将 XML 转为 JSON
+        return {
+          title: $('title', this).text(),
+          content: $('content', this).text(),
+          url: $('url', this).text()
+        };
+      }).get() : res;
+      var $input = $('.search-input input');
+      var $result = $('.search-results');
+      // 搜索对象（标题、内容）的权重，影响显示顺序
+      var WEIGHT = { title: 100, content: 1 };
+      var searchPost = function () {
+        var searchText = $input.val().toLowerCase().trim();
+        // 根据空白字符分隔关键字
+        var keywords = searchText.split(/[\s]+/);
+        // 搜索结果
+        var matchPosts = [];
+
+        // 有多个关键字时，将原文字整个保存下来
+        if (keywords.length > 1) {
+          keywords.push(searchText);
+        }
+        // 防止未输入字符时搜索
+        if (searchText.length > 0) {
+          datas.forEach(function (data) {
+            var isMatch  = false;
+            // 没有标题的文章使用预设的 i18n 变量代替
+            var title = (data.title && data.title.trim()) || '[ 文章无标题 ]';
+            var titleLower = title && title.toLowerCase();
+            // 删除 HTML 标签 和 所有空白字符
+            var content = data.content && data.content.replace(/<[^>]+>/g, '');
+            var contentLower = content && content.toLowerCase();
+            // 删除重复的 /
+            var postURL = data.url && decodeURI(data.url).replace(/\/{2,}/g, '/');
+            // 标题中匹配到的关键词
+            var titleHitSlice = [];
+            // 内容中匹配到的关键词
+            var contentHitSlice = [];
+
+            keywords.forEach(function (keyword) {
+              /**
+              * 获取匹配的关键词的索引
+              * @param {String} keyword 要匹配的关键字
+              * @param {String} text 原文字
+              * @param {Boolean} caseSensitive 是否区分大小写
+              * @param {Number} weight 匹配对象的权重。权重大的优先显示
+              * @return {Array}
+              */
+              function getIndexByword (word, text, caseSensitive, weight) {
+                if (!word || !text) {
+                  return [];
+                };
+
+                var startIndex = 0; // 每次匹配的开始索引
+                var index = -1;     // 匹配到的索引值
+                var result = [];    // 匹配结果
+
+                if (!caseSensitive) {
+                  word = word.toLowerCase();
+                  text = text.toLowerCase();
+                }
+
+                while((index = text.indexOf(word, startIndex)) !== -1) {
+                  var hasMatch = false;
+                  // 索引位置相同的关键词，保留长度较长的
+                  titleHitSlice.forEach(function (hit) {
+                    if (hit.index === index && hit.word.length < word.length) {
+                      hit.word = word;
+                      hasMatch = true;
+                    }
+                  });
+                  startIndex = index + word.length;
+                  !hasMatch && result.push({ index: index, word: word, weight: weight });
+                }
+                return result;
+              }
+              titleHitSlice = titleHitSlice.concat(getIndexByword(keyword, titleLower, false, WEIGHT.title));
+              contentHitSlice = contentHitSlice.concat(getIndexByword(keyword, contentLower, false, WEIGHT.content));
+            });
+
+            var hitTitle = titleHitSlice.length;
+            var hitContent = contentHitSlice.length;
+
+            if (hitTitle > 0 || hitContent > 0) {
+              isMatch = true;
+            }
+            if (isMatch) {
+              ;[titleHitSlice, contentHitSlice].forEach(function (hit) {
+                // 按照匹配文字的索引的递增顺序排序
+                hit.sort(function (left, right) {
+                  return left.index - right.index;
+                });
+              });
+              /**
+              * 给文本中匹配到的关键词添加标记，从而进行高亮显示
+              * @param {String} text 原文本
+              * @param {Array} hitSlice 匹配项的索引信息
+              * @param {Number} start 开始索引
+              * @param {Number} end 结束索引
+              * @return {String}
+              */
+              function highlightKeyword (text, hitSlice, start, end) {
+                if (!text || !hitSlice || !hitSlice.length) {
+                  return;
+                }
+
+                var result = '';
+                var startIndex = start;
+                var endIndex = end;
+                hitSlice.forEach(function (hit) {
+                  if (hit.index < startIndex) {
+                    return;
+                  }
+
+                  var hitWordEnd = hit.index + hit.word.length;
+                  result += text.slice(startIndex, hit.index);
+                  result += '<b>' + text.slice(hit.index, hitWordEnd) + '</b>';
+                  startIndex = hitWordEnd;
+                });
+                result += text.slice(startIndex, endIndex);
+                return result;
+              }
+
+              var postData = {};
+              // 文章总的搜索权重
+              var postWeight = titleHitSlice.length * WEIGHT.title + contentHitSlice.length * WEIGHT.content;
+              // 标记匹配关键词后的标题
+              var postTitle = highlightKeyword(title, titleHitSlice, 0, title.length) || title;
+              // 标记匹配关键词后的内容
+              var postContent;
+              // 显示内容的长度
+              var SHOW_WORD_LENGTH = 200;
+              // 命中关键词前的字符显示长度
+              var SHOW_WORD_FRONT_LENGTH = 20;
+              var SHOW_WORD_END_LENGTH = SHOW_WORD_LENGTH - SHOW_WORD_FRONT_LENGTH;
+
+              // 截取匹配的第一个字符，前后共 200 个字符来显示
+              if (contentHitSlice.length > 0) {
+                var firstIndex = contentHitSlice[0].index;
+                var start = firstIndex > SHOW_WORD_FRONT_LENGTH ? firstIndex - SHOW_WORD_FRONT_LENGTH : 0;
+                var end = firstIndex + SHOW_WORD_END_LENGTH;
+                postContent = highlightKeyword(content, contentHitSlice, start, end);
+              } else { // 未匹配到内容，直接截取前 200 个字符来显示
+                postContent = content.slice(0, SHOW_WORD_LENGTH);
+              }
+              postData.title = postTitle;
+              postData.content = postContent;
+              postData.url = postURL;
+              postData.weight = postWeight;
+              matchPosts.push(postData);
+            }
+          });
+        }
+
+        var resultInnerHtml = '';
+        if (matchPosts.length) {
+          // 按权重递增的顺序排序，使权重大的优先显示
+          matchPosts.sort(function (left, right) {
+            return right.weight - left.weight;
+          });
+          resultInnerHtml += '<ul>';
+          matchPosts.forEach(function (post) {
+            resultInnerHtml += '<li><a class="search-results-title" href="' + post.url + '">';
+            resultInnerHtml += post.title;
+            resultInnerHtml += '</a><div class="search-results-content">';
+            resultInnerHtml += post.content;
+            resultInnerHtml += '</div></li>';
+          });
+          resultInnerHtml += '</ul>';
+        } else {
+          resultInnerHtml += '<div class="search-results-none"><i class="far fa-meh"></i></div>';
+        }
+        $result.html(resultInnerHtml);
+      };
+      $input.on('input', searchPost);
+      $input.on('keyup', function (e) {
+        if (e.keyCode === Stun.utils.codeToKeyCode('Enter')) {
+          searchPost();
+        }
+      });
+    }
+  });
+}
+
+function closeSearch () {
+  $('body').css({ overflow: 'auto' });
+  $('.search-popup').css({ display: 'none' });
+  $('.search-mask').css({ display: 'none' });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+  Stun.utils.pjaxReloadLocalSearch = function () {
+    $('.header-nav-search').on('click', function (e) {
+      e.stopPropagation();
+      $('body').css('overflow', 'hidden');
+      $('.search-popup')
+        .velocity('stop')
+        .velocity('transition.expandIn', {
+          duration: 300,
+          complete: function () {
+            $('.search-popup input').focus();
+          }
+        });
+      $('.search-mask')
+        .velocity('stop')
+        .velocity('transition.fadeIn', {
+          duration: 300
+        });
+
+      initSearch();
+    });
+    $('.search-mask, .search-close').on('click', function () {
+      closeSearch();
+    });
+    $(document).on('keydown', function (e) {
+      // Escape <=> 27
+      if (e.keyCode === Stun.utils.codeToKeyCode('Escape')) {
+        closeSearch();
+      }
+    });
+  };
+
+  Stun.utils.pjaxReloadLocalSearch();
+}, false);
+
+function safeOpenUrl(url) {
+  var newTab = window.open();
+  newTab.opener = null;
+  newTab.location = url;
+}
+
+function extSearch(engine) {
+  var engines = {
+    google: 'https://www.google.com/search?q=',
+    bing: 'https://cn.bing.com/search?q=',
+    baidu: 'https://www.baidu.com/s?ie=UTF-8&wd=',
+  };
+  var host = window.location.host;
+  var query = $('.search-input input').val().toLowerCase().trim();
+  var uri = engines[engine] + query + ' site:' + host;
+
+  if (query) {
+    safeOpenUrl(uri);
+  } else {
+    Stun.utils.popAlert('warning', '请输入字符');
+  }
+}
+
+var assistSearchList = window.CONFIG.assistSearch;
+
+if (Array.isArray(assistSearchList)) {
+  assistSearchList.forEach(function (name) {
+    document.querySelector('.search-btns-item--' + name).addEventListener('click', function () {
+      extSearch(name);
+    }, false);
+  });
+}</script><script src="https://cdn.jsdelivr.net/npm/pjax@latest/pjax.min.js"></script><script>window.addEventListener('DOMContentLoaded', function () {
+  var pjax = new Pjax({"selectors":["head title","#main",".pjax-reload"],"history":true,"scrollTo":false,"scrollRestoration":false,"cacheBust":false,"debug":false,"currentUrlFullReload":false,"timeout":0});
+  // 加载进度条的计时器
+  var loadingTimer = null;
+
+  // 重置页面 Y 方向上的滚动偏移量
+  document.addEventListener('pjax:send', function () {
+    $('.header-nav-menu').removeClass('show');
+    if (CONFIG.pjax && CONFIG.pjax.avoidBanner) {
+      $('html').velocity('scroll', {
+        duration: 500,
+        offset: $('#header').height(),
+        easing: 'easeInOutCubic'
+      });
+    }
+
+    var loadingBarWidth = 20;
+    var MAX_LOADING_WIDTH = 95;
+
+    $('.loading-bar').addClass('loading');
+    $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    clearInterval(loadingTimer);
+    loadingTimer = setInterval(function () {
+      loadingBarWidth += 3;
+      if (loadingBarWidth > MAX_LOADING_WIDTH) {
+        loadingBarWidth = MAX_LOADING_WIDTH;
+      }
+      $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    }, 500);
+  }, false);
+
+  window.addEventListener('pjax:complete', function () {
+    clearInterval(loadingTimer);
+    $('.loading-bar__progress').css('width', '100%');
+    $('.loading-bar').removeClass('loading');
+    setTimeout(function () {
+      $('.loading-bar__progress').css('width', '0');
+    }, 400);
+    $('link[rel=prefetch], script[data-pjax-rm]').each(function () {
+      $(this).remove();
+    });
+    $('script[data-pjax], #pjax-reload script').each(function () {
+      $(this).parent().append($(this).remove());
+    });
+
+    if (Stun.utils.pjaxReloadBoot) {
+      Stun.utils.pjaxReloadBoot();
+    }
+    if (Stun.utils.pjaxReloadScroll) {
+      Stun.utils.pjaxReloadScroll();
+    }
+    if (Stun.utils.pjaxReloadSidebar) {
+      Stun.utils.pjaxReloadSidebar();
+    }
+    if (false) {
+      if (Stun.utils.pjaxReloadHeader) {
+        Stun.utils.pjaxReloadHeader();
+      }
+      if (Stun.utils.pjaxReloadScrollIcon) {
+        Stun.utils.pjaxReloadScrollIcon();
+      }
+      if (Stun.utils.pjaxReloadLocalSearch) {
+        Stun.utils.pjaxReloadLocalSearch();
+      }
+    }
+  }, false);
+}, false);</script><div id="pjax-reload"><link href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" rel="stylesheet" type="text/css"><link href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/copy-tex.css" rel="stylesheet" type="text/css"><script src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/copy-tex.min.js"></script><script src="https://cdn.jsdelivr.net/gh/sukkaw/busuanzi@latest/bsz.pure.mini.js" async></script></div><script src="/js/utils.js?v=2.6.2"></script><script src="/js/stun-boot.js?v=2.6.2"></script><script src="/js/scroll.js?v=2.6.2"></script><script src="/js/header.js?v=2.6.2"></script><script src="/js/sidebar.js?v=2.6.2"></script><script type="application/json" src="/search.json"></script></body></html>
