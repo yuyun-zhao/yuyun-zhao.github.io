@@ -273,7 +273,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <p>模板二适合于在遍历过程中，mid 位置很可能就是符合题意的答案，但是因为在二分过程中没有写“遇到答案立即返回”的代码，因此需要考虑到 mid 就是答案的情况，在 right 更新时要包含 mid，不能将其跳过。</p>
 <blockquote>
 <p>关于二分查找法模板的更多细节：<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://blog.csdn.net/xiao_jj_jj/article/details/106018702" >https://blog.csdn.net/xiao_jj_jj/article/details/106018702</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
-</blockquote></div><div class="post-readmore"><a class="post-readmore__link" href="/2021/11/24/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE%E6%B3%95/"><span class="post-readmore__text">阅读全文</span><span class="post-readmore__icon"><i class="fas fa-long-arrow-alt-right"></i></span></a></div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2021/11/19/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E5%B9%82%E7%AD%89%E6%80%A7%E9%97%AE%E9%A2%98/">【分布式】幂等性问题</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-11-19</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-01-19</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">1.8k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">10分</span></span></div></header><div class="post-body"><div class="post-excerpt">
+</blockquote></div><div class="post-readmore"><a class="post-readmore__link" href="/2021/11/24/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE%E6%B3%95/"><span class="post-readmore__text">阅读全文</span><span class="post-readmore__icon"><i class="fas fa-long-arrow-alt-right"></i></span></a></div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2021/11/19/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E5%B9%82%E7%AD%89%E6%80%A7%E9%97%AE%E9%A2%98/">【分布式】幂等性问题</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-11-19</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-01-20</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">2.2k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">12分</span></span></div></header><div class="post-body"><div class="post-excerpt">
         <h2 id="幂等性问题"   >
           <a href="#幂等性问题" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#幂等性问题"></a> 幂等性问题</h2>
       
@@ -308,7 +308,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
         <h3 id="1-token令牌机制"   >
           <a href="#1-token令牌机制" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#1-token令牌机制"></a> 1. token（令牌）机制</h3>
       
-<p>1、服务端提供了发送 <code>token</code> 的接口，我们在分析业务的时候，哪些业务是存在幂等性问题的，就必须在执行业务前，先获取 <code>token</code>，服务器会把 <code>token</code> 保存到 redis 中</p>
+<p>1、在执行业务前，先获取 <code>token</code>，服务器会把 <code>token</code> 保存到 redis 中</p>
 <p>2、然后调用业务接口请求时， 把 <code>token</code> 携带过去，一般放在请求头部</p>
 <p>3、服务器判断 <code>token</code> 是否存在 <code>redis</code>，存在表示第一次请求，然后删除 <code>token</code>，继续执行业务</p>
 <p>4、如果判断 <code>token</code> 不存在 <code>redis</code> 中，就表示重复操作，直接返回重复标记给 <code>client</code>，这样就保证了业务代码，不被重复执行</p>
@@ -333,23 +333,21 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
         <h4 id="数据库悲观锁"   >
           <a href="#数据库悲观锁" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#数据库悲观锁"></a> 数据库悲观锁</h4>
       
-<p><code>select * from xxx where id = 1 for update;</code></p>
-<p>for update 查询的时候锁定这条记录 别人需要等待</p>
-<p>悲观锁使用的时候一般伴随事务一起使用，数据锁定时间可能会很长，需要根据实际情况选用，另外需要注意的是，id字段一定是主键或唯一索引，不然可能造成锁表的结果，处理起来会非常麻烦</p>
+<p>查询时添加悲观锁：<code>SELECT * FROM xxx WHERE id = 1 FOR UPDATE</code>。这样在查询时就会给该行加悲观锁，其他请求都需要阻塞等待。</p>
+<p><mark>为什么SELECT也要加锁，等看完MySQL高级篇后解答</mark></p>
+<p>悲观锁通常伴随<strong>事务</strong>一起使用，数据锁定时间可能会很长，需要根据实际情况选择是否使用。另外需要注意的是：<strong>id 字段一定是主键或唯一索引</strong>，不然可能造成<strong>锁表</strong>的结果，处理起来会非常麻烦。</p>
 
         <h4 id="数据库乐观锁"   >
           <a href="#数据库乐观锁" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#数据库乐观锁"></a> 数据库乐观锁</h4>
       
-<p>这种方法适合在更新的场景中</p>
-<p>update t_goods set count = count - 1,version = version + 1 where good_id = 2 and version = 1</p>
-<p>根据 version 版本，也就是在操作数据库存前先获取当前商品的 version 版本号，然后操作的时候带上 version 版本号，我们梳理下，我们第一次操作库存时，得</p>
-<p>到 version 为 1，调用库存服务 version = 2，但返回给订单服务出现了问题，订单服务又一次调用了库存服务，当订单服务传的 version 还是 1，再执行上面的</p>
-<p>sql 语句 就不会执行，因为 version 已经变成 2 了，where 条件不成立，这样就保证了不管调用几次，只会真正处理一次，乐观锁主要使用于处理读多写少的问题</p>
+<p>这种方法适合在更新的场景中：</p>
+<figure class="highlight sql"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UPDATE t_goods <span class="keyword">SET</span> count <span class="operator">=</span> count <span class="operator">-</span> <span class="number">1</span>, version <span class="operator">=</span> version <span class="operator">+</span> <span class="number">1</span> <span class="keyword">WHERE</span> good_id <span class="operator">=</span> <span class="number">2</span> <span class="keyword">and</span> version <span class="operator">=</span> <span class="number">1</span></span><br></pre></td></tr></table></div></figure>
+<p>根据 <code>version</code> 版本，也就是在操作数据库存前先获取当前商品的 <code>version</code> 版本号，然后操作的时候带上 <code>version</code> 版本号，这样就保证了不管执行几次该语句，只会真正处理一次。<strong>乐观锁主要使用于处理读多写少的问题</strong></p>
 
         <h4 id="业务层分布式锁"   >
           <a href="#业务层分布式锁" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#业务层分布式锁"></a> 业务层分布式锁</h4>
       
-<p>如果多个机器可能在同一时间处理相同的数据，比如多台机器定时任务拿到了相同的数据，我们就可以加分布式锁，锁定此数据，处理完成后后释放锁，获取锁必须先判断这个数据是否被处理过</p>
+<p>如果多个机器可能在同一时间处理相同的数据，比如多台机器定时任务拿到了相同的数据，我们就可以加分布式锁锁定此数据，处理完成后后释放锁，获取锁必须先判断这个数据是否被处理过。</p>
 
         <h3 id="3-各种唯一约束"   >
           <a href="#3-各种唯一约束" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#3-各种唯一约束"></a> 3. 各种唯一约束</h3>
@@ -358,34 +356,35 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
         <h4 id="数据库唯一约束"   >
           <a href="#数据库唯一约束" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#数据库唯一约束"></a> 数据库唯一约束</h4>
       
-<p>插入数据，应该按照唯一索引进行插入，比如订单号，相同订单就不可能有两条订单插入，我们在数据库层面防止重复</p>
-<p>这个机制利用了数据库的主键唯一约束的特性，解决了 insert场 景时幂等问题，但主键的要求不是自增的主键，这样就需要业务生成全局唯一的主键</p>
-<p>如果是分库分表场景下，路由规则要保证相同请求下，落地在同一个数据库和同一表中，要不然数据库主键约束就不起效果了，因为是不同的数据库和表主键不相关</p>
+<p>插入数据时应该按照<strong>唯一索引</strong>进行插入。比如为订单号字段 <code>order_sn</code> 添加唯一索引 <code>UNIQUE</code>，这样相同的订单就不可能插入两次，从而实现在数据库层面上防止重复插入。同时<strong>需要业务生成全局唯一的字段值</strong>，以保证不会同一个订单不会重复插入到数据库中。</p>
+<p>示例：为订单号字段 <code>order_sn</code> 添加唯一性索引 <code>UNIQUE</code>，从而做到数据库层面的幂等性：</p>
+<p><img src="/images/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E5%B9%82%E7%AD%89%E6%80%A7%E9%97%AE%E9%A2%98/image-20220117164745600.png" alt="image-20220117164745600" /></p>
+<p>这个机制利用了数据库的唯一索引约束的特性，解决了插入场景的幂等性问题。如果将主键设置为唯一索引，则需要注意主键不能设置为自增的。</p>
+<p>如果是分库分表场景下，设置的路由规则要保证：<strong>相同的请求必须路由到同一个数据库和同一表中</strong>，不然数据库的唯一索引约束就不起效果了。</p>
 
         <h4 id="redis-set-防重"   >
-          <a href="#redis-set-防重" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#redis-set-防重"></a> redis set 防重</h4>
+          <a href="#redis-set-防重" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#redis-set-防重"></a> Redis Set 防重</h4>
       
-<p>很多数据需要处理，只能被处理一次，比如我们可以计算数据的 MD5 将其放入 redis 的</p>
-<p>set,每次处理数据，先看这个 MD5 是否已经存在，存在就不处理</p>
+<p>一些不能重复的数据可以存放到 Redis 的 Set 结构中，例如百度网盘在防止重复上传相同文件数据时的做法是：第一次保存数据时先计算文件数据的 MD5 值将其放入 Redis 的 Set 中。之后再想重复上传该文件时，先去 Redis 中查看这个 MD5 值是否已经存在，存在就代表该文件数据之前上传过了，不需要再上传了。</p>
 
         <h3 id="4-防重表"   >
           <a href="#4-防重表" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#4-防重表"></a> 4. 防重表</h3>
       
-<p>使用订单表 <code>orderNo</code> 做为去重表的唯一索引，把唯一索引插入去重表，再进行业务操作，且他们在同一个事务中，这样就保证了重复请求时，因为去重表有唯一</p>
-<p>约束，导致请求失败，避免了幂等性等问题，去重表和业务表应该在同一个库中，这样就保证了在同一个事务，即使业务操作失败，也会把去重表的数据回滚，这</p>
-<p>个很好的保证了数据的一致性，</p>
-<p>redis防重也算</p>
+<p>防重不仅可以在 Redis 里做，也可以使用数据库实现。</p>
+<p>例如：在取消订单后执行解锁库存时，一旦解锁了库存，就需要在<strong>防重表</strong>（保存订单号和库存信息，该表设置了订单号 <code>order_sn</code> 为唯一索引 <code>UNIQUE</code>）里插入一条数据，表示该订单已经解锁了库存。之后重复解锁时再想插入到该防重表就会报错（因为设置了订单号的唯一索引 <code>UNIQUE</code>），此时就知道不能再解锁库存了。只有插入到该防重表成功，才可以执行解锁库存的业务。</p>
+<p>注意：<strong>去重表和业务表应该在同一个库中</strong>，这样就保证了在同一个事务，<strong>即使业务操作失败，也会把去重表的数据回滚</strong>，这个很好的保证了数据的一致性。</p>
 
-        <h3 id="5-全局请求唯一id"   >
-          <a href="#5-全局请求唯一id" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#5-全局请求唯一id"></a> 5. 全局请求唯一id</h3>
+        <h3 id="5-全局请求唯一-id"   >
+          <a href="#5-全局请求唯一-id" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#5-全局请求唯一-id"></a> 5. 全局请求唯一 id</h3>
       
-<p>调用接口时，生成一个唯一的id，redis 将数据保存到集合中（去重），存在即处理过，可以使用 nginx 设置每一个请求一个唯一id</p>
-<p>proxy_set_header X-Request-Id $Request_id</p>
-<blockquote>
-<p>feign 防止重试可以使用这个方法。但是页面的重复提交防止不了</p>
-</blockquote>
-<p>为订单号字段 <code>order_sn</code> 添加唯一性索引 <code>UNIQUE</code>，从而做到数据库层面的幂等性：</p>
-<p><img src="/images/%E3%80%90%E5%88%86%E5%B8%83%E5%BC%8F%E3%80%91%E5%B9%82%E7%AD%89%E6%80%A7%E9%97%AE%E9%A2%98/image-20220117164745600.png" alt="image-20220117164745600" /></p>
+<p>前提：Feign 一旦远程调用失败后，就会<strong>不断重试发出相同请求</strong>。可能实际上远程服务已经收到了调用请求并且执行了业务，但是因为网络延迟等因素，Feign 认为没有调用成功，从而发出了同样的请求。</p>
+<p>为了避免这种情况的发生，我们可以在 Feign <strong>远程调用</strong>接口前，先生成一个唯一的 <code>uuid</code>，并<strong>存入到 Redis 的 Set 结构中</strong>（例如一个用户保存一个 Set，其内保存了该用户所有远程调用请求的 <code>uuid</code>，能够保证不重复）。远程服务在执行业务前先检查 Redis 中该用户的 Set 里是否存在该 <code>uuid</code>，如果存在即代表当前远程请求之前就被处理过了（该请求被重复调用了），那么就不再执行了。</p>
+<p>注意：这种方式<strong>只适用于 Feign 的远程调用防重</strong>。如果是<strong>前端页面发来的重复请求</strong>，<strong>是无法防住的</strong>（需要使用上面的<strong>令牌机制</strong>），因为即使使用 Nginx 给每个前端发来的请求添加唯一 id，点击两次前端页面也会发送两个 id 不同的请求，从而无法做到防重。但是 Nginx 添加 id 的思路可以用于实现<strong>链路追踪</strong>功能。</p>
+<p>总结：Feign 防止重复调用可以使用这个方法。但是页面的重复提交防止不了。</p>
+<hr />
+<p>在 Nginx 中为每一个请求设置一个唯一 id：</p>
+<figure class="highlight txt"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxy_set_header X-Request-Id $Request_id</span><br></pre></td></tr></table></div></figure>
+<hr />
 </div></div></article></section><nav class="paginator"><div class="paginator-inner"><a class="extend prev" rel="prev" href="/page/2/"><i class="fas fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/4/"><i class="fas fa-angle-right"></i></a></div></nav></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><section class="sidebar-toc hide"></section><!-- ov = overview--><section class="sidebar-ov"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/author.png" alt="avatar"></div><p class="sidebar-ov-author__text">no code no life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/YUYUN-ZHAO" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="zyy18749810683" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a><a class="sidebar-ov-social-item" href="1024462136" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="mailto:im.yuyunzhao@gmail.com" target="_blank" rel="noopener" data-popover="social.Gmail" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">Gmail</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">144</div><div class="sidebar-ov-state-item__name">文章</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">39</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">39</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2022</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>yuyun zhao</span><span class="footer__devider">|</span><span>沪ICP备2022000458号</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script>function initSearch() {
   var isXML = true;
   var search_path = 'search.json';
