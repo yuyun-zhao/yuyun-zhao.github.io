@@ -1,12 +1,12 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="本文将详细介绍云商城的订单服务。云商城完整项目介绍见文章 【Project】云商城                      订单服务        电商系列涉及到 3 流，分别为信息流、资金流、物流，而订单系统作为中枢将三者有机的集合起来 订单模块是电商系统的枢纽，在订单这个模块上获取多个模块的数据和信息，同时对这些信息进行加工处理后流向下个环节，这一系列就构成了订单的信息疏通">
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="本文将详细介绍云商城的订单服务。云商城完整项目介绍见文章 【Project】云商城                      订单服务        电商系列涉及到 3 流，分别为信息流、资金流、物流，而订单系统作为中枢将三者有机的集合起来。 订单模块是电商系统的枢纽，在订单这个模块上获取多个模块的数据和信息，同时对这些信息进行加工处理后流向下个环节，这一系列就构成了订单的信息疏通 本项目的订单服">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【Project】云商城 - 订单服务">
 <meta property="og:url" content="http://yuyun-zhao.github.io/2021/12/28/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/index.html">
 <meta property="og:site_name" content="yuyun zhao&#39;s blog">
-<meta property="og:description" content="本文将详细介绍云商城的订单服务。云商城完整项目介绍见文章 【Project】云商城                      订单服务        电商系列涉及到 3 流，分别为信息流、资金流、物流，而订单系统作为中枢将三者有机的集合起来 订单模块是电商系统的枢纽，在订单这个模块上获取多个模块的数据和信息，同时对这些信息进行加工处理后流向下个环节，这一系列就构成了订单的信息疏通">
+<meta property="og:description" content="本文将详细介绍云商城的订单服务。云商城完整项目介绍见文章 【Project】云商城                      订单服务        电商系列涉及到 3 流，分别为信息流、资金流、物流，而订单系统作为中枢将三者有机的集合起来。 订单模块是电商系统的枢纽，在订单这个模块上获取多个模块的数据和信息，同时对这些信息进行加工处理后流向下个环节，这一系列就构成了订单的信息疏通 本项目的订单服">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/image-20201117102129127.png">
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/%E7%94%B5%E5%95%86%E8%AE%A2%E5%8D%95%E6%B5%81%E7%A8%8B%E5%9B%BE.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/image-20201117102129127.png">
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/image-20220119112046278.png">
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/image-20220119102244416.png">
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/%E8%AE%A2%E5%8D%95%E7%A1%AE%E8%AE%A4%E9%A1%B5%E6%B5%81%E7%A8%8B.png">
@@ -14,16 +14,21 @@
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/image-20201117112328742.png">
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/image-20220117190942112.png">
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/image-20220117191148809.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/image-20220122135431543.png">
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/image-20220120142549935.png">
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/image-20220121164035585.png">
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E6%B5%81%E7%A8%8B.jpg">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/image-20220120101110172.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/image-20220121232915466.png">
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E6%B5%81%E7%A8%8B.jpg">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/image-20220122221157095.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/image-20201122174141878.png">
 <meta property="article:published_time" content="2021-12-28T10:36:53.000Z">
-<meta property="article:modified_time" content="2022-01-21T08:56:39.411Z">
+<meta property="article:modified_time" content="2022-01-22T15:50:26.436Z">
 <meta property="article:author" content="yuyun zhao">
 <meta property="article:tag" content="Project">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/image-20201117102129127.png"><title>【Project】云商城 - 订单服务 | yuyun zhao's blog</title><link ref="canonical" href="http://yuyun-zhao.github.io/2021/12/28/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+<meta name="twitter:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/%E7%94%B5%E5%95%86%E8%AE%A2%E5%8D%95%E6%B5%81%E7%A8%8B%E5%9B%BE.png"><title>【Project】云商城 - 订单服务 | yuyun zhao's blog</title><link ref="canonical" href="http://yuyun-zhao.github.io/2021/12/28/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
 var CONFIG = {
   root: '/',
   algolia: undefined,
@@ -47,133 +52,126 @@ var CONFIG = {
   sourcePath: {"js":"js","css":"css","images":"images"},
 };
 
-window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【Project】云商城 - 订单服务</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-12-28</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-01-21</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">14.1k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">95分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body"><p>本文将详细介绍云商城的订单服务。云商城完整项目介绍见文章 <a href="https://yuyun-zhao.github.io/2021/12/20/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E/">【Project】云商城</a></p>
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【Project】云商城 - 订单服务</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-12-28</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-01-22</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">15.8k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">106分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body"><p>本文将详细介绍云商城的订单服务。云商城完整项目介绍见文章 <a href="https://yuyun-zhao.github.io/2021/12/20/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E/">【Project】云商城</a></p>
 
         <h2 id="订单服务"   >
           <a href="#订单服务" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#订单服务"></a> 订单服务</h2>
       
-<p>电商系列涉及到 3 流，分别为信息流、资金流、物流，而订单系统作为中枢将三者有机的集合起来</p>
+<p>电商系列涉及到 3 流，分别为<strong>信息流</strong>、<strong>资金流</strong>、<strong>物流</strong>，而<strong>订单系统</strong>作为<strong>中枢</strong>将三者有机的集合起来。</p>
 <p>订单模块是电商系统的枢纽，在订单这个模块上获取多个模块的数据和信息，同时对这些信息进行加工处理后流向下个环节，这一系列就构成了订单的信息疏通</p>
-<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/image-20201117102129127.png" alt="image-20201117102129127" /></p>
-
-        <h5 id="1-用户信息"   >
-          <a href="#1-用户信息" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#1-用户信息"></a> 1、用户信息</h5>
-      
-<p>用户信息包括是用户账号、用户等级、用户的收货地址、收货人、收货人电话、用户账号需要绑定手机号码，但是用户绑定的手机号码不一定是收货信息上的电话。用户可以添加多个收货信息，用户等级信息可以用来和促销系统进行匹配，获取商品折扣，同时用户等级还可以获取积分的奖励等</p>
-
-        <h5 id="2-订单基础信息"   >
-          <a href="#2-订单基础信息" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#2-订单基础信息"></a> 2、订单基础信息</h5>
-      
-<p>订单基础信息是订单流转的核心，其包括订单类型，父/子订单、订单编号、订单状态、订单流转时间等</p>
-<ol>
-<li>订单类型包括实体订单和虚拟订单商品等，这个根据商城商品和服务类型进行区分</li>
-<li>同时订单都需要做父子订单处理，之前在初创公司一直只有一个订单，没有做父子订单处理后期需</li>
-<li>要进行拆单的时候就比较麻烦，尤其是多商户商场，和不同仓库商品的时候，父子订单就是为后期做拆单准备的。</li>
-<li>订单编号不多说了，需要强调的一点是父子订单都需要有订单编号，需要完善的时候可以对订单编号的每个字段进行统一定义和诠释。</li>
-<li>订单状态记录订单每次流转过程，后面会对订单状态进行单独的说明。</li>
-<li>订单流转时间需要记录下单时间，支付时间，发货时间，结束时间/关闭时间等等</li>
-</ol>
-
-        <h5 id="3-商品信息"   >
-          <a href="#3-商品信息" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#3-商品信息"></a> 3、商品信息</h5>
-      
-<p>商品信息从商品库中获取商品的SKU信息、图片、名称、属性规格、商品单价、商户信息等，从用户</p>
-<p>下单行为记录的用户下单数量，商品合计价格等</p>
-
-        <h5 id="4-优惠信息"   >
-          <a href="#4-优惠信息" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#4-优惠信息"></a> 4、优惠信息</h5>
-      
-<p>优惠信息记录用户参与过的优惠活动，包括优惠促销活动，比如满减、满赠、秒杀等，用户使用的优</p>
-<p>惠卷信息，优惠卷满足条件的优惠卷需要展示出来，另外虚拟币抵扣信息等进行记录</p>
-<p>为什么把优惠信息单独拿出来而不放在支付信息里面呢?</p>
-<p>因为优惠信息只是记录用户使用的条目，而支付信息需要加入数据进行计算，所以做为区分。</p>
-
-        <h5 id="5-支付信息"   >
-          <a href="#5-支付信息" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#5-支付信息"></a> 5、支付信息</h5>
-      
-<p>支付流水单号，这个流水单号是在唤起网关支付后支付通道返回给电商业务平台的支付流水号，财务</p>
-<p>通过订单号和流水单号与支付通道进行对账使用。</p>
-<p>支付方式用户使用的支付方式，比如微信支付、支付宝支付、钱包支付、快捷支付等。支付方式有时候可能有两个一-余额支付+第三方支付。</p>
-<p>商品总金额，每个商品加总后的金额:运费，物流产生的费用;优惠总金额，包括促销活动的优惠金额，</p>
-<p>优惠券优惠金额，虚拟积分或者虛拟币抵扣的金額，会员折扣的金额等之和;实付金额，用户实际需要</p>
-<p>付款的金额。</p>
-<p><strong>用户实付金额=商品总金额+运费 - 优惠总金额</strong></p>
-
-        <h5 id="6-物流信息"   >
-          <a href="#6-物流信息" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#6-物流信息"></a> 6、物流信息</h5>
-      
-<p>物流信息包括配送方式，物流公司，物流单号，物流状态，物流状态可以通过第三方接口来<br />
-获取和向用户展示物流每个状态节点。</p>
-
-        <h4 id="2-订单状态"   >
-          <a href="#2-订单状态" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#2-订单状态"></a> 2、订单状态</h4>
-      
-
-        <h5 id="1-待付款"   >
-          <a href="#1-待付款" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#1-待付款"></a> 1、待付款</h5>
-      
-<p>用户提交订单后，订单进行预下单，目前主流电商网站都会唤起支付，便于用户快速完成支<br />
-付，需要注意的是待付款状态下可以对库存进行锁定，锁定库存需要配置支付超时时间，超<br />
-时后将自动取消订单，订单变更关闭状态。</p>
-
-        <h5 id="2-已付款代发货"   >
-          <a href="#2-已付款代发货" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#2-已付款代发货"></a> 2、已付款/代发货</h5>
-      
-<p>用户完成订单支付，订单系统需要记录支付时间，支付流水单号便于对账，订单下放到WMS系统，仓库进行调动、配货、分拣，出库等操作</p>
-
-        <h5 id="3-待收货已发货"   >
-          <a href="#3-待收货已发货" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#3-待收货已发货"></a> 3、待收货/已发货</h5>
-      
-<p>仓库将商品出库后，订单进入物流环节，订单系统需要同步物流信息，便于用户实时熟悉商品的物流状态</p>
-
-        <h5 id="4-已完成"   >
-          <a href="#4-已完成" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#4-已完成"></a> 4、已完成</h5>
-      
-<p>用户确认收货后吗，订单交易完成，后续支付则进行计算，如果订单存在问题进入售后状态</p>
-
-        <h5 id="5-已取消"   >
-          <a href="#5-已取消" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#5-已取消"></a> 5、已取消</h5>
-      
-<p>付款之前取消订单，包括超时未付款或用户商户取消订单都会产生这种订单状态</p>
-
-        <h5 id="6-售后中"   >
-          <a href="#6-售后中" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#6-售后中"></a> 6、售后中</h5>
-      
-<p>用户在付款后申请退款，或商家发货后用户申请退货</p>
-<p>售后也同样存在各种状态，当发起售后申请后生成售后订单，售后订单状态为待审核，等待</p>
-<p>商家审核，商家审核通过后订单状态变更为待退货，等待用户将商品寄回，商家收货后订单</p>
-<p>状态更新为待退款状态，退款到用户原账户后订单状态更新为售后成功。</p>
-<p>订单服务 <code>mall-order</code>  需要实现的功能：</p>
+<p>本项目的订单服务 <code>mall-order</code>  需要实现的功能：</p>
 <ul>
-<li>订单登录拦截</li>
-<li>用户在购物车点击提交订单时，将购物车信息封装成订单项？</li>
-<li>调用远程库存服务锁定库存</li>
-<li></li>
+<li>订单服务登录拦截</li>
+<li>用户在购物车页点击【去结算】，将购物车内商品信息封装成<strong>订单确认页数据</strong> <code>OrderConfirmVo</code>，并跳转到订单确认页 <code>confirm.html</code></li>
+<li>用户在订单确认页确定订单信息后点击【提交订单】，将根据前端传来的订单确认页数据创建出<strong>订单实体对象</strong>，并持久化到数据库中。30 分钟后<strong>关闭失败订单</strong></li>
+<li>之后远程调用库存服务锁定库存。并在 50 分钟后进行失败订单的<strong>库存解锁</strong></li>
+<li>用户点击【支付订单】后，使用支付宝支付服务完成订单支付</li>
 </ul>
-<p>完整流程：</p>
+<blockquote>
+<p>在订单服务中使用<strong>消息队列</strong>保证整体事务一致性（订单和库存事务一致）。其他要求并发性不高的场景可以使用 Seata（例如后台管理系统中的分布式事务）</p>
+</blockquote>
+<p>完整的订单中心依次需要流程：</p>
 <p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/%E7%94%B5%E5%95%86%E8%AE%A2%E5%8D%95%E6%B5%81%E7%A8%8B%E5%9B%BE.png" alt="电商订单流程图" /></p>
-<p>其中几个比较重要的节点：</p>
+<p>订单创建与支付：</p>
 <ul>
-<li></li>
-<li>库存锁定</li>
-<li>库存解锁</li>
-<li>更新库存</li>
-</ul>
-<p>1、订单创建与支付</p>
-<ol>
 <li>订单创建前需要预览订单，选择收货信息等</li>
 <li>订单创建需要锁定库存，库存有才可创建，否则不能创建</li>
 <li>订单创建后超时未支付需要解锁库存</li>
 <li>支付成功后，需要进行拆单，根据商品打包方式，所在仓库，物流等进行拆单</li>
 <li>支付的每笔流水都需要记录，以待查账</li>
 <li>订单创建，支付成功等状态都需要给MQ发送消息，方便其他系统感知订阅</li>
-</ol>
-<p>2、逆向流程</p>
-<ol>
+</ul>
+<p>逆向流程：</p>
+<ul>
 <li>修改订单，用户没有提交订单，可以对订单一些信息进行修改，比如配送信息，优惠信息，及其他一些订单可修改范围的内容，此时只需对数据进行变更即可。</li>
 <li>订单取消**，用户主动取消订单和用户超时未支付**，两种情况下订单都会取消订单，而超时情况是系统自动关闭订单，所以在订单支付的响应机制上面要做支付的</li>
-</ol>
+</ul>
 <span id="more"></span>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/image-20201117102129127.png" alt="image-20201117102129127" /></p>
+
+        <h3 id="订单中心涉及的信息"   >
+          <a href="#订单中心涉及的信息" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#订单中心涉及的信息"></a> 订单中心涉及的信息</h3>
+      
+
+        <h4 id="1-用户信息"   >
+          <a href="#1-用户信息" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#1-用户信息"></a> 1. 用户信息</h4>
+      
+<p>用户信息包括是用户账号、用户等级、用户的收货地址、收货人、收货人电话、用户账号需要绑定手机号码，但是用户绑定的手机号码不一定是收货信息上的电话。用户可以添加多个收货信息，用户等级信息可以用来和促销系统进行匹配，获取商品折扣，同时用户等级还可以获取积分的奖励等。</p>
+
+        <h4 id="2-订单基础信息"   >
+          <a href="#2-订单基础信息" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#2-订单基础信息"></a> 2. 订单基础信息</h4>
+      
+<p>订单基础信息是订单流转的核心，其包括订单类型，父/子订单、订单编号、订单状态、订单流转时间等。</p>
+
+        <h4 id="3-商品信息"   >
+          <a href="#3-商品信息" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#3-商品信息"></a> 3. 商品信息</h4>
+      
+<p>商品信息从商品数据库中获取商品的 SKU 信息、图片、名称、属性规格、商品单价、商户信息等，从用户下单行为记录的用户下单数量，商品合计价格等。</p>
+
+        <h4 id="4-优惠信息"   >
+          <a href="#4-优惠信息" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#4-优惠信息"></a> 4. 优惠信息</h4>
+      
+<p>优惠信息记录用户参与过的优惠活动，包括优惠促销活动，比如满减、满赠、秒杀等，用户使用的优惠卷信息，优惠卷满足条件的优惠卷需要展示出来，另外虚拟币抵扣信息等进行记录</p>
+<blockquote>
+<p>为什么把优惠信息单独拿出来而不放在支付信息里面呢？因为优惠信息只是记录用户使用的条目，而支付信息需要加入数据进行计算，所以做为区分。</p>
+</blockquote>
+
+        <h4 id="5-支付信息"   >
+          <a href="#5-支付信息" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#5-支付信息"></a> 5. 支付信息</h4>
+      
+<ul>
+<li>支付流水单号：这个流水单号是在唤起网关支付后支付通道返回给电商业务平台的支付流水号，财务通过订单号和流水单号与支付通道进行对账使用</li>
+<li>支付方式：用户使用的支付方式，比如微信支付、支付宝支付、钱包支付、快捷支付等。支付方式有时候可能有两个一-余额支付+第三方支付</li>
+<li>商品总金额：每个商品加总后的金额</li>
+<li>运费：物流价格</li>
+<li>优惠总金额：包括促销活动的优惠金额</li>
+<li>优惠券优惠金额，虚拟积分或者虚拟币抵扣的金额，会员折扣的金额等之和</li>
+<li>实付金额：用户实际需要付款的金额</li>
+</ul>
+<p><strong>用户实付金额 = 商品总金额 + 运费 - 优惠总金额</strong></p>
+
+        <h4 id="6-物流信息"   >
+          <a href="#6-物流信息" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#6-物流信息"></a> 6. 物流信息</h4>
+      
+<p>物流信息包括配送方式，物流公司，物流单号，物流状态，物流状态可以通过第三方接口来<br />
+获取和向用户展示物流每个状态节点。</p>
+
+        <h3 id="订单状态"   >
+          <a href="#订单状态" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#订单状态"></a> 订单状态</h3>
+      
+
+        <h4 id="1-待付款"   >
+          <a href="#1-待付款" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#1-待付款"></a> 1. 待付款</h4>
+      
+<p>用户提交订单后，订单进行预下单，目前主流电商网站都会唤起支付，便于用户快速完成支<br />
+付，需要注意的是待付款状态下可以对库存进行锁定，锁定库存需要配置支付超时时间，超<br />
+时后将自动取消订单，订单变更关闭状态。</p>
+
+        <h4 id="2-已付款-代发货"   >
+          <a href="#2-已付款-代发货" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#2-已付款-代发货"></a> 2. 已付款 / 代发货</h4>
+      
+<p>用户完成订单支付，订单系统需要记录支付时间，支付流水单号便于对账，订单下放到WMS系统，仓库进行调动、配货、分拣，出库等操作</p>
+
+        <h4 id="3-待收货-已发货"   >
+          <a href="#3-待收货-已发货" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#3-待收货-已发货"></a> 3. 待收货 / 已发货</h4>
+      
+<p>仓库将商品出库后，订单进入物流环节，订单系统需要同步物流信息，便于用户实时熟悉商品的物流状态</p>
+
+        <h4 id="4-已完成"   >
+          <a href="#4-已完成" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#4-已完成"></a> 4. 已完成</h4>
+      
+<p>用户确认收货后吗，订单交易完成，后续支付则进行计算，如果订单存在问题进入售后状态</p>
+
+        <h4 id="5-已取消"   >
+          <a href="#5-已取消" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#5-已取消"></a> 5. 已取消</h4>
+      
+<p>付款之前取消订单，包括超时未付款或用户商户取消订单都会产生这种订单状态</p>
+
+        <h4 id="6-售后中"   >
+          <a href="#6-售后中" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#6-售后中"></a> 6. 售后中</h4>
+      
+<p>用户在付款后申请退款，或商家发货后用户申请退货。</p>
+<p>售后也同样存在各种状态，当发起售后申请后生成售后订单，售后订单状态为待审核，等待商家审核，商家审核通过后订单状态变更为待退货，等待用户将商品寄回，商家收货后订单状态更新为待退款状态，退款到用户原账户后订单状态更新为售后成功。</p>
 
         <h2 id="数据模型设计"   >
           <a href="#数据模型设计" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#数据模型设计"></a> 数据模型设计</h2>
@@ -220,6 +218,11 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
       
 <p>订单汇总类 <code>OrderCreateTo</code> 负责封装订单实体类 <code>OrderEntity</code> 和订单项实体类 <code>List&lt;OrderItemEntity&gt;</code>。</p>
 <figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OrderCreateTo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> OrderEntity order;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> List&lt;OrderItemEntity&gt; orderItems;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** 订单计算的应付价格 **/</span></span><br><span class="line">    <span class="keyword">private</span> BigDecimal payPrice;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** 运费 **/</span></span><br><span class="line">    <span class="keyword">private</span> BigDecimal fare;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="库存服务数据模型"   >
+          <a href="#库存服务数据模型" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#库存服务数据模型"></a> 库存服务数据模型</h3>
+      
+<p>库存服务中的数据模型分析见 <a href="#%E5%BA%93%E5%AD%98%E6%9C%8D%E5%8A%A1%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B">库存服务数据模型</a>。</p>
 
         <h2 id="订单服务登录拦截"   >
           <a href="#订单服务登录拦截" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#订单服务登录拦截"></a> 订单服务登录拦截</h2>
@@ -330,7 +333,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <p>流程图：</p>
 <p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/image-20220117190942112.png" alt="image-20220117190942112" /></p>
 <p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/image-20220117191148809.png" alt="image-20220117191148809" /></p>
-<p>还差一个图</p>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/image-20220122135431543.png" alt="image-20220122135431543" /></p>
 
         <h3 id="业务主线代码"   >
           <a href="#业务主线代码" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#业务主线代码"></a> 业务主线代码</h3>
@@ -364,7 +367,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
           <a href="#库存锁定逻辑" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#库存锁定逻辑"></a> 库存锁定逻辑</h3>
       
 <ul>
-<li>首先库存服务收到订单服务的远程调用后，将先创建一个 <code>WareOrderTaskEntity</code> 对象，其代表  <mark><strong>&quot;订单 &amp; 库存 - 工作单&quot;</strong></mark> 信息，其主要保存每个订单的<strong>订单号</strong> <code>order_sn</code> 信息，<strong>方便库存解锁时回溯找到问题订单</strong></li>
+<li>首先库存服务收到订单服务的远程调用后，将先创建一个 <code>WareOrderTaskEntity</code> 对象，其代表  <mark><strong>&quot;订单 &amp; 库存 - 工作单&quot;</strong></mark> 信息，其主要保存每个订单的<strong>订单号</strong> <code>order_sn</code> 信息，<strong>方便库存解锁时回溯找到问题订单</strong>（因为问题订单可能已经回滚了，如果不保存工作单就找不到需要解锁的订单了）</li>
 <li>接着遍历订单服务传来的所有订单项数据，为其创建 <strong>“SKU - 仓库号”</strong> 信息 <code>SkuLockVo</code>，其包含当前 SKU 在哪些仓库里有库存，并且库存数量（<code>num</code>）是多少</li>
 <li>遍历每一个订单项，为其<strong>锁定库存</strong>：从查询出的还有库存的仓库中找出任意一个仓库，在该仓库中锁定当前商品：
 <ul>
@@ -382,8 +385,8 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <p>其中，锁定库存成功后，需要将<strong>库存工作单</strong>和工作单详情数据发送到库存服务的<strong>延迟队列</strong> <code>stock.delay.queue</code> 中，并设置过期时间为 50 分钟。当消息过期之后，将该消息路由到解锁队列中，等待进行库存解锁的业务<a href="#%E6%8F%90%E4%BA%A4%E8%AE%A2%E5%8D%95%E5%BA%93%E5%AD%98%E8%A7%A3%E9%94%81">【提交订单】库存解锁</a></p>
 <p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/image-20220121164035585.png" alt="image-20220121164035585" /></p>
 
-        <h3 id="库存服务数据模型"   >
-          <a href="#库存服务数据模型" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#库存服务数据模型"></a> 库存服务数据模型</h3>
+        <h3 id="库存服务数据模型-2"   >
+          <a href="#库存服务数据模型-2" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#库存服务数据模型-2"></a> 库存服务数据模型</h3>
       
 <ol>
 <li><mark><strong>&quot;订单 &amp; 库存 - 工作单&quot;</strong></mark>：其主要保存每个订单的<strong>订单号</strong> <code>order_sn</code> 信息，<strong>方便库存解锁时回溯找到问题订单</strong></li>
@@ -428,13 +431,19 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <ul>
 <li>如果订单状态仍为<strong>新创建</strong> <code>CREATE_NEW</code>，代表该订单超过三十分钟未支付，那么就<strong>关闭该订单</strong>（将订单状态设置为<strong>取消</strong> <code>CANCLED</code>）。<strong>手动回复 Ack</strong> 。同时发送消息通知<strong>其他服务</strong>，本订单已经关闭了，可以进行其他处理了。例如：
 <ul>
-<li>库存服务可以<strong>解锁库存</strong>了（<strong>双重保险</strong>。确保库存一定能解锁，防止因为订单服务的网络延迟导致晚于库存服务关单，这时再发一次消息解锁库存就能保证库存一定能解锁）</li>
+<li>库存服务可以<strong>解锁库存</strong>了（<strong>双重保险</strong>。确保库存一定能解锁）</li>
 <li>优惠券服务可以<strong>返回优惠券</strong>了</li>
 </ul>
 </li>
 <li>如果该订单的状态不是新建，代表该订单已经支付成功，不再进行关单</li>
-<li>如果该过程<strong>出现异常</strong>，则<strong>手动回复 Reject</strong>，令该消息重新入队，等待其他消费者再次消费，避免消息丢失</li>
+<li>如果该过程<strong>出现异常</strong>，则<strong>手动回复 Reject</strong>，令该消息<strong>重新入队</strong>，等待其他消费者再次消费，避免消息丢失</li>
 </ul>
+<p>其中，在关单后还要发送解锁库存消息的原因是：作为一种<strong>双重保险</strong>，确保库存一定能解锁。因为可能出现：</p>
+<ul>
+<li>库存服务在锁定库存后，<strong>还未来得及发送解锁消息到延迟队列就宕机</strong>。这时可能导致该库存一直无法解锁</li>
+<li>订单服务因网络延迟导致关单的响应晚于库存服务的解锁响应，这样该库存在关单后就不会再解锁了</li>
+</ul>
+<p>为防止这两种情况的发生，必须在关单后立即发送一次消息通知库存服务解锁库存，这样就能保证库存一定能解锁。</p>
 
         <h3 id="消息路由过程"   >
           <a href="#消息路由过程" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#消息路由过程"></a> 消息路由过程</h3>
@@ -454,6 +463,9 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 </ul>
 <p>该过程的流程图：</p>
 <p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E6%B5%81%E7%A8%8B.jpg" alt="消息队列流程" /></p>
+<p>其中，订单服务的消息队列配置示意图：</p>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/image-20220120101110172.png" alt="image-20220120101110172" /></p>
+<p>整个订单服务只设置了一个总交换机，延迟队列和死信队列都与其绑定，通过不同的路由键实现路由到不同的队列中。</p>
 
         <h3 id="创建交换机和队列"   >
           <a href="#创建交换机和队列" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#创建交换机和队列"></a> 创建交换机和队列</h3>
@@ -480,7 +492,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
           <a href="#消息消费者" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#消息消费者"></a> 消息消费者</h3>
       
 <p>在 <code>listener</code> 包下创建消息消费者，负责监听死信队列（关单队列）<code>order.release.order.queue</code> 中的消息，将过期的订单关闭：</p>
-<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 监听死信队列（关单队列） order.release.order.queue，将过期的订单关闭</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@RabbitListener(queues = &#123;&quot;order.release.order.queue&quot;&#125;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OrderCloseListener</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> OrderService orderService;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 从队列中拿到订单实体对象 OrderEntity，调用 OrderService 关闭该订单</span></span><br><span class="line"><span class="comment">     *    1. 如果关闭订单成功，就手动回复成功 Ack，从队列中删除该消息；</span></span><br><span class="line"><span class="comment">     *    2. 如果关闭订单失败，就回复失败 Reject，并且重新入队：requeue=true，等待其他消费者重新消费该消息</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> orderEntity</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> message</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> channel</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> IOException</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@RabbitHandler</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">listener</span><span class="params">(OrderEntity orderEntity, Message message, Channel channel)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;收到过期的订单信息，准备关闭订单&quot;</span> + orderEntity.getOrderSn());</span><br><span class="line">        <span class="keyword">long</span> deliveryTag = message.getMessageProperties().getDeliveryTag();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            orderService.closeOrder(orderEntity);</span><br><span class="line">            channel.basicAck(deliveryTag,<span class="keyword">false</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            channel.basicReject(deliveryTag,<span class="keyword">true</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 监听死信队列（关单队列） order.release.order.queue，将过期的订单关闭</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@RabbitListener(queues = &#123;&quot;order.release.order.queue&quot;&#125;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OrderCloseListener</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> OrderService orderService;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 从队列中拿到订单实体对象 OrderEntity，调用 OrderService 关闭该订单</span></span><br><span class="line"><span class="comment">     *    1. 如果关闭订单成功，就手动回复成功 Ack，从队列中删除该消息；</span></span><br><span class="line"><span class="comment">     *    2. 如果关闭订单失败，就回复失败 Reject，并且重新入队：requeue=true，等待其他消费者重新消费该消息</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> orderEntity</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> message</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> channel</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> IOException</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@RabbitHandler</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">listener</span><span class="params">(OrderEntity orderEntity, Message message, Channel channel)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;收到过期的订单信息，准备关闭订单&quot;</span> + orderEntity.getOrderSn());</span><br><span class="line">        <span class="keyword">long</span> deliveryTag = message.getMessageProperties().getDeliveryTag();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            orderService.closeOrder(orderEntity);</span><br><span class="line">            channel.basicAck(deliveryTag,<span class="keyword">false</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            channel.basicReject(deliveryTag, <span class="keyword">true</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
 <blockquote>
 <p>需要在配置文件中事先开启<strong>手动确认机制</strong></p>
 </blockquote>
@@ -490,12 +502,71 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
         <h2 id="提交订单库存解锁"   >
           <a href="#提交订单库存解锁" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#提交订单库存解锁"></a> 【提交订单】：库存解锁</h2>
       
-<p>库存需要解锁的场景：</p>
+<p>需要解锁库存的场景：</p>
 <ul>
-<li>下订单成功，但订单过期没有支付，被系统自动取消；或者用户手动选择取消订单。需要将之前锁定的库存解锁</li>
-<li>下订单成功，库存锁定成功。但接下来的业务调用失败，导致订单回滚。需要将之前锁定的库存解锁</li>
+<li>【提交订单】业务<strong>全部执行成功</strong>，但成功创建订单过期没有支付，被<a href="#%E6%8F%90%E4%BA%A4%E8%AE%A2%E5%8D%95%E5%AE%9A%E6%97%B6%E5%85%B3%E5%8D%95">【提交订单】定时关单</a>自动取消；或者用户手动选择取消订单。此时需要将之前锁定的库存解锁</li>
+<li>创建订单成功，<strong>库存锁定成功</strong>，但在接下来的<strong>其他代码执行失败</strong>（【提交订单】业务没有全部执行成功），导致前面创建的订单回滚，在数据库中不存在该订单。此时需要将之前锁定的库存解锁</li>
 </ul>
+<p>因此，只要库存服务锁定库存成功，就需要立即发送一条消息到库存服务的<strong>延迟队列</strong>中，<strong>在 50 分钟后被消费者监听到消息后，进行库存解锁判断</strong>：</p>
+<ul>
+<li>如果订单表里<strong>没有这个订单</strong>（说明其他代码抛异常导致订单回滚了），则必须解锁该订单的库存</li>
+<li>如果订单表里<strong>有这个订单</strong>，则不一定需要解锁库存：
+<ul>
+<li>如果订单状态为<strong>已取消</strong> <code>CANCLED</code>，则该订单要么过期要么被手动取消，需要解锁库存</li>
+<li>如果订单状态为<strong>已支付</strong> <code>PAYED</code>，则该订单不需要解锁库存</li>
+</ul>
+</li>
+</ul>
+<p>那么如何得知应该判断哪个订单的状态呢？如果订单数据在之前已经回滚了，那么在订单表中就找不到问题订单的信息了。因此我们需要在库存锁定后为该订单和库存信息创建 <mark><strong>&quot;订单 &amp; 库存 - 工作单&quot;</strong></mark> 对象  <code>WareOrderTaskEntity</code>，其主要保存每个订单的<strong>订单号</strong> <code>order_sn</code> 信息，<strong>方便库存解锁时回溯找到问题订单</strong>（因为问题订单可能已经回滚了，如果不保存工作单就找不到需要解锁的订单了）</p>
+<p>这样在库存锁定成功<strong>后</strong>，就把该信息发送到延迟队列 <code>stock.delay.queue</code> 中，在 50 分钟后该消息过期，就会路由到 <code>stock.release.stock.queue</code> 队列，由库存服务的消费者 <code>OrderCloseListener</code> 进行解锁。</p>
+<p>库存解锁的消息队列示意图：</p>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/image-20220121232915466.png" alt="image-20220121232915466" /></p>
+<p>完整示意图：</p>
 <p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E6%B5%81%E7%A8%8B.jpg" alt="消息队列流程" /></p>
+
+        <h3 id="消息生产者-2"   >
+          <a href="#消息生产者-2" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#消息生产者-2"></a> 消息生产者</h3>
+      
+<p>库存解锁的消息生产者为<a href="#%E6%8F%90%E4%BA%A4%E8%AE%A2%E5%8D%95%E5%BA%93%E5%AD%98%E9%94%81%E5%AE%9A">【提交订单】库存锁定</a>：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 4.4 发送封装后的&quot;商品&amp;库存-工作单详情&quot;数据到库存延迟队列 stock.release.stock.queue 中，</span></span><br><span class="line"><span class="comment">// 将在 50 分钟后过期，被 StockReleaseListener 监听后进行库存解锁</span></span><br><span class="line">rabbitTemplate.convertAndSend(<span class="string">&quot;stock-event-exchange&quot;</span>, <span class="string">&quot;stock.locked&quot;</span>, lockedTo);</span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="消息消费者-2"   >
+          <a href="#消息消费者-2" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#消息消费者-2"></a> 消息消费者</h3>
+      
+<ol>
+<li>库存服务的消费负责监听<strong>两个队列</strong>，分别为库存服务之前发送的解锁库存队列以及<strong>订单服务</strong>发来的立即解锁库存队列：</li>
+</ol>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@RabbitListener(queues = &#123;&quot;stock.release.stock.queue&quot;&#125;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StockReleaseListener</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> WareSkuService wareSkuService;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 库存服务在库存锁定后立即发送库存工作详情单到延迟队列中</span></span><br><span class="line"><span class="comment">     * 50 分钟后被该消费者监听到，进行库存解锁</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> stockLockedTo</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> message</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> channel</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> IOException</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@RabbitHandler</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleStockLockedRelease</span><span class="params">(StockLockedTo stockLockedTo, Message message, Channel channel)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        log.info(<span class="string">&quot;************************ 收到库存解锁的消息 ********************************&quot;</span>);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            wareSkuService.unlock(stockLockedTo);</span><br><span class="line">            <span class="comment">// 手动回复成功</span></span><br><span class="line">            channel.basicAck(message.getMessageProperties().getDeliveryTag(), <span class="keyword">false</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            <span class="comment">// 失败则手动回复拒绝，并要求重新入队</span></span><br><span class="line">            channel.basicReject(message.getMessageProperties().getDeliveryTag(),<span class="keyword">true</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 订单服务中关单成功后立即发送消息到库存服务，进行解锁库存（双重保险，保证库存一定解锁）</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> orderTo</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> message</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> channel</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> IOException</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@RabbitHandler</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleStockLockedRelease</span><span class="params">(OrderTo orderTo, Message message, Channel channel)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        log.info(<span class="string">&quot;************************ 从订单服务收到库存解锁的消息 ********************************&quot;</span>);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 手动回复成功</span></span><br><span class="line">            wareSkuService.unlock(orderTo);</span><br><span class="line">            channel.basicAck(message.getMessageProperties().getDeliveryTag(), <span class="keyword">false</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            <span class="comment">// 失败则手动回复拒绝，并要求重新入队</span></span><br><span class="line">            channel.basicReject(message.getMessageProperties().getDeliveryTag(),<span class="keyword">true</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<ol start="2">
+<li>Service 层：</li>
+</ol>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 对库存服务延迟队列中过期的消息进行解锁库存</span></span><br><span class="line"><span class="comment"> * 1、没有这个订单，必须解锁库存</span></span><br><span class="line"><span class="comment"> * 2、有这个订单，不一定解锁库存</span></span><br><span class="line"><span class="comment"> *    订单状态：已取消：解锁库存</span></span><br><span class="line"><span class="comment"> *             已支付：不能解锁库存</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> stockLockedTo</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">unlock</span><span class="params">(StockLockedTo stockLockedTo)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 1. 获取库存工作详情单</span></span><br><span class="line">    StockDetailTo detailTo = stockLockedTo.getDetailTo();</span><br><span class="line">    WareOrderTaskDetailEntity detailEntity = wareOrderTaskDetailService.getById(detailTo.getId());</span><br><span class="line">    <span class="comment">// 如果工作单详情不为空，说明该库存锁定成功</span></span><br><span class="line">    <span class="keyword">if</span> (detailEntity != <span class="keyword">null</span>) &#123;</span><br><span class="line">        WareOrderTaskEntity taskEntity = wareOrderTaskService.getById(stockLockedTo.getId());</span><br><span class="line">        <span class="comment">// 2. 远程调用订单服务查询订单信息</span></span><br><span class="line">        R r = orderFeignService.infoByOrderSn(taskEntity.getOrderSn());</span><br><span class="line">        <span class="keyword">if</span> (r.getCode() == <span class="number">0</span>) &#123;</span><br><span class="line">            OrderTo order = JSON.parseObject(JSON.toJSONString(r.get(<span class="string">&quot;orderEntity&quot;</span>)), OrderTo.class);</span><br><span class="line">            <span class="comment">// 3. 如果没有这个订单 或 订单状态为已取消，则解锁库存</span></span><br><span class="line">            <span class="comment">// 如果该订单存在且状态为新建，或已支付，则不需要解锁库存</span></span><br><span class="line">            <span class="keyword">if</span> (order == <span class="keyword">null</span> || order.getStatus().equals(OrderStatusEnum.CANCLED.getCode())) &#123;</span><br><span class="line">                <span class="comment">// 为保证幂等性，只有当工作单详情处于被锁定的情况下才进行解锁</span></span><br><span class="line">                <span class="keyword">if</span> (detailEntity.getLockStatus().equals(WareTaskStatusEnum.Locked.getCode())) &#123;</span><br><span class="line">                    <span class="comment">// 真正执行解锁库存的业务代码</span></span><br><span class="line">                    unlockStock(detailTo.getSkuId(), detailTo.getSkuNum(), detailTo.getWareId(), detailEntity.getId());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 如果远程调用失败则抛出异常，消费者捕获异常后将消息重新入队等待其他消费者再次消费</span></span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">&quot;远程调用订单服务失败&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 订单服务在关单后，将立即发来消息解锁库存</span></span><br><span class="line"><span class="comment"> * 作为双重保险，保证库存一定能解锁，防止订单服务因网络延迟而没有将订单状态改为已取消</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> orderTo</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">unlock</span><span class="params">(OrderTo orderTo)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 为防止重复解锁，需要重新查询工作单</span></span><br><span class="line">    String orderSn = orderTo.getOrderSn();</span><br><span class="line">    WareOrderTaskEntity taskEntity = wareOrderTaskService.getBaseMapper()</span><br><span class="line">        .selectOne((<span class="keyword">new</span> QueryWrapper&lt;WareOrderTaskEntity&gt;()</span><br><span class="line">                    .eq(<span class="string">&quot;order_sn&quot;</span>, orderSn)));</span><br><span class="line">    <span class="comment">// 查询出当前订单相关的且处于锁定状态的工作单详情</span></span><br><span class="line">    List&lt;WareOrderTaskDetailEntity&gt; lockDetails = wareOrderTaskDetailService.list(</span><br><span class="line">        <span class="keyword">new</span> QueryWrapper&lt;WareOrderTaskDetailEntity&gt;()</span><br><span class="line">        .eq(<span class="string">&quot;task_id&quot;</span>, taskEntity.getId())</span><br><span class="line">        .eq(<span class="string">&quot;lock_status&quot;</span>, WareTaskStatusEnum.Locked.getCode()));</span><br><span class="line">    <span class="keyword">for</span> (WareOrderTaskDetailEntity lockDetail : lockDetails) &#123;</span><br><span class="line">        <span class="comment">// 解锁库存</span></span><br><span class="line">        unlockStock(lockDetail.getSkuId(), lockDetail.getSkuNum(), lockDetail.getWareId(), lockDetail.getId());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 去数据库中解锁库存并更改库存工作单状态</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> skuId</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> skuNum</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> wareId</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> detailId</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">unlockStock</span><span class="params">(Long skuId, Integer skuNum, Long wareId, Long detailId)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 从数据库中解锁库存数据（现有的库存 + 商品数量 skuNum）</span></span><br><span class="line">    baseMapper.unlockStock(skuId, skuNum, wareId);</span><br><span class="line">    <span class="comment">// 更新库存工作单详情的状态</span></span><br><span class="line">    WareOrderTaskDetailEntity detail = WareOrderTaskDetailEntity.builder()</span><br><span class="line">        .id(detailId)</span><br><span class="line">        .lockStatus(<span class="number">2</span>).build();</span><br><span class="line">    wareOrderTaskDetailService.updateById(detail);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<ol start="3">
+<li><code>WareSkuDao.xml</code></li>
+</ol>
+<figure class="highlight xml"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">update</span> <span class="attr">id</span>=<span class="string">&quot;unlockStock&quot;</span>&gt;</span></span><br><span class="line">    UPDATE wms_ware_sku</span><br><span class="line">    SET stock_locked = stock_locked - #&#123;skuNum&#125;</span><br><span class="line">    WHERE sku_id = #&#123;skuId&#125;</span><br><span class="line">      AND ware_id = #&#123;wareId&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">update</span>&gt;</span></span><br></pre></td></tr></table></div></figure>
+
+        <h2 id="立即支付支付宝支付"   >
+          <a href="#立即支付支付宝支付" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#立即支付支付宝支付"></a> 【立即支付】：支付宝支付</h2>
+      
+<p>在用户提交订单后，将跳转到支付页面：</p>
+<img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/image-20220122221157095.png" alt="image-20220122221157095" style="zoom: 67%;" />
+<p>用户需要在该页面内选择<strong>支付宝</strong>支付订单。关于支付宝支付服务的开通和使用见文章<a href=""></a></p>
+
+        <h3 id="4-什么是公钥-私钥-加密-签名和验签"   >
+          <a href="#4-什么是公钥-私钥-加密-签名和验签" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#4-什么是公钥-私钥-加密-签名和验签"></a> 4、什么是公钥、私钥、加密、签名和验签?</h3>
+      
+<p>1、公钥私钥<br />
+公钥和私钥是一一个相对概念</p>
+<p>它们的公私性是相对于生成者来说的。</p>
+<p>一对密钥生成后，保存在生成者手里的就是私钥，生成者发布出去大家用的就是公钥</p>
+<p><img src="/images/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/image-20201122174141878.png" alt="image-20201122174141878" /></p>
+<p>商户私钥自己保存，在自己应用里保存</p>
+<p>应用公钥给支付宝（放到网页上），他会为我们生成支付宝公钥：</p>
+
+        <h2 id="消息积压"   >
+          <a href="#消息积压" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#消息积压"></a> 消息积压</h2>
+      
 
         <h2 id="幂等性问题"   >
           <a href="#幂等性问题" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#幂等性问题"></a> 幂等性问题</h2>
@@ -551,38 +622,30 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
       
 <p>库存里需要用到。</p>
 <p>保证消息不丢失，不积压的方案</p>
-<p>下订单业务使用<strong>消息队列</strong>保证整体事务一致性</p>
-<p>其他要求并发性不高的可以使用Seata</p>
-
-        <h2 id="分布式事务"   >
-          <a href="#分布式事务" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#分布式事务"></a> 分布式事务</h2>
-      
-<p>TC 管理全局。在服务端。</p>
-<p>TM 标注在 Service 层，在业务代码处控制整个事务（下订单业务，先告诉TC，自己准备开启一个全局事务 ，然后RM开始注册分支事务，并且实时通知TC自己的状态，这样TC就实时直到RM的状态，成功还是失败。一旦某一个RM通知TC自己失败了，TC就命令其他的RM回滚）</p>
-<p>RM 表在每个微服务上，控制本地事务，操纵数据库等</p>
-<p>回滚是自动做的。借助于UNDO_LOG，反向补偿</p>
 </div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yuyun-zhao.github.io">yuyun zhao</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yuyun-zhao.github.io/2021/12/28/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/">http://yuyun-zhao.github.io/2021/12/28/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.github.io/tags/Project/">Project</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2021/12/29/%E3%80%90MyBatis%E3%80%91MyBatis-Plus/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">【MyBatis】MyBatis-Plus</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2021/12/27/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E-%E8%AE%A4%E8%AF%81%E6%9C%8D%E5%8A%A1/"><span class="paginator-prev__text">【Project】云商城 - 认证服务</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1"><span class="toc-text">
-           订单服务</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF"><span class="toc-text">
-           1、用户信息</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-%E8%AE%A2%E5%8D%95%E5%9F%BA%E7%A1%80%E4%BF%A1%E6%81%AF"><span class="toc-text">
-           2、订单基础信息</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-%E5%95%86%E5%93%81%E4%BF%A1%E6%81%AF"><span class="toc-text">
-           3、商品信息</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-%E4%BC%98%E6%83%A0%E4%BF%A1%E6%81%AF"><span class="toc-text">
-           4、优惠信息</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#5-%E6%94%AF%E4%BB%98%E4%BF%A1%E6%81%AF"><span class="toc-text">
-           5、支付信息</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-%E7%89%A9%E6%B5%81%E4%BF%A1%E6%81%AF"><span class="toc-text">
-           6、物流信息</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E8%AE%A2%E5%8D%95%E7%8A%B6%E6%80%81"><span class="toc-text">
-           2、订单状态</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-%E5%BE%85%E4%BB%98%E6%AC%BE"><span class="toc-text">
-           1、待付款</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-%E5%B7%B2%E4%BB%98%E6%AC%BE%E4%BB%A3%E5%8F%91%E8%B4%A7"><span class="toc-text">
-           2、已付款&#x2F;代发货</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-%E5%BE%85%E6%94%B6%E8%B4%A7%E5%B7%B2%E5%8F%91%E8%B4%A7"><span class="toc-text">
-           3、待收货&#x2F;已发货</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-%E5%B7%B2%E5%AE%8C%E6%88%90"><span class="toc-text">
-           4、已完成</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#5-%E5%B7%B2%E5%8F%96%E6%B6%88"><span class="toc-text">
-           5、已取消</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-%E5%94%AE%E5%90%8E%E4%B8%AD"><span class="toc-text">
-           6、售后中</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B%E8%AE%BE%E8%AE%A1"><span class="toc-text">
+           订单服务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A2%E5%8D%95%E4%B8%AD%E5%BF%83%E6%B6%89%E5%8F%8A%E7%9A%84%E4%BF%A1%E6%81%AF"><span class="toc-text">
+           订单中心涉及的信息</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF"><span class="toc-text">
+           1. 用户信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E8%AE%A2%E5%8D%95%E5%9F%BA%E7%A1%80%E4%BF%A1%E6%81%AF"><span class="toc-text">
+           2. 订单基础信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%95%86%E5%93%81%E4%BF%A1%E6%81%AF"><span class="toc-text">
+           3. 商品信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E4%BC%98%E6%83%A0%E4%BF%A1%E6%81%AF"><span class="toc-text">
+           4. 优惠信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E6%94%AF%E4%BB%98%E4%BF%A1%E6%81%AF"><span class="toc-text">
+           5. 支付信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-%E7%89%A9%E6%B5%81%E4%BF%A1%E6%81%AF"><span class="toc-text">
+           6. 物流信息</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A2%E5%8D%95%E7%8A%B6%E6%80%81"><span class="toc-text">
+           订单状态</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%BE%85%E4%BB%98%E6%AC%BE"><span class="toc-text">
+           1. 待付款</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%B7%B2%E4%BB%98%E6%AC%BE-%E4%BB%A3%E5%8F%91%E8%B4%A7"><span class="toc-text">
+           2. 已付款 &#x2F; 代发货</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%BE%85%E6%94%B6%E8%B4%A7-%E5%B7%B2%E5%8F%91%E8%B4%A7"><span class="toc-text">
+           3. 待收货 &#x2F; 已发货</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E5%B7%B2%E5%AE%8C%E6%88%90"><span class="toc-text">
+           4. 已完成</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E5%B7%B2%E5%8F%96%E6%B6%88"><span class="toc-text">
+           5. 已取消</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-%E5%94%AE%E5%90%8E%E4%B8%AD"><span class="toc-text">
+           6. 售后中</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B%E8%AE%BE%E8%AE%A1"><span class="toc-text">
            数据模型设计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A2%E5%8D%95%E7%A1%AE%E8%AE%A4%E9%A1%B9-orderconfirmvo"><span class="toc-text">
            订单确认项 OrderConfirmVo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A2%E5%8D%95%E9%A1%B9-orderitemvo"><span class="toc-text">
            订单项 OrderItemVo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%9A%E5%91%98%E6%94%B6%E8%B4%A7%E5%9C%B0%E5%9D%80-memberaddressvo"><span class="toc-text">
            会员收货地址 MemberAddressVo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A2%E5%8D%95%E5%AE%9E%E4%BD%93%E7%B1%BB-orderentity"><span class="toc-text">
            订单实体类 OrderEntity</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A2%E5%8D%95%E9%A1%B9%E5%AE%9E%E4%BD%93%E7%B1%BB-orderitementity"><span class="toc-text">
            订单项实体类 OrderItemEntity</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A2%E5%8D%95%E6%B1%87%E6%80%BB-ordercreateto"><span class="toc-text">
-           订单汇总 OrderCreateTo</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1%E7%99%BB%E5%BD%95%E6%8B%A6%E6%88%AA"><span class="toc-text">
+           订单汇总 OrderCreateTo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%93%E5%AD%98%E6%9C%8D%E5%8A%A1%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B"><span class="toc-text">
+           库存服务数据模型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1%E7%99%BB%E5%BD%95%E6%8B%A6%E6%88%AA"><span class="toc-text">
            订单服务登录拦截</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%BB%E7%BB%93%E7%AE%97%E7%94%9F%E6%88%90%E8%AE%A2%E5%8D%95%E7%A1%AE%E8%AE%A4%E9%A1%B5%E6%95%B0%E6%8D%AE"><span class="toc-text">
            【去结算】：生成订单确认页数据</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%9A%E5%8A%A1%E4%BB%A3%E7%A0%81"><span class="toc-text">
            业务代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#feign-%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%E4%B8%A2%E5%A4%B1%E8%AF%B7%E6%B1%82%E5%A4%B4%E9%97%AE%E9%A2%98"><span class="toc-text">
@@ -591,7 +654,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
            业务主线代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B1%87%E6%80%BB%E8%AE%A2%E5%8D%95%E4%BF%A1%E6%81%AF-ordercreateto"><span class="toc-text">
            汇总订单信息 OrderCreateTo</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%90%E4%BA%A4%E8%AE%A2%E5%8D%95%E5%BA%93%E5%AD%98%E9%94%81%E5%AE%9A"><span class="toc-text">
            【提交订单】：库存锁定</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%93%E5%AD%98%E9%94%81%E5%AE%9A%E9%80%BB%E8%BE%91"><span class="toc-text">
-           库存锁定逻辑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%93%E5%AD%98%E6%9C%8D%E5%8A%A1%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B"><span class="toc-text">
+           库存锁定逻辑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%93%E5%AD%98%E6%9C%8D%E5%8A%A1%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B-2"><span class="toc-text">
            库存服务数据模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%93%E5%AD%98%E9%94%81%E5%AE%9A%E4%B8%9A%E5%8A%A1%E4%BB%A3%E7%A0%81"><span class="toc-text">
            库存锁定业务代码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%90%E4%BA%A4%E8%AE%A2%E5%8D%95%E5%AE%9A%E6%97%B6%E5%85%B3%E5%8D%95"><span class="toc-text">
            【提交订单】：定时关单</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E8%B7%AF%E7%94%B1%E8%BF%87%E7%A8%8B"><span class="toc-text">
@@ -599,13 +662,17 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
            创建交换机和队列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E7%94%9F%E4%BA%A7%E8%80%85"><span class="toc-text">
            消息生产者</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E6%B6%88%E8%B4%B9%E8%80%85"><span class="toc-text">
            消息消费者</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%90%E4%BA%A4%E8%AE%A2%E5%8D%95%E5%BA%93%E5%AD%98%E8%A7%A3%E9%94%81"><span class="toc-text">
-           【提交订单】：库存解锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B9%82%E7%AD%89%E6%80%A7%E9%97%AE%E9%A2%98"><span class="toc-text">
+           【提交订单】：库存解锁</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E7%94%9F%E4%BA%A7%E8%80%85-2"><span class="toc-text">
+           消息生产者</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E6%B6%88%E8%B4%B9%E8%80%85-2"><span class="toc-text">
+           消息消费者</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AB%8B%E5%8D%B3%E6%94%AF%E4%BB%98%E6%94%AF%E4%BB%98%E5%AE%9D%E6%94%AF%E4%BB%98"><span class="toc-text">
+           【立即支付】：支付宝支付</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E4%BB%80%E4%B9%88%E6%98%AF%E5%85%AC%E9%92%A5-%E7%A7%81%E9%92%A5-%E5%8A%A0%E5%AF%86-%E7%AD%BE%E5%90%8D%E5%92%8C%E9%AA%8C%E7%AD%BE"><span class="toc-text">
+           4、什么是公钥、私钥、加密、签名和验签?</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E7%A7%AF%E5%8E%8B"><span class="toc-text">
+           消息积压</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B9%82%E7%AD%89%E6%80%A7%E9%97%AE%E9%A2%98"><span class="toc-text">
            幂等性问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A1%B5%E9%9D%A2%E9%87%8D%E5%A4%8D%E6%8F%90%E4%BA%A4%E9%97%AE%E9%A2%98"><span class="toc-text">
            页面重复提交问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#feign-%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%E9%97%AE%E9%A2%98"><span class="toc-text">
            Feign 远程调用问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E9%87%8D%E5%A4%8D%E6%8F%92%E5%85%A5%E8%AE%A2%E5%8D%95%E9%97%AE%E9%A2%98"><span class="toc-text">
            数据库重复插入订单问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%BB%E9%87%8D%E8%A1%A8"><span class="toc-text">
-           去重表</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1"><span class="toc-text">
-           分布式事务</span></a></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/author.png" alt="avatar"></div><p class="sidebar-ov-author__text">no code no life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/YUYUN-ZHAO" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="zyy18749810683" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a><a class="sidebar-ov-social-item" href="1024462136" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="mailto:im.yuyunzhao@gmail.com" target="_blank" rel="noopener" data-popover="social.Gmail" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">Gmail</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">145</div><div class="sidebar-ov-state-item__name">文章</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">40</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">40</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2022</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>yuyun zhao</span><span class="footer__devider">|</span><span>沪ICP备2022000458号</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script>function initSearch() {
+           去重表</span></a></li></ol></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/author.png" alt="avatar"></div><p class="sidebar-ov-author__text">no code no life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/YUYUN-ZHAO" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="zyy18749810683" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a><a class="sidebar-ov-social-item" href="1024462136" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="mailto:im.yuyunzhao@gmail.com" target="_blank" rel="noopener" data-popover="social.Gmail" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">Gmail</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">145</div><div class="sidebar-ov-state-item__name">文章</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">39</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">39</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2022</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>yuyun zhao</span><span class="footer__devider">|</span><span>沪ICP备2022000458号</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script>function initSearch() {
   var isXML = true;
   var search_path = 'search.json';
 
