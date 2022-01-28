@@ -358,26 +358,64 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <li>灵活：mybatis不会对应用程序或者数据库的现有设计强加任何影响。 sql写在xml里，便于统一管理和优化。通过sql语句可以满足操作数据库的所有需求。</li>
 <li>解除sql与程序代码的耦合：通过提供DAO层，将业务逻辑和数据访问逻辑分离，使系统的设计更清晰，更易维护，更易单元测试。sql和代码的分离，提高了可维护性。</li>
 <li>提供xml标签，支持编写动态sql。</li>
-</ul></div><div class="post-readmore"><a class="post-readmore__link" href="/2021/05/15/%E3%80%90MyBatis%E3%80%91MyBatis/"><span class="post-readmore__text">阅读全文</span><span class="post-readmore__icon"><i class="fas fa-long-arrow-alt-right"></i></span></a></div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2021/05/15/%E3%80%90Git%E3%80%91%E5%B8%B8%E7%94%A8Git%E5%91%BD%E4%BB%A4/">【Git】常用 Git 命令</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-05-15</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-10-11</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">240</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">1分</span></span></div></header><div class="post-body"><div class="post-excerpt">
-        <h2 id="基本流程"   >
-          <a href="#基本流程" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#基本流程"></a> 基本流程</h2>
+</ul></div><div class="post-readmore"><a class="post-readmore__link" href="/2021/05/15/%E3%80%90MyBatis%E3%80%91MyBatis/"><span class="post-readmore__text">阅读全文</span><span class="post-readmore__icon"><i class="fas fa-long-arrow-alt-right"></i></span></a></div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2021/05/15/%E3%80%90Git%E3%80%91%E5%B8%B8%E7%94%A8Git%E5%91%BD%E4%BB%A4/">【Git】Git 常用命令</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-05-15</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-01-28</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">817</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">5分</span></span></div></header><div class="post-body"><div class="post-excerpt">
+        <h2 id="常用命令"   >
+          <a href="#常用命令" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#常用命令"></a> 常用命令</h2>
       
 <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br><span class="line"></span><br><span class="line">git remote add origin 远程仓库地址</span><br><span class="line"></span><br><span class="line">git add .</span><br><span class="line"></span><br><span class="line">git commit -m <span class="string">&quot;...&quot;</span></span><br><span class="line"></span><br><span class="line">git push -u origin master</span><br><span class="line"></span><br><span class="line">git pull origin master</span><br></pre></td></tr></table></div></figure>
 
-        <h2 id="在远程分支与本地分支之间建立联系"   >
-          <a href="#在远程分支与本地分支之间建立联系" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#在远程分支与本地分支之间建立联系"></a> 在远程分支与本地分支之间建立联系</h2>
+        <h3 id="在远程分支与本地分支之间建立联系"   >
+          <a href="#在远程分支与本地分支之间建立联系" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#在远程分支与本地分支之间建立联系"></a> 在远程分支与本地分支之间建立联系</h3>
       
-<p>在本地分支新创建的分支没有与远程分支建立联系，需要使用以下指令建立本地分支与远程分支的联系，之后即可pull</p>
+<p>在本地分支新创建的分支没有与远程分支建立联系，需要使用以下指令建立本地分支与远程分支的联系，之后即可 pull</p>
 <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git checkout -b dev</span><br><span class="line"></span><br><span class="line">git branch --set-upstream-to=origin/dev dev</span><br><span class="line"></span><br><span class="line">git pull origin dev</span><br></pre></td></tr></table></div></figure>
 
-        <h2 id="更新远程分支列表"   >
-          <a href="#更新远程分支列表" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#更新远程分支列表"></a> 更新远程分支列表</h2>
+        <h3 id="更新远程分支列表"   >
+          <a href="#更新远程分支列表" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#更新远程分支列表"></a> 更新远程分支列表</h3>
       
 <p>在远程仓库的分支发生变化而本地仓库的分支没有更新时使用</p>
 <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git remote update origin --prune</span><br><span class="line">git fetch --all</span><br></pre></td></tr></table></div></figure>
 
-        <h3 id="各种疑难杂症解决方案"   >
-          <a href="#各种疑难杂症解决方案" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#各种疑难杂症解决方案"></a> 各种疑难杂症解决方案</h3>
+        <h2 id="git-基本原理"   >
+          <a href="#git-基本原理" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#git-基本原理"></a> Git 基本原理</h2>
+      
+
+        <h3 id="工作区域"   >
+          <a href="#工作区域" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#工作区域"></a> 工作区域</h3>
+      
+<p>Git 本地有三个工作区域：</p>
+<ul>
+<li><strong>工作目录</strong>（Working Directory）：平时存放项目代码的地方</li>
+<li><strong>暂存区</strong>（Stage / Index）：用于临时存放你的改动，事实上他只是一个文件，保存即将提交的文件列表信息</li>
+<li><strong>资源库</strong>（Repository 或 Git Directory）：安全存放数据的地方，这里面有你提交到所有版本的数据，其中 head 指向最新放入仓库的版本</li>
+</ul>
+<p>如果再加上远程的 git 仓库（Remote Directory），就可以分为四个工作区域。文件在这四个区域之间的转换关系如下：</p>
+<p><img src="/images/%E3%80%90Git%E3%80%91%E5%B8%B8%E7%94%A8Git%E5%91%BD%E4%BB%A4/kuangstudyae8da8c9-1abe-4723-80a1-26653a41bad1.png" alt="img" /></p>
+
+        <h3 id="创建工作目录与常用命令"   >
+          <a href="#创建工作目录与常用命令" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#创建工作目录与常用命令"></a> 创建工作目录与常用命令</h3>
+      
+<p><img src="/images/%E3%80%90Git%E3%80%91%E5%B8%B8%E7%94%A8Git%E5%91%BD%E4%BB%A4/kuangstudy9ff8c022-46e4-47e4-89f3-33f69aab6dd6.png" alt="img" /></p>
+
+        <h3 id="文件的四种状态"   >
+          <a href="#文件的四种状态" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#文件的四种状态"></a> 文件的四种状态</h3>
+      
+<p>版本控制就是对文件的版本控制，要对文件进行修改、提交等操作，首先要知道文件当前在什么状态，不然可能会提交了现在还不想提交的文件，或者要提交的文件没提交上。</p>
+<ul>
+<li>Untracked：未跟踪，此文件在文件夹中，但没有加入到git库，不参与版本控制，通过 <code>git add</code> 状态变为 Staged</li>
+<li>Staged：暂存状态，执行了 <code>git commit</code> 则将修改同步到库中，这时库中的文件和本地文件又变为一致，文件为 Unmodified 状态，执行 <code>git reset HEAD filename</code> 取消暂存，文件状态为Modified</li>
+<li>Unmodify：文件已入库，未修改，即版本库中的文件快照内容与文件夹中完全一致，这种类型的文件有两种去处，如果他被修改而变为 Modified，如果使用 <code>git rm</code> 移出版本库，则成为 Untracked 文件</li>
+<li>Modified：文件已修改，仅仅是修改，并没有进行其他操作，这个文件也有两个去处，通过 <code>git add</code> 可进入暂存 Staged 状态，使用 <code>git checkout</code> 则丢弃修改过，返回到 Unmodify 状态，这个 <code>git checkout</code> 即从库中取出文件，覆盖当前修改</li>
+</ul>
+
+        <h3 id="查看文件状态"   >
+          <a href="#查看文件状态" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#查看文件状态"></a> 查看文件状态</h3>
+      
+<p>上面说文件有四种状态，通过如下命令可以查看到文件的状态</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看指定文件状态</span></span><br><span class="line">git status [filename]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看所有文件状态</span></span><br><span class="line">git status</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加所有文件到暂存区</span></span><br><span class="line">git add .</span><br><span class="line"></span><br><span class="line"><span class="comment"># 提交暂存区中的内容到本地仓库</span></span><br><span class="line">git commit -m <span class="string">&quot;消息内容&quot;</span></span><br></pre></td></tr></table></div></figure>
+
+        <h2 id="各种疑难杂症解决方案"   >
+          <a href="#各种疑难杂症解决方案" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#各种疑难杂症解决方案"></a> 各种疑难杂症解决方案</h2>
       
 
         <h3 id="failed-to-connect-to-githubcom-port-443connection-timed-out"   >
