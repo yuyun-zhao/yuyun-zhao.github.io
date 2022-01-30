@@ -1,13 +1,43 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F32.png?v=2.6.2" type="image/png" sizes="32x32"><meta property="og:type" content="article">
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="Tomcat 简介        Tomcat 是由 Apache 软件基金会属下Jakarta项目开发的Servlet容器，按照Sun Microsystems提供的技术规范，实现了对Servlet和JavaServer Page（JSP）的支持，并提供了作为Web服务器的一些特有功能，如Tomcat管理和控制平台、安全局管理和Tomcat阀等。由于Tomcat本身也内含">
+<meta property="og:type" content="article">
 <meta property="og:title" content="【Tomcat】Tomcat">
 <meta property="og:url" content="http://yuyun-zhao.github.io/2021/04/29/%E3%80%90Tomcat%E3%80%91Tomcat/index.html">
 <meta property="og:site_name" content="yuyun zhao&#39;s blog">
+<meta property="og:description" content="Tomcat 简介        Tomcat 是由 Apache 软件基金会属下Jakarta项目开发的Servlet容器，按照Sun Microsystems提供的技术规范，实现了对Servlet和JavaServer Page（JSP）的支持，并提供了作为Web服务器的一些特有功能，如Tomcat管理和控制平台、安全局管理和Tomcat阀等。由于Tomcat本身也内含">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130103856954.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130104501350.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130105249865.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130111057831.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Tomcat%E3%80%91Tomcat/20180108204347710">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Tomcat%E3%80%91Tomcat/20180108194817763">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130140058239.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130141231762.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130142639010.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Tomcat%E3%80%91Tomcat/20180108205854139">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130185854077.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130190809580.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130190849670.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Tomcat%E3%80%91Tomcat/20180108201901382">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130194623089.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Tomcat%E3%80%91Tomcat/74a1291e954d388235d758067b274429.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130194711901.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Tomcat%E3%80%91Tomcat/20180116093931129">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130202122132.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130203247456.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130203426222.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130204002258.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130204451489.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130232015897.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130232455469.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130103737751.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130231727802.png">
 <meta property="article:published_time" content="2021-04-29T02:35:00.000Z">
-<meta property="article:modified_time" content="2022-01-29T02:46:42.511Z">
+<meta property="article:modified_time" content="2022-01-30T15:37:40.942Z">
 <meta property="article:author" content="yuyun zhao">
 <meta property="article:tag" content="Tomcat">
-<meta name="twitter:card" content="summary"><title>【Tomcat】Tomcat | yuyun zhao's blog</title><link ref="canonical" href="http://yuyun-zhao.github.io/2021/04/29/%E3%80%90Tomcat%E3%80%91Tomcat/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yuyun-zhao.github.io/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130103856954.png"><title>【Tomcat】Tomcat | yuyun zhao's blog</title><link ref="canonical" href="http://yuyun-zhao.github.io/2021/04/29/%E3%80%90Tomcat%E3%80%91Tomcat/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
 var CONFIG = {
   root: '/',
   algolia: undefined,
@@ -31,7 +61,449 @@ var CONFIG = {
   sourcePath: {"js":"js","css":"css","images":"images"},
 };
 
-window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【Tomcat】Tomcat</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-04-29</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-01-29</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">0</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">1分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body"></div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yuyun-zhao.github.io">yuyun zhao</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yuyun-zhao.github.io/2021/04/29/%E3%80%90Tomcat%E3%80%91Tomcat/">http://yuyun-zhao.github.io/2021/04/29/%E3%80%90Tomcat%E3%80%91Tomcat/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.github.io/tags/Tomcat/">Tomcat</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2021/05/01/%E3%80%90JavaWeb%E3%80%91Session%E5%92%8CCookie/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">【JavaWeb】Session 和 Cookie</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2021/04/28/%E3%80%90JavaWeb%E3%80%91%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/"><span class="paginator-prev__text">【JavaWeb】文件上传</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/author.png" alt="avatar"></div><p class="sidebar-ov-author__text">no code no life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/YUYUN-ZHAO" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="zyy18749810683" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a><a class="sidebar-ov-social-item" href="1024462136" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="mailto:im.yuyunzhao@gmail.com" target="_blank" rel="noopener" data-popover="social.Gmail" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">Gmail</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">146</div><div class="sidebar-ov-state-item__name">文章</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">40</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">40</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2022</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>yuyun zhao</span><span class="footer__devider">|</span><span>沪ICP备2022000458号</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script>function initSearch() {
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【Tomcat】Tomcat</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-04-29</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-01-30</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">6.4k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">37分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body">
+        <h2 id="tomcat-简介"   >
+          <a href="#tomcat-简介" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#tomcat-简介"></a> Tomcat 简介</h2>
+      
+<p>Tomcat 是由 Apache 软件基金会属下<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Jakarta%E9%A1%B9%E7%9B%AE" >Jakarta项目</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>开发的<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Servlet" >Servlet</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>容器，按照<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Sun_Microsystems" >Sun Microsystems</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>提供的技术规范，实现了对<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Servlet" >Servlet</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>和<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/JavaServer_Page" >JavaServer Page</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>（<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/JSP" >JSP</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>）的支持，并提供了作为Web服务器的一些特有功能，如Tomcat管理和控制平台、安全局管理和Tomcat阀等。由于Tomcat本身也内含了<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/HTTP" >HTTP</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%9C%8D%E5%8A%A1%E5%99%A8" >服务器</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>，因此也可以视作单独的<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Web%E6%9C%8D%E5%8A%A1%E5%99%A8" >Web服务器</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>。Tomcat提供了一个Jasper<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%BC%96%E8%AF%91%E5%99%A8" >编译器</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>用以将JSP编译成对应的Servlet。</p>
+<p><strong>Servlet接口和Servlet容器这一整套规范叫作Servlet规范</strong>。Tomcat按照Servlet规范的要求<strong>实现了Servlet容器</strong>，同时它们也具有HTTP服务器的功能。</p>
+<p><strong>Tomcat 本质上是一个 Servlet 容器</strong>。开发人员只需要实现 Servlet 接口并注入到 Servlet 容器中，剩下的跳转响应都交给 Tomcat 实现。*</p>
+
+        <h3 id="历史"   >
+          <a href="#历史" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#历史"></a> 历史</h3>
+      
+<p>Tomcat 最初由Sun公司的软件架构师 James Duncan Davidson 开发，名称为 JavaWebServer</p>
+<ul>
+<li>1999年 ，在 Davidson 的帮助下，该项目于1999年于 apache 软件基金会旗下的 JServ 项目合并，并发布第一个版本（3.x），即是现在的Tomcat，该版本实现了 Servlet2.2 和 JSP 1.1 规范</li>
+<li>2001年，Tomcat 发布了4.0版本，作为里程碑式的版本，Tomcat 完全重新设计了 其架构，并实现了 Servlet 2.3 和 JSP1.2规范</li>
+<li>目前 Tomcat 已经更新到 9.0.x 版本，但是目前企业中的Tomcat服务器， 主流版本还是 7.x 和 8.x 版本</li>
+</ul>
+
+        <h3 id="常见-web-服务器软件"   >
+          <a href="#常见-web-服务器软件" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#常见-web-服务器软件"></a> 常见 web 服务器软件</h3>
+      
+<ul>
+<li>webLogic：oracle公司，大型的JavaEE服务器，支持所有的JavaEE规范，收费的。</li>
+<li>webSphere：IBM公司，大型的JavaEE服务器，支持所有的JavaEE规范，收费的。</li>
+<li>JBOSS：JBOSS公司的，大型的JavaEE服务器，支持所有的JavaEE规范，收费的。</li>
+<li>Tomcat：Apache基金组织，中小型的JavaEE服务器，仅仅支持少量的JavaEE规范 servlet/jsp。开源的，免费的</li>
+</ul>
+<span id="more"></span>
+
+        <h2 id="tomcat-架构"   >
+          <a href="#tomcat-架构" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#tomcat-架构"></a> Tomcat 架构</h2>
+      
+<blockquote>
+<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1dJ411N7Um?p=1" >https://www.bilibili.com/video/BV1dJ411N7Um?p=1</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+</blockquote>
+
+        <h3 id="http-工作原理"   >
+          <a href="#http-工作原理" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#http-工作原理"></a> HTTP 工作原理</h3>
+      
+<p>HTTP 协议是浏览器与服务器之间的数据传送协议。作为<strong>应用层协议</strong>，HTTP 是基于 TCP/IP 协议来传递数据的（HTML文件、图片、查询结果等），HTTP 协议<strong>不涉及数据包（Packet）传输</strong>，主要规定了客户端和服务器之间的<strong>通信格式</strong>。</p>
+<p><img src="/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130103856954.png" alt="image-20220130103856954" /></p>
+<p>具体流程：</p>
+<ul>
+<li>用户通过浏览器进行了一个操作，比如输入网址并回车，或者是点击链接，接着浏览器获取了这个事件。</li>
+<li>浏览器向服务端发出TCP连接请求。</li>
+<li>服务程序接受浏览器的连接请求，并经过TCP三次握手建立连接。</li>
+<li>浏览器将请求数据打包成一个HTTP协议格式的数据包。</li>
+<li>浏览器将该数据包推入网络，数据包经过网络传输，最终达到端服务程序。</li>
+<li>服务端程序拿到这个数据包后，同样以HTTP协议格式解包，获取到客户端的意图。</li>
+<li>得知客户端意图后进行处理，比如提供静态文件或者调用服务端程序获得动态结果。</li>
+<li>服务器将响应结果（可能是HTML或者图片等）按照HTTP协议格式打包。</li>
+<li>服务器将响应数据包推入网络，数据包经过网络传输最终达到到浏览器。</li>
+<li>浏览器拿到数据包后，以HTTP协议的格式解包，然后解析数据，假设这里的数据是 HTML。</li>
+<li>浏览器将HTML文件展示在页面上。</li>
+</ul>
+<p>那我们想要探究的Tomcat作为一个HTTP服务器，在这个过程中都做了些什么事情呢？主要是<strong>接收连接</strong>、<strong>解析请求数据</strong>、<strong>处理请求</strong>和<strong>发送响应</strong>这几个步骤。</p>
+
+        <h3 id="http-服务器请求处理"   >
+          <a href="#http-服务器请求处理" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#http-服务器请求处理"></a> HTTP 服务器请求处理</h3>
+      
+<p>浏览器发给服务端的是一个HTTP格式的请求，HTTP服务器收到这个请求后，需要调用服务端程序来处理，所谓的服务端程序就是你写的Java类，一般来说不同的请求需要由不同的Java类来处理。</p>
+<p><img src="/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130104501350.png" alt="image-20220130104501350" /></p>
+<ul>
+<li>图1，表示HTTP服务器直接调用具体业务类，它们是紧耦合的。</li>
+<li>图2，HTTP服务器不直接调用业务类，而是把请求交给<strong>Servlet 容器</strong>来处理，容器通过 Servlet 接口调用业务类。因此Servlet接口和Servlet容器的出现，达到了HTTP服务器与业务类解耦的目的。</li>
+</ul>
+<p><strong>Servlet接口和Servlet容器这一整套规范叫作Servlet规范</strong>。 <strong>Tomcat按照Servlet规范的要求实现了Servlet容器，同时它们也具有HTTP服务器的功能</strong>。作为Java程序员，如果我们要实现新的业务功能，只需要实现一个Servlet，并把它注册到Tomcat（Servlet容器）中，剩下的事情就由Tomcat帮我们处理了。</p>
+
+        <h3 id="servlet-容器工作流程"   >
+          <a href="#servlet-容器工作流程" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#servlet-容器工作流程"></a> Servlet 容器工作流程</h3>
+      
+<p>为了解耦，<strong>HTTP服务器不直接调用Servlet，而是把请求交给Servlet容器来处理</strong>，那Servlet容器又是怎么工作的呢？</p>
+<ul>
+<li>当客户请求某个资源时，<strong>HTTP服务器</strong>会<strong>用一个<code>ServletRequest</code>对象把客户的请求信息封装起来</strong>，然后调用<strong>Servlet容器</strong>的<code>service</code>方法</li>
+<li><strong>Servlet容器</strong>拿到请求后，根据请求的URL和Servlet的映射关系，找到相应的Servlet</li>
+<li>如果Servlet还没有被加载，就用<strong>反射机制</strong>创建这个Servlet，并调用Servlet的<code>init</code>方法来完成初始化</li>
+<li>接着调用Servlet的<code>service</code>方法来处理请求，把<code>ServletResponse</code>对象返回给HTTP服务器，HTTP服务器会把响应发送给客户端。</li>
+</ul>
+<p><img src="/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130105249865.png" alt="image-20220130105249865" /></p>
+<blockquote>
+<p>HTTP 服务器具体实现就是下面要介绍的 Connector，其负责将客户端发来的 HTTP 请求进行解析转换成 <code>ServletRequest</code> 对象。</p>
+</blockquote>
+
+        <h3 id="tomcat-整体架构"   >
+          <a href="#tomcat-整体架构" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#tomcat-整体架构"></a> Tomcat 整体架构</h3>
+      
+<p>Tomcat 要实现两个核心功能：</p>
+<ul>
+<li>处理客户端发来的Socket连接，负责<strong>网络字节流</strong>与<strong>Request/Response对象</strong>之间的转化。</li>
+<li>加载和管理Servlet，以及具体处理Request请求。</li>
+</ul>
+<p>因此Tomcat设计了两个核心组件<strong>连接器</strong>（Connector）和<strong>容器</strong>（Container）来分别做这两件事情。<strong>连接器负责对外交流</strong>，<strong>容器负责内部处理</strong>。</p>
+<p><img src="/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130111057831.png" alt="image-20220130111057831" /></p>
+<p>从图中可以看出，<strong>一个 Tomcat 服务器可以配置多个服务 Service</strong>（默认配置了一个名为 <code>&quot;Catalina&quot;</code> 的 Service）。每个 Service 中又包含了<strong>多个连接器 Connector</strong>和<strong>一个Servlet容器</strong>。</p>
+<ul>
+<li>多个连接器是为了实现支持<strong>多种 I/O 模型</strong>和<strong>应用层协议</strong>。</li>
+<li>Servlet容器管理着所有Servlet实例对象。其内有一个引擎 Engine，且包含多个主机 Host 与多个 Context。每个 Context 代表一个 Web 应用，其内有许多的 Servlet 实例对象。</li>
+</ul>
+<p>其中，Tomcat 的 Connector 连接器框架为 <strong>Coyote</strong>。Servlet 容器为 <strong>Catalina 容器</strong>。</p>
+<blockquote>
+<p>Servlet 容器又可被称为 Catalina 容器、Container 容器</p>
+</blockquote>
+<p>单独的连接器或者容器都不能对外提供服务，需要把它们组装起来才能工作，组装后这个整体叫作Service组件。注意，Service本身没有做什么重要的事情，只是在连接器和容器外面多包了一层，把它们组装在一起。Tomcat内可能有多个Service，这样的设计也是出于灵活性的考虑。通过在Tomcat中配置多个Service，可以实现通过不同的端口号来访问同一台机器上部署的不同应用。</p>
+
+        <h3 id="示例"   >
+          <a href="#示例" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#示例"></a> 示例</h3>
+      
+<blockquote>
+<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://blog.csdn.net/hancoder/article/details/118466983" >https://blog.csdn.net/hancoder/article/details/118466983</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+</blockquote>
+<p>示例 1：多协议访问</p>
+<p><img src="/images/%E3%80%90Tomcat%E3%80%91Tomcat/20180108204347710" alt="img" /></p>
+<p>示例 2：</p>
+<p><img src="/images/%E3%80%90Tomcat%E3%80%91Tomcat/20180108194817763" alt="img" /></p>
+<p>其中，Server标签设置的端口号为8005，<code>shutdown=&quot;SHUTDOWN&quot;</code>，表示在8005端口监听 <code>SHUTDOWN</code> 命令，如果接收到了就会关闭Tomcat。一个Server有多个Service，Service左边的内容（Engine）都属于Container的，Service下边是Connector，负责监听TCP请求。</p>
+
+        <h2 id="连接器框架-coyote"   >
+          <a href="#连接器框架-coyote" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#连接器框架-coyote"></a> 连接器框架 Coyote</h2>
+      
+
+        <h3 id="coyote-简介"   >
+          <a href="#coyote-简介" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#coyote-简介"></a> Coyote 简介</h3>
+      
+<p>Coyote是Tomcat的Connector连接器框架的名称，是Tomcat服务器提供的<strong>供客户端访问的外部接口</strong>。客户端通过Coyote与服务器建立连接、发送请求并接受响应。</p>
+<p>Coyote封装了底层的网络通信（Socket 请求及响应处理），为Catalina容器（Servlet容器/Cotainer容器）提供了统一的接口，<strong>使Catalina容器与具体的请求协议及IO操作方式完全解耦</strong>。</p>
+<ul>
+<li>Coyote将Socket输入转换封装为<code>Request</code>对象，交由Catalina容器进行处理，处理请求完成后，Catalina容器通过Coyote提供的<code>Response</code>对象将结果写入输出流</li>
+<li>Catalina容器只负责接收Coyote包装处理后的<code>Request</code>对象，对其进行业务处理后再将响应结果<code>Response</code>对象传给Coyote，Coyote在进行解析后再返回HTTP请求给客户端</li>
+</ul>
+<blockquote>
+<p>Servlet 容器又可被称为 Catalina 容器、Container 容器</p>
+</blockquote>
+<p>Coyote作为独立的模块，<strong>只负责具体协议和IO的相关操作</strong>，与Servlet规范实现没有直接关系，因此即便是<code>Request</code>和<code>Response</code>对象也并未实现Servlet规范对应的接口，而是在Catalina容器中将他们进一步封装为<code>ServletRequest</code>和<code>ServletResponse</code>。</p>
+<p>示意图：</p>
+<blockquote>
+<p>图中的 Catalina 就是 Container 容器</p>
+</blockquote>
+<p><img src="/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130140058239.png" alt="image-20220130140058239" /></p>
+<blockquote>
+<p>Request -&gt; ServletRequest 的转换是由 Coyote 框架的适配器组件 Adapter 完成的（适配器模式）。</p>
+</blockquote>
+
+        <h3 id="io-模型与协议"   >
+          <a href="#io-模型与协议" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#io-模型与协议"></a> IO 模型与协议</h3>
+      
+<p>在Coyote中，Tomcat支持多种I/O模型和应用层协议，具体包含了以下IO模型和应用层协议：</p>
+<blockquote>
+<p>自 8.5/9.0 版本起，Tomcat 移除了对BIO的支持改为使用NIO</p>
+</blockquote>
+<p>IO 模型（传输层）：</p>
+<div class="table-container"><table>
+<thead>
+<tr>
+<th>IO 模型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NIO</td>
+<td>非阻塞IO，采用JAVA NIO实现</td>
+</tr>
+<tr>
+<td>NIO2</td>
+<td><strong>异步</strong>IO，采用JDK7最新的NIO2类库实现</td>
+</tr>
+<tr>
+<td>APR</td>
+<td>采用Apache可移植运行库实现，是C/C++编写的本地库，如果选择此方案需要单独安装APR库</td>
+</tr>
+</tbody>
+</table></div>
+<p>Tomcat 支持的<strong>应用层协议</strong>：</p>
+<div class="table-container"><table>
+<thead>
+<tr>
+<th>应用层协议</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HTTP1.1</td>
+<td>大部分web应用采用的协议</td>
+</tr>
+<tr>
+<td>HTTP2</td>
+<td>HTTP2大幅度提升了web性能，自tomcat 9版本以后支持</td>
+</tr>
+<tr>
+<td>AJP</td>
+<td>用于和Web服务器(Apache)集成，以实现对静态资源的优化和集群部署，当前支持AJP/1.3</td>
+</tr>
+</tbody>
+</table></div>
+<p>两种协议分层：</p>
+<p><img src="/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130141231762.png" alt="image-20220130141231762" /></p>
+<p>在 8.0 之前，Tomcat 默认采用的I/O方式为BIO，之后改为NIO。无论 NIO、NIO2 还是 APR， 在性能方面均优于以往的BIO。如果采用APR，甚至可以达到 Apache HTTP Server 的影响性能。</p>
+
+        <h3 id="连接器组件"   >
+          <a href="#连接器组件" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#连接器组件"></a> 连接器组件</h3>
+      
+<p>Coyote中的连接组件分为四部分：</p>
+<p><img src="/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130142639010.png" alt="image-20220130142639010" /></p>
+
+        <h4 id="endpoint"   >
+          <a href="#endpoint" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#endpoint"></a> EndPoint</h4>
+      
+<p><code>EndPoint</code>是Coyote的<strong>通信端点</strong>，即<strong>通信监听的接口</strong>，是具体Socket接收和发送处理器，是对传输层的抽象，因此<code>EndPoint</code>是用来实现TCP/IP协议的。</p>
+<p>Tomcat 并没有<code>EndPoint</code>接口，而是提供了一个抽象类<code>AbstractEndpoint</code> ，里面定义了两个内部类：<code>Acceptor</code>和<code>SocketProcessor</code>。</p>
+<ul>
+<li><code>Acceptor</code>用于监听Socket连接请求。</li>
+<li><code>SocketProcessor</code>用于处理接收到的Socket请求，它实现<code>Runnable</code>接口，在<code>run()</code>方法里调用协议处理组件<code>Processor</code>进行处理。为了提高处理能力，<code>SocketProcessor</code>被提交到线程池来执行。而这个线程池叫作执行器（<code>Executor</code>)。</li>
+</ul>
+<p>该模式就类似于NIO中的多路复用模型。一个<code>Acceptor</code>负责监听所有Socket请求，然后每收到一个新的请求，就从线程池中占用一个线程执行处理代码。</p>
+
+        <h4 id="processor"   >
+          <a href="#processor" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#processor"></a> Processor</h4>
+      
+<p><code>Processor</code>是HTTP协议的<strong>处理接口</strong> ，<strong>如果说<code>EndPoint</code>是用来实现TCP/IP协议的，那么<code>Processor</code>用来实现HTTP协议</strong>，<code>Processor</code>接收来自<code>EndPoint</code>的Socket，读取字节流解析成Tomcat <code>Request</code>和<code>Response</code>对象，并通过<code>Adapter</code>将其提交到容器处理，<code>Processor</code>是对<strong>应用层</strong>协议的抽象。</p>
+
+        <h4 id="protocolhandler"   >
+          <a href="#protocolhandler" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#protocolhandler"></a> ProtocolHandler</h4>
+      
+<p><code>ProtocolHandler</code>是Coyote协议接口， 通过<code>Endpoint</code>和<code>Processor</code>，实现针对具体协议的处理能力。Tomcat 按照协议和I/O 提供了6个实现类 ： <code>AjpNioProtocol</code>，<code>AjpAprProtocol</code>， <code>AjpNio2Protocol</code>，<code>Http11NioProtocol</code>，<code>Http11Nio2Protocol</code>，<code>Http11AprProtocol</code>。我们在配置<code>tomcat/conf/server.xml</code> 时，至少要指定具体的<code>ProtocolHandler</code>，当然也可以指定协议名称。例如： HTTP/1.1。如果安装了APR，那么将使用<code>Http11AprProtocol</code>，否则使用<code>Http11NioProtocol</code>。</p>
+
+        <h4 id="adapter"   >
+          <a href="#adapter" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#adapter"></a> Adapter</h4>
+      
+<p>由于协议不同，客户端发过来的请求信息也不尽相同，Tomcat定义了自己的<code>Request</code>类来“存放”这些请求信息。<code>ProtocolHandler</code>接口负责解析请求并生成Tomcat <code>Request</code>类。但是这个<code>Request</code>对象不是标准的<code>ServletRequest</code>，也就意味着，不能用Tomcat Request作为参数来调用容器。</p>
+<p>Tomcat设计者的解决方案是引入<code>Adapter</code>，这是<strong>适配器模式</strong>的经典运用，连接器调用<code>Adapter</code>的<code>Sevice()</code>方法，传入的是Tomcat <code>Request</code>对象，<code>Adapter</code>负责将Tomcat <code>Request</code>转成<code>ServletRequest</code>，再调用容器的<code>Service</code>方法。</p>
+
+        <h4 id="总结"   >
+          <a href="#总结" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#总结"></a> 总结</h4>
+      
+<p><img src="/images/%E3%80%90Tomcat%E3%80%91Tomcat/20180108205854139" alt="img" /></p>
+<p>Connector就是使用<code>ProtocolHandler</code>（协议处理器）来处理请求的，不同的<code>ProtocolHandler</code>代表不同的连接类型，比如：<code>Http11Protocol</code>使用的是普通<code>Socket</code>来连接的，<code>Http11NioProtocol</code>使用的是<code>NioSocket</code>来连接的。</p>
+<p>其中<code>ProtocolHandler</code>由包含了三个部件：<code>Endpoint</code>、<code>Processor</code>、<code>Adapter</code>。</p>
+<ul>
+<li><code>Endpoint</code> 用来处理底层Socket的网络连接，因此<code>Endpoint</code>是用来实现<code>TCP/IP</code>协议的</li>
+<li><code>Processor</code> 用于将<code>Endpoint</code>接收到的Socket封装成<code>Request</code>。<code>Processor</code>是用来实现<code>HTTP</code>协议的</li>
+<li><code>Adapter</code> 用于将<code>Request</code>交给Container进行具体的处理（将请求适配到Servlet容器）。</li>
+</ul>
+<p>此外<code>Endpoint</code>的抽象实现<code>AbstractEndpoint</code>里面定义的<code>Acceptor</code>和<code>AsyncTimeout</code>两个内部类和一个<code>Handler</code>接口：</p>
+<ul>
+<li><code>Acceptor</code>用于监听请求</li>
+<li><code>AsyncTimeout</code>用于检查异步Request的超时</li>
+<li><code>Handler</code>用于处理接收到的Socket，在内部调用<code>Processor</code>进行处理。</li>
+</ul>
+
+        <h2 id="catalina-容器"   >
+          <a href="#catalina-容器" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#catalina-容器"></a> Catalina 容器</h2>
+      
+<blockquote>
+<p>Catalina 容器即为 Container 容器、Servlet 容器。Tomcat 的配置文件中，默认 <code>Service</code> 的名称为 <code>&quot;Catalina&quot;</code>；默认 <code>Engine</code> 的名称也为 <code>&quot;Catalina&quot;</code>。说明 Catalina 只是对 Service 和 Container 容器起的一个别名罢了，不要弄混 Service 和 Container 容器的区别。</p>
+</blockquote>
+<p>Tomcat 本质上就是一款 Servlet 容器（Servlet 可以理解为一种规范）， 因此 Catalina 才是 Tomcat 的核心，其他模块都是为Catalina提供支撑的。 比如：通过Coyote模块提供通信连接，Jasper模块提供JSP引擎，Naming提供JNDI 服务，Juli提供日志服务。</p>
+<img src="/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130185854077.png" alt="image-20220130185854077" style="zoom:67%;" />
+<p>Tomcat的主要组件结构如下：Server表示着整个服务器，Server下面有多个服务Service，每个服务都包含着多个连接器组件Connector（Coyote 实现）和一个容器组件Container。</p>
+<p><img src="/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130190809580.png" alt="image-20220130190809580" /></p>
+<p>Tomcat的Container中设计了4种容器，分别是<code>Engine</code>、<code>Host</code>、<code>Context</code>和<code>Wrapper</code>。这4种容器不是平行关系，而是父子关系。Tomcat通过一种分层的架构，使得Servlet容器具有很好的灵活性。</p>
+<p><img src="/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130190849670.png" alt="image-20220130190849670" /></p>
+<p>其中，</p>
+<ul>
+<li>一个Container中只有一个<code>Engine</code>，<code>Engine</code>是整个Container容器的引擎，<strong>用来管理多个站点</strong></li>
+<li>一个<code>Engine</code>中可以有多个<code>Host</code>，<strong>一个<code>Host</code>代表一个站点</strong>（虚拟主机），<strong>一个<code>Host</code>里有可以包含多个<code>Context</code></strong></li>
+<li><strong><code>Context</code>就是一个Web应用</strong>，对应着平时开发的一套程序，或者一个<code>WEB-INF</code>目录以及下面的<code>web.xml</code>文件；</li>
+<li>一个Web应用中可以包含多个<code>Wrapper</code>，<code>Wrapper</code>就是Servlet。</li>
+</ul>
+<p><img src="/images/%E3%80%90Tomcat%E3%80%91Tomcat/20180108201901382" alt="img" /></p>
+<p>我们也可以再通过Tomcat的<code>server.xml</code>配置文件来加深对Tomcat容器的理解：</p>
+<img src="/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130194623089.png" alt="image-20220130194623089" style="zoom:67%;" />
+<p>Tomcat采用了<strong>组件化</strong>的设计，它的构成组件都是可配置的，其中最外层的是Server，其他组件按照一定的格式要求配置在这个顶层容器中。</p>
+<p>示例：</p>
+<p><img src="/images/%E3%80%90Tomcat%E3%80%91Tomcat/74a1291e954d388235d758067b274429.png" alt="img" /></p>
+<p>Tomcat的容器是具有父子关系的，形成一个树形结构，Tomcat就是用<strong>组合模式</strong>来管理这些容器的。具体实现方法是，所有容器组件都实现了<code>Container</code>接口，因此<strong>组合模式可以使得用户对单容器对象和组合容器对象的使用具有一致性</strong>。这里单容器对象指的是最底层的<code>Wrapper</code>，组合容器对象指的是上面的<code>Context</code>、<code>Host</code>或者<code>Engine</code>。<code>Container</code>接口扩展了<code>LifeCycle</code>接口，<code>LifeCycle</code>接口用来统一管理各组件的<strong>生命周期</strong>。</p>
+<p><img src="/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130194711901.png" alt="image-20220130194711901" /></p>
+
+        <h3 id="container-如何处理请求的"   >
+          <a href="#container-如何处理请求的" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#container-如何处理请求的"></a> Container 如何处理请求的</h3>
+      
+<p>Container处理请求是使用<code>Pipeline-Valve管道</code>来处理的（Valve是阀门之意）</p>
+<p>Pipeline-Valve是<strong>责任链模式</strong>，责任链模式是指在一个请求处理的过程中有很多处理者依次对请求进行处理，每个处理者负责做自己相应的处理，处理完之后将处理后的请求返回，再让下一个处理着继续处理。</p>
+<p>但是，Pipeline-Valve使用的责任链模式和普通的责任链模式有些不同！区别主要有以下两点：</p>
+<ul>
+<li>每个Pipeline都有特定的Valve，而且是在管道的最后一个执行，这个Valve叫做<code>BaseValve</code>，BaseValve是不可删除的；</li>
+<li>在上层容器的管道的<code>BaseValve</code>中会调用下层容器的管道。</li>
+</ul>
+<p>我们知道Container包含四个子容器，而这四个子容器对应的BaseValve分别在：<code>StandardEngineValve</code>、<code>StandardHostValve</code>、<code>StandardContextValve</code>、<code>StandardWrapperValve</code>。</p>
+<p><img src="/images/%E3%80%90Tomcat%E3%80%91Tomcat/20180116093931129" alt="img" /></p>
+<ul>
+<li>Connector在接收到请求后会首先调用最顶层容器的Pipeline来处理，这里的<code>最顶层容器</code>的Pipeline就是<code>EnginePipeline</code>（Engine的管道）</li>
+<li>在<code>Engine</code>的管道中依次会执行EngineValve1、EngineValve2等等，最后会执行<code>StandardEngineValve</code>，在StandardEngineValve中会调用Host管道，然后再依次执行<code>Host</code>的HostValve1、HostValve2等，最后在执行<code>StandardHostValve</code>，然后再依次调用<code>Context</code>的管道和<code>Wrapper</code>的管道，最后执行到<code>StandardWrapperValve</code></li>
+<li>当执行到StandardWrapperValve的时候，会在StandardWrapperValve中创建<code>FilterChain</code>，并调用其<code>doFilter()</code>方法来处理请求，这个FilterChain包含着我们配置的与请求相匹配的Filter和Servlet，其doFilter方法会依次调用所有的<code>Filter</code>的<code>doFilter()</code>方法和<code>Servlet</code>的<code>service()</code>方法，这样请求就得到了处理</li>
+<li>当所有的Pipeline-Valve都执行完之后，并且处理完了具体的请求，这个时候就可以将返回的结果交给Connector了，Connector在通过Socket的方式将结果返回给客户端</li>
+</ul>
+
+        <h2 id="tomcat-启动流程"   >
+          <a href="#tomcat-启动流程" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#tomcat-启动流程"></a> Tomcat 启动流程</h2>
+      
+<p><img src="/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130202122132.png" alt="image-20220130202122132" /></p>
+<ul>
+<li>调用 bin/startup.bat（在linux 目录下 , 需要调用 bin/startup.sh）</li>
+<li>在startup.bat 脚本中，调用了catalina.bat。</li>
+<li>在catalina.bat 脚本文件中，调用了<code>BootStrap</code>中的<code>main</code>方法。</li>
+<li>在<code>BootStrap</code>的<code>main</code>方法中调用了 <code>init</code> 方法 ，来创建<code>Catalina</code>及初始化类加载器。</li>
+<li>在<code>BootStrap</code>的<code>main</code>方法中调用了 <code>load</code> 方法 ，在其中又调用了<code>Catalina</code>的<code>load</code>方法。</li>
+<li>在<code>Catalina</code>的<code>load</code>方法中 , 需要进行一些初始化的工作, 并需要构造<code>Digester</code>对象，用于解析 XML。</li>
+<li>然后在调用后续组件的初始化操作 。加载Tomcat的配置文件，初始化容器组件 ，监听对应的端口号， 准备接受客户端请求</li>
+</ul>
+
+        <h3 id="源码解析"   >
+          <a href="#源码解析" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#源码解析"></a> 源码解析</h3>
+      
+<p>由于所有的组件均存在初始化、启动、停止等生命周期方法，拥有生命周期管理的特性，所以Tomcat在设计的时候， 基于生命周期管理抽象成了一个接口 <code>Lifecycle</code> ，而组件 <code>Server</code>、<code>Service</code>、<code>Container</code>、<code>Executor</code>、<code>Connector</code> 组件， 都实现了一个生命周期的接口，从而具有了以下生命周期中核心方法：</p>
+<ul>
+<li><code>init()</code>：初始化组件</li>
+<li><code>start()</code>：开始组件</li>
+<li><code>stop()</code>：停止组件</li>
+<li><code>destroy()</code>：销毁组件</li>
+</ul>
+<p><img src="/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130203247456.png" alt="image-20220130203247456" /></p>
+
+        <h3 id="各组件实现"   >
+          <a href="#各组件实现" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#各组件实现"></a> 各组件实现</h3>
+      
+<p>上面我们提到的<code>Server</code>、<code>Service</code>、<code>Engine</code>、<code>Host</code>、<code>Context</code>都是接口， 下图中罗列了这些接口的默认实现类。当前对于 <code>Endpoint</code>组件来说，在Tomcat中没有对应的<code>Endpoint</code>接口， 但是有一个抽象类 <code>AbstractEndpoint</code> ，其下有三个实现类： <code>NioEndpoint</code>、<code>Nio2Endpoint</code>、<code>AprEndpoint</code>，这三个实现类，分别对应于前面讲解连接器Coyote时， 提到的链接器支持的三种IO模型：NIO，NIO2，APR ，Tomcat8.5版本中，默认采用的是 <code>NioEndpoint</code>。</p>
+<p><img src="/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130203426222.png" alt="image-20220130203426222" /></p>
+
+        <h3 id="总结-2"   >
+          <a href="#总结-2" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#总结-2"></a> 总结</h3>
+      
+<p>从启动流程图中以及源码中，我们可以看出Tomcat的启动过程非常准化，统一按照生命周期管理接口<code>Lifecycle</code>的定义进行启动。首先调<code>init()</code>方法进行组件的逐级初始化操作，然后再调用<code>start()</code>方法进行启动。</p>
+<p>每一级的组件除了完成自身的处理外，还要负责调用子组件响应的生命周期管理方法，组件与组件之间是松耦合的，因为我们可以很容易的通过配置文件进行修改和替换</p>
+
+        <h2 id="tomcat-请求处理流程"   >
+          <a href="#tomcat-请求处理流程" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#tomcat-请求处理流程"></a> Tomcat 请求处理流程</h2>
+      
+<p>Tomcat中维护了一个<code>Mapper</code>组件<strong>将用户请求的URL定位到一个Servlet</strong>，它的工作原理是：<code>Mapper</code>组件里保存了Web应用的配置信息，其实就是<strong>容器组件与访问路径的映射关系</strong>，比如<code>Host</code>容器里配置的域名、<code>Context</code>容器里的Web应用路径，以及<code>Wrapper</code>容器里Servlet映射的路径，这些配置信息就像是一个多层次的Map。</p>
+<p>当一个请求到来时，<strong><code>Mapper</code>组件通过解析请求URL里的域名和路径，再到自己保存的Map里去查找，就能定位到一个Servlet</strong>。一个请求URL最后只会定位到一个<code>Wrapper</code>容器，也就是一个Servlet。下面的示意图中，就描述了当用户请求链接 <span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="http://www.itcast.cn/bbs/findAll" >http://www.itcast.cn/bbs/findAll</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span> 之后，是如何找到最终处理业务逻辑的Servlet：</p>
+<p><img src="/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130204002258.png" alt="image-20220130204002258" /></p>
+<p>上面这幅图只是描述了根据请求的URL如何查找到需要执行的Servlet，下面从Tomcat的设计架构层面来分析Tomcat了请求处理的过程：</p>
+<p><img src="/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130204451489.png" alt="image-20220130204451489" /></p>
+<ul>
+<li><code>Connector</code>组件<code>Endpoint</code>中的<code>Acceptor</code>监听客户端套接字连接并接收Socket。将连接交给线程池<code>Executor</code>处理，开始执行请求响应任务。</li>
+<li><code>Processor</code>组件读取消息报文，解析请求行、请求体、请求头，封装成<code>Request</code>对象。</li>
+<li><code>CoyoteAdaptor</code>组件负责将<code>Connector</code>组件和<code>Engine</code>容器关联起来，把生成的<code>Request</code>对象转换成<code>ServletRequest</code>，后面还会把<code>ServletResponse</code>转成<code>HttpResponse</code>对象返回回去。</li>
+<li><code>Mapper</code>组件根据请求行的URL值和请求头的Host值匹配由哪个Host容器、Context容器、Wrapper容器处理请求。</li>
+<li><code>Engine</code>容器的管道开始处理，管道中包含若干个<code>Valve</code>、每个<code>Valve</code>负责部分处理逻辑。执行完<code>Valve</code>后会执行基础的<code>StandardEngineValve</code>，负责调用<code>Host</code>容器的Pipeline。</li>
+<li><code>Host</code>容器的管道开始处理，流程类似，最后执行<code>Context</code>容器的Pipeline。</li>
+<li><code>Context</code>容器的管道开始处理，流程类似，最后执行<code>Wrapper</code>容器的Pipeline。</li>
+<li><code>Wrapper</code>容器的管道开始处理，流程类似，最后执行<code>Wrapper</code>容器对应的<code>Servlet</code>对象的处理方法。</li>
+</ul>
+<p>Tomcat中的各个组件各司其职，组件之间松耦合，确保了整体架构的可伸缩性和可拓展性, 在Tomcat中，每个Container组件采用<strong>责任链模式</strong>来完成具体的请求处理。<strong>在Tomcat中定义了Pipeline和 Valve两个接口，Pipeline用于构建责任链，后者代表责任链上的每个处理器</strong>。Pipeline中维护了一个基础的Valve，它始终位于Pipeline的末端（最后执行），封装了具体的请求处理和输出响应的过程。当然，我们也可以调用<code>addValve()</code>方法，为Pipeline添加其他的<code>Valve</code>，后添加的<code>Valve</code>位于基础的<code>Valve</code>之前，并按照添加顺序执行。Pipiline通过获得首个<code>Valve</code>来启动整合链条的执行。其实就是代码的同步执行。</p>
+<p><img src="/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130232015897.png" alt="image-20220130232015897" /></p>
+
+        <h3 id="总结-3"   >
+          <a href="#总结-3" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#总结-3"></a> 总结</h3>
+      
+<p><code>Mapper</code> 组件负责根据 <code>Connector</code> 传来的 URL 找到对应的 Servlet，然后由 <code>Container</code> 逐步传给对应的 <code>Wrapper</code>，在经过所有的过滤器 <code>Filter</code> 后再执行对应 Servlet 的 <code>service()</code> 方法。</p>
+
+        <h2 id="jasper"   >
+          <a href="#jasper" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#jasper"></a> Jasper</h2>
+      
+
+        <h3 id="jasper-简介"   >
+          <a href="#jasper-简介" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#jasper-简介"></a> Jasper 简介</h3>
+      
+<p>对于基于JSP 的web应用来说，我们可以直接在JSP页面中编写 Java代码，添加第三方的 标签库，以及使用EL表达式。但是无论经过何种形式的处理，最终输出到客户端的都是 标准的HTML页面（包含js ，css…），并不包含任何的java相关的语法。也就是说，我们可以把jsp看做是一种运行在服务端的脚本。那么服务器是如何将 JSP页面转换为 HTML页面的呢？</p>
+<p>Jasper模块是Tomcat的JSP<strong>核心引擎</strong>，我们知道<strong>JSP本质上是一个Servlet</strong>。Tomcat使用Jasper对JSP语法进行解析，生成Servlet并生成Class字节码，用户在进行访问jsp时，会访问Servlet，最终将访问的结果直接响应在浏览器端 。另外，在运行的时候，Jasper还会检测JSP文件是否被修改，如果修改，则会重新编译JSP文件。</p>
+<blockquote>
+<p>Tomcat 并不会在启动Web应用的时候自动编译JSP文件， 而是在客户端第一次请求时， 才编译需要访问的JSP文件。</p>
+</blockquote>
+
+        <h3 id="jsp-编译过程"   >
+          <a href="#jsp-编译过程" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#jsp-编译过程"></a> JSP 编译过程</h3>
+      
+<p>Tomcat 在默认的<code>web.xml</code>中配置了一个<code>org.apache.jasper.servlet.JspServlet</code>，用于处理所有的<code>.jsp</code>或 <code>.jspx</code>结尾的请求，该Servlet实现即是运行时编译的入口。</p>
+<p><code>JspServlet</code> 处理流程图：</p>
+<p><img src="/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130232455469.png" alt="image-20220130232455469" /></p>
+<p>JSP文件生成的对应Servlet对象：</p>
+<ul>
+<li>对于每一行的静态内容（HTML），调用 <code>out.write</code> 输出在浏览器上。</li>
+<li>对于 <code>&lt;% ... %&gt;</code> 中的 Java 代码 ，将直接转换为 Servlet 类中的代码。 如果在 Java 代码中嵌入了静态文件， 则同样调用 <code>out.write</code> 输出。</li>
+</ul>
+
+        <h2 id="tomcat-配置文件"   >
+          <a href="#tomcat-配置文件" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#tomcat-配置文件"></a> Tomcat 配置文件</h2>
+      
+
+        <h3 id="tomcat-目录结构"   >
+          <a href="#tomcat-目录结构" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#tomcat-目录结构"></a> Tomcat 目录结构</h3>
+      
+<p><img src="/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130103737751.png" alt="image-20220130103737751" /></p>
+<p>Tomcat 服务器的配置主要集中于 <code>tomcat/conf</code> 下的 <code>catalina.policy</code>、<code>catalina.properties</code>、<code>context.xml</code>、<code>server.xml</code>、<code>tomcat-users.xml</code>、<code>web.xml</code> 文件。</p>
+<p><code>server.xml</code>是Tomcat的核心配置，<code>tomcat-user.xml</code>主要是配置一些访问manager页面、域安全用户角色的信息，<code>web.xml</code>和webapp中的<code>web.xml</code>功能是一致的，控制一些访问Servlet的参数等等，但是全局的，本章主要讲一下<code>server.xml</code></p>
+
+        <h3 id="serverxml"   >
+          <a href="#serverxml" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#serverxml"></a> server.xml</h3>
+      
+<p><code>server.xml</code>是Tomcat的核心配置，包含了Tomcat的Servlet容器（Catalina）的所有配置。由于配置的属性特别多，我们在这里主要讲解其中的一部分重要配置。</p>
+<figure class="highlight xml"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Server</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Listener</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">GlobaNamingResources</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">GlobaNamingResources</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Service</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">Connector</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">Engine</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">Logger</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">Realm</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">host</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">Logger</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">Context</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">host</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">Engine</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">Service</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">Server</span>&gt;</span></span><br></pre></td></tr></table></div></figure>
+<p>Server是<code>server.xml</code>的根元素，用于创建一个Server实例，默认使用的实现类是<code>org.apache.catalina.core.StandardServer。</code></p>
+<p>Tomcat 的配置文件中，默认 <code>Service</code> 的名称为 <code>&quot;Catalina&quot;</code>；默认 <code>Engine</code> 的名称也为 <code>&quot;Catalina&quot;</code>。</p>
+
+        <h2 id="websocket"   >
+          <a href="#websocket" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#websocket"></a> WebSocket</h2>
+      
+<p><img src="/images/%E3%80%90Tomcat%E3%80%91Tomcat/image-20220130231727802.png" alt="image-20220130231727802" /></p>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yuyun-zhao.github.io">yuyun zhao</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yuyun-zhao.github.io/2021/04/29/%E3%80%90Tomcat%E3%80%91Tomcat/">http://yuyun-zhao.github.io/2021/04/29/%E3%80%90Tomcat%E3%80%91Tomcat/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.github.io/tags/Tomcat/">Tomcat</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2021/05/01/%E3%80%90JavaWeb%E3%80%91Session%E5%92%8CCookie/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">【JavaWeb】Session 和 Cookie</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2021/04/28/%E3%80%90JavaWeb%E3%80%91%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/"><span class="paginator-prev__text">【JavaWeb】文件上传</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#tomcat-%E7%AE%80%E4%BB%8B"><span class="toc-text">
+           Tomcat 简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%86%E5%8F%B2"><span class="toc-text">
+           历史</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81-web-%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6"><span class="toc-text">
+           常见 web 服务器软件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tomcat-%E6%9E%B6%E6%9E%84"><span class="toc-text">
+           Tomcat 架构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#http-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-text">
+           HTTP 工作原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#http-%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%AF%B7%E6%B1%82%E5%A4%84%E7%90%86"><span class="toc-text">
+           HTTP 服务器请求处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#servlet-%E5%AE%B9%E5%99%A8%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="toc-text">
+           Servlet 容器工作流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#tomcat-%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="toc-text">
+           Tomcat 整体架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B"><span class="toc-text">
+           示例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5%E5%99%A8%E6%A1%86%E6%9E%B6-coyote"><span class="toc-text">
+           连接器框架 Coyote</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#coyote-%E7%AE%80%E4%BB%8B"><span class="toc-text">
+           Coyote 简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#io-%E6%A8%A1%E5%9E%8B%E4%B8%8E%E5%8D%8F%E8%AE%AE"><span class="toc-text">
+           IO 模型与协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5%E5%99%A8%E7%BB%84%E4%BB%B6"><span class="toc-text">
+           连接器组件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#endpoint"><span class="toc-text">
+           EndPoint</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#processor"><span class="toc-text">
+           Processor</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#protocolhandler"><span class="toc-text">
+           ProtocolHandler</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#adapter"><span class="toc-text">
+           Adapter</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">
+           总结</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#catalina-%E5%AE%B9%E5%99%A8"><span class="toc-text">
+           Catalina 容器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#container-%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E7%9A%84"><span class="toc-text">
+           Container 如何处理请求的</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tomcat-%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B"><span class="toc-text">
+           Tomcat 启动流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90"><span class="toc-text">
+           源码解析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%84%E7%BB%84%E4%BB%B6%E5%AE%9E%E7%8E%B0"><span class="toc-text">
+           各组件实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93-2"><span class="toc-text">
+           总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tomcat-%E8%AF%B7%E6%B1%82%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B"><span class="toc-text">
+           Tomcat 请求处理流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93-3"><span class="toc-text">
+           总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#jasper"><span class="toc-text">
+           Jasper</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#jasper-%E7%AE%80%E4%BB%8B"><span class="toc-text">
+           Jasper 简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#jsp-%E7%BC%96%E8%AF%91%E8%BF%87%E7%A8%8B"><span class="toc-text">
+           JSP 编译过程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tomcat-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">
+           Tomcat 配置文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#tomcat-%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84"><span class="toc-text">
+           Tomcat 目录结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#serverxml"><span class="toc-text">
+           server.xml</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#websocket"><span class="toc-text">
+           WebSocket</span></a></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/author.png" alt="avatar"></div><p class="sidebar-ov-author__text">no code no life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/YUYUN-ZHAO" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="zyy18749810683" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a><a class="sidebar-ov-social-item" href="1024462136" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="mailto:im.yuyunzhao@gmail.com" target="_blank" rel="noopener" data-popover="social.Gmail" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">Gmail</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">146</div><div class="sidebar-ov-state-item__name">文章</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">40</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">40</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2022</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>yuyun zhao</span><span class="footer__devider">|</span><span>沪ICP备2022000458号</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script>function initSearch() {
   var isXML = true;
   var search_path = 'search.json';
 
