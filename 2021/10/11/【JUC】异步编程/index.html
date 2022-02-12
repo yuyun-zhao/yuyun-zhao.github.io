@@ -1,0 +1,523 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="异步回调 CompletableFuture        CompletableFuture 在 Java 里面被用于异步编程，异步通常意味着非阻塞，可以使得我们的任务单独运行在与主线程分离的其他线程中，并且通过回调的方式在主线程中得到异步任务的执行状态，是否完成，和是否异常等信息。  Future 接口不是通过回调的方式，而是使用 get() 方法阻塞判断业务是否执行完">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【JUC】异步编程">
+<meta property="og:url" content="http://yuyun-zhao.github.io/2021/10/11/%E3%80%90JUC%E3%80%91%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/index.html">
+<meta property="og:site_name" content="yuyun zhao&#39;s blog">
+<meta property="og:description" content="异步回调 CompletableFuture        CompletableFuture 在 Java 里面被用于异步编程，异步通常意味着非阻塞，可以使得我们的任务单独运行在与主线程分离的其他线程中，并且通过回调的方式在主线程中得到异步任务的执行状态，是否完成，和是否异常等信息。  Future 接口不是通过回调的方式，而是使用 get() 方法阻塞判断业务是否执行完">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JUC%E3%80%91%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/image-20210917164341898.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JUC%E3%80%91%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/image-20201109080935340.png">
+<meta property="article:published_time" content="2021-10-11T15:20:00.000Z">
+<meta property="article:modified_time" content="2022-02-12T13:25:28.782Z">
+<meta property="article:author" content="yuyun zhao">
+<meta property="article:tag" content="JUC">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JUC%E3%80%91%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/image-20210917164341898.png"><title>【JUC】异步编程 | yuyun zhao's blog</title><link ref="canonical" href="http://yuyun-zhao.github.io/2021/10/11/%E3%80%90JUC%E3%80%91%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":true},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"carbon","highlight":"light","wordWrap":false},
+  reward: false,
+  fancybox: true,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: {"avoidBanner":false},
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"复制","copySuccess":"复制成功","copyError":"复制失败"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【JUC】异步编程</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-10-11</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-02-12</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">3.5k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">25分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body">
+        <h2 id="异步回调-completablefuture"   >
+          <a href="#异步回调-completablefuture" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#异步回调-completablefuture"></a> 异步回调 CompletableFuture</h2>
+      
+<p><code>CompletableFuture</code> 在 Java 里面被用于<strong>异步</strong>编程，异步通常意味着非阻塞，可以使得我们的任务单独运行在与主线程分离的其他线程中，并且通过<strong>回调</strong>的方式在主线程中得到异步任务的执行状态，是否完成，和是否异常等信息。</p>
+<ul>
+<li><code>Future</code> 接口不是通过回调的方式，而是使用 <code>get()</code> 方法阻塞判断业务是否执行完毕，所以本质还是同步</li>
+<li><code>CompletableFuture</code>接口通过回调的方式，并不会阻塞等待业务执行完毕，而是在业务执行完毕后回调通知主线程运行结果，这才是真正的异步。</li>
+</ul>
+<p><img src="/images/%E3%80%90JUC%E3%80%91%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/image-20210917164341898.png" alt="image-20210917164341898" /></p>
+<p><code>CompletableFuture</code>实现了 <code>Future</code>, <code>CompletionStage</code>接口，实现了 <code>Future</code>接口就可以兼容现在有线程池框架，而 <code>CompletionStage</code>接口才是异步编程的接口抽象，里面定义多种异步方法，通过这两者集合，从而打造出了强大的<code>CompletableFuture</code>类</p>
+<ul>
+<li><code>runAsync()</code>：调用<strong>没有返回值</strong>方法，主线程调用 <code>get()</code>方法时会阻塞（这种方式和 <code>Future</code>相似，本质还是同步）</li>
+<li><code>supplyAsync()</code>：调用<strong>有返回值</strong>方法（<strong>回调</strong>的方式得到运行结果，程序不会阻塞，真正的异步）</li>
+</ul>
+<span id="more"></span>
+<p>具体案例：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 异步调用和同步调用</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CompletableFutureDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="comment">// 本质上是同步调用</span></span><br><span class="line">        CompletableFuture&lt;Void&gt; completableFuture1 = CompletableFuture.runAsync(()-&gt;&#123;</span><br><span class="line">            System.out.println(Thread.currentThread().getName()+<span class="string">&quot; : CompletableFuture1&quot;</span>);</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="comment">// 尽管会创建另一个线程执行任务，但是主线程仍然会阻塞在get()方法处直到任务完成</span></span><br><span class="line">        completableFuture1.get();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 消息队列</span></span><br><span class="line">        <span class="comment">// 异步调用</span></span><br><span class="line">        CompletableFuture&lt;Integer&gt; completableFuture2 = CompletableFuture.supplyAsync(()-&gt;&#123;</span><br><span class="line">            System.out.println(Thread.currentThread().getName()+<span class="string">&quot; : CompletableFuture2&quot;</span>);</span><br><span class="line">            <span class="comment">// 模拟异常</span></span><br><span class="line">            <span class="keyword">int</span> i = <span class="number">10</span>/<span class="number">0</span>;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1024</span>;</span><br><span class="line">        &#125;);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 回调的方式异步执行</span></span><br><span class="line">        completableFuture2.whenComplete((t,u)-&gt;&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;------t=&quot;</span>+t);</span><br><span class="line">            System.out.println(<span class="string">&quot;------u=&quot;</span>+u);</span><br><span class="line">        &#125;).exceptionally(f -&gt;</span><br><span class="line">                         &#123; System.out.println(<span class="string">&quot;------exception=&quot;</span>+f.getMessage);</span><br><span class="line">                         <span class="keyword">return</span> <span class="number">4444</span>;&#125;)</span><br><span class="line">                         .get();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p><code>whenComplete()</code>方法的源码为：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> CompletableFuture&lt;T&gt; <span class="title">whenComplete</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    BiConsumer&lt;? <span class="keyword">super</span> T, ? <span class="keyword">super</span> Throwable&gt; action)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> uniWhenCompleteStage(<span class="keyword">null</span>, action);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>其中，<code>t</code>为返回结果，<code>u</code>为异常信息（没有异常时为null）</p>
+
+        <h3 id="future-与-completablefuture"   >
+          <a href="#future-与-completablefuture" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#future-与-completablefuture"></a> Future 与 CompletableFuture</h3>
+      
+<p>对比这两种方法，一个为同步一个为异步。</p>
+<p><code>Futrue</code>在 Java 里面，通常用来表示一个异步任务的引用，比如我们将任务提交到线程池里面，然后我们会得到一个 <code>Futrue</code>，在 <code>Future</code>里面有 <code>isDone()</code> 方法来判断任务是否处理结束，还有 <code>get()</code> 方法可以一直阻塞直到任务结束然后获取结果，<strong>但整体来说这种方式，还是同步的，因为需要客户端不断阻塞等待或者不断轮询才能知道任务是否完成</strong>。</p>
+<p>与 <code>CompletableFuture</code>相比， <code>Future</code>的缺点：</p>
+<p><strong>（1）不支持手动完成</strong></p>
+<p>我提交了一个任务，但是执行太慢了，我通过其他路径已经获取到了任务结果，现在没法把这个任务结果通知到正在执行的线程，所以必须主动取消或者一直等待它执行完成</p>
+<p><strong>（2）不支持进一步的非阻塞调用</strong></p>
+<p>通过 <code>Future</code>的 <code>get()</code> 方法会一直阻塞到任务完成，但是想在获取任务之后执行额外的任务，因为 <code>Future</code>不支持回调函数，所以无法实现这个功能</p>
+<p><strong>（3）不支持链式调用</strong></p>
+<p>对于 <code>Future</code>的执行结果，我们想继续传到下一个 Future 处理使用，从而形成一个链式的 <code>pipline</code>调用，这在 <code>Future</code>中是没法实现的。</p>
+<p><strong>（4）不支持多个 Future 合并</strong></p>
+<p>比如我们有 10 个 <code>Future</code>并行执行，我们想在所有的 <code>Future</code>运行完毕之后，执行某些函数，是没法通过 <code>Future</code>实现的。</p>
+<p><strong>（5）不支持异常处理</strong></p>
+<p><code>Future</code>的 API 没有任何的异常处理的 api，所以在异步运行时，如果出了问题是不好定位的</p>
+
+        <h3 id="创建-completablefuture-对象"   >
+          <a href="#创建-completablefuture-对象" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#创建-completablefuture-对象"></a> 创建 CompletableFuture 对象</h3>
+      
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;U&gt; <span class="function">CompletableFuture&lt;U&gt; <span class="title">supplyAsync</span><span class="params">(Supplier&lt;U&gt; supplier)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> asyncSupplyStage(asyncPool, supplier);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;U&gt; <span class="function">CompletableFuture&lt;U&gt; <span class="title">supplyAsync</span><span class="params">(Supplier&lt;U&gt; supplier,Executor executor)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> asyncSupplyStage(screenExecutor(executor), supplier);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> CompletableFuture&lt;Void&gt; <span class="title">runAsync</span><span class="params">(Runnable runnable)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> asyncRunStage(asyncPool, runnable);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> CompletableFuture&lt;Void&gt; <span class="title">runAsync</span><span class="params">(Runnable runnable, Executor executor)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> asyncRunStage(screenExecutor(executor), runnable);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>以Async结尾并且没有指定Executor的方法会使用ForkJoinPool.commonPool()作为线程池执行异步代码。</p>
+<ul>
+<li><code>runAsync</code>方法用于<strong>没有返回值</strong>的任务，它以 <code>Runnable</code> 函数式接口类型为参数，所以<code>CompletableFuture</code>的计算结果为空。</li>
+<li><code>supplyAsync</code>方法用于<strong>有返回值</strong>的任务，以<code>Supplier&lt;U&gt;</code>函数式接口类型为参数，<code>CompletableFuture</code>的计算结果类型为 <code>U</code>。</li>
+</ul>
+
+        <h3 id="计算结果完成时的处理"   >
+          <a href="#计算结果完成时的处理" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#计算结果完成时的处理"></a> 计算结果完成时的处理</h3>
+      
+<p>当 <code>CompletableFuture</code> 的计算结果完成，或者抛出异常的时候，有如下四个方法：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> CompletableFuture&lt;T&gt; <span class="title">whenComplete</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    BiConsumer&lt;? <span class="keyword">super</span> T, ? <span class="keyword">super</span> Throwable&gt; action)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> uniWhenCompleteStage(<span class="keyword">null</span>, action);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> CompletableFuture&lt;T&gt; <span class="title">whenCompleteAsync</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    BiConsumer&lt;? <span class="keyword">super</span> T, ? <span class="keyword">super</span> Throwable&gt; action)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> uniWhenCompleteStage(asyncPool, action);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> CompletableFuture&lt;T&gt; <span class="title">whenCompleteAsync</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    BiConsumer&lt;? <span class="keyword">super</span> T, ? <span class="keyword">super</span> Throwable&gt; action, Executor executor)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> uniWhenCompleteStage(screenExecutor(executor), action);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> CompletableFuture&lt;T&gt; <span class="title">exceptionally</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    Function&lt;Throwable, ? extends T&gt; fn)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> uniExceptionallyStage(fn);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<ul>
+<li>方法不以<code>Async</code>结尾，意味着<code>Action</code>使用相同的线程执行，而<code>Async</code>可能会使用其他线程执行（如果是使用相同的线程池，也可能会被同一个线程选中执行）</li>
+<li><code>exceptionally</code>方法返回一个新的<code>CompletableFuture</code>，当原始的<code>CompletableFuture</code>抛出异常的时候，就会触发这个<code>CompletableFuture</code>的计算，调用function计算值，否则如果原始的<code>CompletableFuture</code>正常计算完后，这个新的<code>CompletableFuture</code>也计算完成，它的值和原始的<code>CompletableFuture</code>的计算的值相同。</li>
+</ul>
+<p>除了上述四个方法之外，一组<code>handle</code>方法也可用于处理计算结果。当原先的<code>CompletableFuture</code>的值计算完成或者抛出异常的时候，会触发这个<code>CompletableFuture</code>对象的计算，结果由<code>BiFunction</code>参数计算而得。因此这组方法兼有<code>whenComplete</code>和转换的两个功能。</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;U&gt; <span class="function">CompletableFuture&lt;U&gt; <span class="title">handle</span><span class="params">(BiFunction&lt;? <span class="keyword">super</span> T,Throwable,? extends U&gt; fn)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> &lt;U&gt; <span class="function">CompletableFuture&lt;U&gt; <span class="title">handleAsync</span><span class="params">(BiFunction&lt;? <span class="keyword">super</span> T,Throwable,? extends U&gt; fn)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> &lt;U&gt; <span class="function">CompletableFuture&lt;U&gt; <span class="title">handleAsync</span><span class="params">(BiFunction&lt;? <span class="keyword">super</span> T,Throwable,? extends U&gt; fn, Executor executor)</span></span>;</span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="进行转换"   >
+          <a href="#进行转换" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#进行转换"></a> 进行转换</h3>
+      
+<p>我们可以将操作串联起来，或者将<code>CompletableFuture</code>组合起来。关键的入参只有一个<code>Function</code>，它是函数式接口，所以使用Lambda表示起来会更加优雅。它的入参是上一个阶段计算后的结果，返回值是经过转化后结果。</p>
+<figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public &lt;U&gt; CompletionStage&lt;U&gt; thenApply(Function&lt;? super T,? extends U&gt; fn);</span><br><span class="line"></span><br><span class="line">public &lt;U&gt; CompletionStage&lt;U&gt; thenApplyAsync(Function&lt;? super T,? extends U&gt; fn);</span><br><span class="line"></span><br><span class="line">public &lt;U&gt; CompletionStage&lt;U&gt; thenApplyAsync(Function&lt;? super T,? extends U&gt; fn,Executor executor);</span><br></pre></td></tr></table></div></figure>
+<p>函数的功能是当原来的<code>CompletableFuture</code>计算完后，将结果传递给函数fn，将fn的结果作为新的<code>CompletableFuture</code>计算结果。因此它的功能相当于将<code>CompletableFuture&lt;T&gt;</code>转换成<code>CompletableFuture&lt;U&gt;</code>。</p>
+<p>需要注意的是，这些转换并不是马上执行的，也不会阻塞，而是在前一个stage完成后继续执行。</p>
+
+        <h3 id="消费"   >
+          <a href="#消费" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#消费"></a> 消费</h3>
+      
+<p>上面的方法是当计算完成的时候，会生成新的计算结果 (thenApply, handle)，或者返回同样的计算结果<code>whenComplete</code>。我们可以在每个<code>CompletableFuture</code> 上注册一个操作，该操作会在 <code>CompletableFuture</code> 完成执行后调用它。</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> CompletableFuture&lt;Void&gt; <span class="title">thenAccept</span><span class="params">(Consumer&lt;? <span class="keyword">super</span> T&gt; action)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> CompletableFuture&lt;Void&gt; <span class="title">thenAcceptAsync</span><span class="params">(Consumer&lt;? <span class="keyword">super</span> T&gt; action)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> CompletableFuture&lt;Void&gt; <span class="title">thenAcceptAsync</span><span class="params">(Consumer&lt;? <span class="keyword">super</span> T&gt; action, Executor executor)</span></span>;</span><br></pre></td></tr></table></div></figure>
+<p><code>CompletableFuture</code> 通过 <code>thenAccept</code> 方法提供了这一功能，它接收<code>CompletableFuture</code> 执行完毕后的返回值做参数，只对结果执行Action，而不返回新的计算值，因此计算值为空：</p>
+<p>下面一组方法当计算完成的时候会执行一个<code>Runnable</code>，与<code>thenAccept</code>不同，<code>Runnable</code>并不使用<code>CompletableFuture</code>计算的结果。</p>
+<figure class="highlight csharp"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> CompletableFuture&lt;Void&gt; <span class="title">thenRun</span>(<span class="params">Runnable action</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> CompletableFuture&lt;Void&gt; <span class="title">thenRunAsync</span>(<span class="params">Runnable action</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> CompletableFuture&lt;Void&gt; <span class="title">thenRunAsync</span>(<span class="params">Runnable action, Executor executor</span>)</span>;</span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="组合"   >
+          <a href="#组合" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#组合"></a> 组合</h3>
+      
+<p>通常，我们会有多个需要独立运行但又有所依赖的的任务。比如先等用于的订单处理完毕然后才发送邮件通知客户。</p>
+<p><code>thenCompose</code> 方法允许你对两个异步操作进行流水线，第一个操作完成时，将其结果作为参数传递给第二个操作。你可以创建两个<code>CompletableFutures</code> 对象，对第一个 <code>CompletableFuture</code> 对象调用<code>thenCompose</code> ，并向其传递一个函数。当第一个<code>CompletableFuture</code> 执行完毕后，它的结果将作为该函数的参数，这个函数的返回值是以第一个 <code>CompletableFuture</code> 的返回做输入计算出的第二个 <code>CompletableFuture</code> 对象。</p>
+<figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public &lt;U&gt; CompletableFuture&lt;U&gt; thenCompose(Function&lt;? super T,? extends CompletionStage&lt;U&gt;&gt; fn);</span><br><span class="line"></span><br><span class="line">public &lt;U&gt; CompletableFuture&lt;U&gt; thenComposeAsync(Function&lt;? super T,? extends CompletionStage&lt;U&gt;&gt; fn);</span><br><span class="line"></span><br><span class="line">public &lt;U&gt; CompletableFuture&lt;U&gt; thenComposeAsync(Function&lt;? super T,? extends CompletionStage&lt;U&gt;&gt; fn, Executor executor);</span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="多任务组合"   >
+          <a href="#多任务组合" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#多任务组合"></a> 多任务组合</h3>
+      
+<ul>
+<li><code>allOf</code>：等待所有任务完成</li>
+<li><code>anyOf</code>：只要有一个任务完成就可以</li>
+</ul>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CompletableFuture&lt;Void&gt; allOf = CompletableFuture.allOf(future01, future02, future03);</span><br><span class="line"></span><br><span class="line">CompletableFuture&lt;Void&gt; anyOf = CompletableFuture.anyOf(future01, future02, future03);</span><br></pre></td></tr></table></div></figure>
+
+        <h2 id="异步编排案例"   >
+          <a href="#异步编排案例" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#异步编排案例"></a> 异步编排案例</h2>
+      
+<p>本章介绍使用异步编排的具体案例，具体业务见文章 <a href="https://yuyun-zhao.github.io/2021/12/20/%E3%80%90Project%E3%80%91%E4%BA%91%E5%95%86%E5%9F%8E/">【Project】云商城</a></p>
+
+        <h3 id="业务介绍"   >
+          <a href="#业务介绍" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#业务介绍"></a> 业务介绍</h3>
+      
+<p><img src="/images/%E3%80%90JUC%E3%80%91%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/image-20201109080935340.png" alt="image-20201109080935340" /></p>
+<p><strong>需求分析</strong>：通过 <code>skuId</code> 查询出商品的相关信息，图片、标题、价格，属性对应版本等等。在点击商城项目中的详情页后，前端将发出请求查询指定 <code>skuId</code> 的各种商品信息，包括：</p>
+<ol>
+<li>当前 SKU 基本信息</li>
+<li>当前 SKU 的图片信息</li>
+<li>当前 SKU 所属的 SPU 的所有销售属性组合，展示在界面上</li>
+<li>当前 KUS 所属的 SPU 的介绍信息</li>
+<li>SPU 的规格参数（基本属性）信息</li>
+</ol>
+<p>其中，查询 3/4/5 前需要先完成查询 1，因为三者都需要 SKU 的信息，同时三者之间是没有依赖关系的，完全可以并行查询节省时间。查询 2 则和其余的四条查询没有任何依赖关系，也可以并行查询。</p>
+<p>首先是没有异步的版本：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> SkuItemVo <span class="title">item</span><span class="params">(Long skuId)</span> </span>&#123;</span><br><span class="line">    SkuItemVo skuItemVo = <span class="keyword">new</span> SkuItemVo();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 1. 当前sku的基本信息获取，从pms_sku_info表中查</span></span><br><span class="line">    SkuInfoEntity skuInfoEntity = <span class="keyword">this</span>.getById(skuId);</span><br><span class="line">    skuItemVo.setInfo(skuInfoEntity);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 准备几个关键的id在下面进行查询</span></span><br><span class="line">    Long catalogId = skuInfoEntity.getCatalogId();</span><br><span class="line">    Long spuId = skuInfoEntity.getSpuId();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 当前sku的图片信息，从pms_sku_images表中查</span></span><br><span class="line">    List&lt;SkuImagesEntity&gt; imagesEntities = imagesService.getImagesBySkuId(skuId);</span><br><span class="line">    skuItemVo.setImages(imagesEntities);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3. 获取当前sku所属的spu的所有销售属性组合，展示在界面上</span></span><br><span class="line">    List&lt;SkuItemSaleAttrVo&gt; saleAttrVos = skuSaleAttrValueService.listSaleAttrs(spuId);</span><br><span class="line">    skuItemVo.setSaleAttr(saleAttrVos);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 4. 获取当前sku所属的spu的介绍信息，从pms_spu_info_desc表中查</span></span><br><span class="line">    SpuInfoDescEntity spuInfoDescEntity = spuInfoDescService.getById(spuId);</span><br><span class="line">    skuItemVo.setDesc(spuInfoDescEntity);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 5. 获取spu的规格参数（基本属性）信息</span></span><br><span class="line">    List&lt;SpuItemAttrGroupVo&gt; attrGroupVos = attrGroupService.getAttrGroupWithAttrsBySpuId(spuId, catalogId);</span><br><span class="line">    skuItemVo.setGroupAttrs(attrGroupVos);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> skuItemVo;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>该版本的所有任务都是串行的，整条查询的耗时为五个查询的耗时累计和。下面将对该版本进行优化，使用异步编排优化查询效率。</p>
+
+        <h3 id="自定义线程池"   >
+          <a href="#自定义线程池" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#自定义线程池"></a> 自定义线程池</h3>
+      
+<p>首先自定义线程池，并注入到 Spring 容器中：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 加上下面的注解就不需要再在ConfigProperties类上加<span class="doctag">@Component</span>注解了（加了反而会导致报错：重复注入同一个组件）</span></span><br><span class="line"><span class="comment"> *  <span class="doctag">@EnableConfigurationProperties</span>(ThreadPoolConfigProperties.class)</span></span><br><span class="line"><span class="comment"> * 如果不加，也可以在入参中自动注入</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyThreadConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 向容器中注入一个自定义线程池，并使用配置文件中配置的参数</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> pool 自动注入 ThreadPoolConfigProperties，其绑定了配置文件中的相关参数</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ThreadPoolExecutor <span class="title">threadPoolExecutor</span><span class="params">(ThreadPoolConfigProperties pool)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ThreadPoolExecutor(pool.getMaxSize(), pool.getMaxSize(), pool.getKeepAliveTime(),</span><br><span class="line">                                      TimeUnit.SECONDS, <span class="keyword">new</span> LinkedBlockingQueue&lt;&gt;(<span class="number">10000</span>),</span><br><span class="line">                                      Executors.defaultThreadFactory(), <span class="keyword">new</span> ThreadPoolExecutor.AbortPolicy());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>配置文件绑定类：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 绑定配置文件中的 yunmall.thread 前缀</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@Component</span>  <span class="comment">// 如果上面加了 @EnableConfigurationProperties(xxx)，这里就不能再加 @Component，否则会重复注入该组件</span></span><br><span class="line"><span class="meta">@ConfigurationProperties(prefix = &quot;yunmall.thread&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadPoolConfigProperties</span> </span>&#123;</span><br><span class="line">   <span class="keyword">private</span> Integer coreSize;</span><br><span class="line">   <span class="keyword">private</span> Integer maxSize;</span><br><span class="line">   <span class="keyword">private</span> Integer keepAliveTime;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>配置文件：</p>
+<figure class="highlight yaml"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 自定义线程池配置</span></span><br><span class="line"><span class="attr">yunmall:</span></span><br><span class="line">  <span class="attr">thread:</span></span><br><span class="line">    <span class="attr">core-size:</span> <span class="number">50</span></span><br><span class="line">    <span class="attr">max-size:</span> <span class="number">200</span></span><br><span class="line">    <span class="attr">keep-alive-time:</span> <span class="number">10</span></span><br></pre></td></tr></table></div></figure>
+<p>开启配置文件自动提示自定义的前缀：</p>
+<figure class="highlight xml"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--  加了以后，配置文件中就会有自定义的提示了 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-configuration-processor<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">optional</span>&gt;</span>true<span class="tag">&lt;/<span class="name">optional</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="异步编排版本"   >
+          <a href="#异步编排版本" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#异步编排版本"></a> 异步编排版本</h3>
+      
+<p>使用 <code>CompletableFuture</code> 进行异步编排，将查询 3/4/5 作为查询 1 的子查询任务，改造后的版本：</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> SkuItemVo <span class="title">item</span><span class="params">(Long skuId)</span> <span class="keyword">throws</span> ExecutionException, InterruptedException </span>&#123;</span><br><span class="line">    SkuItemVo skuItemVo = <span class="keyword">new</span> SkuItemVo();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 任务1：获取当前sku的基本信息（从pms_sku_info表中查）</span></span><br><span class="line">    <span class="comment">// 该任务的的执行结果需要传给后面的三个子任务，所以需要设置为supplyAsync模式，为下面的三个任务提供info信息</span></span><br><span class="line">    CompletableFuture&lt;SkuInfoEntity&gt; infoFuture = CompletableFuture.supplyAsync(() -&gt; &#123;</span><br><span class="line">        SkuInfoEntity skuInfoEntity = <span class="keyword">this</span>.getById(skuId);</span><br><span class="line">        skuItemVo.setInfo(skuInfoEntity);</span><br><span class="line">        <span class="comment">// 后面的三个子任务需要用到该信息，所以要返回出去</span></span><br><span class="line">        <span class="keyword">return</span> skuInfoEntity;</span><br><span class="line">    &#125;, executor);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 下面的三个子任务必须在任务1执行完毕后执行，并且相互之间是并行执行的，</span></span><br><span class="line">    <span class="comment">// 三者都需要任务1提供的参数，并且自身不向外提供参数，所以使用acceptAsync模式</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 1.1 获取当前sku所属的spu的所有销售属性组合，展示在界面上</span></span><br><span class="line">    CompletableFuture&lt;Void&gt; saleAttrFuture = infoFuture.thenAcceptAsync(info -&gt; &#123;</span><br><span class="line">        List&lt;SkuItemSaleAttrVo&gt; saleAttrVos = skuSaleAttrValueService.listSaleAttrs(info.getSpuId());</span><br><span class="line">        skuItemVo.setSaleAttr(saleAttrVos);</span><br><span class="line">    &#125;, executor);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 1.2 获取当前sku所属的spu的介绍信息，从pms_spu_info_desc表中查</span></span><br><span class="line">    CompletableFuture&lt;Void&gt; descFuture = infoFuture.thenAcceptAsync(info -&gt; &#123;</span><br><span class="line">        SpuInfoDescEntity spuInfoDescEntity = spuInfoDescService.getById(info.getSpuId());</span><br><span class="line">        skuItemVo.setDesc(spuInfoDescEntity);</span><br><span class="line">    &#125;, executor);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 1.3 获取spu的规格参数（基本属性）信息</span></span><br><span class="line">    CompletableFuture&lt;Void&gt; baseAttrFuture = infoFuture.thenAcceptAsync(info -&gt; &#123;</span><br><span class="line">        List&lt;SpuItemAttrGroupVo&gt; attrGroupVos = attrGroupService.getAttrGroupWithAttrsBySpuId(info.getSpuId(), info.getCatalogId());</span><br><span class="line">        skuItemVo.setGroupAttrs(attrGroupVos);</span><br><span class="line">    &#125;, executor);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 任务2和上面的四个任务都没关系</span></span><br><span class="line">    <span class="comment">// 2. 当前sku的图片信息，从pms_sku_images表中查</span></span><br><span class="line">    CompletableFuture&lt;Void&gt; imagesFuture = CompletableFuture.runAsync(() -&gt; &#123;</span><br><span class="line">        List&lt;SkuImagesEntity&gt; imagesEntities = imagesService.getImagesBySkuId(skuId);</span><br><span class="line">        skuItemVo.setImages(imagesEntities);</span><br><span class="line">    &#125;, executor);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//  阻塞等待所有任务都执行完毕才能返回skuItemVo，所以要用allOf().get()</span></span><br><span class="line">    CompletableFuture.allOf(saleAttrFuture, descFuture, baseAttrFuture, imagesFuture).get();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> skuItemVo;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yuyun-zhao.github.io">yuyun zhao</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yuyun-zhao.github.io/2021/10/11/%E3%80%90JUC%E3%80%91%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/">http://yuyun-zhao.github.io/2021/10/11/%E3%80%90JUC%E3%80%91%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.github.io/tags/JUC/">JUC</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2021/10/15/%E3%80%90%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%91%E6%A0%91/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">【数据结构】树</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2021/10/10/%E3%80%90%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%91%E9%93%BE%E8%A1%A8/"><span class="paginator-prev__text">【数据结构】链表</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%82%E6%AD%A5%E5%9B%9E%E8%B0%83-completablefuture"><span class="toc-text">
+           异步回调 CompletableFuture</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#future-%E4%B8%8E-completablefuture"><span class="toc-text">
+           Future 与 CompletableFuture</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA-completablefuture-%E5%AF%B9%E8%B1%A1"><span class="toc-text">
+           创建 CompletableFuture 对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E7%BB%93%E6%9E%9C%E5%AE%8C%E6%88%90%E6%97%B6%E7%9A%84%E5%A4%84%E7%90%86"><span class="toc-text">
+           计算结果完成时的处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E8%A1%8C%E8%BD%AC%E6%8D%A2"><span class="toc-text">
+           进行转换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%88%E8%B4%B9"><span class="toc-text">
+           消费</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%84%E5%90%88"><span class="toc-text">
+           组合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E4%BB%BB%E5%8A%A1%E7%BB%84%E5%90%88"><span class="toc-text">
+           多任务组合</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%82%E6%AD%A5%E7%BC%96%E6%8E%92%E6%A1%88%E4%BE%8B"><span class="toc-text">
+           异步编排案例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%9A%E5%8A%A1%E4%BB%8B%E7%BB%8D"><span class="toc-text">
+           业务介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BA%BF%E7%A8%8B%E6%B1%A0"><span class="toc-text">
+           自定义线程池</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%82%E6%AD%A5%E7%BC%96%E6%8E%92%E7%89%88%E6%9C%AC"><span class="toc-text">
+           异步编排版本</span></a></li></ol></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/author.png" alt="avatar"></div><p class="sidebar-ov-author__text">no code no life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/YUYUN-ZHAO" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="zyy18749810683" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a><a class="sidebar-ov-social-item" href="1024462136" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="mailto:im.yuyunzhao@gmail.com" target="_blank" rel="noopener" data-popover="social.Gmail" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">Gmail</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">154</div><div class="sidebar-ov-state-item__name">文章</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">41</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">41</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2022</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>yuyun zhao</span><span class="footer__devider">|</span><span>沪ICP备2022000458号</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script>function initSearch() {
+  var isXML = true;
+  var search_path = 'search.json';
+
+  if (!search_path) {
+    search_path = 'search.xml';
+  } else if (/json$/i.test(search_path)) {
+    isXML = false;
+  }
+
+  var path = '/' + search_path;
+  $.ajax({
+    url: path,
+    dataType: isXML ? 'xml' : 'json',
+    async: true,
+    success: function (res) {
+      var datas = isXML ? $('entry', res).map(function () {
+        // 将 XML 转为 JSON
+        return {
+          title: $('title', this).text(),
+          content: $('content', this).text(),
+          url: $('url', this).text()
+        };
+      }).get() : res;
+      var $input = $('.search-input input');
+      var $result = $('.search-results');
+      // 搜索对象（标题、内容）的权重，影响显示顺序
+      var WEIGHT = { title: 100, content: 1 };
+      var searchPost = function () {
+        var searchText = $input.val().toLowerCase().trim();
+        // 根据空白字符分隔关键字
+        var keywords = searchText.split(/[\s]+/);
+        // 搜索结果
+        var matchPosts = [];
+
+        // 有多个关键字时，将原文字整个保存下来
+        if (keywords.length > 1) {
+          keywords.push(searchText);
+        }
+        // 防止未输入字符时搜索
+        if (searchText.length > 0) {
+          datas.forEach(function (data) {
+            var isMatch  = false;
+            // 没有标题的文章使用预设的 i18n 变量代替
+            var title = (data.title && data.title.trim()) || '[ 文章无标题 ]';
+            var titleLower = title && title.toLowerCase();
+            // 删除 HTML 标签 和 所有空白字符
+            var content = data.content && data.content.replace(/<[^>]+>/g, '');
+            var contentLower = content && content.toLowerCase();
+            // 删除重复的 /
+            var postURL = data.url && decodeURI(data.url).replace(/\/{2,}/g, '/');
+            // 标题中匹配到的关键词
+            var titleHitSlice = [];
+            // 内容中匹配到的关键词
+            var contentHitSlice = [];
+
+            keywords.forEach(function (keyword) {
+              /**
+              * 获取匹配的关键词的索引
+              * @param {String} keyword 要匹配的关键字
+              * @param {String} text 原文字
+              * @param {Boolean} caseSensitive 是否区分大小写
+              * @param {Number} weight 匹配对象的权重。权重大的优先显示
+              * @return {Array}
+              */
+              function getIndexByword (word, text, caseSensitive, weight) {
+                if (!word || !text) {
+                  return [];
+                };
+
+                var startIndex = 0; // 每次匹配的开始索引
+                var index = -1;     // 匹配到的索引值
+                var result = [];    // 匹配结果
+
+                if (!caseSensitive) {
+                  word = word.toLowerCase();
+                  text = text.toLowerCase();
+                }
+
+                while((index = text.indexOf(word, startIndex)) !== -1) {
+                  var hasMatch = false;
+                  // 索引位置相同的关键词，保留长度较长的
+                  titleHitSlice.forEach(function (hit) {
+                    if (hit.index === index && hit.word.length < word.length) {
+                      hit.word = word;
+                      hasMatch = true;
+                    }
+                  });
+                  startIndex = index + word.length;
+                  !hasMatch && result.push({ index: index, word: word, weight: weight });
+                }
+                return result;
+              }
+              titleHitSlice = titleHitSlice.concat(getIndexByword(keyword, titleLower, false, WEIGHT.title));
+              contentHitSlice = contentHitSlice.concat(getIndexByword(keyword, contentLower, false, WEIGHT.content));
+            });
+
+            var hitTitle = titleHitSlice.length;
+            var hitContent = contentHitSlice.length;
+
+            if (hitTitle > 0 || hitContent > 0) {
+              isMatch = true;
+            }
+            if (isMatch) {
+              ;[titleHitSlice, contentHitSlice].forEach(function (hit) {
+                // 按照匹配文字的索引的递增顺序排序
+                hit.sort(function (left, right) {
+                  return left.index - right.index;
+                });
+              });
+              /**
+              * 给文本中匹配到的关键词添加标记，从而进行高亮显示
+              * @param {String} text 原文本
+              * @param {Array} hitSlice 匹配项的索引信息
+              * @param {Number} start 开始索引
+              * @param {Number} end 结束索引
+              * @return {String}
+              */
+              function highlightKeyword (text, hitSlice, start, end) {
+                if (!text || !hitSlice || !hitSlice.length) {
+                  return;
+                }
+
+                var result = '';
+                var startIndex = start;
+                var endIndex = end;
+                hitSlice.forEach(function (hit) {
+                  if (hit.index < startIndex) {
+                    return;
+                  }
+
+                  var hitWordEnd = hit.index + hit.word.length;
+                  result += text.slice(startIndex, hit.index);
+                  result += '<b>' + text.slice(hit.index, hitWordEnd) + '</b>';
+                  startIndex = hitWordEnd;
+                });
+                result += text.slice(startIndex, endIndex);
+                return result;
+              }
+
+              var postData = {};
+              // 文章总的搜索权重
+              var postWeight = titleHitSlice.length * WEIGHT.title + contentHitSlice.length * WEIGHT.content;
+              // 标记匹配关键词后的标题
+              var postTitle = highlightKeyword(title, titleHitSlice, 0, title.length) || title;
+              // 标记匹配关键词后的内容
+              var postContent;
+              // 显示内容的长度
+              var SHOW_WORD_LENGTH = 200;
+              // 命中关键词前的字符显示长度
+              var SHOW_WORD_FRONT_LENGTH = 20;
+              var SHOW_WORD_END_LENGTH = SHOW_WORD_LENGTH - SHOW_WORD_FRONT_LENGTH;
+
+              // 截取匹配的第一个字符，前后共 200 个字符来显示
+              if (contentHitSlice.length > 0) {
+                var firstIndex = contentHitSlice[0].index;
+                var start = firstIndex > SHOW_WORD_FRONT_LENGTH ? firstIndex - SHOW_WORD_FRONT_LENGTH : 0;
+                var end = firstIndex + SHOW_WORD_END_LENGTH;
+                postContent = highlightKeyword(content, contentHitSlice, start, end);
+              } else { // 未匹配到内容，直接截取前 200 个字符来显示
+                postContent = content.slice(0, SHOW_WORD_LENGTH);
+              }
+              postData.title = postTitle;
+              postData.content = postContent;
+              postData.url = postURL;
+              postData.weight = postWeight;
+              matchPosts.push(postData);
+            }
+          });
+        }
+
+        var resultInnerHtml = '';
+        if (matchPosts.length) {
+          // 按权重递增的顺序排序，使权重大的优先显示
+          matchPosts.sort(function (left, right) {
+            return right.weight - left.weight;
+          });
+          resultInnerHtml += '<ul>';
+          matchPosts.forEach(function (post) {
+            resultInnerHtml += '<li><a class="search-results-title" href="' + post.url + '">';
+            resultInnerHtml += post.title;
+            resultInnerHtml += '</a><div class="search-results-content">';
+            resultInnerHtml += post.content;
+            resultInnerHtml += '</div></li>';
+          });
+          resultInnerHtml += '</ul>';
+        } else {
+          resultInnerHtml += '<div class="search-results-none"><i class="far fa-meh"></i></div>';
+        }
+        $result.html(resultInnerHtml);
+      };
+      $input.on('input', searchPost);
+      $input.on('keyup', function (e) {
+        if (e.keyCode === Stun.utils.codeToKeyCode('Enter')) {
+          searchPost();
+        }
+      });
+    }
+  });
+}
+
+function closeSearch () {
+  $('body').css({ overflow: 'auto' });
+  $('.search-popup').css({ display: 'none' });
+  $('.search-mask').css({ display: 'none' });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+  Stun.utils.pjaxReloadLocalSearch = function () {
+    $('.header-nav-search').on('click', function (e) {
+      e.stopPropagation();
+      $('body').css('overflow', 'hidden');
+      $('.search-popup')
+        .velocity('stop')
+        .velocity('transition.expandIn', {
+          duration: 300,
+          complete: function () {
+            $('.search-popup input').focus();
+          }
+        });
+      $('.search-mask')
+        .velocity('stop')
+        .velocity('transition.fadeIn', {
+          duration: 300
+        });
+
+      initSearch();
+    });
+    $('.search-mask, .search-close').on('click', function () {
+      closeSearch();
+    });
+    $(document).on('keydown', function (e) {
+      // Escape <=> 27
+      if (e.keyCode === Stun.utils.codeToKeyCode('Escape')) {
+        closeSearch();
+      }
+    });
+  };
+
+  Stun.utils.pjaxReloadLocalSearch();
+}, false);
+
+function safeOpenUrl(url) {
+  var newTab = window.open();
+  newTab.opener = null;
+  newTab.location = url;
+}
+
+function extSearch(engine) {
+  var engines = {
+    google: 'https://www.google.com/search?q=',
+    bing: 'https://cn.bing.com/search?q=',
+    baidu: 'https://www.baidu.com/s?ie=UTF-8&wd=',
+  };
+  var host = window.location.host;
+  var query = $('.search-input input').val().toLowerCase().trim();
+  var uri = engines[engine] + query + ' site:' + host;
+
+  if (query) {
+    safeOpenUrl(uri);
+  } else {
+    Stun.utils.popAlert('warning', '请输入字符');
+  }
+}
+
+var assistSearchList = window.CONFIG.assistSearch;
+
+if (Array.isArray(assistSearchList)) {
+  assistSearchList.forEach(function (name) {
+    document.querySelector('.search-btns-item--' + name).addEventListener('click', function () {
+      extSearch(name);
+    }, false);
+  });
+}</script><script src="https://cdn.jsdelivr.net/npm/pjax@latest/pjax.min.js"></script><script>window.addEventListener('DOMContentLoaded', function () {
+  var pjax = new Pjax({"selectors":["head title","#main",".pjax-reload"],"history":true,"scrollTo":false,"scrollRestoration":false,"cacheBust":false,"debug":false,"currentUrlFullReload":false,"timeout":0});
+  // 加载进度条的计时器
+  var loadingTimer = null;
+
+  // 重置页面 Y 方向上的滚动偏移量
+  document.addEventListener('pjax:send', function () {
+    $('.header-nav-menu').removeClass('show');
+    if (CONFIG.pjax && CONFIG.pjax.avoidBanner) {
+      $('html').velocity('scroll', {
+        duration: 500,
+        offset: $('#header').height(),
+        easing: 'easeInOutCubic'
+      });
+    }
+
+    var loadingBarWidth = 20;
+    var MAX_LOADING_WIDTH = 95;
+
+    $('.loading-bar').addClass('loading');
+    $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    clearInterval(loadingTimer);
+    loadingTimer = setInterval(function () {
+      loadingBarWidth += 3;
+      if (loadingBarWidth > MAX_LOADING_WIDTH) {
+        loadingBarWidth = MAX_LOADING_WIDTH;
+      }
+      $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    }, 500);
+  }, false);
+
+  window.addEventListener('pjax:complete', function () {
+    clearInterval(loadingTimer);
+    $('.loading-bar__progress').css('width', '100%');
+    $('.loading-bar').removeClass('loading');
+    setTimeout(function () {
+      $('.loading-bar__progress').css('width', '0');
+    }, 400);
+    $('link[rel=prefetch], script[data-pjax-rm]').each(function () {
+      $(this).remove();
+    });
+    $('script[data-pjax], #pjax-reload script').each(function () {
+      $(this).parent().append($(this).remove());
+    });
+
+    if (Stun.utils.pjaxReloadBoot) {
+      Stun.utils.pjaxReloadBoot();
+    }
+    if (Stun.utils.pjaxReloadScroll) {
+      Stun.utils.pjaxReloadScroll();
+    }
+    if (Stun.utils.pjaxReloadSidebar) {
+      Stun.utils.pjaxReloadSidebar();
+    }
+    if (false) {
+      if (Stun.utils.pjaxReloadHeader) {
+        Stun.utils.pjaxReloadHeader();
+      }
+      if (Stun.utils.pjaxReloadScrollIcon) {
+        Stun.utils.pjaxReloadScrollIcon();
+      }
+      if (Stun.utils.pjaxReloadLocalSearch) {
+        Stun.utils.pjaxReloadLocalSearch();
+      }
+    }
+  }, false);
+}, false);</script><div id="pjax-reload"><link href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" rel="stylesheet" type="text/css"><link href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/copy-tex.css" rel="stylesheet" type="text/css"><script src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/copy-tex.min.js"></script><script src="https://cdn.jsdelivr.net/gh/sukkaw/busuanzi@latest/bsz.pure.mini.js" async></script></div><script src="/js/utils.js?v=2.6.2"></script><script src="/js/stun-boot.js?v=2.6.2"></script><script src="/js/scroll.js?v=2.6.2"></script><script src="/js/header.js?v=2.6.2"></script><script src="/js/sidebar.js?v=2.6.2"></script><script type="application/json" src="/search.json"></script></body></html>
