@@ -344,40 +344,29 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <li><code>Pluggable Storage Engines</code>：<strong>可插拔的存储引擎接口。MySQL区别于其他数据库的最重要的特点就是其插件式的表存储引擎(注意：存储引擎是基于表的，而不是数据库)。</strong></li>
 <li><code>File System</code>：数据落地到磁盘上，就是文件的存储。</li>
 </ul>
-<p>MySQL数据库和其他数据库相比，MySQL有点与众不同，主要体现在存储引擎的架构上，<strong>插件式的存储引擎架构将查询处理和其他的系统任务以及数据的存储提取相分离</strong>。这种架构可以根据业务的需求和实际需求选择合适的存储引擎。</p></div><div class="post-readmore"><a class="post-readmore__link" href="/2021/10/28/%E3%80%90MySQL%E3%80%91MySQL%E9%AB%98%E7%BA%A7/"><span class="post-readmore__text">阅读全文</span><span class="post-readmore__icon"><i class="fas fa-long-arrow-alt-right"></i></span></a></div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2021/10/24/%E3%80%90JUC%E3%80%91AQS%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">【JUC】AQS 源码分析</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-10-24</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-02-14</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">6.1k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">36分</span></span></div></header><div class="post-body"><div class="post-excerpt"><h2 id="locksupport"   >
-          <a href="#locksupport" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#locksupport"></a> LockSupport</h2>
+<p>MySQL数据库和其他数据库相比，MySQL有点与众不同，主要体现在存储引擎的架构上，<strong>插件式的存储引擎架构将查询处理和其他的系统任务以及数据的存储提取相分离</strong>。这种架构可以根据业务的需求和实际需求选择合适的存储引擎。</p></div><div class="post-readmore"><a class="post-readmore__link" href="/2021/10/28/%E3%80%90MySQL%E3%80%91MySQL%E9%AB%98%E7%BA%A7/"><span class="post-readmore__text">阅读全文</span><span class="post-readmore__icon"><i class="fas fa-long-arrow-alt-right"></i></span></a></div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2021/10/24/%E3%80%90JUC%E3%80%91AQS%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">【JUC】AQS 源码分析</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-10-24</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-02-15</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">4.5k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">25分</span></span></div></header><div class="post-body"><div class="post-excerpt"><h2 id="aqs-理论"   >
+          <a href="#aqs-理论" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#aqs-理论"></a> AQS 理论</h2>
       
-
-        <h3 id="线程等待和唤醒方式"   >
-          <a href="#线程等待和唤醒方式" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#线程等待和唤醒方式"></a> 线程等待和唤醒方式</h3>
-      
-<p>3种让线程等待和唤醒的方法：</p>
+<p>AQS：<code>AbstractQueuedSynchronizer</code> <strong>抽象的队列同步器</strong>。</p>
+<p>AQS是用来构建锁或者其它同步器组件的<strong>重量级基础框架</strong>及<strong>整个JUC体系的基石</strong>， 通过内置的FIFO队列来完成资源获取线程的排队工作，并通过一个int类变量<code>state</code>表示持有锁的状态。</p>
+<p><strong>AQS 中大量应用了 CAS + Unsafe 保证自旋原子性地添加节点。</strong></p>
 <ul>
-<li>方式1：使用<code>Object</code>中的<code>wait()</code>方法让线程等待，使用<code>Object</code>中的<code>notify()</code>方法唤醒线程</li>
-<li>方式2：使用JUC包中<code>Condition</code>的<code>await()</code>方法让线程等待，使用<code>signal()</code>方法唤醒线程</li>
-<li>方式3：使用<code>LockSupport</code>类的<code>park()</code> 和 <code>unpark()</code> 阻塞当前线程以及唤醒指定被阻塞的线程</li>
+<li>每次在抢占锁的时候都会CAS，因为可能其他非公平锁并发地抢占了锁，那么当前线程就需要再次自旋尝试获取锁。</li>
+<li>每次在修改时（例如添加修改节点时）都使用 <code>Unsafe</code> 类的 <code>native</code> 方法保证修改的原子性。</li>
 </ul>
-<p>传统的<code>synchronized</code>和<code>Lock</code>实现等待唤醒通知的约束：</p>
+<p><img src="/images/%E3%80%90JUC%E3%80%91AQS%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/47fad3563d427ffe5058343de85e3e05.png" alt="img" /></p>
+<p>CLH：Craig、Landin and Hagersten队列（三位科学家的名字简写），是一个单向链表，AQS中的队列是CLH变体的<strong>虚拟双向队列FIFO</strong>。</p>
+<p><img src="/images/%E3%80%90JUC%E3%80%91AQS%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/image-20210926135141194.png" alt="image-20210926135141194" /></p>
+<p>JUC的<code>locks</code>包下：</p>
 <ul>
-<li>线程先要获得并持有锁，必须在锁块(<code>synchronized</code>或<code>lock</code>)中</li>
-<li>必须要先等待后唤醒，线程才能够被唤醒</li>
+<li>AbstractOwnableSynchronizer</li>
+<li>AbstractQueuedLongSynchronizer</li>
+<li><strong>AbstractQueuedSynchronizer</strong></li>
 </ul>
-<p>前两种方式存在的问题：</p>
-<ul>
-<li><code>Object</code>类中的<code>wait()</code>和<code>notify()</code>方法<strong>必须要在同步块或者方法里面且成对出现使用</strong>，否则会抛出<code>java.lang.IllegalMonitorStateException</code>。并且调用顺序必须是先<code>wait()</code>后<code>notify()</code>，否则线程无法被唤醒。</li>
-<li><code>Condition</code>类中的<code>await()</code>和<code>signal()</code>方法<strong>必须要在同步块或者方法里面且成对出现使用</strong>，否则会抛出<code>java.lang.IllegalMonitorStateException</code>。并且调用顺序必须是先<code>await()</code>后<code>signal()</code>，否则线程无法被唤醒。</li>
-</ul>
-<p>第三种使用<code>LockSupport</code>的方式则不会出现这些问题。</p>
-<p><code>LockSupport</code> 是进入等待状态，而非阻塞。（API 层面来说）</p>
-
-        <h3 id="locksupport-介绍"   >
-          <a href="#locksupport-介绍" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#locksupport-介绍"></a> LockSupport 介绍</h3>
-      
-<blockquote>
-<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/locks/LockSupport.html" >LockSupport Java doc</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
-</blockquote>
-<p><code>LockSupport</code>（锁支持）是用来创建锁和其他同步类的<strong>基本线程阻塞原语</strong>。<code>LockSupport</code>中的 <code>park()</code> 和 <code>unpark(thread)</code> 的作用分别是<strong>阻塞线程</strong>和<strong>解除阻塞线程</strong>。其功能比<code>wait/notify</code>，<code>await/signal</code>更强。</p>
-<p><code>LockSuport</code>是一个<strong>线程阻塞工具类</strong>，所有的方法都是<strong>静态方法</strong>，可以让线程在任意位置阻塞，阻寨之后也有对应的唤醒方法。归根结底，<code>LockSupport</code>调用的<code>Unsafe</code>中的<code>native</code>代码。</p></div><div class="post-readmore"><a class="post-readmore__link" href="/2021/10/24/%E3%80%90JUC%E3%80%91AQS%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"><span class="post-readmore__text">阅读全文</span><span class="post-readmore__icon"><i class="fas fa-long-arrow-alt-right"></i></span></a></div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2021/10/21/%E3%80%90JUC%E3%80%91i%E5%8A%A0%E5%8A%A0%E6%93%8D%E4%BD%9C%E8%AF%A6%E8%A7%A3/">【JUC】i++ 源码详解</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-10-21</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-10-21</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">764</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">4分</span></span></div></header><div class="post-body"><div class="post-excerpt">
+<p>AQS是一个抽象的父类，可以将其理解为一个框架。基于AQS这个框架，我们可以实现多种同步器，比如下方图中的几个Java内置的同步器。同时我们也可以基于AQS框架实现我们自己的同步器以满足不同的业务场景需求。</p>
+<p><img src="/images/%E3%80%90JUC%E3%80%91AQS%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/7ecbe7fbeecd5d5e20b2d8de59e8a033.png" alt="img" /></p>
+<p>AQS中使用了<strong>模板方法</strong>的设计模式，AQS父类中的 <code>tryAcquire()</code> 方法和 <code>tryRelease()</code> 方法中只有 <code>throw new UnsupportedOperationException();</code>，说明如果子类不重写代码时被调用就会抛出异常：</p>
+<p><img src="/images/%E3%80%90JUC%E3%80%91AQS%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/image-20210927102559000.png" alt="image-20210927102559000" /></p></div><div class="post-readmore"><a class="post-readmore__link" href="/2021/10/24/%E3%80%90JUC%E3%80%91AQS%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"><span class="post-readmore__text">阅读全文</span><span class="post-readmore__icon"><i class="fas fa-long-arrow-alt-right"></i></span></a></div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2021/10/21/%E3%80%90JUC%E3%80%91i%E5%8A%A0%E5%8A%A0%E6%93%8D%E4%BD%9C%E8%AF%A6%E8%A7%A3/">【JUC】i++ 源码详解</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-10-21</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-10-21</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">764</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">4分</span></span></div></header><div class="post-body"><div class="post-excerpt">
         <h2 id="字节码自增指令"   >
           <a href="#字节码自增指令" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#字节码自增指令"></a> 字节码自增指令</h2>
       
