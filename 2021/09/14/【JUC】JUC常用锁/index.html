@@ -9,10 +9,15 @@
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JUC%E3%80%91JUC/9bd90c95c5da45fe8fe49852733c1370.png">
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JUC%E3%80%91JUC/image-20210917094529785.png">
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JUC%E3%80%91JUC/image-20210917094646045.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JUC%E3%80%91JUC%E5%B8%B8%E7%94%A8%E9%94%81/image-20220216163034024.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JUC%E3%80%91JUC%E5%B8%B8%E7%94%A8%E9%94%81/image-20220216162630701.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JUC%E3%80%91JUC%E5%B8%B8%E7%94%A8%E9%94%81/image-20220216163737770.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JUC%E3%80%91JUC%E5%B8%B8%E7%94%A8%E9%94%81/image-20220216163817049.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JUC%E3%80%91JUC%E5%B8%B8%E7%94%A8%E9%94%81/image-20220216163940159.png">
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JUC%E3%80%91JUC/image-20210917175644768.png">
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JUC%E3%80%91JUC/23c582a533ca4b80b4c2ca7b9db3de92.png">
 <meta property="article:published_time" content="2021-09-14T11:05:50.000Z">
-<meta property="article:modified_time" content="2022-02-15T12:48:08.300Z">
+<meta property="article:modified_time" content="2022-02-16T08:53:43.941Z">
 <meta property="article:author" content="yuyun zhao">
 <meta property="article:tag" content="JUC">
 <meta name="twitter:card" content="summary">
@@ -40,7 +45,7 @@ var CONFIG = {
   sourcePath: {"js":"js","css":"css","images":"images"},
 };
 
-window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【JUC】JUC 常用锁</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-09-14</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-02-15</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">10.4k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">73分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body">
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【JUC】JUC 常用锁</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-09-14</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-02-16</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">9.8k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">67分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body">
         <h2 id="juc-简介"   >
           <a href="#juc-简介" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#juc-简介"></a> JUC 简介</h2>
       
@@ -55,109 +60,18 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <ul>
 <li><strong>原始构成</strong>：<code>sync</code>是JVM层面的，底层通过<code>monitorenter</code>和<code>monitorexit</code>来实现的。<code>Lock</code>是JDK API层面的。（<code>sync</code>一个<code>enter</code>会有两个<code>exit</code>，一个是正常退出，一个是异常退出）</li>
 <li><strong>使用方法</strong>：<code>sync</code>不需要手动释放锁（若发生异常也会自动释放），而<code>Lock</code>需要手动释放<code>unlock()</code>（通常写在finally代码块中防止发生异常无法释放同步监视器）</li>
-<li><strong>是否可中断</strong>：<code>sync</code>不可中断，除非抛出异常或者正常运行完成。<code>Lock</code>是可中断的，通过调用<code>interrupt()</code>方法。</li>
+<li><strong>是否可中断</strong>：<code>sync</code>不可中断，除非抛出异常或者正常运行完成。<code>Lock</code>是可中断的，通过调用<code>interrupt()</code>方法可以打断锁，会抛出异常。</li>
 <li><strong>是否为公平锁</strong>：<code>sync</code>只能是非公平锁，而<code>Lock</code>既能是公平锁，又能是非公平锁。</li>
 <li><strong>绑定多个条件</strong>：<code>sync</code>不能，只能随机唤醒。而<code>Lock</code>可以通过<code>Condition</code>来绑定多个条件，精确唤醒。</li>
 </ul>
 <p>在高并发场景下，<code>Lock</code> 的性能远优于 <code>synchronized</code>。</p>
 <p>优先使用顺序：<code>Lock</code>——&gt; 同步代码块（已经进入了方法体，分配了相应资源）——&gt; 同步方法（在方法体之外）</p>
 
-        <h2 id="locksupport"   >
-          <a href="#locksupport" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#locksupport"></a> LockSupport</h2>
-      
-
-        <h3 id="线程等待和唤醒方式"   >
-          <a href="#线程等待和唤醒方式" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#线程等待和唤醒方式"></a> 线程等待和唤醒方式</h3>
-      
-<p>3种让线程等待和唤醒的方法：</p>
-<ul>
-<li>方式1：使用<code>Object</code>中的<code>wait()</code>方法让线程等待，使用<code>Object</code>中的<code>notify()</code>方法唤醒线程</li>
-<li>方式2：使用JUC包中<code>Condition</code>的<code>await()</code>方法让线程等待，使用<code>signal()</code>方法唤醒线程</li>
-<li>方式3：使用<code>LockSupport</code>类的<code>park()</code> 和 <code>unpark()</code> 阻塞当前线程以及唤醒指定被阻塞的线程</li>
-</ul>
-<p>传统的<code>synchronized</code>和<code>Lock</code>实现等待唤醒通知的约束：</p>
-<ul>
-<li>线程先要获得并持有锁，必须在锁块(<code>synchronized</code>或<code>lock</code>)中</li>
-<li>必须要先等待后唤醒，线程才能够被唤醒</li>
-</ul>
-<p>前两种方式存在的问题：</p>
-<ul>
-<li><code>Object</code>类中的<code>wait()</code>和<code>notify()</code>方法<strong>必须要在同步块或者方法里面且成对出现使用</strong>，否则会抛出<code>java.lang.IllegalMonitorStateException</code>。并且调用顺序必须是先<code>wait()</code>后<code>notify()</code>，否则线程无法被唤醒。</li>
-<li><code>Condition</code>类中的<code>await()</code>和<code>signal()</code>方法<strong>必须要在同步块或者方法里面且成对出现使用</strong>，否则会抛出<code>java.lang.IllegalMonitorStateException</code>。并且调用顺序必须是先<code>await()</code>后<code>signal()</code>，否则线程无法被唤醒。</li>
-</ul>
-<p>第三种使用<code>LockSupport</code>的方式则不会出现这些问题。</p>
-<p><code>LockSupport</code> 是进入等待状态，而非阻塞。（API 层面来说）</p>
-
-        <h3 id="locksupport-介绍"   >
-          <a href="#locksupport-介绍" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#locksupport-介绍"></a> LockSupport 介绍</h3>
-      
-<blockquote>
-<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/locks/LockSupport.html" >LockSupport Java doc</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
-</blockquote>
-<p><code>LockSupport</code>（锁支持）是用来创建锁和其他同步类的<strong>基本线程阻塞原语</strong>。<code>LockSupport</code>中的 <code>park()</code> 和 <code>unpark(thread)</code> 的作用分别是<strong>阻塞线程</strong>和<strong>解除阻塞线程</strong>。其功能比<code>wait/notify</code>，<code>await/signal</code>更强。</p>
-<p><code>LockSuport</code>是一个<strong>线程阻塞工具类</strong>，所有的方法都是<strong>静态方法</strong>，可以让线程在任意位置阻塞，阻寨之后也有对应的唤醒方法。归根结底，<code>LockSupport</code>调用的<code>Unsafe</code>中的<code>native</code>代码。</p>
-<blockquote>
-<p>Basic thread blocking primitives for creating locks and other synchronization classes.</p>
-<p>This class associates, with each thread that uses it, a permit (in the sense of the Semaphore class). A call to park will return immediately if the permit is available, consuming it in the process; otherwise it may block. A call to unpark makes the permit available, if it was not already available. (Unlike with Semaphores though, permits do not accumulate. There is at most one.)</p>
-</blockquote>
-<p><code>LockSupport</code>类<strong>通过<code>park()</code>和<code>unpark(thread)</code>方法来实现阻塞和唤醒线程的操作</strong>。</p>
-<p>其使用了一种名为<code>Permit</code>（许可）的概念来做到阻塞和唤醒线程的功能，<strong>每个线程都有一个许可（permit）</strong>，<strong>permit只有两个值1和零，默认是零</strong>。可以把许可看成是一种信号量（Semaphore），但与Semaphore不同的是，<strong>许可的累加上限是1</strong>。</p>
-<hr />
-<p><strong>面试题</strong>：</p>
-<ul>
-<li>为什么<code>LockSupport</code>可以先唤醒线程后阻塞线程：因为<code>unpark(a)</code>让线程a先获得了一个凭证，之后a线程再调用<code>park()</code>方法时，就可以名正言顺的凭证消费，故不会阻塞。</li>
-<li>为什么<code>LockSupport</code>唤醒两次后阻塞两次，但最终结果还会阻塞线程：因为凭证的数量最多为1（不能累加），连续调用两次<code>unpark()</code>和调用一次效果一样，只会增加一个凭证；而调用两次<code>park()</code>却需要消费两个凭证，证不够，不能放行。</li>
-</ul>
-<hr />
-
-        <h3 id="locksupport-源码"   >
-          <a href="#locksupport-源码" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#locksupport-源码"></a> LockSupport 源码</h3>
-      
-<ul>
-<li><code>park()</code> / <code>park(Object blocker)</code>：阻塞当前线程 / 阻塞传入的具体线程。其底层使用了<code>Unsafe</code>类的<code>native</code>本地方法：</li>
-</ul>
-<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LockSupport</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">park</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        UNSAFE.park(<span class="keyword">false</span>, <span class="number">0L</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">park</span><span class="params">(Object blocker)</span> </span>&#123;</span><br><span class="line">        Thread t = Thread.currentThread();</span><br><span class="line">        setBlocker(t, blocker);</span><br><span class="line">        UNSAFE.park(<span class="keyword">false</span>, <span class="number">0L</span>);</span><br><span class="line">        setBlocker(t, <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//...   </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
-<p><code>permit</code>默认是0，所以一开始调用<code>park()</code>方法，当前线程就会阻塞，直到别的线程将当前线程的<code>permit</code>设置为1时，<code>park()</code>方法会被唤醒，然后会将<code>permit</code>再次设置为0并返回。（若其他线程事先调用了<code>unpark(a)</code>，则a线程的<code>permit</code>事先就变为了1，其后续再调用<code>park()</code>时就不会阻塞）</p>
-<ul>
-<li><code>unpark(Thread thread)</code> ：唤醒处于阻塞状态的指定线程</li>
-</ul>
-<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LockSupport</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">unpark</span><span class="params">(Thread thread)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (thread != <span class="keyword">null</span>)</span><br><span class="line">            UNSAFE.unpark(thread);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
-<p>调用<code>unpark(thread)</code>方法后，就会将<code>thread</code>线程的许可<code>permit</code>设置成1（注意多次调用<code>unpark()</code>方法，不会累加，<code>pemit</code>值还是1）。从而自动唤醒<code>thead</code>线程，即之前阻塞中的<code>LockSupport.park()</code>方法会立即返回。</p>
-
-        <h3 id="locksupport-案例解析"   >
-          <a href="#locksupport-案例解析" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#locksupport-案例解析"></a> LockSupport 案例解析</h3>
-      
-<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LockSupportDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Thread a = <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="comment">//	try &#123;</span></span><br><span class="line">            <span class="comment">//		TimeUnit.SECONDS.sleep(2);</span></span><br><span class="line">            <span class="comment">//	&#125; catch (InterruptedException e) &#123;</span></span><br><span class="line">            <span class="comment">//		e.printStackTrace();</span></span><br><span class="line">            <span class="comment">//  &#125;</span></span><br><span class="line">            System.out.println(Thread.currentThread().getName() + <span class="string">&quot; come in. &quot;</span> + System.currentTimeMillis());</span><br><span class="line">            LockSupport.park();</span><br><span class="line">            System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 换醒. &quot;</span> + System.currentTimeMillis());</span><br><span class="line">        &#125;, <span class="string">&quot;Thread A&quot;</span>);</span><br><span class="line">        a.start();</span><br><span class="line"></span><br><span class="line">        Thread b = <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                TimeUnit.SECONDS.sleep(<span class="number">1</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">            LockSupport.unpark(a);</span><br><span class="line">            System.out.println(Thread.currentThread().getName()+<span class="string">&quot; 通知.&quot;</span>);</span><br><span class="line">        &#125;, <span class="string">&quot;Thread B&quot;</span>);</span><br><span class="line">        b.start();</span><br><span class="line">    &#125;	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
-<p>输出结果：</p>
-<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Thread A come in.</span><br><span class="line">Thread B 通知.</span><br><span class="line">Thread A 换醒.</span><br></pre></td></tr></table></div></figure>
-<p>正常 + 无锁块要求。先前错误的先唤醒后等待顺序，<code>LockSupport</code>可无视这顺序。</p>
-
-        <h3 id="总结"   >
-          <a href="#总结" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#总结"></a> 总结</h3>
-      
-<p><code>LockSuport</code>是一个<strong>线程阻塞工具类</strong>，所有的方法都是<strong>静态方法</strong>，可以让线程在任意位置阻塞，阻寨之后也有对应的唤醒方法。归根结底，<code>LockSupport</code>调用的<code>Unsafe</code>中的<code>native</code>代码。</p>
-<p><code>LockSupport</code>提供<code>park()</code>和<code>unpark()</code>方法实现阻塞线程和解除线程阻塞的过程。<code>LockSupport</code>和每个使用它的线程都有一个许可(<code>permit</code>)关联。<code>permit</code>相当于1，0的开关，默认是0，调用一次<code>unpark()</code>就加1变成1，调用一次<code>park()</code>会消费<code>permit</code>，也就是将1变成0，同时<code>park()</code>立即返回。</p>
-<p>如再次调用<code>park()</code>会变成阻塞（因为<code>permit</code>为0了会阻塞在这里，一直到<code>permit</code>变为1），这时调用<code>unpark()</code>会把<code>permit</code>置为1。每个线程都有一个相关的<code>permit</code>，<code>permit</code>最多只有一个，<strong>重复调用<code>unpark()</code>也不会积累凭证</strong>。</p>
-<p><strong>形象的理解</strong></p>
-<p>线程阻塞需要消耗凭证(permit)，这个凭证最多只有1个。当调用<code>park()</code>方法时：</p>
-<ul>
-<li>如果有凭证，则会直接消耗掉这个凭证然后正常退出。</li>
-<li>如果无凭证，就必须阻塞等待凭证可用。</li>
-</ul>
-<p>而<code>unpark()</code>则相反，它会增加一个凭证，但凭证最多只能有1个，累加无效。</p>
-<hr />
-<p><strong>面试题</strong>：</p>
-<ul>
-<li>为什么<code>LockSupport</code>可以先唤醒线程后阻塞线程：因为<code>unpark(a)</code>让线程a先获得了一个凭证，之后a线程再调用<code>park()</code>方法时，就可以名正言顺的凭证消费，故不会阻塞。</li>
-<li>为什么<code>LockSupport</code>唤醒两次后阻塞两次，但最终结果还会阻塞线程：因为凭证的数量最多为1（不能累加），连续调用两次<code>unpark()</code>和调用一次效果一样，只会增加一个凭证；而调用两次<code>park()</code>却需要消费两个凭证，证不够，不能放行。</li>
-</ul>
-<hr />
-
         <h2 id="死锁"   >
           <a href="#死锁" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#死锁"></a> 死锁</h2>
       
 <p>两个或者两个以上线程在执行过程中，因为争夺资源而造成一种互相等待的现象。如果没有外力干涉，他们无法在执行下去。</p>
-<p>产生死锁的原因：</p>
+<p>产生死锁的原因：一个线程需要同时获取多把锁，这样多个这样的线程同时竞争这些锁就可能死锁</p>
 <ul>
 <li>系统资源不足</li>
 <li>进程运行推进顺序不合适</li>
@@ -175,8 +89,9 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DeadLock</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//创建两个对象</span></span><br><span class="line">    <span class="keyword">static</span> Object a = <span class="keyword">new</span> Object();</span><br><span class="line">    <span class="keyword">static</span> Object b = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (a) &#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName()+<span class="string">&quot; 持有锁a，试图获取锁b&quot;</span>);</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    TimeUnit.SECONDS.sleep(<span class="number">1</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">synchronized</span> (b) &#123;</span><br><span class="line">                    System.out.println(Thread.currentThread().getName()+<span class="string">&quot; 获取锁b&quot;</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,<span class="string">&quot;A&quot;</span>).start();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (b) &#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName()+<span class="string">&quot; 持有锁b，试图获取锁a&quot;</span>);</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    TimeUnit.SECONDS.sleep(<span class="number">1</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">synchronized</span> (a) &#123;</span><br><span class="line">                    System.out.println(Thread.currentThread().getName()+<span class="string">&quot; 获取锁a&quot;</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,<span class="string">&quot;B&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
 <p><strong>验证是否是死锁</strong></p>
 <ol>
-<li>jps 类似于linux中的<code>ps -ef</code>查看进程号</li>
-<li>jstack 自带的堆栈跟踪工具</li>
+<li>jps：类似于linux中的<code>ps -ef</code>查看进程号</li>
+<li>jstack：自带的堆栈跟踪工具</li>
+<li>jvisualvm：Java虚拟机图形化检测器，可以查看死锁</li>
 </ol>
 <p>通过用idea自带的命令行输入 <code>jps -l</code>，查看其编译代码的进程号后使用 <code>jstack 进程号</code>查看进程堆栈信息。死锁验证截图：</p>
 <p><img src="/images/%E3%80%90JUC%E3%80%91JUC/9bd90c95c5da45fe8fe49852733c1370.png" alt="img" /></p>
@@ -197,6 +112,9 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <p><img src="/images/%E3%80%90JUC%E3%80%91JUC/image-20210917094529785.png" alt="image-20210917094529785" /></p>
 <p><code>FairSync</code> 内：</p>
 <p><img src="/images/%E3%80%90JUC%E3%80%91JUC/image-20210917094646045.png" alt="image-20210917094646045" /></p>
+<blockquote>
+<p>一般没必要设置为公平锁，因为其会降低并发度</p>
+</blockquote>
 
         <h2 id="可重入锁"   >
           <a href="#可重入锁" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#可重入锁"></a> 可重入锁</h2>
@@ -272,8 +190,8 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <li><strong>锁降级</strong>：某个线程先上写锁，再上读锁，执行完业务后先释放写锁，再释放读锁。这样外部看来就是写锁降级退化成了读锁。反过来却不行，先加读锁后不能再加写锁。</li>
 </ul>
 
-        <h3 id="总结-2"   >
-          <a href="#总结-2" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#总结-2"></a> 总结</h3>
+        <h3 id="总结"   >
+          <a href="#总结" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#总结"></a> 总结</h3>
       
 <ul>
 <li>在线程持有读锁的情况下，该线程和其他线程均不能取得写锁（因为获取写锁的时候，如果发现当前的读锁被占用，就马上获取失败，不管读锁是不是被当前线程持有）</li>
@@ -281,26 +199,41 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 </ul>
 <p>原因：当线程获取读锁的时候，可能有其他线程同时也在持有读锁，因此不能把获取读锁的线程“升级”为写锁；而对于获得写锁的线程，它一定独占了读写锁，因此可以继续让它获取读锁，当它同时获取了写锁和读锁后，还可以先释放写锁继续持有读锁，这样一个写锁就“降级”为了读锁。</p>
 
-        <h2 id="闭锁-countdownlatch"   >
-          <a href="#闭锁-countdownlatch" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#闭锁-countdownlatch"></a> 闭锁 CountDownLatch</h2>
+        <h2 id="倒计时锁-countdownlatch"   >
+          <a href="#倒计时锁-countdownlatch" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#倒计时锁-countdownlatch"></a> 倒计时锁 CountDownLatch</h2>
       
-<p><code>CountDownLatch</code>类可以设置一个<strong>计数器</strong>，然后通过 <code>countDown()</code> 方法来进行减 1 的操作，使用 <code>await()</code> 方法等待计数器不大于 0，然后继续执行 <code>await()</code> 方法之后的语句。具体步骤可以演化为定义一个类，减1操作，并等待到0，为0执行结果。</p>
+<p><code>CountDownLatch</code> 常用来进行线程间的<strong>同步协作</strong>，例如<strong>主线程等待所有线程都完成任务后再执行</strong>。</p>
+<p><code>CountDownLatch</code>类可以设置一个<strong>计数器</strong>，然后通过 <code>countDown()</code> 方法来进行减 1 的操作，使用 <code>await()</code> 方法等待计数器不大于 0，然后继续执行 <code>await()</code> 方法之后的语句。具体步骤可以演化为定义一个类，减1操作，并等待到0，为0执行结果。其缺点是，<strong>只能在构造方法里设置 <code>count</code>，一旦用完后不能再重置了</strong>。</p>
 <p>该类的构造方法为：<code>CountDownLatch(int count)</code></p>
 <p>两个常用的主要方法：</p>
 <ul>
 <li><code>await()</code>：使当前线程在锁存器倒计数至零之前一直在等待，除非线程被中断</li>
 <li><code>countDown()</code>：递减锁存器的计数，如果计数达到零，将释放所有等待的线程</li>
 </ul>
+<p>其应用场景：</p>
+<ul>
+<li><strong>同步等待多个线程准备完毕</strong>：例如游戏开始准备。主线程调用 <code>await()</code> 方法阻塞等待其他线程（所有玩家线程）都准备完毕，各个线程在准备完毕后调用 <code>countDown()</code> 方法。主线程等到所有线程都调用完毕后才被唤醒</li>
+<li><strong>同步等待多个远程调用完毕</strong>：例如 RPC 调用。主线程调用 <code>await()</code> 方法阻塞等待其他线程（RPC 调用线程）都完成远程调用后再执行。异步编排的 <code>CompletableFuture</code> 类就采用这种思想。</li>
+</ul>
+<p>该类的缺点：只能得知其他线程都执行完毕，但无法得到这些线程的执行结果，若必须获得返回结果，可以使用 <code>Future</code> 或 <code>CompletableFutrue</code>。</p>
 <p>具体案例：6个同学陆续离开教室之后，班长才能锁门。如果不加 <code>CountDownLatch</code> 类，会出现线程混乱执行，同学还未离开教室班长就已经锁门了。</p>
 <figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CountDownLatchDemo</span> </span>&#123;</span><br><span class="line">    <span class="comment">//6 个同学陆续离开教室之后，班长锁门</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="comment">// 创建CountDownLatch对象，设置初始值</span></span><br><span class="line">        CountDownLatch countDownLatch = <span class="keyword">new</span> CountDownLatch(<span class="number">6</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 6个同学陆续离开教室之后</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;=<span class="number">6</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName()+<span class="string">&quot; 号同学离开了教室&quot;</span>);</span><br><span class="line">                <span class="comment">// 计数-1</span></span><br><span class="line">                countDownLatch.countDown();</span><br><span class="line">            &#125;, String.valueOf(i)).start();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 阻塞等待直到计数器中的数为0</span></span><br><span class="line">        countDownLatch.await();</span><br><span class="line">        System.out.println(Thread.currentThread().getName()+<span class="string">&quot; 班长锁门走人了&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
 
         <h2 id="循环栅栏-cyclicbarrier"   >
           <a href="#循环栅栏-cyclicbarrier" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#循环栅栏-cyclicbarrier"></a> 循环栅栏 CyclicBarrier</h2>
       
-<p><code>CyclicBarrier</code> 类是一个<strong>同步辅助类</strong>，允许一组线程互相等待，直至到达某个<strong>公共屏障点</strong>，在设计一组固定大小的线程的程序中，这些线程必须互相等待直至达到公共屏障点。这个类很有用，因为barrier在释放等待线程后可以重用，所以称为循环barrier。<code>CountDownLatch</code>是减，而<code>CyclicBarrier</code>是加。</p>
-<p>创建一个新的CyclicBarrier，它将在给定数量的参与者（线程）处于等待状态时启动，并在启动barrier时执行给定的屏障操作，该操作由最后一个进入barrier的线程操作。</p>
+<p><code>CyclicBarrier</code> 也是用来进行线程间的<strong>同步协作</strong>，作用与 <code>CountDownLatch</code> 非常相似，区别在于：</p>
+<ul>
+<li><code>CyclicBarrier</code> 的 <strong><code>count</code> 值是可以重置的</strong>，而 <code>CountDownLatch</code> 则不行，因此得名为<strong>循环栅栏</strong>。</li>
+<li><code>CyclicBarrier</code> 的 <code>count</code> 是从零开始增加直到临界点，而 <code>CountDownLatch</code> 的 <code>count</code> 是从最大值减小到零</li>
+</ul>
+<blockquote>
+<p><code>CyclicBarrier</code> 可以被比喻为『人满发车』</p>
+</blockquote>
+<p><code>CyclicBarrier</code> 类是一个<strong>同步辅助类</strong>，允许一组线程互相等待，直至到达某个<strong>公共屏障点</strong>，在设计一组固定大小的线程的程序中，这些线程必须互相等待直至达到公共屏障点。这个类很有用，因为barrier在释放等待线程后可以重用，所以称为循环barrier。</p>
+<p>创建一个新的<code>CyclicBarrier</code>，它将在给定数量的参与者（线程）处于等待状态时启动，并在启动barrier时执行给定的屏障操作，该操作由最后一个进入barrier的线程操作。</p>
 <p>常用的构造方法：<code>CyclicBarrier(int parties，Runnable barrierAction)</code></p>
-<p>常用的方法有：<code>await()</code>： 在所有的线程都已经在此barrier上调用 <code>await()</code> 方法之前一直等待</p>
+<p>常用的方法有：<code>await()</code>：在所有的线程都已经在此barrier上调用 <code>await()</code> 方法之前一直等待</p>
 
         <h3 id="案例-2"   >
           <a href="#案例-2" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#案例-2"></a> 案例</h3>
@@ -315,7 +248,11 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
         <h2 id="信号量-semaphore"   >
           <a href="#信号量-semaphore" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#信号量-semaphore"></a> 信号量 Semaphore</h2>
       
+<blockquote>
+<p><code>Semaphore</code> <strong>本质上也是使用 AQS 实现的</strong>，可以理解为是一个<strong>支持多个线程同时占有锁</strong>的 <code>ReentrantLock</code></p>
+</blockquote>
 <p>信号量主要用于两个目的，一个是用于<strong>多个共享资源的互斥使用</strong>，另一个用于<strong>并发线程数的控制</strong>。正常的锁在任何时刻都<strong>只允许一个任务访问一项资源</strong>，而 <code>Semaphore</code> 允许<strong>n个任务</strong>同时访问这个资源。</p>
+<p>使用信号量可以实现：<strong>限制线程数量</strong>、<strong>限流</strong>，保证同一时刻只能有有限个线程工作。</p>
 <p>从概念上讲，信号量维护了一个<strong>许可集</strong>（车位集），如有必要，在许可可用前会阻塞每一个<code>acquire()</code>（没车位了就阻塞等待别人释放车位），然后再获取该许可。每个 <code>release()</code> 添加一个许可（释放一个车位），从而可能释放一个正在阻塞的获取者。但是，不使用实际的许可对象，<code>Semaphore</code> 只对可用许可的号码进行计数，并采取相应的行动。</p>
 <p>具体常用的构造方法：<code>new Semaphore(3)</code> 设置许可数量为3（3个车位）</p>
 <p>具体常用的方法有：</p>
@@ -327,6 +264,30 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <p><code>CountDownLatch</code>的问题是<strong>不能复用</strong>。比如<code>count=3</code>，那么加到3，就不能继续操作了。而<code>Semaphore</code>可以解决这个问题，比如6辆车3个停车位，对于<code>CountDownLatch</code><strong>只能停3辆车</strong>，而<code>Semaphore</code>可以停6辆车，车位空出来后，其它车可以占有：</p>
 <figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 6辆汽车，停3个车位</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SemaphoreDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 创建Semaphore，设置许可数量3（3个车位）</span></span><br><span class="line">        Semaphore semaphore = <span class="keyword">new</span> Semaphore(<span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 模拟6辆汽车</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;=<span class="number">6</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="comment">// 抢占一个许可（车位）</span></span><br><span class="line">                    semaphore.acquire();</span><br><span class="line">                    </span><br><span class="line">                    System.out.println(Thread.currentThread().getName()+<span class="string">&quot; 抢到了车位&quot;</span>);</span><br><span class="line">                    <span class="comment">// 设置随机停车时间</span></span><br><span class="line">                    TimeUnit.SECONDS.sleep(<span class="keyword">new</span> Random().nextInt(<span class="number">5</span>));</span><br><span class="line">                    System.out.println(Thread.currentThread().getName()+<span class="string">&quot; ------离开了车位&quot;</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                    <span class="comment">// 释放这个许可（车位）</span></span><br><span class="line">                    semaphore.release();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;, String.valueOf(i)).start();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
 <p>当前共有三个车位（三个许可）。之后三个线程先后获取许可0，许可量为0，代表没有多余的许可给其他线程了。此后再想来获取许可的线程会阻塞等待其他线程释放许可，才能继续获取到许可。</p>
+
+        <h3 id="semaphore-原理"   >
+          <a href="#semaphore-原理" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#semaphore-原理"></a> Semaphore 原理</h3>
+      
+<p><code>Semaphore</code> <strong>本质上也是使用 AQS 实现的</strong>，可以理解为是一个<strong>支持多个线程同时占有锁</strong>的 <code>ReentrantLock</code>。该类内部包含一个 AQS 的同步器类：</p>
+<p><img src="/images/%E3%80%90JUC%E3%80%91JUC%E5%B8%B8%E7%94%A8%E9%94%81/image-20220216163034024.png" alt="image-20220216163034024" /></p>
+<p>其实现原理为：将构造方法里设置的信号量设置到 AQS 同步器类 <code>Sync</code> 的 <code>state</code> 属性中，使得<strong>最多只能有 N 个线程能抢占到锁</strong>（此时 <code>state</code> 减少为 0），其余的线程都使用 AQS 中的阻塞机制进入双向链表阻塞队列中等待，直到这些占有锁的线程释放锁，使得 <code>state</code> 大于 0，并唤醒阻塞队列中的线程，重新竞争锁。因此该流程和 AQS 非常相似。</p>
+<ol>
+<li>初始状态：<code>state = 3</code>，代表可以有三个线程同时占有锁，其他线程都得进入阻塞队列</li>
+</ol>
+<p><img src="/images/%E3%80%90JUC%E3%80%91JUC%E5%B8%B8%E7%94%A8%E9%94%81/image-20220216162630701.png" alt="image-20220216162630701" /></p>
+<ol start="2">
+<li>其他线程都得进入阻塞队列</li>
+</ol>
+<p><img src="/images/%E3%80%90JUC%E3%80%91JUC%E5%B8%B8%E7%94%A8%E9%94%81/image-20220216163737770.png" alt="image-20220216163737770" /></p>
+<ol start="3">
+<li>某个时刻 Thread-4 释放了 permits，令 <code>state = 1</code>，并唤醒队列中的 Thread-0</li>
+</ol>
+<p><img src="/images/%E3%80%90JUC%E3%80%91JUC%E5%B8%B8%E7%94%A8%E9%94%81/image-20220216163817049.png" alt="image-20220216163817049" /></p>
+<ol start="4">
+<li>Thread-0 竞争成功，permits 再次设置为 0，设置自己为 head 节点，断开原来的 head 节点，<code>unpark()</code> 接<br />
+下来的 Thread-3 节点，但由于 permits 是 0，因此 Thread-3 在尝试不成功后再次进入 park 状态 （该过程属于 AQS 原理）</li>
+</ol>
+<p><img src="/images/%E3%80%90JUC%E3%80%91JUC%E5%B8%B8%E7%94%A8%E9%94%81/image-20220216163940159.png" alt="image-20220216163940159" /></p>
 
         <h2 id="阻塞队列"   >
           <a href="#阻塞队列" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#阻塞队列"></a> 阻塞队列</h2>
@@ -353,6 +314,18 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <li>当队列中没有数据的情况下，消费者端的所有线程都会被自动阻塞（挂起），直到有数据放入队列</li>
 <li>当队列中填满数据的情况下，生产者端的所有线程都会被自动阻塞（挂起），直到队列中有空的位置，线程被自动唤醒</li>
 </ul>
+<hr />
+<p><strong>阻塞队列</strong>（BlockingQueue）是 <code>java util.concurrent</code> 包下重要的数据结构，<code>BlockingQueue</code> 提供了线程安全的队列访问方式：</p>
+<ul>
+<li>当阻塞队列进行插入数据时，如果队列已满，线程将会阻塞等待直到队列非满；</li>
+<li>从阻塞队列取数据时，如果队列已空，线程将会阻塞等待直到队列非空。</li>
+</ul>
+<p>并发包下很多高级同步类的实现都是基于 <code>BlockingQueue</code> 实现的。</p>
+<p>阻塞队列的阻塞功能是通过 lock 锁的多条件（Condition）阻塞控制实现的，队列满或空时使用 <code>condition.await()</code> 方法 + <code>while(true)</code> 阻塞等待；使用 <code>condition.signal()</code> 唤醒阻塞线程</p>
+<blockquote>
+<p>使用阻塞队列可以实现消息队列（生产者-消费者模型）</p>
+</blockquote>
+<hr />
 
         <h3 id="为什么需要-blockingqueue"   >
           <a href="#为什么需要-blockingqueue" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#为什么需要-blockingqueue"></a> 为什么需要 BlockingQueue?</h3>
@@ -502,25 +475,20 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">java.util.concurrent.ArrayBlockingQueue</span><br><span class="line">producer	 生产线程启动</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">consumer	 消费线程启动</span><br><span class="line">producer	 插入队列:1成功</span><br><span class="line">consumer	 消费队列:1成功</span><br><span class="line">producer	 插入队列:2成功</span><br><span class="line">consumer	 消费队列:2成功</span><br><span class="line">producer	 插入队列:3成功</span><br><span class="line">consumer	 消费队列:3成功</span><br><span class="line">producer	 插入队列:4成功</span><br><span class="line">consumer	 消费队列:4成功</span><br><span class="line">producer	 插入队列:5成功</span><br><span class="line">consumer	 消费队列:5成功</span><br><span class="line"></span><br><span class="line">5秒后，生产和消费线程停止，线程结束</span><br><span class="line">producer	 停止生产，表示FLAG&#x3D;false，生产结束</span><br><span class="line"></span><br><span class="line">consumer	 消费失败，队列中已为空，退出</span><br></pre></td></tr></table></div></figure>
 </div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yuyun-zhao.github.io">yuyun zhao</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yuyun-zhao.github.io/2021/09/14/%E3%80%90JUC%E3%80%91JUC%E5%B8%B8%E7%94%A8%E9%94%81/">http://yuyun-zhao.github.io/2021/09/14/%E3%80%90JUC%E3%80%91JUC%E5%B8%B8%E7%94%A8%E9%94%81/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.github.io/tags/JUC/">JUC</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2021/09/14/%E3%80%90Redis%E3%80%91Redisson/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">【Redis】Redisson</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2021/09/14/%E3%80%90JVM%E3%80%91JVM%E6%A6%82%E8%BF%B0/"><span class="paginator-prev__text">【JVM】JVM 概述</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#juc-%E7%AE%80%E4%BB%8B"><span class="toc-text">
            JUC 简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#synchronized-%E5%92%8C-lock-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">
-           synchronized 和 Lock 的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#locksupport"><span class="toc-text">
-           LockSupport</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E7%AD%89%E5%BE%85%E5%92%8C%E5%94%A4%E9%86%92%E6%96%B9%E5%BC%8F"><span class="toc-text">
-           线程等待和唤醒方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#locksupport-%E4%BB%8B%E7%BB%8D"><span class="toc-text">
-           LockSupport 介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#locksupport-%E6%BA%90%E7%A0%81"><span class="toc-text">
-           LockSupport 源码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#locksupport-%E6%A1%88%E4%BE%8B%E8%A7%A3%E6%9E%90"><span class="toc-text">
-           LockSupport 案例解析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">
-           总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%BB%E9%94%81"><span class="toc-text">
+           synchronized 和 Lock 的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%BB%E9%94%81"><span class="toc-text">
            死锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AC%E5%B9%B3%E9%94%81%E4%B8%8E%E9%9D%9E%E5%85%AC%E5%B9%B3%E9%94%81"><span class="toc-text">
            公平锁与非公平锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81"><span class="toc-text">
            可重入锁</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B"><span class="toc-text">
            案例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%94%81%E7%9A%84%E9%85%8D%E5%AF%B9"><span class="toc-text">
            锁的配对</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E6%97%8B%E9%94%81"><span class="toc-text">
            自旋锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%BB%E5%86%99%E9%94%81"><span class="toc-text">
-           读写锁</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93-2"><span class="toc-text">
-           总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%97%AD%E9%94%81-countdownlatch"><span class="toc-text">
-           闭锁 CountDownLatch</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BE%AA%E7%8E%AF%E6%A0%85%E6%A0%8F-cyclicbarrier"><span class="toc-text">
+           读写锁</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">
+           总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%80%92%E8%AE%A1%E6%97%B6%E9%94%81-countdownlatch"><span class="toc-text">
+           倒计时锁 CountDownLatch</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BE%AA%E7%8E%AF%E6%A0%85%E6%A0%8F-cyclicbarrier"><span class="toc-text">
            循环栅栏 CyclicBarrier</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B-2"><span class="toc-text">
            案例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%A1%E5%8F%B7%E9%87%8F-semaphore"><span class="toc-text">
-           信号量 Semaphore</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97"><span class="toc-text">
+           信号量 Semaphore</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#semaphore-%E5%8E%9F%E7%90%86"><span class="toc-text">
+           Semaphore 原理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97"><span class="toc-text">
            阻塞队列</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#blockingqueue-%E7%AE%80%E4%BB%8B"><span class="toc-text">
            BlockingQueue 简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81-blockingqueue"><span class="toc-text">
            为什么需要 BlockingQueue?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A7%8D%E7%B1%BB"><span class="toc-text">
