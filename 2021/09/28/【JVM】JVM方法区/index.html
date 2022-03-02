@@ -15,6 +15,7 @@
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708211637952.png">
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708215025527.png">
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708215218078.png">
+<meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20220301155109064.png">
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20210929165800059.png">
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708161856504.png">
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708171151384.png">
@@ -34,7 +35,7 @@
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/0039.png">
 <meta property="og:image" content="http://yuyun-zhao.github.io/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200709230647277.png">
 <meta property="article:published_time" content="2021-09-28T07:13:03.000Z">
-<meta property="article:modified_time" content="2021-10-20T07:45:38.524Z">
+<meta property="article:modified_time" content="2022-03-01T08:26:49.598Z">
 <meta property="article:author" content="yuyun zhao">
 <meta property="article:tag" content="JVM">
 <meta name="twitter:card" content="summary">
@@ -62,7 +63,7 @@ var CONFIG = {
   sourcePath: {"js":"js","css":"css","images":"images"},
 };
 
-window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【JVM】JVM 方法区</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-09-28</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-10-20</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">9.4k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">66分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body">
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【JVM】JVM 方法区</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-09-28</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-03-01</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">9.5k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">66分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body">
         <h2 id="栈-堆-方法区的交互关系"   >
           <a href="#栈-堆-方法区的交互关系" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#栈-堆-方法区的交互关系"></a> 栈、堆、方法区的交互关系</h2>
       
@@ -197,6 +198,10 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
         <h2 id="方法区的内部结构"   >
           <a href="#方法区的内部结构" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#方法区的内部结构"></a> 方法区的内部结构</h2>
       
+<blockquote>
+<p>注意：下图中运行时常量池也是在方法区中的</p>
+</blockquote>
+<p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20220301155109064.png" alt="image-20220301155109064" /></p>
 <p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20210929165800059.png" alt="image-20210929165800059" /></p>
 <blockquote>
 <p><strong>字符串常量池在JDK 8中被存放在堆区</strong></p>
@@ -256,7 +261,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <li><code>descriptor</code>：表示字段类型为 Integer</li>
 <li><code>flags: ACC_PUBLIC</code>：表示字段权限修饰符为 public</li>
 </ol>
-<figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 域信息</span><br><span class="line">  public int num;</span><br><span class="line">    descriptor: I</span><br><span class="line">    flags: ACC_PUBLIC</span><br><span class="line"></span><br><span class="line">  private static java.lang.String str;</span><br><span class="line">    descriptor: Ljava&#x2F;lang&#x2F;String;</span><br><span class="line">    flags: ACC_PRIVATE, ACC_STATIC</span><br></pre></td></tr></table></div></figure>
+<figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 域信息</span><br><span class="line">public int num;</span><br><span class="line">  descriptor: I</span><br><span class="line">  flags: ACC_PUBLIC</span><br><span class="line"></span><br><span class="line">private static java.lang.String str;</span><br><span class="line">  descriptor: Ljava&#x2F;lang&#x2F;String;</span><br><span class="line">  flags: ACC_PRIVATE, ACC_STATIC</span><br></pre></td></tr></table></div></figure>
 <p><strong>方法信息</strong></p>
 <ol>
 <li><code>descriptor: ()V</code> 表示方法返回值类型为 void</li>
@@ -299,8 +304,8 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <ul>
 <li>方法区内部包含了运行时常量池</li>
 <li>字节码文件内部包含了常量池</li>
-<li>要弄清楚方法区，需要理解清楚ClassFile，因为加载类的信息都在方法区。</li>
-<li>要弄清楚方法区的运行时常量池，需要理解清楚ClassFile中的常量池。</li>
+<li>要弄清楚方法区，需要理解清楚ClassFile，因为加载类的信息都在方法区</li>
+<li>要弄清楚方法区的运行时常量池，需要理解清楚ClassFile中的常量池</li>
 </ul>
 
         <h3 id="常量池"   >
@@ -336,7 +341,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
         <h4 id="小结"   >
           <a href="#小结" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#小结"></a> 小结</h4>
       
-<p>常量池、可以看做是一张表，虚拟机指令根据这张常量表找到要执行的类名、方法名、参数类型、字面量等类型</p>
+<p>常量池可以看做是一张表，虚拟机指令根据这张常量表找到要执行的类名、方法名、参数类型、字面量等类型</p>
 
         <h3 id="运行时常量池"   >
           <a href="#运行时常量池" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#运行时常量池"></a> 运行时常量池</h3>
@@ -344,9 +349,9 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <p>运行时常量池（Runtime Constant Pool）是方法区的一部分。</p>
 <p>常量池表（Constant Pool Table）是Class文件的一部分，用于存放编译期生成的各种<strong>字面量</strong>与<strong>符号引用</strong>，<strong>这部分内容将在类加载后存放到方法区的运行时常量池中</strong>。在加载类和接口到虚拟机后，就会创建对应的运行时常量池。</p>
 <p>JVM为每个已加载的类型（类或接口）都维护一个常量池。池中的数据项像数组项一样，是通过索引访问的。</p>
-<p>运行时常量池中包含多种不同的常量，包括编译期就已经明确的数值字面量，也包括到运行期解析后才能够获得的方法或者字段引用。此时不再是常量池中的符号地址了，在Linking阶段的Resolve阶段价格符号引用转换为真实地址。</p>
+<p>运行时常量池中包含多种不同的常量，包括编译期就已经明确的数值字面量，也包括到运行期解析后才能够获得的方法或者字段引用。<strong>此时不再是常量池中的符号地址了，在Linking阶段的Resolve阶段将符号引用转换为真实地址</strong>。</p>
 <p>运行时常量池，相对于Class文件常量池的另一重要特征是：<strong>具备动态性</strong>。运行时常量池类似于传统编程语言中的符号表（symboltable），但是它所包含的数据却比符号表要更加丰富一些。</p>
-<p>当创建类或接口的运行时常量池时，如果构造运行时常量池所需的内存空间超过了方法区所能提供的最大值，则JVM会抛outofMemoryError异常。</p>
+<p>当创建类或接口的运行时常量池时，如果构造运行时常量池所需的内存空间超过了方法区所能提供的最大值，则JVM会抛OutOfMemoryError异常。</p>
 
         <h2 id="方法区使用举例"   >
           <a href="#方法区使用举例" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#方法区使用举例"></a> 方法区使用举例</h2>
@@ -355,7 +360,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MethodAreaDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> x = <span class="number">500</span>;</span><br><span class="line">        <span class="keyword">int</span> y = <span class="number">100</span>;</span><br><span class="line">        <span class="keyword">int</span> a = x / y;</span><br><span class="line">        <span class="keyword">int</span> b = <span class="number">50</span>;</span><br><span class="line">        System.out.println(a+b);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
 <p>字节码执行过程展示</p>
 <p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708204750374.png" alt="image-20200708204750374" /></p>
-<p>首先现将操作数500放入到操作数栈中</p>
+<p>首先先将操作数500放入到操作数栈中</p>
 <p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708204953552.png" alt="image-20200708204953552" /></p>
 <p>然后存储到局部变量表中</p>
 <p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200708205029376.png" alt="image-20200708205029376" /></p>
@@ -375,7 +380,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <li>如果没有加载，则执行加载。在类加载的<strong>Resolve解析阶段</strong>时，将常量池中的符号引用（字面量）转换为运行时常量池的直接引用（真正的地址值）</li>
 </ol>
 <blockquote>
-<p>程序计数器始终计算的都是<strong>当前代码</strong>运行的位置，目的是为了方便记录 方法调用后能够正常返回，或者是进行了CPU切换后，也能回来到原来的代码进行执行。</p>
+<p>程序计数器始终计算的都是<strong>当前代码</strong>运行的位置，目的是为了方便记录方法调用后能够正常返回，或者是进行了CPU切换后，也能回来到原来的代码进行执行。</p>
 </blockquote>
 
         <h2 id="设置方法区大小与-oom"   >
@@ -398,7 +403,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
       
 <p>元数据区大小可以使用参数 <code>-XX:MetaspaceSize</code> 和 -<code>XX:MaxMetaspaceSize</code> 指定。默认值依赖于平台。Windows下，<code>-XX:MetaspaceSize</code>是21M，<code>-XX:MaxMetaspaceSize</code>的值是-1代表没有限制。</p>
 <p>与永久代不同，如果不指定大小，默认情况下，虚拟机会耗尽所有的可用系统内存。如果元数据区发生溢出，虚拟机一样会抛出异常<code>OutOfMemoryError:Metaspace</code></p>
-<p><code>-XX:MetaspaceSize：</code>设置初始的元空间大小。对于一个64位的服务器端JVM来说，其默认的<code>-XX:MetaspaceSize</code>值为21MB。这就是初始的高水位线，一旦触及这个水位线，Full GC将会被触发并卸载没用的类（即这些类对应的类加载器不再存活）然后这个高水位线将会重置。新的高水位线的值取决于GC后释放了多少元空间。如果释放的空间不足，那么在不超过<code>MaxMetaspaceSize</code>时，适当提高该值。如果释放空间过多，则适当降低该值。</p>
+<p><code>-XX:MetaspaceSize：</code>设置初始的元空间大小。<strong>对于一个64位的服务器端JVM来说，其默认的<code>-XX:MetaspaceSize</code>值为21MB</strong>。这就是初始的高水位线，一旦触及这个水位线，Full GC将会被触发并卸载没用的类（即这些类对应的类加载器不再存活）然后这个高水位线将会重置。新的高水位线的值取决于GC后释放了多少元空间。如果释放的空间不足，那么在不超过<code>MaxMetaspaceSize</code>时，适当提高该值。如果释放空间过多，则适当降低该值。</p>
 <p>如果初始化的高水位线设置过低，上述高水位线调整情况会发生很多次。通过垃圾回收器的日志可以观察到Full GC多次调用。为了避免频繁地GC，建议将<code>-XX:MetaspaceSize</code>设置为一个<strong>相对较高的值</strong>。</p>
 
         <h3 id="如何解决这些-oom"   >
@@ -425,8 +430,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
         <h3 id="永久代设置空间大小很难确定"   >
           <a href="#永久代设置空间大小很难确定" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#永久代设置空间大小很难确定"></a> 永久代设置空间大小很难确定</h3>
       
-<p>在某些场景下，如果动态加载类过多，容易产生永久代Perm区的OOM。比如某个实际Web工<br />
-程中，因为功能点比较多，在运行过程中，要不断动态加载很多类，经常出现致命错误：</p>
+<p>在某些场景下，如果动态加载类过多，容易产生永久代Perm区的OOM。比如某个实际Web工程中，因为功能点比较多，在运行过程中，要不断动态加载很多类，经常出现致命错误：</p>
 <figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Exception in thread‘dubbo client x.x connector&#39;java.lang.OutOfMemoryError:PermGen space</span><br></pre></td></tr></table></div></figure>
 <p>而元空间和永久代之间最大的区别在于：<strong>元空间并不在虚拟机中，而是使用本地内存</strong>。因此，默认情况下，元空间的大小仅受本地内存限制。</p>
 
@@ -519,7 +523,7 @@ jvm的永久代中会发生垃圾回收吗？<br />
 <blockquote>
 <p>元空间存储的类型信息、方法信息、域信息等都存储在直接内存中</p>
 </blockquote>
-<p>直接内存来源于NIO，通过存在堆中的<code>DirectByteBuffer</code>操作Native内存。</p>
+<p>直接内存<strong>来源于NIO</strong>，通过存在堆中的<code>DirectByteBuffer</code>操作Native内存。</p>
 <p>通常，访问直接内存的速度会优于Java堆。即<strong>读写性能高</strong>。</p>
 <ul>
 <li>因此出于性能考虑，读写频繁的场合可能会考虑使用直接内存。</li>
@@ -546,7 +550,7 @@ jvm的永久代中会发生垃圾回收吗？<br />
 <li>分配回收成本较高</li>
 <li>不受JVM内存回收管理</li>
 </ul>
-<p>直接内存大小可以通过<code>MaxDirectMemorySize</code>设。如果不指定，默认与堆的最大值<code>-Xmx</code>参数值一致</p>
+<p>直接内存大小可以通过<code>MaxDirectMemorySize</code>设置。如果不指定，默认与堆的最大值<code>-Xmx</code>参数值一致</p>
 <p><img src="/images/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/image-20200709230647277.png" alt="image-20200709230647277" /></p>
 </div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yuyun-zhao.github.io">yuyun zhao</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yuyun-zhao.github.io/2021/09/28/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/">http://yuyun-zhao.github.io/2021/09/28/%E3%80%90JVM%E3%80%91JVM%E6%96%B9%E6%B3%95%E5%8C%BA/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.github.io/tags/JVM/">JVM</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2021/09/29/%E3%80%90JUC%E3%80%91%E7%BA%BF%E7%A8%8B%E6%B1%A0/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">【JUC】线程池</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2021/09/25/%E3%80%90RabbitMQ%E3%80%91RabbitMQ%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/"><span class="paginator-prev__text">【RabbitMQ】RabbitMQ 常见问题</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%88-%E5%A0%86-%E6%96%B9%E6%B3%95%E5%8C%BA%E7%9A%84%E4%BA%A4%E4%BA%92%E5%85%B3%E7%B3%BB"><span class="toc-text">
            栈、堆、方法区的交互关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E5%8C%BA%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-text">
