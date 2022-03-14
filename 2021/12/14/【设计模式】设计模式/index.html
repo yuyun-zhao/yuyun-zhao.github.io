@@ -1,12 +1,12 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="单例模式        线程安全的懒汉式单例模式： 123456789101112131415161718192021222324252627&#x2F;&#x2F; 1. final 修饰：禁止被继承，防止子类继承后破坏单例特性public final class Singleton implements Serializable &amp;#123;    &#x2F;&#x2F; 2. 私有构造方法：防止被外部直接">
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/Q%E7%89%88%E5%A4%B4%E5%83%8F32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="按照模式的应用目标分类，设计模式可以分为创建型模式、结构型模式和行为型模式。  创建型模式：是对对象创建过程的各种问题和解决方案的总结，包括各种工厂模式（Factory、Abstract Factory）、单例模式（Singleton）、构建器模式（Builder）、原型模式（ProtoType） 结构型模式：是针对软件设计结构的总结，关注于类、对象继承、组合方式的实践经验。常见的结构型模式，包括">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【设计模式】设计模式">
 <meta property="og:url" content="http://yuyun-zhao.github.io/2021/12/14/%E3%80%90%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E3%80%91%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/index.html">
 <meta property="og:site_name" content="yuyun zhao&#39;s blog">
-<meta property="og:description" content="单例模式        线程安全的懒汉式单例模式： 123456789101112131415161718192021222324252627&#x2F;&#x2F; 1. final 修饰：禁止被继承，防止子类继承后破坏单例特性public final class Singleton implements Serializable &amp;#123;    &#x2F;&#x2F; 2. 私有构造方法：防止被外部直接">
+<meta property="og:description" content="按照模式的应用目标分类，设计模式可以分为创建型模式、结构型模式和行为型模式。  创建型模式：是对对象创建过程的各种问题和解决方案的总结，包括各种工厂模式（Factory、Abstract Factory）、单例模式（Singleton）、构建器模式（Builder）、原型模式（ProtoType） 结构型模式：是针对软件设计结构的总结，关注于类、对象继承、组合方式的实践经验。常见的结构型模式，包括">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-12-14T09:05:25.000Z">
-<meta property="article:modified_time" content="2022-03-03T08:52:55.757Z">
+<meta property="article:modified_time" content="2022-03-14T08:16:43.234Z">
 <meta property="article:author" content="yuyun zhao">
 <meta property="article:tag" content="设计模式">
 <meta name="twitter:card" content="summary"><title>【设计模式】设计模式 | yuyun zhao's blog</title><link ref="canonical" href="http://yuyun-zhao.github.io/2021/12/14/%E3%80%90%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E3%80%91%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
@@ -33,7 +33,13 @@ var CONFIG = {
   sourcePath: {"js":"js","css":"css","images":"images"},
 };
 
-window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【设计模式】设计模式</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-12-14</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-03-03</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">1k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">6分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body">
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">【设计模式】设计模式</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-12-14</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-03-14</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">2.9k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">19分</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body"><p>按照模式的应用目标分类，设计模式可以分为创建型模式、结构型模式和行为型模式。</p>
+<ul>
+<li><strong>创建型模式</strong>：是对对象创建过程的各种问题和解决方案的总结，包括各种工厂模式（Factory、Abstract Factory）、单例模式（Singleton）、构建器模式（Builder）、原型模式（ProtoType）</li>
+<li><strong>结构型模式</strong>：是针对软件设计结构的总结，关注于类、对象继承、组合方式的实践经验。常见的结构型模式，包括桥接模式（Bridge）、适配器模式（Adapter）、装饰者模式（Decorator）、代理模式（Proxy）、组合模式（Composite）、外观模式（Facade）、享元模式（Flyweight）等</li>
+<li><strong>行为型模式</strong>：是从类或对象之间交互、职责划分等角度总结的模式。比较常见的行为型模式有策略模式（Strategy）、解释器模式（Interpreter）、命令模式（Command）、观察者模式（Observer）、迭代器模式（Iterator）、模板方法模式（Template Method）、访问者模式（Visitor）</li>
+</ul>
+
         <h2 id="单例模式"   >
           <a href="#单例模式" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#单例模式"></a> 单例模式</h2>
       
@@ -56,8 +62,8 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 </ol>
 <span id="more"></span>
 
-        <h3 id="享元模式"   >
-          <a href="#享元模式" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#享元模式"></a> 享元模式</h3>
+        <h2 id="享元模式"   >
+          <a href="#享元模式" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#享元模式"></a> 享元模式</h2>
       
 <blockquote>
 <p>Flyweight pattern</p>
@@ -68,7 +74,6 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <li>包装类的 <code>valueOf()</code> 方法缓存机制</li>
 <li>String 字符串常量池</li>
 <li>线程池</li>
-<li></li>
 </ul>
 <p>在JDK中 Boolean，Byte，Short，Integer，Long，Character 等包装类提供了 <code>valueOf()</code> 方法，例如 Long 的<br />
 <code>valueOf()</code> 会缓存 -128~127 之间的 Long 对象，在这个范围之间会重用对象，大于这个范围，才会新建 Long 对<br />
@@ -86,9 +91,202 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 </li>
 <li>Boolean 缓存了 true 和 false</li>
 </ul>
+
+        <h2 id="spring-中使用到的设计模式"   >
+          <a href="#spring-中使用到的设计模式" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#spring-中使用到的设计模式"></a> Spring 中使用到的设计模式</h2>
+      
+
+        <h2 id="单例模式-singleton"   >
+          <a href="#单例模式-singleton" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#单例模式-singleton"></a> 单例模式 Singleton</h2>
+      
+<blockquote>
+<p><em>Ensure a class only has one instance, and provide a global point of access to it</em></p>
+</blockquote>
+<p>注意区分 Singleton Pattern 与 Spring 中的 Singleton Bean</p>
+<p>根据单例模式的目的 ，显然 Spring 中的 singleton bean 并非实现了单例模式，singleton bean 只能保证每个容器内，相同 id 的 bean 单实例只有一份。<strong>id 不相同的 bean 可以重复存在</strong>。</p>
+<p>当然 Spring 中也用到了单例模式，例如</p>
+<ul>
+<li>org.springframework.transaction.TransactionDefinition#withDefaults</li>
+<li>org.springframework.aop.TruePointcut#INSTANCE</li>
+<li>org.springframework.aop.interceptor.ExposeInvocationInterceptor#ADVISOR</li>
+<li>org.springframework.core.annotation.AnnotationAwareOrderComparator#INSTANCE</li>
+<li>org.springframework.core.OrderComparator#INSTANCE</li>
+</ul>
+
+        <h2 id="建造者模式-builder"   >
+          <a href="#建造者模式-builder" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#建造者模式-builder"></a> 建造者模式 Builder</h2>
+      
+<blockquote>
+<p><em>Separate the construction of a complex object from its representation so that the same construction process can create different representations</em></p>
+</blockquote>
+<p>它的主要亮点有三处：</p>
+<ol>
+<li>较为灵活的构建产品对象</li>
+<li>在不执行最后 build 方法前，产品对象都不可用</li>
+<li>构建过程采用<strong>链式调用</strong>，看起来比较爽</li>
+</ol>
+<p>Spring 中体现 Builder 模式的地方：</p>
+<ul>
+<li>org.springframework.beans.factory.support.<strong>BeanDefinitionBuilder</strong></li>
+<li>org.springframework.web.util.UriComponentsBuilder</li>
+<li>org.springframework.http.ResponseEntity.HeadersBuilder</li>
+<li>org.springframework.http.ResponseEntity.BodyBuilder</li>
+</ul>
+
+        <h2 id="工厂方法模式-factory-method"   >
+          <a href="#工厂方法模式-factory-method" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#工厂方法模式-factory-method"></a> 工厂方法模式 Factory Method</h2>
+      
+<blockquote>
+<p><em>Define an interface for creating an object, but let subclasses decide which class to instantiate. Factory Method lets a class defer instantiation to subclasses</em></p>
+</blockquote>
+<p>工厂模式的目的：<strong>让接口和实现相分离，降低耦合</strong>。在工厂模式中，我们在创建对象时不会对客户端暴露创建逻辑，并且是通过使用一个共同的接口来指向新创建的对象。</p>
+<p>根据上面的定义，Spring 中的 <code>ApplicationContext</code> 与 <code>BeanFactory</code> 中的 <code>getBean()</code> 都可以视为工厂方法，它隐藏了 bean （产品）的创建过程和具体实现。</p>
+<hr />
+<blockquote>
+<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/yssjun/p/11102162.html" >https://www.cnblogs.com/yssjun/p/11102162.html</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+</blockquote>
+<ul>
+<li>简单工厂：在方法内通过判断传入的类型是什么创建出对应的对象，里面会有大量的 if/else 逻辑，不利于扩展</li>
+<li>工厂方法：提供一个 <code>AbstractFactory</code>，实现多个工厂子类，各自实现自己的逻辑，生产出对应的产品对象</li>
+<li>抽象工厂：同样提供一个 <code>AbstractFactory</code>，实现多个工厂子类，其中每个子类里提供多个方法，用于支持生产不同类型的产品对象</li>
+</ul>
+<hr />
+<p>Spring 中其它工厂：</p>
+<ul>
+<li>org.springframework.beans.factory.FactoryBean</li>
+<li><strong>@Bean 标注的静态方法</strong>及实例方法</li>
+<li>ObjectFactory 及 ObjectProvider</li>
+</ul>
+<p>前两种工厂主要封装第三方的 bean 的创建过程，后两种工厂可以推迟 bean 创建，解决循环依赖及单例注入多例等问题</p>
+
+        <h2 id="适配器模式-adapter"   >
+          <a href="#适配器模式-adapter" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#适配器模式-adapter"></a> 适配器模式 Adapter</h2>
+      
+<blockquote>
+<p><em>Convert the interface of a class into another interface clients expect. Adapter lets classes work together that couldn’t otherwise because of incompatible interfaces</em></p>
+</blockquote>
+<p>典型的实现有两处：</p>
+<ul>
+<li>org.springframework.web.servlet.<strong>HandlerAdapter</strong> – 因为控制器实现有各种各样，比如有
+<ul>
+<li>大家熟悉的 @RequestMapping 标注的控制器实现</li>
+<li>传统的基于 Controller 接口（不是 @Controller注解啊）的实现</li>
+<li>较新的基于 RouterFunction 接口的实现</li>
+<li>它们的处理方法都不一样，为了统一调用，必须适配为 HandlerAdapter 接口</li>
+</ul>
+</li>
+<li>org.springframework.beans.factory.support.DisposableBeanAdapter – 因为销毁方法多种多样，因此都要适配为 DisposableBean 来统一调用销毁方法</li>
+</ul>
+<p>有的 <strong>HandlerAdapter</strong> 适配器是用来适配调用 @ReqeuestMapping，有的是适配调用基于 Controller 接口的。<code>DispatcherServlet</code> 通过适配器来调用 Controller 里的具体方法。</p>
+
+        <h2 id="组合模式-composite"   >
+          <a href="#组合模式-composite" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#组合模式-composite"></a> 组合模式 Composite</h2>
+      
+<blockquote>
+<p><em>Compose objects into tree structures to represent part-whole hierarchies. Composite lets clients treat individual objects and compositions of objects uniformly</em></p>
+</blockquote>
+<p>组合模式的典型实现为各种解析器：<strong>参数解析器</strong>，<strong>方法返回值解析器</strong>，<strong>异常解析器</strong>，<strong>视图解析器</strong></p>
+<ul>
+<li>org.springframework.web.method.support.<strong>HandlerMethodArgumentResolver</strong>Composite（<strong>多种不同的参数解析器组合起来，组合器内的集合就是各种参数解析器，使用组合器的统一调用接口来实现多个分散的解析器的有序调用</strong>）</li>
+<li>org.springframework.web.method.support.<strong>HandlerMethodReturnValueHandler</strong>Composite</li>
+<li>org.springframework.web.servlet.handler.<strong>HandlerExceptionResolver</strong>Composite</li>
+<li>org.springframework.web.servlet.view.<strong>ViewResolver</strong>Composite</li>
+</ul>
+<p>composite 对象的作用是将分散的调用集中起来，统一调用入口。它的特征是，与具体干活的类实现同一个接口，当调用 composite 对象的接口方法时，其实是委托具体干活的实现来完成。</p>
+
+        <h2 id="装饰器模式-decorator"   >
+          <a href="#装饰器模式-decorator" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#装饰器模式-decorator"></a> 装饰器模式 Decorator</h2>
+      
+<blockquote>
+<p><em>Attach additional responsibilities to an object dynamically. Decorators provide a flexible alternative to subclassing for extending functionality</em></p>
+</blockquote>
+<p>装饰器模式：对一个对象动态的增加一些职责和功能。解决子类扩展方式提供功能增强的问题：子类扩展需要把所有父类的方法都继承。使用装饰器模式就可以增加一些额外的功能。</p>
+<p>典型实现：</p>
+<ul>
+<li>org.springframework.web.util.ContentCachingRequestWrapper</li>
+<li>Spring Session 中的 <code>SessionRepositoryRequestWrapper</code>，将 <strong>将普通的 <code>HttpRequest</code> 进行了包装</strong>，这样 Controller 层在调用<code>HttpRequest.getSession()</code> 时，真正在执行的就是包装后的 <code>SessionRepositoryRequestWrapper</code> 的 <code>getSession()</code> 方法了</li>
+</ul>
+
+        <h2 id="代理模式-proxy"   >
+          <a href="#代理模式-proxy" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#代理模式-proxy"></a> 代理模式 Proxy</h2>
+      
+<blockquote>
+<p><em>Provide a surrogate or placeholder for another object to control access to it</em></p>
+</blockquote>
+<p><strong>装饰器模式注重的是功能增强，避免子类继承方式进行功能扩展，而代理模式更注重控制目标的访问</strong>。侧重控制和访问，增强其实是由切面方法实现的，代理主要是为了控制访问。</p>
+<p>典型实现：</p>
+<ul>
+<li>org.springframework.aop.framework.<strong>JdkDynamicAopProxy</strong>：jdk 代理</li>
+<li>org.springframework.aop.framework.<strong>ObjenesisCglibAopProxy</strong>：cglib 代理</li>
+</ul>
+<p>AOP 中就是用了代理模式，使用 <code>ProyFactory</code> 为对象创建动态代理对象。</p>
+
+        <h2 id="责任链模式-chain-of-responsibility"   >
+          <a href="#责任链模式-chain-of-responsibility" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#责任链模式-chain-of-responsibility"></a> 责任链模式 Chain of Responsibility</h2>
+      
+<blockquote>
+<p><em>Avoid coupling the sender of a request to its receiver by giving more than one object a chance to handle the request. Chain the receiving objects and pass the request along the chain until an object handles it</em></p>
+</blockquote>
+<p>典型实现：</p>
+<ul>
+<li>org.springframework.web.servlet.<strong>HandlerInterceptor</strong></li>
+</ul>
+<p>各种拦截器都是责任链模式，每一个拦截器只负责调用下一个拦截器的方法，最后一个拦截器再执行目标方法。</p>
+
+        <h2 id="观察者模式-observer"   >
+          <a href="#观察者模式-observer" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#观察者模式-observer"></a> 观察者模式 Observer</h2>
+      
+<blockquote>
+<p><em>Define a one-to-many dependency between objects so that when one object changes state, all its dependents are notified and updated automatically</em></p>
+</blockquote>
+<p>典型实现：</p>
+<ul>
+<li>org.springframework.context.<strong>ApplicationListener</strong>：接收事件</li>
+<li>org.springframework.context.event.<strong>ApplicationEventMulticaster</strong>：发送事件</li>
+<li>org.springframework.context.<strong>ApplicationEvent</strong>：事件</li>
+</ul>
+
+        <h2 id="策略模式-strategy"   >
+          <a href="#策略模式-strategy" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#策略模式-strategy"></a> 策略模式 Strategy</h2>
+      
+<blockquote>
+<p><em>Define a family of algorithms, encapsulate each one, and make them interchangeable. Strategy lets the algorithm vary independently from clients that use it</em></p>
+</blockquote>
+<p>典型实现：</p>
+<ul>
+<li>org.springframework.beans.factory.support.InstantiationStrategy</li>
+<li>org.springframework.core.annotation.MergedAnnotations.<strong>SearchStrategy</strong>：查找注解时，使用多个策略，判断是去当前类中查找呢还是父类查找呢</li>
+<li>org.springframework.boot.autoconfigure.condition.SearchStrategy：条件判断，当前bean是在哪个容器里呢</li>
+</ul>
+<p>根据开发人员的选择，执行相应的策略。</p>
+
+        <h2 id="模板方法模式-template-method"   >
+          <a href="#模板方法模式-template-method" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#模板方法模式-template-method"></a> 模板方法模式 Template Method</h2>
+      
+<blockquote>
+<p><em>Define the skeleton of an algorithm in an operation, deferring some steps to subclasses. Template Method lets subclasses redefine certain steps of an algorithm without changing the algorithm’s structure</em></p>
+</blockquote>
+<p>典型实现：</p>
+<ul>
+<li>大部分以 Template 命名的类，如 <strong>JdbcTemplate</strong>，<strong>TransactionTemplate</strong></li>
+<li>很多以 Abstract 命名的类，如 <strong>AbstractApplicationContext</strong></li>
+</ul>
+<p>父类没有实现方法内容，只是提供一个基础架构。子类继承后自己实现。JUC 里也有很多模板方法模式的实现。</p>
 </div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yuyun-zhao.github.io">yuyun zhao</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yuyun-zhao.github.io/2021/12/14/%E3%80%90%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E3%80%91%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">http://yuyun-zhao.github.io/2021/12/14/%E3%80%90%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E3%80%91%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yuyun-zhao.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2021/12/14/%E3%80%90%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%91%E5%A0%86/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">【数据结构】堆</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2021/12/11/%E3%80%90ElasticSearch%E3%80%91ElasticSearch/"><span class="paginator-prev__text">【ElasticSearch】ElasticSearch</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F"><span class="toc-text">
-           单例模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F"><span class="toc-text">
-           享元模式</span></a></li></ol></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/author.png" alt="avatar"></div><p class="sidebar-ov-author__text">no code no life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/YUYUN-ZHAO" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="zyy18749810683" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a><a class="sidebar-ov-social-item" href="1024462136" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="mailto:im.yuyunzhao@gmail.com" target="_blank" rel="noopener" data-popover="social.Gmail" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">Gmail</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">160</div><div class="sidebar-ov-state-item__name">文章</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">42</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">42</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2022</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>yuyun zhao</span><span class="footer__devider">|</span><span>沪ICP备2022000458号</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script>function initSearch() {
+           单例模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F"><span class="toc-text">
+           享元模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#spring-%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%88%B0%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="toc-text">
+           Spring 中使用到的设计模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F-singleton"><span class="toc-text">
+           单例模式 Singleton</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F-builder"><span class="toc-text">
+           建造者模式 Builder</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F-factory-method"><span class="toc-text">
+           工厂方法模式 Factory Method</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F-adapter"><span class="toc-text">
+           适配器模式 Adapter</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F-composite"><span class="toc-text">
+           组合模式 Composite</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F-decorator"><span class="toc-text">
+           装饰器模式 Decorator</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F-proxy"><span class="toc-text">
+           代理模式 Proxy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F-chain-of-responsibility"><span class="toc-text">
+           责任链模式 Chain of Responsibility</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F-observer"><span class="toc-text">
+           观察者模式 Observer</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F-strategy"><span class="toc-text">
+           策略模式 Strategy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F-template-method"><span class="toc-text">
+           模板方法模式 Template Method</span></a></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/author.png" alt="avatar"></div><p class="sidebar-ov-author__text">no code no life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/YUYUN-ZHAO" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="zyy18749810683" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a><a class="sidebar-ov-social-item" href="1024462136" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="mailto:im.yuyunzhao@gmail.com" target="_blank" rel="noopener" data-popover="social.Gmail" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">Gmail</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">155</div><div class="sidebar-ov-state-item__name">文章</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">40</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">40</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2022</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>yuyun zhao</span><span class="footer__devider">|</span><span>沪ICP备2022000458号</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script>function initSearch() {
   var isXML = true;
   var search_path = 'search.json';
 

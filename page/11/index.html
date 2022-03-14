@@ -28,123 +28,7 @@ var CONFIG = {
   sourcePath: {"js":"js","css":"css","images":"images"},
 };
 
-window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content content-home" id="content"><section class="postlist"><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2021/08/18/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/">【ZooKeeper】ZooKeeper</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-08-18</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-02-22</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">4.7k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">36分</span></span></div></header><div class="post-body"><div class="post-excerpt"><p><img src="/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/1200px-Apache_ZooKeeper_logo.svg.png" alt="Apache ZooKeeper - Wikipedia" /></p>
-
-        <h2 id="zookeeper-简介"   >
-          <a href="#zookeeper-简介" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#zookeeper-简介"></a> ZooKeeper 简介</h2>
-      
-<p>ZooKeeper 是一个开源的分布式的，为分布式框架提供协调服务的Apache项目。ZooKeeper安装见<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://blog.yuyunzhao.cn/documents/linux%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE.pdf" >Linux 开发环境配置文档</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
-<p><img src="/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824153402010.png" alt="image-20210824153402010" /></p>
-<blockquote>
-<p>本文档参考尚硅谷ZooKeeper教程：<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1to4y1C7gw?p=2" >https://www.bilibili.com/video/BV1to4y1C7gw?p=2</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
-</blockquote>
-
-        <h3 id="zookeeper-工作机制"   >
-          <a href="#zookeeper-工作机制" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#zookeeper-工作机制"></a> ZooKeeper 工作机制</h3>
-      
-<p>ZooKeeper从设计模式角度来理解：是一个基于<strong>观察者模式</strong>设计的分布式服务管理框架，它负责存储和管理大家都关心的数据，然后接受观察者的注册，一旦这些数据的状态发生变化，Zookeeper就将负责通知已经在Zookeeper上注册的那些观察者做出相应的反应。ZooKeeper服务器采用NIO与客户端进行通讯</p>
-<p><strong>ZooKeeper = 文件系统 + 通知机制</strong></p>
-<p><img src="/images/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/image-20210824154028992.png" alt="image-20210824154028992" /></p></div><div class="post-readmore"><a class="post-readmore__link" href="/2021/08/18/%E3%80%90ZooKeeper%E3%80%91ZooKeeper/"><span class="post-readmore__text">阅读全文</span><span class="post-readmore__icon"><i class="fas fa-long-arrow-alt-right"></i></span></a></div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2021/08/17/%E3%80%90JavaWeb%E3%80%91Web%E4%B8%AD%E8%AE%BF%E9%97%AE%E8%B5%84%E6%BA%90%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/">【JavaWeb】Web 中访问资源路径问题汇总</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-08-17</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-01-15</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">1k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">7分</span></span></div></header><div class="post-body"><div class="post-excerpt"><h2 id="web中-斜杠的不同意义"   >
-          <a href="#web中-斜杠的不同意义" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#web中-斜杠的不同意义"></a> Web中 / 斜杠的不同意义</h2>
-      
-<ul>
-<li>浏览器内代表所有资源：<code>/**</code></li>
-<li>服务器内代表所有资源：<code>/</code></li>
-</ul>
-<p>在Web中，/ 是<strong>绝对路径</strong>：</p>
-<ul>
-<li>/ 如果被<strong>浏览器</strong>解析，得到的地址是：<code>http://ip:port/</code> （指写在静态html代码中，无法被服务器解析，只能被浏览器解析）</li>
-</ul>
-<figure class="highlight html"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;/&quot;</span>&gt;</span>斜杠<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></div></figure>
-<ul>
-<li>/ 如果被<strong>服务器</strong>解析，得到的地址是：<code>http://ip:port/工程路径/</code></li>
-</ul>
-<figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 映射</span></span><br><span class="line">&lt;url-pattern&gt;/servlet1&lt;url-pattern&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取绝对路径</span></span><br><span class="line">servletContext.getRealPath(<span class="string">&quot;/&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 请求转发</span></span><br><span class="line">request.getRequestDispacther(<span class="string">&quot;/&quot;</span>);</span><br></pre></td></tr></table></div></figure>
-<ul>
-<li>特殊情况：<code>response.sendRedirect(&quot;/&quot;);</code>会将斜杠发送给浏览器解析，得到<code>http://ip:port/</code> ，因此需要再加上工程名<code>response.sendRedirect(&quot;/projectName/xxx&quot;);</code></li>
-</ul>
-<p><strong>/WEB-INF/目录下的资源文件，客户端无法直接访问（即不能在浏览器中输入url直接跳转），而只能在servlet程序中跳转</strong></p>
-<p><strong>在IDEA中，&quot;/“代表的项目文件路径为”<code>target/项目名-1.0-SNAPSHOT/</code>&quot;</strong></p>
-<p>在Web应用的前端程序（.jsp）中：</p>
-<ul>
-<li>不以 / 开始的相对路径找资源时以<strong>当前资源的路径为基准</strong>，容易出现问题（不推荐使用）</li>
-<li>以 / 开始的相对路径找资源时以<code>http://ip:port/</code>为基准，不包含<strong>当前项目名称路径</strong>，因此需要在资源前加上<code>$&#123;pageContext.request.contextPath&#125;/</code>以使程序能找到&quot;<code>target/项目名-1.0-SNAPSHOT/</code>&quot;下的资源文件（<code>项目名-1.0-SNAPSHOT</code>为Maven工程打包后生成的工程根目录）。例如若想在.jsp文件中引入css文件的路径，需要写 <code>href=&quot;$&#123;pageContext.request.contextPath&#125;/css/style.css&quot;</code></li>
-</ul>
-<p><img src="/images/%E3%80%90Memo%E3%80%91Web%E4%B8%AD%E8%AE%BF%E9%97%AE%E8%B5%84%E6%BA%90%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/image-20210604105603326.png" alt="image-20210604105603326" /></p></div><div class="post-readmore"><a class="post-readmore__link" href="/2021/08/17/%E3%80%90JavaWeb%E3%80%91Web%E4%B8%AD%E8%AE%BF%E9%97%AE%E8%B5%84%E6%BA%90%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/"><span class="post-readmore__text">阅读全文</span><span class="post-readmore__icon"><i class="fas fa-long-arrow-alt-right"></i></span></a></div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2021/08/14/%E3%80%90Netty%E3%80%91Netty/">【Netty】Netty</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-08-14</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-02-22</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">15.8k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">118分</span></span></div></header><div class="post-body"><div class="post-excerpt"><p><img src="/images/%E3%80%90Netty%E3%80%91Netty/153862342369097" alt="img" /></p>
-
-        <h2 id="netty-概述"   >
-          <a href="#netty-概述" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#netty-概述"></a> Netty 概述</h2>
-      
-
-        <h3 id="原生-nio-存在的问题"   >
-          <a href="#原生-nio-存在的问题" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#原生-nio-存在的问题"></a> 原生 NIO 存在的问题</h3>
-      
-<blockquote>
-<p>NIO的介绍见<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="http://blog.yuyunzhao.cn/2021/08/13/%E3%80%90Java%E3%80%91NIO/" >【Java】NIO</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
-</blockquote>
-<ul>
-<li><code>NIO</code> 的类库和 <code>API</code> 繁杂，使用麻烦：需要熟练掌握 <code>Selector</code>、<code>ServerSocketChannel</code>、<code>SocketChannel</code>、<code>ByteBuffer</code>等。</li>
-<li>需要具备其他的额外技能：要熟悉 <code>Java</code> 多线程编程，因为 <code>NIO</code> 编程涉及到 <code>Reactor</code> 模式，你必须对多线程和网络编程非常熟悉，才能编写出高质量的 <code>NIO</code> 程序。</li>
-<li>开发工作量和难度都非常大：例如客户端面临断连重连、网络闪断、半包读写、失败缓存、网络拥塞和异常流的处理等等。</li>
-<li><code>JDK NIO</code> 的 <code>Bug</code>：例如臭名昭著的 <code>Epoll Bug</code>，它会导致 <code>Selector</code> 空轮询，最终导致 <code>CPU100%</code>。直到 <code>JDK1.7</code> 版本该问题仍旧存在，没有被根本解决。</li>
-</ul>
-
-        <h3 id="netty-官网说明"   >
-          <a href="#netty-官网说明" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#netty-官网说明"></a> Netty 官网说明</h3>
-      
-<p>官网：<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://netty.io/" >https://netty.io/</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
-<blockquote>
-<p>Netty is an asynchronous event-driven network application framework for rapid development of maintainable high performance protocol servers &amp; clients.</p>
-</blockquote>
-<p><img src="/images/%E3%80%90Netty%E3%80%91Netty/chapter04_01.png" alt="img" /></p>
-
-        <h3 id="netty-的优点"   >
-          <a href="#netty-的优点" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#netty-的优点"></a> Netty 的优点</h3>
-      
-<p><code>Netty</code> 对 <code>JDK</code> 自带的 <code>NIO</code> 的 <code>API</code> 进行了封装，解决了上述问题。</p>
-<ul>
-<li>设计优雅：适用于各种传输类型的统一 <code>API</code> 阻塞和非阻塞 <code>Socket</code>；基于灵活且可扩展的事件模型，可以清晰地分离关注点；高度可定制的线程模型-单线程，一个或多个线程池。</li>
-<li>使用方便：详细记录的 <code>Javadoc</code>，用户指南和示例；没有其他依赖项，<code>JDK5（Netty3.x）</code>或 <code>6（Netty4.x）</code>就足够了。</li>
-<li>高性能、吞吐量更高：延迟更低；减少资源消耗；最小化不必要的内存复制。</li>
-<li>安全：完整的 <code>SSL/TLS</code> 和 <code>StartTLS</code> 支持。</li>
-<li>社区活跃、不断更新：社区活跃，版本迭代周期短，发现的 <code>Bug</code> 可以被及时修复，同时，更多的新功能会被加入。</li>
-</ul>
-
-        <h3 id="netty-版本说明"   >
-          <a href="#netty-版本说明" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#netty-版本说明"></a> Netty 版本说明</h3>
-      
-<p><code>Netty</code> 版本分为 <code>Netty 3.x</code> 和 <code>Netty 4.x</code>、<code>Netty 5.x</code>。目前推荐使用的是 <code>Netty 4.x</code>的稳定版本。</p></div><div class="post-readmore"><a class="post-readmore__link" href="/2021/08/14/%E3%80%90Netty%E3%80%91Netty/"><span class="post-readmore__text">阅读全文</span><span class="post-readmore__icon"><i class="fas fa-long-arrow-alt-right"></i></span></a></div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2021/08/13/%E3%80%90Java%E3%80%91NIO/">【Java】NIO</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-08-13</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-08-24</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">8.5k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">61分</span></span></div></header><div class="post-body"><div class="post-excerpt"><h2 id="io-模型"   >
-          <a href="#io-模型" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#io-模型"></a> I/O 模型</h2>
-      
-
-        <h3 id="io-模型简介"   >
-          <a href="#io-模型简介" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#io-模型简介"></a> I/O 模型简介</h3>
-      
-<p><code>I/O</code> 模型简单的理解：就是用什么样的通道进行数据的发送和接收，很大程度上决定了程序通信的性能。</p>
-<p>共有三种<code>I/O</code> 模型：</p>
-<blockquote>
-<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://blog.csdn.net/tomcyndi/article/details/79087578" >https://blog.csdn.net/tomcyndi/article/details/79087578</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
-</blockquote>
-<p><strong>1. 同步阻塞</strong>：在调用read方法时，stream里没有数据可读，线程停止向下执行，直至stream有数据。</p>
-<blockquote>
-<p>阻塞：体现在这个线程不能干别的了，只能在这里等着</p>
-<p>同步：是体现在消息通知机制上的，即stream有没有数据是需要我自己来判断的。</p>
-</blockquote>
-<p><strong>2. 同步非阻塞</strong>：调用read方法后，如果stream没有数据，方法就返回，然后这个线程就就干别的事（例如NIO中<code>Selector</code>所在的线程不会一直阻塞在某一个IO，而是会循环判断当前有没有能处理的IO，没有就做别的事，过一段时间再判断一下有没有要处理的IO，此时仍然是同步的，因为线程一直在循环）。</p>
-<blockquote>
-<p>非阻塞：体现在这个线程可以去干别的，不需要一直在这等着</p>
-<p>同步：体现在消息通知机制，这个线程仍然要定时的读取stream，判断数据有没有准备好，client采用循环的方式去读取，可以看出CPU大部分被浪费了</p>
-</blockquote>
-<p><strong>3. 异步非阻塞</strong>：服务端调用read方法，若stream中无数据则返回，程序继续向下执行。当stream中有数据时，操作系统会负责把数据拷贝到用户空间，然后通知这个线程，这里的消息通知机制就是异步。而不是像NIO那样，自己起一个线程去监控stream里面有没有数据。</p>
-
-        <h3 id="bio-nio-aio"   >
-          <a href="#bio-nio-aio" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#bio-nio-aio"></a> BIO、NIO、AIO</h3>
-      
-<p><code>Java</code> 共支持 <code>3</code> 种网络编程模型 <code>I/O</code> 模式：<code>BIO</code>、<code>NIO</code>、<code>AIO</code>。</p>
-<ol>
-<li><code>Java BIO</code>：同步并阻塞（传统阻塞型），服务器实现模式为一个连接一个线程，即客户端有连接请求时服务器端就需要启动一个线程进行处理，如果这个连接不做任何事情会造成不必要的线程开销。</li>
-</ol>
-<p><img src="/images/%E3%80%90Java%E3%80%91NIO/image-20210813230944094.png" alt="image-20210813230944094" /></p></div><div class="post-readmore"><a class="post-readmore__link" href="/2021/08/13/%E3%80%90Java%E3%80%91NIO/"><span class="post-readmore__text">阅读全文</span><span class="post-readmore__icon"><i class="fas fa-long-arrow-alt-right"></i></span></a></div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2021/08/12/%E3%80%90Spring%E3%80%91Spring%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3/">【Spring】Spring 常用注解</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-08-12</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-03-12</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">595</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">3分</span></span></div></header><div class="post-body"><div class="post-excerpt">
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">文章</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">yuyun zhao's blog</div><div class="header-banner-info__subtitle">no code no life</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content content-home" id="content"><section class="postlist"><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2021/08/12/%E3%80%90Spring%E3%80%91Spring%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3/">【Spring】Spring 常用注解</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-08-12</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-03-12</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">595</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">3分</span></span></div></header><div class="post-body"><div class="post-excerpt">
         <h2 id="spring-注解"   >
           <a href="#spring-注解" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#spring-注解"></a> Spring 注解</h2>
       
@@ -422,7 +306,161 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <p>ApplicationContext：容器接口，更多的负责容器功能的实现，其可以基于BeanFactory创建好的对象之上完成强大的容器功能，其可以从map中获取这些Bean，并且AOP，DI都在ApplicationContext接口下的类中。</p>
 <p>BeanFactory 是 Spring最底层的接口，ApplicationContext是留给程序员使用的IOC容器；ApplicationContext是BeanFactory的子接口。</p>
 <p>对象由BeanFactory 创建。对象间的动态装配和管理由ApplicationContext完成。</p>
-<p>Spring中最大的模式是工厂模式，其帮助用户创建和管理组件。</p></div><div class="post-readmore"><a class="post-readmore__link" href="/2021/07/14/%E3%80%90Spring%E3%80%91Spring5-IoC%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"><span class="post-readmore__text">阅读全文</span><span class="post-readmore__icon"><i class="fas fa-long-arrow-alt-right"></i></span></a></div></div></article></section><nav class="paginator"><div class="paginator-inner"><a class="extend prev" rel="prev" href="/page/10/"><i class="fas fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/12/"><i class="fas fa-angle-right"></i></a></div></nav></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><section class="sidebar-toc hide"></section><!-- ov = overview--><section class="sidebar-ov"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/author.png" alt="avatar"></div><p class="sidebar-ov-author__text">no code no life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/YUYUN-ZHAO" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="zyy18749810683" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a><a class="sidebar-ov-social-item" href="1024462136" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="mailto:im.yuyunzhao@gmail.com" target="_blank" rel="noopener" data-popover="social.Gmail" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">Gmail</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">160</div><div class="sidebar-ov-state-item__name">文章</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">42</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">42</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2022</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>yuyun zhao</span><span class="footer__devider">|</span><span>沪ICP备2022000458号</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script>function initSearch() {
+<p>Spring中最大的模式是工厂模式，其帮助用户创建和管理组件。</p></div><div class="post-readmore"><a class="post-readmore__link" href="/2021/07/14/%E3%80%90Spring%E3%80%91Spring5-IoC%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"><span class="post-readmore__text">阅读全文</span><span class="post-readmore__icon"><i class="fas fa-long-arrow-alt-right"></i></span></a></div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2021/07/13/%E3%80%90SpringMVC%E3%80%91SpringMVC-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">【Spring MVC】Spring MVC 源码分析</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-07-13</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-03-14</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">1.4k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">8分</span></span></div></header><div class="post-body"><div class="post-excerpt"><h2 id="spring-mvc-执行流程"   >
+          <a href="#spring-mvc-执行流程" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#spring-mvc-执行流程"></a> Spring MVC 执行流程</h2>
+      
+<p>Spring MVC 原理概述：在Tomcat中注册配置了一个<strong>DispatcherServlet</strong>，该Servlet的默认请求映射路径为 <code>&quot;/&quot;</code>，当客户端收到符合该路径的请求时，将执行该Servlet的<code>doService()</code>方法，其都会执行一个<code>doDispatch()</code>方法，在其内进行请求映射、参数解析、返回值处理、内容协商、页面解析跳转等操作。</p>
+<p><img src="/images/%E3%80%90SpringMVC%E3%80%91SpringMVC-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/image-20220312203816076.png" alt="image-20220312203816076" /></p>
+<p>可以将整个流程分成三个阶段：</p>
+<ul>
+<li>准备阶段</li>
+<li>匹配阶段</li>
+<li>执行阶段</li>
+</ul>
+<p><strong>准备阶段</strong></p>
+<ol>
+<li>
+<p>在 Web 容器第一次用到 DispatcherServlet 的时候，会创建其对象并执行 init 方法</p>
+</li>
+<li>
+<p>init 方法内会创建 Spring Web 容器，并调用容器 refresh 方法</p>
+</li>
+<li>
+<p>refresh 过程中会创建并初始化 SpringMVC 中的重要组件， 例如 MultipartResolver，HandlerMapping，HandlerAdapter，HandlerExceptionResolver、ViewResolver 等</p>
+</li>
+<li>
+<p>容器初始化后，会将上一步初始化好的重要组件，赋值给 DispatcherServlet 的成员变量，留待后用</p>
+</li>
+</ol>
+<img src="/../../../Data/Java/day04-%E6%A1%86%E6%9E%B6%E7%AF%87/%E8%AE%B2%E4%B9%89/img/image-20210903140657163.png" alt="image-20210903140657163" style="zoom: 80%;" />
+<p><strong>匹配阶段</strong></p>
+<ol>
+<li>
+<p>用户发送的请求统一到达前端控制器 DispatcherServlet</p>
+</li>
+<li>
+<p>DispatcherServlet 遍历所有 HandlerMapping ，找到与路径匹配的处理器</p>
+<p>① HandlerMapping 有多个，每个 HandlerMapping 会返回不同的处理器对象，谁先匹配，返回谁的处理器。其中能识别 @RequestMapping 的优先级最高</p>
+<p>② 对应 @RequestMapping 的处理器是 HandlerMethod，它包含了控制器对象和控制器方法信息</p>
+<p>③ 其中路径与处理器的映射关系在 HandlerMapping 初始化时就会建立好</p>
+</li>
+</ol>
+<img src="/../../../Data/Java/day04-%E6%A1%86%E6%9E%B6%E7%AF%87/%E8%AE%B2%E4%B9%89/img/image-20210903141017502.png" alt="image-20210903141017502" style="zoom:80%;" />
+<ol start="3">
+<li>将 HandlerMethod 连同匹配到的拦截器，生成调用链对象 HandlerExecutionChain 返回</li>
+</ol>
+<img src="/../../../Data/Java/day04-%E6%A1%86%E6%9E%B6%E7%AF%87/%E8%AE%B2%E4%B9%89/img/image-20210903141124911.png" alt="image-20210903141124911" style="zoom:80%;" />
+<ol start="4">
+<li>遍历HandlerAdapter 处理器适配器，找到能处理 HandlerMethod 的适配器对象，开始调用</li>
+</ol>
+<img src="/../../../Data/Java/day04-%E6%A1%86%E6%9E%B6%E7%AF%87/%E8%AE%B2%E4%B9%89/img/image-20210903141204799.png" alt="image-20210903141204799" style="zoom:80%;" />
+<p><strong>调用阶段</strong></p>
+<ol>
+<li>执行拦截器 preHandle</li>
+</ol>
+<img src="/../../../Data/Java/day04-%E6%A1%86%E6%9E%B6%E7%AF%87/%E8%AE%B2%E4%B9%89/img/image-20210903141445870.png" alt="image-20210903141445870" style="zoom: 67%;" />
+<ol start="2">
+<li>
+<p>由 HandlerAdapter 调用 HandlerMethod</p>
+<p>① 调用前处理不同类型的参数</p>
+<p>② 调用后处理不同类型的返回值</p>
+</li>
+</ol>
+<img src="/../../../Data/Java/day04-%E6%A1%86%E6%9E%B6%E7%AF%87/%E8%AE%B2%E4%B9%89/img/image-20210903141658199.png" alt="image-20210903141658199" style="zoom:67%;" />
+<ol start="3">
+<li>
+<p>第 2 步没有异常</p>
+<p>① 返回 ModelAndView</p>
+<p>② 执行拦截器 postHandle 方法</p>
+<p>③ 解析视图，得到 View 对象，进行视图渲染</p>
+</li>
+</ol>
+<img src="/../../../Data/Java/day04-%E6%A1%86%E6%9E%B6%E7%AF%87/%E8%AE%B2%E4%B9%89/img/image-20210903141749830.png" alt="image-20210903141749830" style="zoom:67%;" />
+<ol start="4">
+<li>第 2 步有异常，进入 HandlerExceptionResolver 异常处理流程</li>
+</ol>
+<img src="/../../../Data/Java/day04-%E6%A1%86%E6%9E%B6%E7%AF%87/%E8%AE%B2%E4%B9%89/img/image-20210903141844185.png" alt="image-20210903141844185" style="zoom:67%;" />
+<ol start="5">
+<li>最后都会执行拦截器的 afterCompletion 方法</li>
+<li>如果控制器方法标注了 @ResponseBody 注解，则在第 2 步，就会生成 json 结果，并标记 ModelAndView 已处理，这样就不会执行第 3 步的视图渲染</li>
+</ol></div><div class="post-readmore"><a class="post-readmore__link" href="/2021/07/13/%E3%80%90SpringMVC%E3%80%91SpringMVC-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"><span class="post-readmore__text">阅读全文</span><span class="post-readmore__icon"><i class="fas fa-long-arrow-alt-right"></i></span></a></div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2021/07/05/%E3%80%90Spring%E3%80%91Spring5-%E4%BA%8B%E5%8A%A1%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">【Spring】Spring5 事务源码分析</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-07-05</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-03-03</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">1.8k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">9分</span></span></div></header><div class="post-body"><div class="post-excerpt"><h2 id="spring声明式事务原理"   >
+          <a href="#spring声明式事务原理" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#spring声明式事务原理"></a> Spring声明式事务原理</h2>
+      
+<p><strong>@EnableTransactionManagement</strong> 注解向容器中添加<strong>AutoProxyRegistrar</strong>和<strong>ProxyTransactionManagementConfiguration</strong>组件，二者作用分别为：</p>
+<ul>
+<li><strong>AutoProxyRegistrar</strong>：类似于AOP中的<strong>AspectJAutoProxyRegistrar</strong>，用于向容器中注册<strong>InfrastructureAdvisorAutoProxyCreator</strong>组件（类似于AOP里的自动代理器，一种后置处理器）来为普通组件进行代理包装，创建<strong>代理对象</strong></li>
+<li><strong>ProxyTransactionManagementConfiguration</strong>：用于注册<strong>事务增强器</strong>，该增强器内设置有<strong>事务拦截器</strong>，将在代理对象执行目标方法时进行拦截，并调用其<code>invoke()</code>方法，<strong>由事务管理器控制事务的提交与回滚</strong>。</li>
+</ul>
+<p>Spring事务原理与AOP原理十分相似，都包含有<strong>后置处理器</strong>和<strong>拦截器</strong>思想，在组件创建后包装出代理对象、在代理对象执行目标方法时进行拦截，使用<strong>事务管理器</strong>控制事务的提交与回滚。</p></div><div class="post-readmore"><a class="post-readmore__link" href="/2021/07/05/%E3%80%90Spring%E3%80%91Spring5-%E4%BA%8B%E5%8A%A1%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"><span class="post-readmore__text">阅读全文</span><span class="post-readmore__icon"><i class="fas fa-long-arrow-alt-right"></i></span></a></div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2021/06/30/%E3%80%90SpringBoot%E3%80%91SpringBoot2/">【Spring Boot】Spring Boot2</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-06-30</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-03-06</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">17.9k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">146分</span></span></div></header><div class="post-body"><div class="post-excerpt"><h2 id="spring-boot-简介"   >
+          <a href="#spring-boot-简介" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#spring-boot-简介"></a> Spring Boot 简介</h2>
+      
+<blockquote>
+<p>Spring Boot makes it easy to create stand-alone, production-grade Spring based Applications that you can “just run” —— 能快速创建出生产级别的Spring应用</p>
+</blockquote>
+<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://spring.io/projects/spring-boot" >Spring Boot 官方</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://docs.spring.io/spring-boot/docs/current/reference/html/" >Spring Boot 官方手册</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+
+        <h3 id="spring-boot-优点"   >
+          <a href="#spring-boot-优点" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#spring-boot-优点"></a> Spring Boot 优点</h3>
+      
+<ul>
+<li>Create stand-alone Spring applications：创建独立Spring应用</li>
+<li>Embed Tomcat, Jetty or Undertow directly (no need to deploy WAR files)：内嵌web服务器</li>
+<li>Provide opinionated ‘starter’ dependencies to simplify your build configuration：自动starter依赖，简化构建配置</li>
+<li>Automatically configure Spring and 3rd party libraries whenever possible：自动配置Spring以及第三方功能</li>
+<li>Provide production-ready features such as metrics, health checks, and externalized configuration：提供生产级别的监控、健康检查及外部化配置</li>
+<li>Absolutely no code generation and no requirement for XML configuration：无代码生成、无需编写XML</li>
+<li>Spring Boot是整合Spring技术栈的一站式框架</li>
+<li>Spring Boot是简化Spring技术栈的快速开发脚手架</li>
+</ul></div><div class="post-readmore"><a class="post-readmore__link" href="/2021/06/30/%E3%80%90SpringBoot%E3%80%91SpringBoot2/"><span class="post-readmore__text">阅读全文</span><span class="post-readmore__icon"><i class="fas fa-long-arrow-alt-right"></i></span></a></div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2021/06/28/%E3%80%90Memo%E3%80%91%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/">【Memo】常见问题汇总</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-06-28</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-11-14</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">378</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">2分</span></span></div></header><div class="post-body"><div class="post-excerpt">
+        <h2 id="idea设置"   >
+          <a href="#idea设置" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#idea设置"></a> IDEA设置</h2>
+      
+
+        <h3 id="项目字符编码设置"   >
+          <a href="#项目字符编码设置" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#项目字符编码设置"></a> 项目字符编码设置</h3>
+      
+<p>新建项目后，首先设置项目的字符编码为UTF-8：</p>
+<p><img src="/images/%E3%80%90Memo%E3%80%91%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/image-20210809212949065.png" alt="image-20210809212949065" /></p>
+
+        <h3 id="设置-tab-为四个空格"   >
+          <a href="#设置-tab-为四个空格" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#设置-tab-为四个空格"></a> 设置 Tab 为四个空格</h3>
+      
+<blockquote>
+<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/pcheng/p/12567734.html" >https://www.cnblogs.com/pcheng/p/12567734.html</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+</blockquote>
+<p>阿里巴巴 Java 规范手册规定，使用空格而不是 Tab，原因：</p>
+<ul>
+<li>在不同的编辑器里Tab的长度可能会不一致。这会导致有Tab的代码，用不同的编辑器打开时，格式可能会乱。</li>
+<li>代码压缩时，空格会有更好的压缩率。这里面是信息量的问题，使用了Tab的代码，仍然会有空格，比如代码注释、运算符之间的间隔等等，但使用了空格的代码，是可以没有Tab的。Tab也是一个字符，这就决定了，用Tab的代码虽然不压缩的时候更小，但熵更高，因此压缩率会较差，压缩之后反而更大。</li>
+</ul>
+<p><img src="/images/%E3%80%90Memo%E3%80%91%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/image-20211114185155293.png" alt="image-20211114185155293" /></p>
+
+        <h3 id="开启支持注解"   >
+          <a href="#开启支持注解" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#开启支持注解"></a> 开启支持注解</h3>
+      
+<p><img src="/images/%E3%80%90Memo%E3%80%91%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/image-20210809213138786.png" alt="image-20210809213138786" /></p>
+
+        <h3 id="设置java版本"   >
+          <a href="#设置java版本" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#设置java版本"></a> 设置Java版本</h3>
+      
+<p><img src="/images/%E3%80%90Memo%E3%80%91%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/image-20210809213305683.png" alt="image-20210809213305683" /></p>
+
+        <h3 id="将项目的构建和运行操作交给maven"   >
+          <a href="#将项目的构建和运行操作交给maven" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#将项目的构建和运行操作交给maven"></a> 将项目的构建和运行操作交给Maven</h3>
+      
+<p>在不勾选的情况下对项目的构建和运行是 intelliJ idea 去做的，就可能导致构建和运行时无法找到maven仓库中的相关jar包，勾选后在对项目进行构建和运行等操作直接交给了maven。</p>
+<p><img src="/images/%E3%80%90Memo%E3%80%91%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/image-20210810155531212.png" alt="image-20210810155531212" /></p>
+
+        <h2 id="配置文件"   >
+          <a href="#配置文件" class="heading-link"><i class="fas fa-link"></i></a><a class="markdownIt-Anchor" href="#配置文件"></a> 配置文件</h2>
+      
+<blockquote>
+<p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://blog.csdn.net/CoderBruis/article/details/80721841" >https://blog.csdn.net/CoderBruis/article/details/80721841</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+</blockquote>
+<p>IDEA 的<code>properties</code>文件中默认是不会将中文转为ASCII码的。只需要在<code>File-&gt;Settings-&gt;File Encodings</code>里面设置编码的自动转变即可，如图操作：</p>
+<p><img src="/images/%E3%80%90Memo%E3%80%91%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/20180617233755855" alt="img" /></p>
+</div></div></article></section><nav class="paginator"><div class="paginator-inner"><a class="extend prev" rel="prev" href="/page/10/"><i class="fas fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/12/"><i class="fas fa-angle-right"></i></a></div></nav></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><section class="sidebar-toc hide"></section><!-- ov = overview--><section class="sidebar-ov"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/icons/author.png" alt="avatar"></div><p class="sidebar-ov-author__text">no code no life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/YUYUN-ZHAO" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="zyy18749810683" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a><a class="sidebar-ov-social-item" href="1024462136" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="mailto:im.yuyunzhao@gmail.com" target="_blank" rel="noopener" data-popover="social.Gmail" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">Gmail</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">155</div><div class="sidebar-ov-state-item__name">文章</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">40</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">40</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2022</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>yuyun zhao</span><span class="footer__devider">|</span><span>沪ICP备2022000458号</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script>function initSearch() {
   var isXML = true;
   var search_path = 'search.json';
 
